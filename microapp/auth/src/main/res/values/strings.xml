@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_title">Welcome to Jetisteam!</string>
+    <string name="auth_subtitle">An unofficial Steam client.</string>
+
+    <string name="email">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Log in</string>
+    <string name="disclaimers">Disclaimers</string>
+
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
+
+    <string name="auth_disclaimer">Disclaimers</string>
+    <string name="auth_disclaimer_text">
+        Jetisteam is an unofficial application which is not connected in any ways to Valve.\n\nBy entering your account details and pressing \"Log in\", you confirm that the account you\'re using is yours.\n\nPlease note that usage of this application may lead to a ban - the application developers are not responsible for that.
+    </string>
+    <string name="auth_disclaimer_confirm">Confirm</string>
+
+    <string name="auth_tfa_title">2FA</string>
+    <string name="auth_tfa_guard_desc">To sign in, enter your Steam Guard code.</string>
+    <string name="auth_tfa_hint">Code</string>
+</resources>

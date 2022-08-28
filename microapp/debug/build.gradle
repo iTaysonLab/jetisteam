@@ -1,0 +1,67 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+}
+
+android {
+    namespace 'bruhcollective.itaysonlab.microapp.debug'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 33
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.3.0'
+    }
+}
+
+kapt {
+    correctErrorTypes = true
+}
+
+dependencies {
+    implementation project(":microapp:core")
+
+    implementation project(":domain")
+    implementation project(":data")
+    implementation project(":uikit")
+
+    implementation libs.protobufRuntime
+
+    implementation libs.bundles.compose
+    implementation libs.bundles.accompanist
+    debugImplementation libs.bundles.composeDebug
+
+    implementation libs.coilCompose
+
+    implementation libs.hiltAndroid
+    implementation libs.hiltNavigation
+    kapt libs.hiltCompiler
+}

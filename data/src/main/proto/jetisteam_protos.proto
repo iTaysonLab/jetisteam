@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+option java_package = "bruhcollective.itaysonlab.jetisteam.proto";
+option java_multiple_files = true;
+
+message SessionData {
+    uint64 steam_id = 1;
+    string username = 2;
+    string access_token = 3;
+    string refresh_token = 4;
+}

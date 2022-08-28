@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="showcase_achievements_rarest">Rarest Achievement Showcase</string>
+    <string name="showcase_collector_game">Game Collector</string>
+    <string name="showcase_items">Item Showcase</string>
+    <string name="showcase_items_trade">Items Up For Trade</string>
+    <string name="showcase_collector_badge">Badge Collector</string>
+    <string name="showcase_favorite_game">Favorite Game</string>
+    <string name="showcase_screenshots">Screenshot Showcase</string>
+    <string name="showcase_favorite_guide">Favorite Guide</string>
+    <string name="showcase_achievements">Achievement Showcase</string>
+    <string name="showcase_salien">Salien Stats</string>
+    <string name="showcase_awards">Awards Showcase</string>
+    <string name="showcase_favorite_group">Favorite Group</string>
+    <string name="showcase_workshop">Workshop Showcase</string>
+    <string name="showcase_info">Custom Info Box</string>
+</resources>

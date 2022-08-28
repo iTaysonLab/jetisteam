@@ -1,0 +1,67 @@
+import "common_base.proto";
+
+option optimize_for = SPEED;
+option java_package = "steam.steamnotification";
+option java_generic_services = true;
+option java_multiple_files = true;
+
+enum SteamNotificationType {
+  Gift = 2;
+  Comment = 3;
+  Item = 4;
+  FriendInvite = 5;
+  MajorSale = 6;
+  PreloadAvailable = 7;
+  Wishlist = 8;
+}
+
+message CSteamNotification_GetPreferences_Request {
+}
+
+message CSteamNotification_GetPreferences_Response {
+  repeated .SteamNotificationPreference preferences = 1;
+}
+
+message CSteamNotification_GetSteamNotifications_Request {
+}
+
+message CSteamNotification_GetSteamNotifications_Response {
+  repeated .SteamNotificationData notifications = 1;
+  optional int32 confirmation_count = 2;
+}
+
+message CSteamNotification_MarkNotificationsRead_Notification {
+  optional uint32 timestamp = 1;
+  optional SteamNotificationType notification_type = 2;
+  repeated uint64 notification_ids = 3;
+  optional bool mark_all_read = 4;
+}
+
+message CSteamNotification_SetPreferences_Request {
+  repeated .SteamNotificationPreference preferences = 1;
+}
+
+message CSteamNotification_SetPreferences_Response {
+}
+
+message SteamNotificationData {
+  optional uint64 notification_id = 1;
+  optional uint32 notification_targets = 2;
+  optional SteamNotificationType notification_type = 3;
+  optional string body_data = 4;
+  optional bool read = 7;
+  optional uint32 timestamp = 8;
+}
+
+message SteamNotificationPreference {
+  optional SteamNotificationType notification_type = 1;
+  optional uint32 notification_targets = 2;
+}
+
+service SteamNotification {
+  rpc GetPreferences (.CSteamNotification_GetPreferences_Request) returns (.CSteamNotification_GetPreferences_Response);
+  rpc GetSteamNotifications (.CSteamNotification_GetSteamNotifications_Request) returns (.CSteamNotification_GetSteamNotifications_Response);
+  rpc MarkNotificationsRead (.CSteamNotification_MarkNotificationsRead_Notification) returns (.NoResponse);
+  rpc SetPreferences (.CSteamNotification_SetPreferences_Request) returns (.CSteamNotification_SetPreferences_Response);
+}
+

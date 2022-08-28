@@ -1,0 +1,27 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "Jetisteam"
+include ':app'
+include ':data'
+include ':domain'
+include ':microapp:core'
+include ':microapp:auth'
+include ':microapp:home'
+include ':microapp:profile'
+include ':uikit'
+include ':microapp:notifications'
+include ':microapp:news'
+include ':microapp:debug'
