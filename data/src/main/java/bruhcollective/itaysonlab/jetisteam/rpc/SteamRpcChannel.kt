@@ -51,7 +51,7 @@ class SteamRpcChannel @Inject constructor(
                         .newBuilder()
                         .addQueryParameter(
                             FIELD_NAME,
-                            Base64.encodeToString(request.toByteArray(), Base64.URL_SAFE)
+                            Base64.encodeToString(request.toByteArray(), Base64.NO_PADDING or Base64.NO_WRAP)
                         )
                         .build()
                 )
