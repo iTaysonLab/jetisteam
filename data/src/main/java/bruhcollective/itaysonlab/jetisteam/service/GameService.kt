@@ -6,6 +6,6 @@ import retrofit2.http.GET
 interface GameService {
     @GET("/api/libraryappdetails/?appid={appId}")
     suspend fun getGameDetails(
-        appId: Int
+        appId: String
     ): GameDetails
 }
