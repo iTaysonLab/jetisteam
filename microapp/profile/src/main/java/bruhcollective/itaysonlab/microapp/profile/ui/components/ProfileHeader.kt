@@ -47,8 +47,6 @@ internal fun ProfileHeader(
                         Brush.verticalGradient(
                             colorStops = arrayOf(
                                 0f to Color.Transparent,
-                                //0.5f to surfaceColor.copy(alpha = 0.5f),
-                                //0.85f to surfaceColor,
                                 1f to theme.gradientBackground.copy(alpha = 1f),
                             )
                         )
@@ -89,14 +87,14 @@ internal fun ProfileHeader(
                         Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
                             containerColor = theme.btnBackground,
                             contentColor = Color.White
-                        ), border = BorderStroke(1.dp, theme.btnOutline)) {
+                        )) {
                             Text(text = "Edit profile")
                         }
                     }
 
                     item {
                         Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
-                            containerColor = theme.btnBackground,
+                            containerColor = theme.btnBackground.copy(alpha = 0.5f),
                             contentColor = Color.White
                         ), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
                             Icon(imageVector = Icons.Rounded.Person, contentDescription = null)
@@ -107,7 +105,7 @@ internal fun ProfileHeader(
 
                     item {
                         Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
-                            containerColor = theme.btnBackground,
+                            containerColor = theme.btnBackground.copy(alpha = 0.5f),
                             contentColor = Color.White
                         ), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
                             Icon(imageVector = Icons.Rounded.Gamepad, contentDescription = null)
@@ -118,7 +116,7 @@ internal fun ProfileHeader(
 
                     item {
                         Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
-                            containerColor = theme.btnBackground,
+                            containerColor = theme.btnBackground.copy(alpha = 0.5f),
                             contentColor = Color.White
                         ), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
                             Icon(imageVector = Icons.Rounded.Wallet, contentDescription = null)
