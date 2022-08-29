@@ -23,6 +23,7 @@ import bruhcollective.itaysonlab.microapp.profile.ui.components.ProfileHeader
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ProfileScreen(
+    onGameClick: (Int) -> Unit,
     viewModel: ProfileScreenViewModel = hiltViewModel()
 ) {
     val tab = rememberTopAppBarState()
@@ -65,7 +66,8 @@ internal fun ProfileScreen(
                         ProfileCardEntry(
                             entry = entry,
                             ownedGames = data.ownedGames,
-                            achievementsProgress = data.achievementsProgress
+                            achievementsProgress = data.achievementsProgress,
+                            onGameClick = onGameClick
                         )
                     }
                 }

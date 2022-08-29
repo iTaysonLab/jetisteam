@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.microapp.profile.ui.components.slots
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,7 +22,8 @@ import steam.player.CPlayer_GetOwnedGames_Response_Game
 @Composable
 internal fun GameCollector(
     entry: ProfileCustomizationEntry,
-    ownedGames: Map<Int, CPlayer_GetOwnedGames_Response_Game>
+    ownedGames: Map<Int, CPlayer_GetOwnedGames_Response_Game>,
+    onGameClick: (Int) -> Unit
 ) {
     val games = remember(entry.slots) {
         val appIds = entry.slots.map { it.appId }
@@ -30,8 +32,13 @@ internal fun GameCollector(
 
     LazyRow {
         items(games.size) {
-            Column {
-                val game = games[it]
+            val game = games[it]
+
+            Column(
+                modifier = Modifier.clickable(
+                    onClick = { onGameClick(game.appid) }
+                )
+            ) {
                 AsyncImage(
                     model = remember(game.appid) {
                         CdnUrlUtil.buildAppUrl(game.appid, "capsule_467x181.jpg")

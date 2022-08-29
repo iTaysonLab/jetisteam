@@ -26,7 +26,8 @@ import steam.player.EProfileCustomizationType
 internal fun ProfileCardEntry(
     entry: ProfileCustomizationEntry,
     ownedGames: Map<Int, CPlayer_GetOwnedGames_Response_Game>,
-    achievementsProgress: Map<Int, CPlayer_GetAchievementsProgress_Response_AchievementProgress>
+    achievementsProgress: Map<Int, CPlayer_GetAchievementsProgress_Response_AchievementProgress>,
+    onGameClick: (Int) -> Unit
 ) {
     val name = remember(entry.customizationType) {
         when (entry.customizationType) {
@@ -65,9 +66,8 @@ internal fun ProfileCardEntry(
 
         when (entry.customizationType) {
             EProfileCustomizationType.k_EProfileCustomizationTypeFavoriteGame -> FavoriteGame(entry, ownedGames, achievementsProgress)
-            EProfileCustomizationType.k_EProfileCustomizationTypeGameCollector -> GameCollector(entry, ownedGames)
+            EProfileCustomizationType.k_EProfileCustomizationTypeGameCollector -> GameCollector(entry, ownedGames, onGameClick)
             else -> Text("Unsupported!")
         }
-
     }
 }
