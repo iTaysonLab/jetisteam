@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -27,7 +26,8 @@ import steam.player.EProfileCustomizationType
 internal fun ProfileCardEntry(
     entry: ProfileCustomizationEntry,
     ownedGames: Map<Int, CPlayer_GetOwnedGames_Response_Game>,
-    achievementsProgress: Map<Int, CPlayer_GetAchievementsProgress_Response_AchievementProgress>
+    achievementsProgress: Map<Int, CPlayer_GetAchievementsProgress_Response_AchievementProgress>,
+    onGameClick: (Int) -> Unit
 ) {
     val name = remember(entry.customizationType) {
         when (entry.customizationType) {
@@ -66,9 +66,8 @@ internal fun ProfileCardEntry(
 
         when (entry.customizationType) {
             EProfileCustomizationType.k_EProfileCustomizationTypeFavoriteGame -> FavoriteGame(entry, ownedGames, achievementsProgress)
-            EProfileCustomizationType.k_EProfileCustomizationTypeGameCollector -> GameCollector()
+            EProfileCustomizationType.k_EProfileCustomizationTypeGameCollector -> GameCollector(entry, ownedGames, onGameClick)
             else -> Text("Unsupported!")
         }
-
     }
 }

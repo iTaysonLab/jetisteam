@@ -1,8 +1,6 @@
 package bruhcollective.itaysonlab.jetisteam.di
 
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamAuthInterceptor
-import bruhcollective.itaysonlab.jetisteam.ext.interceptRequest
-import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcChannel
 import dagger.Module
 import dagger.Provides
@@ -45,5 +43,14 @@ object NetworkModule {
         .baseUrl("https://steamcommunity.com/")
         .build()
 
-
+    @Provides
+    @Singleton
+    @Named("steamPoweredRetrofit")
+    fun provideStoreSteamPoweredRetrofit(
+        okHttpClient: OkHttpClient
+    ) = Retrofit.Builder()
+        .client(okHttpClient)
+        .addConverterFactory(MoshiConverterFactory.create())
+        .baseUrl("https://store.steampowered.com/")
+        .build()
 }

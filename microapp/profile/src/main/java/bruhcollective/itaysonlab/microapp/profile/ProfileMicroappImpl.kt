@@ -5,6 +5,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import bruhcollective.itaysonlab.microapp.core.Destinations
+import bruhcollective.itaysonlab.microapp.core.find
+import bruhcollective.itaysonlab.microapp.gamepage.GamePageMicroapp
 import bruhcollective.itaysonlab.microapp.profile.ui.ProfileScreen
 import javax.inject.Inject
 
@@ -15,6 +17,12 @@ class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
         destinations: Destinations,
         backStackEntry: NavBackStackEntry
     ) {
-        ProfileScreen()
+        ProfileScreen(
+            onGameClick = { appId ->
+                navController.navigate(
+                    destinations.find<GamePageMicroapp>().gameDestination(appId)
+                )
+            }
+        )
     }
 }
