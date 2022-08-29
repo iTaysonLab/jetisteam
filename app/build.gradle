@@ -69,6 +69,7 @@ dependencies {
     implementation project(":microapp:notifications")
     implementation project(":microapp:news")
     implementation project(":microapp:debug")
+    implementation project(":microapp:gamepage")
 
     implementation 'com.github.penfeizhou.android.animation:apng:2.23.0'
 
