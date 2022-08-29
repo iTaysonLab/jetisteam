@@ -12,7 +12,7 @@ import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun GamepageScreen(
+internal fun GamePageScreen(
     viewModel: GamePageViewModel = hiltViewModel()
 ) {
     val topAppBarState = rememberTopAppBarState()
