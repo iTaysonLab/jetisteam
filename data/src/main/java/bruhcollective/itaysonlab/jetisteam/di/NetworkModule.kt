@@ -47,7 +47,7 @@ object NetworkModule {
     @Singleton
     @Named("steamPoweredRetrofit")
     fun provideStoreSteamPoweredRetrofit(
-        @Named("steamPoweredRetrofit") okHttpClient: OkHttpClient
+        okHttpClient: OkHttpClient
     ) = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create())
