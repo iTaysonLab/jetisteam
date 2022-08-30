@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetisteam.repository
 
-import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcChannel
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcController
 import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
@@ -14,8 +13,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ProfileRepository @Inject constructor(
-    steamRpcChannel: SteamRpcChannel,
-    private val steamSessionController: SteamSessionController
+    steamRpcChannel: SteamRpcChannel
 ) {
     private val playerStub = Player.newBlockingStub(steamRpcChannel)
     private val mobileAppStub = MobileApp.newBlockingStub(steamRpcChannel)
@@ -30,7 +28,7 @@ class ProfileRepository @Inject constructor(
         playerStub.getProfileItemsEquipped(
             SteamRpcController(), CPlayer_GetProfileItemsEquipped_Request.newBuilder()
                 .setSteamid(steamid)
-                .setLanguage(LanguageUtil.getCurrentLanguage())
+                .setLanguage(LanguageUtil.currentLanguage)
                 .build()
         )
     }
@@ -53,7 +51,7 @@ class ProfileRepository @Inject constructor(
                 .setIncludeAppinfo(true)
                 .setIncludeExtendedAppinfo(true)
                 .setIncludePlayedFreeGames(true)
-                .setLanguage(LanguageUtil.getCurrentLanguage())
+                .setLanguage(LanguageUtil.currentLanguage)
                 .build()
         )
     }
@@ -63,7 +61,7 @@ class ProfileRepository @Inject constructor(
             SteamRpcController(post = true), CPlayer_GetAchievementsProgress_Request.newBuilder()
                 .setSteamid(steamid)
                 .addAllAppids(appids)
-                .setLanguage(LanguageUtil.getCurrentLanguage())
+                .setLanguage(LanguageUtil.currentLanguage)
                 .build()
         )
     }

@@ -26,6 +26,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import bruhcollective.itaysonlab.jetisteam.R
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
+import bruhcollective.itaysonlab.jetisteam.repository.UserAccountRepository
+import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
 import bruhcollective.itaysonlab.microapp.core.ComposableMicroappEntry
 import bruhcollective.itaysonlab.microapp.core.Destinations
@@ -49,10 +51,14 @@ fun AppNavigation (
     LaunchedEffect(Unit) {
         if (navController.currentDestination?.route != "coreLoading") return@LaunchedEffect
 
-        val profileScreen = viewModel.destinations.find<ProfileMicroapp>()
-        val authScreen = viewModel.destinations.find<AuthMicroapp>()
+        val startRoute = if (viewModel.signedIn()) {
+            LanguageUtil.currentRegion = viewModel.userAccountRepository.getUserCountry(viewModel.mySteamId())
+            viewModel.destinations.find<ProfileMicroapp>()
+        } else {
+            viewModel.destinations.find<AuthMicroapp>()
+        }.microappRoute
 
-        navController.navigateRoot((if (viewModel.signedIn()) profileScreen else authScreen).microappRoute)
+        navController.navigateRoot(startRoute)
     }
 
     val shouldHideNavigationBar = remember(navBackStackEntry) {
@@ -134,17 +140,19 @@ fun AppNavigation (
 @JvmSuppressWildcards
 class AppNavigationViewModel @Inject constructor(
     private val steamSessionController: SteamSessionController,
-    val destinations: Destinations
+    val destinations: Destinations,
+    val userAccountRepository: UserAccountRepository
 ): ViewModel() {
     val fullscreenDestinations = destinations
         .map { it.value.fullscreenRoutes }
         .flatten()
         .distinct()
 
-    val bottomNavDestinations = listOf<Pair<String, Pair<Int, ImageVector>>>(
+    val bottomNavDestinations = listOf(
         destinations.find<NotificationsMicroapp>().microappRoute to ( bruhcollective.itaysonlab.microapp.notifications.R.string.notifications to Icons.Rounded.Notifications ),
         destinations.find<ProfileMicroapp>().microappRoute to (R.string.tab_profile to Icons.Rounded.Person),
     )
 
     fun signedIn() = steamSessionController.signedIn()
+    fun mySteamId() = steamSessionController.steamId().steamId
 }
