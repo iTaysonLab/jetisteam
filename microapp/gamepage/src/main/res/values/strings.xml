@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gamepage_review_coef">%1$s of %2$s reviews are positive</string>
+    <string name="gamepage_publishers">Publisher</string>
+    <string name="gamepage_developers">Developer</string>
+    <string name="gamepage_franchises">Franchise</string>
+    <string name="gamepage_release">Release Date</string>
+</resources>

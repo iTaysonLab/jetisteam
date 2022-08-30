@@ -8,7 +8,5 @@ import javax.inject.Inject
 class GameRepository @Inject constructor(
     private val gameService: GameService
 ) {
-    suspend fun getGame(appId: String) = withContext(Dispatchers.IO) {
-        gameService.getGameDetails(appId)
-    }
+    suspend fun getGameDetails(appId: String) = gameService.getGameDetails(appId)
 }

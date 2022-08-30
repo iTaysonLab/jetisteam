@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'bruhcollective.itaysonlab.jetisoft.domain'
+    namespace 'bruhcollective.itaysonlab.jetisteam.domain'
     compileSdk 33
 
     defaultConfig {

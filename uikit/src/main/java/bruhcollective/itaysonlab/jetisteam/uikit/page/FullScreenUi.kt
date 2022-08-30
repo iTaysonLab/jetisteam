@@ -75,5 +75,5 @@ fun FullscreenError(
 }
 
 private fun Context.copy(txt: String) {
-    getSystemService<ClipboardManager>()?.setPrimaryClip(ClipData.newPlainText("Jetisoft", txt))
+    getSystemService<ClipboardManager>()?.setPrimaryClip(ClipData.newPlainText("Jetisteam", txt))
 }

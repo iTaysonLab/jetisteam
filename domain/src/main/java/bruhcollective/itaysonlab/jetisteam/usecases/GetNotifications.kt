@@ -12,6 +12,7 @@ import bruhcollective.itaysonlab.jetisteam.util.CdnUrlUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import steam.common.StoreBrowseItemDataRequest
 import steam.common.StoreItemID
 import steam.econ.CEconItem_Description
 import steam.steamnotification.SteamNotificationType
@@ -43,7 +44,7 @@ class GetNotifications @Inject constructor(
             shouldRequestGames.map {
                 StoreItemID.newBuilder().setAppid(JSONObject(it.first.bodyData).getInt("appid"))
                     .build()
-            }
+            }, StoreBrowseItemDataRequest.newBuilder().setIncludeTagCount(0).setIncludeAssets(true).build()
         ).storeItemsList else emptyList()).associateBy { it.appid }
 
         val friends =

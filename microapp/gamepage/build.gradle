@@ -46,11 +46,16 @@ kapt {
 
 dependencies {
     implementation project(':microapp:core')
+    implementation project(':data')
     implementation project(':domain')
     implementation project(':uikit')
 
     implementation libs.bundles.compose
+    implementation libs.bundles.richText
+    implementation libs.bundles.accompanist
     debugImplementation libs.bundles.composeDebug
+
+    implementation libs.coilCompose
 
     implementation libs.hiltAndroid
     implementation libs.hiltNavigation
