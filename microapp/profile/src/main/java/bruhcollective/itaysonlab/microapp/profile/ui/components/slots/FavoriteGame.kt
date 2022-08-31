@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.microapp.profile.ui.components.slots
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +23,7 @@ internal fun FavoriteGame(
     entry: ProfileCustomizationEntry,
     ownedGames: Map<Int, CPlayer_GetOwnedGames_Response_Game>,
     achievementsProgress: Map<Int, CPlayer_GetAchievementsProgress_Response_AchievementProgress>,
+    onGameClick: (Int) -> Unit,
 ) {
     val completedColor = LocalSteamTheme.current.gradientShowcaseHeaderLeft
 
@@ -36,7 +37,11 @@ internal fun FavoriteGame(
         progress.percentage / 100f to "${progress.unlocked} of ${progress.total}"
     }
 
-    Column(Modifier.padding(16.dp)) {
+    Column(
+        Modifier
+            .clickable { onGameClick(game.first.appid) }
+            .fillMaxWidth()
+            .padding(16.dp)) {
         AsyncImage(
             model = remember(game.first.appid) {
                 CdnUrlUtil.buildAppUrl(game.first.appid, "capsule_467x181.jpg")

@@ -65,7 +65,7 @@ internal fun ProfileCardEntry(
         )
 
         when (entry.customizationType) {
-            EProfileCustomizationType.k_EProfileCustomizationTypeFavoriteGame -> FavoriteGame(entry, ownedGames, achievementsProgress)
+            EProfileCustomizationType.k_EProfileCustomizationTypeFavoriteGame -> FavoriteGame(entry, ownedGames, achievementsProgress, onGameClick)
             EProfileCustomizationType.k_EProfileCustomizationTypeGameCollector -> GameCollector(entry, ownedGames, onGameClick)
             else -> Text("Unsupported!")
         }
