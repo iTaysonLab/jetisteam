@@ -11,6 +11,8 @@ abstract class PageViewModel <T> : ViewModel() {
     var state by mutableStateOf<State<T>>(State.Loading())
         private set
 
+    val data: T? get() = (state as? State.Loaded<T>)?.data
+
     abstract suspend fun load(): T
 
     fun reload() {

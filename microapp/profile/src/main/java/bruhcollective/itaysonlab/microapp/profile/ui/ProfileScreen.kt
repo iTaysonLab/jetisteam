@@ -69,9 +69,10 @@ internal fun ProfileScreen(
                     items(data.customization.profileCustomizationEntries) { entry ->
                         ProfileCardEntry(
                             entry = entry,
-                            ownedGames = data.ownedGames,
-                            achievementsProgress = data.achievementsProgress,
-                            onGameClick = onGameClick
+                            onGameClick = onGameClick,
+                            getGame = viewModel::game,
+                            getGameWithAchievements = viewModel::gameToAchievements,
+                            getGameSize = viewModel::gameSize
                         )
                     }
                 }

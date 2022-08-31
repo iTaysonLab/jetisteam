@@ -15,6 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetisteam.mappers.ProfileCustomizationEntry
 import bruhcollective.itaysonlab.microapp.profile.R
+import bruhcollective.itaysonlab.microapp.profile.ui.Game
+import bruhcollective.itaysonlab.microapp.profile.ui.GameToAchievements
 import bruhcollective.itaysonlab.microapp.profile.ui.LocalSteamTheme
 import bruhcollective.itaysonlab.microapp.profile.ui.components.slots.FavoriteGame
 import bruhcollective.itaysonlab.microapp.profile.ui.components.slots.GameCollector
@@ -25,8 +27,9 @@ import steam.player.EProfileCustomizationType
 @Composable
 internal fun ProfileCardEntry(
     entry: ProfileCustomizationEntry,
-    ownedGames: Map<Int, CPlayer_GetOwnedGames_Response_Game>,
-    achievementsProgress: Map<Int, CPlayer_GetAchievementsProgress_Response_AchievementProgress>,
+    getGameSize: () -> Int,
+    getGame: (Int) -> Game,
+    getGameWithAchievements: (Int) -> GameToAchievements,
     onGameClick: (Int) -> Unit
 ) {
     val name = remember(entry.customizationType) {
@@ -65,8 +68,8 @@ internal fun ProfileCardEntry(
         )
 
         when (entry.customizationType) {
-            EProfileCustomizationType.k_EProfileCustomizationTypeFavoriteGame -> FavoriteGame(entry, ownedGames, achievementsProgress, onGameClick)
-            EProfileCustomizationType.k_EProfileCustomizationTypeGameCollector -> GameCollector(entry, ownedGames, onGameClick)
+            EProfileCustomizationType.k_EProfileCustomizationTypeFavoriteGame -> FavoriteGame(remember(entry) { entry.slots.first().appId }, getGameWithAchievements, onGameClick)
+            EProfileCustomizationType.k_EProfileCustomizationTypeGameCollector -> GameCollector(getGameSize, remember(entry) { entry.slots.map { slot -> getGame(slot.appId) } }, onGameClick)
             else -> Text("Unsupported!")
         }
     }

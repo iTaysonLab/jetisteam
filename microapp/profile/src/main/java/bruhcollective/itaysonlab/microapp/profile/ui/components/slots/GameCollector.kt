@@ -16,20 +16,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetisteam.mappers.ProfileCustomizationEntry
 import bruhcollective.itaysonlab.jetisteam.util.CdnUrlUtil
+import bruhcollective.itaysonlab.microapp.profile.ui.Game
 import coil.compose.AsyncImage
 import steam.player.CPlayer_GetOwnedGames_Response_Game
 
 @Composable
 internal fun GameCollector(
-    entry: ProfileCustomizationEntry,
-    ownedGames: Map<Int, CPlayer_GetOwnedGames_Response_Game>,
+    getGameSize: () -> Int,
+    games: List<Game>,
     onGameClick: (Int) -> Unit
 ) {
-    val games = remember(entry.slots) {
-        entry.slots.mapNotNull { slot ->
-            ownedGames[slot.appId]
-        }
-    }
+    val ownedGames = remember(games) { getGameSize() }
 
     LazyRow(
         contentPadding = PaddingValues(16.dp),
@@ -57,7 +54,7 @@ internal fun GameCollector(
             .fillMaxWidth()
     ) {
         Text(
-            text = "${ownedGames.values.size} games and DLCs owned",
+            text = "$ownedGames games and DLCs owned",
             color = Color.White.copy(alpha = 0.7f), fontSize = 16.sp
         )
     }
