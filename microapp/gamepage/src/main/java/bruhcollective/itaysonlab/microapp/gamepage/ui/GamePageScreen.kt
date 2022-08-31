@@ -25,6 +25,7 @@ import com.halilibo.richtext.ui.material3.Material3RichText
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GamePageScreen(
+    onBackClick: () -> Unit,
     viewModel: GamePageViewModel = hiltViewModel()
 ) {
     val topAppBarState = rememberTopAppBarState()
@@ -41,7 +42,7 @@ internal fun GamePageScreen(
                         actionIconContentColor = Color.White,
                     ),
                     navigationIcon = {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = onBackClick) {
                             Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
                         }
                     }

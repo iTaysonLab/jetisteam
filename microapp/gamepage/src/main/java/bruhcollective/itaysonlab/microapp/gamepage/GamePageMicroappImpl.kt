@@ -15,6 +15,6 @@ class GamePageMicroappImpl @Inject constructor() : GamePageMicroapp() {
         destinations: Destinations,
         backStackEntry: NavBackStackEntry
     ) {
-        GamePageScreen()
+        GamePageScreen(onBackClick = navController::popBackStack)
     }
 }
