@@ -5,11 +5,7 @@ import androidx.compose.ui.graphics.Color
 object SteamColors {
     private val registeredThemes = mapOf(
         "Default" to ColorTheme(
-            gradientRight = Color(red = 109, green = 38, blue = 44, alpha = alpha(0.301f)),
-            gradientLeft = Color(red = 50, green = 255, blue = 193, alpha = alpha(0.103f)),
             gradientBackground = Color(red = 34, green = 35, blue = 48, alpha = alpha(0.93f)),
-            gradientBackgroundRight = Color.Transparent,
-            gradientBackgroundLeft = Color(red = 50, green = 255, blue = 193, alpha = alpha(0.103f)),
             colorShowcaseHeader = Color(red = 43, green = 45, blue = 68, alpha = alpha(0.93f)),
             gradientShowcaseHeaderLeft = Color(red = 115, green = 173, blue = 184, alpha = alpha(0.247f)),
             btnBackground = Color(43, 52, 68),
@@ -17,11 +13,7 @@ object SteamColors {
         ),
 
         "Cosmic" to ColorTheme(
-            gradientRight = Color(248, 70, 180, alpha = alpha(0.301f)),
-            gradientLeft = Color(9, 243, 99, alpha = alpha(0.247f)),
             gradientBackground = Color(46, 13, 36, alpha = alpha(0.93f)),
-            gradientBackgroundRight = Color.Transparent,
-            gradientBackgroundLeft = Color(239, 243, 9, alpha = alpha(0.13f)),
             colorShowcaseHeader = Color(57, 24, 61, alpha = alpha(0.93f)),
             gradientShowcaseHeaderLeft = Color(20, 60, 68, alpha = alpha(0.93f)),
             btnBackground = Color(90, 40, 92),
@@ -29,11 +21,7 @@ object SteamColors {
         ),
 
         "Summer" to ColorTheme(
-            gradientRight = Color(252, 197, 16, alpha = alpha(0.301f)),
-            gradientLeft = Color(9, 243, 153, alpha = alpha(0.247f)),
             gradientBackground = Color(51, 27, 16, alpha = alpha(0.93f)),
-            gradientBackgroundRight = Color.Transparent,
-            gradientBackgroundLeft = Color(48, 243, 9, alpha = alpha(0.13f)),
             colorShowcaseHeader = Color(70, 53, 31, alpha = alpha(0.93f)),
             gradientShowcaseHeaderLeft = Color(33, 78, 76, alpha = alpha(0.93f)),
             btnBackground = Color(95, 76, 39),
@@ -41,11 +29,7 @@ object SteamColors {
         ),
 
         "Midnight" to ColorTheme(
-            gradientRight = Color(51, 54, 253, alpha = alpha(0.233f)),
-            gradientLeft = Color(12, 85, 241, alpha = alpha(0.37f)),
             gradientBackground = Color(10, 14, 32, alpha = alpha(0.93f)),
-            gradientBackgroundRight = Color.Transparent,
-            gradientBackgroundLeft = Color(12, 85, 241, alpha = alpha(0.13f)),
             colorShowcaseHeader = Color(34, 32, 61, alpha = alpha(0.93f)),
             gradientShowcaseHeaderLeft = Color(20, 33, 68, alpha = alpha(0.93f)),
             btnBackground = Color(38, 36, 68),
@@ -53,11 +37,7 @@ object SteamColors {
         ),
 
         "DarkMode" to ColorTheme(
-            gradientRight = Color(49, 49, 49, alpha = alpha(0.233f)),
-            gradientLeft = Color(51, 51, 51, alpha = alpha(0.37f)),
             gradientBackground = Color(24, 24, 24, alpha = alpha(0.93f)),
-            gradientBackgroundRight = Color.Transparent,
-            gradientBackgroundLeft = Color(32, 32, 32, alpha = alpha(0.13f)),
             colorShowcaseHeader = Color(0, 0, 0, alpha = alpha(0.5f)),
             gradientShowcaseHeaderLeft = Color(0, 0, 0, alpha = alpha(0.5f)),
             btnBackground = Color(40, 40, 40),
@@ -65,11 +45,7 @@ object SteamColors {
         ),
 
         "Steel" to ColorTheme(
-            gradientRight = Color(70, 106, 128, alpha = alpha(0.233f)),
-            gradientLeft = Color(86, 120, 134, alpha = alpha(0.37f)),
             gradientBackground = Color(41, 46, 51, alpha = alpha(0.93f)),
-            gradientBackgroundRight = Color.Transparent,
-            gradientBackgroundLeft = Color.Transparent,
             colorShowcaseHeader = Color(55, 62, 76, alpha = alpha(0.93f)),
             gradientShowcaseHeaderLeft = Color(68, 83, 93, alpha = alpha(0.93f)),
             btnBackground = Color(66, 76, 92),
@@ -77,11 +53,7 @@ object SteamColors {
         ),
 
         "SteamGreen" to ColorTheme(
-            gradientRight = Color(0xFF393e2b),
-            gradientLeft = Color(71, 78, 52),
             gradientBackground = Color(53, 58, 39),
-            gradientBackgroundRight = Color.Transparent,
-            gradientBackgroundLeft = Color.Transparent,
             colorShowcaseHeader = Color(62, 69, 44),
             gradientShowcaseHeaderLeft = Color(83, 92, 60),
             btnBackground = Color(73, 82, 53),
@@ -89,11 +61,7 @@ object SteamColors {
         ),
 
         "MutedBlue" to ColorTheme(
-            gradientRight = Color(0xFF737d96),
-            gradientLeft = Color(115, 124, 147),
             gradientBackground = Color(0x2127338c),
-            gradientBackgroundRight = Color.Transparent,
-            gradientBackgroundLeft = Color(20, 26, 49, alpha(0.13f)),
             colorShowcaseHeader = Color(30, 44, 66, alpha(0.54f)),
             gradientShowcaseHeaderLeft = Color(69, 79, 108, alpha(0.75f)),
             btnBackground = Color(44, 55, 74),
@@ -101,11 +69,7 @@ object SteamColors {
         ),
 
         "PinkTeal" to ColorTheme(
-            gradientRight = Color(139, 29, 68),
-            gradientLeft = Color(137, 30, 67),
             gradientBackground = Color(0, 255, 255, alpha(0.15f)),
-            gradientBackgroundRight = Color.Transparent,
-            gradientBackgroundLeft = Color.Transparent,
             colorShowcaseHeader = Color(42, 117, 122),
             gradientShowcaseHeaderLeft = Color(42, 117, 122),
             btnBackground = Color(42, 117, 122),
@@ -113,29 +77,83 @@ object SteamColors {
         ),
 
         "MutedRed" to ColorTheme(
-            gradientRight = Color(142, 40, 40, alpha = alpha(0.23f)),
-            gradientLeft = Color(163, 53, 53, alpha = alpha(0.37f)),
             gradientBackground = Color(96, 17, 2, alpha = alpha(0.30f)),
-            gradientBackgroundRight = Color.Transparent,
-            gradientBackgroundLeft = Color(241, 12, 12, alpha = alpha(0.13f)),
             colorShowcaseHeader = Color(49, 9, 9, alpha = alpha(0.81f)),
             gradientShowcaseHeaderLeft = Color(182, 27, 23, alpha = alpha(0.35f)),
             btnBackground = Color(58, 13, 10),
             btnOutline = Color(108, 90, 86)
         ),
 
-        // TODO: RE8, CSGO, Civ7, Events, more...
+        "BlueRedTheme" to ColorTheme(
+            gradientBackground = Color(10, 25, 32, alpha = alpha(0.30f)),
+            colorShowcaseHeader = Color(64, 23, 23, alpha = alpha(0.5f)),
+            gradientShowcaseHeaderLeft = Color(27, 113, 132, alpha = alpha(0.93f)),
+            btnBackground = Color(45, 93, 111),
+            btnOutline = Color(86, 105, 108)
+        ),
+
+        "GoldBurgundyTheme" to ColorTheme(
+            gradientBackground = Color(39, 27, 16, alpha = alpha(0.50f)),
+            colorShowcaseHeader = Color(53, 28, 22, alpha = alpha(0.76f)),
+            gradientShowcaseHeaderLeft = Color(120, 92, 20, alpha = alpha(0.69f)),
+            btnBackground = Color(57, 38, 25),
+            btnOutline = Color(108, 90, 86)
+        ),
+
+        "VibrantBlueTheme" to ColorTheme(
+            gradientBackground = Color(0x0203048A),
+            colorShowcaseHeader = Color(19, 57, 95),
+            gradientShowcaseHeaderLeft = Color(39, 106, 141),
+            btnBackground = Color(25, 70, 107),
+            btnOutline = Color(34, 88, 133)
+        ),
+
+        "GoldenProfileDebutTheme" to ColorTheme(
+            gradientBackground = Color(61, 47, 20, alpha(0.6f)),
+            colorShowcaseHeader = Color(95, 72, 33, alpha(0.82f)),
+            gradientShowcaseHeaderLeft = Color(155, 122, 54, alpha(0.9f)),
+            btnBackground = Color(125, 98, 44),
+            btnOutline = Color(175, 148, 94)
+        ),
+
+        "GoldTheme" to ColorTheme(
+            gradientBackground = Color(116, 93, 44, alpha(0.64f)),
+            colorShowcaseHeader = Color(185, 145, 76, alpha(0.76f)),
+            gradientShowcaseHeaderLeft = Color(120, 95, 31, alpha(0.69f)),
+            btnBackground = Color(145, 116, 66),
+            btnOutline = Color(108, 90, 86)
+        ),
+
+        "BurntOrangeTheme" to ColorTheme(
+            gradientBackground = Color(47, 24, 6, alpha(0.65f)),
+            colorShowcaseHeader = Color(48, 12, 5, alpha(0.88f)),
+            gradientShowcaseHeaderLeft = Color(168, 99, 5, alpha(0.67f)),
+            btnBackground = Color(50, 15, 7),
+            btnOutline = Color(86, 30, 17)
+        ),
+
+        "FlatGreyTheme" to ColorTheme(
+            gradientBackground = Color(59, 62, 65),
+            colorShowcaseHeader = Color(105, 110, 113),
+            gradientShowcaseHeaderLeft = Color(105, 110, 113),
+            btnBackground = Color(105, 110, 113),
+            btnOutline = Color(105, 110, 113)
+        ),
+
+        "PurpleTheme" to ColorTheme(
+            gradientBackground = Color(0x20024380),
+            colorShowcaseHeader = Color(0xFF4c2f69),
+            gradientShowcaseHeaderLeft = Color(0xFF29113f),
+            btnBackground = Color(0xFF40245c),
+            btnOutline = Color(0xFF603689)
+        ),
     )
 
     fun getColorTheme(id: String) = registeredThemes[id] ?: default()
     fun default() = registeredThemes["Default"]!!
 
     class ColorTheme(
-        val gradientRight: Color,
-        val gradientLeft: Color,
         val gradientBackground: Color,
-        val gradientBackgroundRight: Color,
-        val gradientBackgroundLeft: Color,
         val colorShowcaseHeader: Color,
         val gradientShowcaseHeaderLeft: Color,
         val btnBackground: Color,
@@ -146,61 +164,6 @@ object SteamColors {
 }
 
 /*
-
-/* -- BlueRedTheme -- (CSGO) */
-body.BlueRedTheme {
-	--gradient-right: rgb(253 56 51 / 23%);
-    --gradient-left: rgb(12 230 241 / 37%);
-    --gradient-background: rgb(10 25 32 / 30%);
-    --gradient-background-right: rgb(253 51 51 / 15%);
-    --gradient-background-left: rgb(12 241 241 / 13%);
-    --color-showcase-header: rgb(64 23 23 / 50%);
-    --gradient-showcase-header-left: rgb(27 113 132 / 93%);
-    --btn-background: rgb(45 93 111);
-    --btn-background-hover: rgb(36 121 130);
-    --btn-outline: rgb(86 105 108);
-}
-
-/* -- GoldBurgundyTheme -- (Resident Evil Village - Castle) */
-body.GoldBurgundyTheme {
-	--gradient-right: rgb(253 219 51 / 23%);
-    --gradient-left: rgb(97 75 37);
-    --gradient-background: rgb(39 27 16 / 50%);
-    --gradient-background-right: rgb(0 0 0 / 35%);
-    --gradient-background-left: rgb(0 0 0 / 35%);
-    --color-showcase-header: rgb(53 28 22 / 76%);
-    --gradient-showcase-header-left: rgb(120 92 20 / 69%);
-    --btn-background: rgb(57 38 25);
-    --btn-background-hover: rgb(77 52 36);
-    --btn-outline: rgb(108, 90, 86);
-}
-
-/* -- VibrantBlueTheme -- (Civilization VI) */
-body.VibrantBlueTheme {
-	--gradient-right: #008ada8a;
-    --gradient-left: rgb(47 137 188);
-    --gradient-background: #0203048a;
-    --gradient-background-right: rgb(253 51 51 / 0%);
-    --gradient-background-left: rgb(12 140 241 / 17%);
-    --color-showcase-header: rgb(19 57 95);
-    --gradient-showcase-header-left: rgb(39 106 141);
-    --btn-background: rgb(25 70 107);
-    --btn-background-hover: rgb(35 87 130);
-    --btn-outline: rgb(34 88 133);
-}
-
-body.GoldenProfileDebutTheme {
-    --gradient-right: rgba(156, 66, 17, 0.18);
-    --gradient-left: rgba(213, 172, 81, 0.62);
-	--gradient-background: rgba(61, 47, 20, 0.6);
-    --gradient-background-right: rgba(0, 0, 0, 0);
-    --gradient-background-left: rgba(243, 200, 9, 0.13);
-    --color-showcase-header: rgba(95, 72, 33, 0.82);
-    --gradient-showcase-header-left: rgba(155, 122, 54, 0.9);
-    --btn-background: rgb(125, 98, 44);
-    --btn-background-hover: rgb(135, 108, 54);
-    --btn-outline: rgb(175, 148, 94);
-}
 
 body.WinterProfile2020Theme {
 	--gradient-right: #7770A988;
@@ -239,64 +202,6 @@ body.Summer2021Theme {
     --btn-background: #309186;
     --btn-background-hover: #3aa89c;
     --btn-outline: #2c5e83;
-}
-
-/* -- NEW THEMES 6.23.21 -- */
-
-/* (Evil Genius 2) */
-body.GoldTheme {
-    --gradient-right: rgb(197 164 79 / 73%);
-    --gradient-left: rgb(128 94 36);
-    --gradient-background: rgb(116 93 44 / 64%);
-    --gradient-background-right: rgb(0 0 0 / 35%);
-    --gradient-background-left: rgb(0 0 0 / 35%);
-    --color-showcase-header: rgb(185 145 76 / 76%);
-    --gradient-showcase-header-left: rgb(120 95 31 / 69%);
-    --btn-background: rgb(145 116 66);
-    --btn-background-hover: rgb(169 132 68);
-	--btn-outline: rgb(108, 90, 86);
-}
-
-/* (Dying Light) */
-body.BurntOrangeTheme {
-    --gradient-right: rgb(136 66 8 / 66%);
-    --gradient-left: rgb(251 250 251 / 48%);
-    --gradient-background: rgb(47 24 6 / 65%);
-    --gradient-background-right: rgb(19 8 2);
-    --gradient-background-left: rgb(8 2 5 / 0%);
-    --color-showcase-header: rgb(48 12 5 / 88%);
-    --gradient-showcase-header-left: rgb(168 99 5 / 67%);
-    --btn-background: rgb(50 15 7);
-    --btn-background-hover: rgb(89 31 17);
-    --btn-outline: rgb(86 30 17);
-}
-
-/* (Loop Hero) */
-body.FlatGreyTheme {
-	--gradient-right: #3b3e4100;
-    --gradient-left: rgb(59 62 65 / 0%);
-    --gradient-background: rgb(59 62 65);
-    --gradient-background-right: rgb(59 62 65 / 0%);
-    --gradient-background-left: rgb(59 62 65 / 0%);
-    --color-showcase-header: rgb(105 110 113);
-    --gradient-showcase-header-left: rgb(105 110 113);
-    --btn-background: rgb(105 110 113);
-    --btn-background-hover: rgb(118 122 124);
-    --btn-outline: rgb(105 110 113);
-}
-
-/* (Outriders - Main) */
-body.PurpleTheme {
-	--gradient-right: #3c2c4c;
-    --gradient-left: #52298094;
-    --gradient-background: #20024380;
-    --gradient-background-right: #0f021f;
-    --gradient-background-left: #150329;
-    --color-showcase-header: #4c2f69;
-    --gradient-showcase-header-left: #29113f;
-    --btn-background: #40245c;
-    --btn-background-hover: #5f3c80;
-    --btn-outline: #603689;
 }
 
 /* Halloween 2021 */
