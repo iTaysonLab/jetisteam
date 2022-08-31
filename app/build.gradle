@@ -15,19 +15,20 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            ndk {
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
+            }
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -47,7 +48,17 @@ android {
 
     packagingOptions {
         resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += "/META-INF/*.kotlin_module"
+            excludes += "/META-INF/*.version"
+            excludes += "/META-INF/**"
+            excludes += "/kotlin/**"
+            excludes += "/kotlinx/**"
+            excludes += "**/*.properties"
+            excludes += "DebugProbesKt.bin"
+            excludes += "kotlin-tooling-metadata.json"
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "log4j2.xml"
+            excludes += "**.proto"
         }
     }
 }
