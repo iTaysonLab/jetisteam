@@ -10,6 +10,9 @@ object SteamBbToMarkdown {
             .replaceTagWith("h2") { "# $it" }
             .replaceTagWith("img") { "![image]($it)" }
             .replaceTagWith("b") { "**$it**" }
+            .replace("\\[url=(.+?)](.+?)\\[/url]".toRegex()) { result ->
+                "[${result.groupValues[2]}](${result.groupValues[1]})"
+            }
     }
 
     private fun String.replaceTagWith(tag: String, func: (String) -> String) = replace(
