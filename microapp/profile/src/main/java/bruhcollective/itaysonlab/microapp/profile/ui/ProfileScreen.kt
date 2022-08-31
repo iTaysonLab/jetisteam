@@ -24,6 +24,7 @@ import bruhcollective.itaysonlab.microapp.profile.ui.components.ProfileHeader
 @Composable
 internal fun ProfileScreen(
     onGameClick: (Int) -> Unit,
+    onLibraryClick: (Long) -> Unit,
     viewModel: ProfileScreenViewModel = hiltViewModel()
 ) {
     val tab = rememberTopAppBarState()
@@ -58,7 +59,10 @@ internal fun ProfileScreen(
                             avatarUrl = data.miniProfile.avatarUrl,
                             avatarFrameUrl = data.equipment.avatarFrame?.imageLarge,
                             personaName = data.miniProfile.personaName,
-                            summary = data.summary
+                            summary = data.summary,
+                            onLibraryClick = {
+                                onLibraryClick(data.steamID.steamId)
+                            }
                         )
                     }
 

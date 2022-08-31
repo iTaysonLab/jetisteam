@@ -7,8 +7,6 @@ object CdnUrlUtil {
         return "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/${path ?: return null}"
     }
 
-    // GetCommunityIconURL
-
     fun buildAppUrl(appid: Int, file: String): String {
         return "$MEDIA_CDN_URL/steam/apps/$appid/$file"
     }

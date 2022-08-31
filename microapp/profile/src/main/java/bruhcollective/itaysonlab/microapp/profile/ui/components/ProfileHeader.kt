@@ -26,7 +26,8 @@ internal fun ProfileHeader(
     avatarUrl: String?,
     avatarFrameUrl: String?,
     personaName: String,
-    summary: ProfileSummary?
+    summary: ProfileSummary?,
+    onLibraryClick: () -> Unit,
 ) {
     val theme = LocalSteamTheme.current
 
@@ -104,7 +105,7 @@ internal fun ProfileHeader(
                     }
 
                     item {
-                        Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
+                        Button(onClick = onLibraryClick, colors = ButtonDefaults.buttonColors(
                             containerColor = theme.btnBackground.copy(alpha = 0.5f),
                             contentColor = Color.White
                         ), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {

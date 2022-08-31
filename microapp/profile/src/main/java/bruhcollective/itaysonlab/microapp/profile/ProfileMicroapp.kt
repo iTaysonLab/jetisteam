@@ -1,7 +1,9 @@
 package bruhcollective.itaysonlab.microapp.profile
 
-import bruhcollective.itaysonlab.microapp.core.ComposableMicroappEntry
+import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
+import bruhcollective.itaysonlab.microapp.profile.ProfileMicroappImpl.InternalRoutes.ARG_ID
 
-abstract class ProfileMicroapp: ComposableMicroappEntry {
+abstract class ProfileMicroapp: NestedMicroappEntry {
     override val microappRoute = "profile"
+    fun libraryDestination(steamId: Long) = ProfileMicroappImpl.InternalRoutes.Library.replace("{$ARG_ID}", steamId.toString())
 }

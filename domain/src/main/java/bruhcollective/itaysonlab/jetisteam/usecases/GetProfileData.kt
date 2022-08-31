@@ -50,6 +50,7 @@ class GetProfileData @Inject constructor(
             .take(3)
 
         return ProfileData(
+            steamID = steamid,
             miniProfile = miniprofileService.getMiniprofile(steamid.accountId),
             summary = summary,
             equipment = ProfileEquipment(profileRepository.getProfileItems(steamid.steamId)),
@@ -65,6 +66,7 @@ class GetProfileData @Inject constructor(
     }
 
     class ProfileData(
+        val steamID: SteamID,
         val miniProfile: Miniprofile,
         val summary: ProfileSummary?,
         val equipment: ProfileEquipment,

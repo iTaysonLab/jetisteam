@@ -14,4 +14,5 @@
     <string name="showcase_favorite_group">Favorite Group</string>
     <string name="showcase_workshop">Workshop Showcase</string>
     <string name="showcase_info">Custom Info Box</string>
+    <string name="library">Library</string>
 </resources>
