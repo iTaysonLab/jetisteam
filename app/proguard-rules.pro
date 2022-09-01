@@ -81,5 +81,10 @@
 
 -dontwarn kotlin.**
 
--keep public class * extends com.google.protobuf.GeneratedMessage { *; }
--keep public class * extends com.google.protobuf.GeneratedMessageLite { *; }
+# TODO: Research this and try to reduce the app size
+-keep class bruhcollective.itaysonlab.jetisteam.proto.** { *; }
+-keep class steam.** { *; }
+-keep class com.google.protobuf.** { *; }
+
+-keep class org.bouncycastle.jcajce.provider.** { *; }
+-keep class !org.bouncycastle.jce.provider.X509LDAPCertStoreSpi,org.bouncycastle.jce.provider.** { *; }
