@@ -47,7 +47,7 @@ class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
     }
 
     object InternalRoutes {
-        const val NavGraph = "@auth"
+        const val NavGraph = "@profile"
 
         const val ARG_ID = "id"
 
