@@ -7,11 +7,13 @@ hilt = "2.43.2"
 retrofit = "2.9.0"
 richText = "0.13.0"
 protobuf = "3.21.5"
+wire = "4.4.1"
 
 [plugins]
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 moshix = { id = "dev.zacsweers.moshix", version = "0.18.3" }
 protobuf = { id = "com.google.protobuf", version = "0.8.19" }
+wire = { id = "com.squareup.wire", version.ref = "wire" }
 
 [libraries]
 androidCoreKtx = "androidx.core:core-ktx:1.8.0"
@@ -52,6 +54,8 @@ retrofitProtobuf = { module = "com.squareup.retrofit2:converter-protobuf", versi
 
 richTextMaterial3 = { module = "com.halilibo.compose-richtext:richtext-ui-material3", version.ref = "richText" }
 richTextMarkdown = { module = "com.halilibo.compose-richtext:richtext-commonmark", version.ref = "richText" }
+
+wireRuntime = { module = "com.squareup.wire:wire-runtime", version.ref = "wire" }
 
 javaInject = "javax.inject:javax.inject:1"
 

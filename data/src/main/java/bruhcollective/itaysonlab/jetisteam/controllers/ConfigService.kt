@@ -1,8 +1,8 @@
 package bruhcollective.itaysonlab.jetisteam.controllers
 
 import android.content.Context
-import com.google.protobuf.MessageLite
-import com.google.protobuf.Parser
+import com.squareup.wire.Message
+import com.squareup.wire.ProtoAdapter
 import com.tencent.mmkv.MMKV
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -52,19 +52,19 @@ class ConfigService @Inject constructor(
     }
 
     // experimental json delegating
-    inner class ProtoCfg <T: MessageLite> (private val key: String, type: Class<T>) {
+    inner class ProtoCfg <T: Message<T, *>> (private val key: String, type: Class<T>) {
         // protobuf parsing isn't cheap, so we cache it
         private var _value: T? = null
 
         @Suppress("UNCHECKED_CAST")
-        private val _parserField = type.getDeclaredMethod("parser").invoke(null) as Parser<T>
+        private val _parserField = type.getDeclaredField("ADAPTER").get(null) as ProtoAdapter<T>
 
         operator fun getValue(thisRef: Any?, property: KProperty<*>): T? {
             if (_value == null) {
                 if (instance.containsKey(key)) {
                     val bytes = instance.getBytes(key, null)
                     if (bytes == null || bytes.isEmpty()) return null
-                    _value = _parserField.parseFrom(bytes)
+                    _value = _parserField.decode(bytes)
                 } else {
                     return null
                 }
@@ -75,7 +75,7 @@ class ConfigService @Inject constructor(
 
         operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
             _value = if (value != null) {
-                instance.putBytes(key, value.toByteArray())
+                instance.putBytes(key, value.encode())
                 value
             } else {
                 instance.removeValueForKey(key)
@@ -84,5 +84,5 @@ class ConfigService @Inject constructor(
         }
     }
 
-    inline fun <reified T: MessageLite> protoCfg(key: String) = ProtoCfg(key, T::class.java)
+    inline fun <reified T: Message<T, *>> protoCfg(key: String) = ProtoCfg(key, T::class.java)
 }

@@ -13,7 +13,7 @@ class SteamSessionController @Inject constructor(
         private set
 
     internal fun buildSteamLoginSecureCookie(): String {
-        return "${authSession!!.steamId}||${authSession!!.accessToken}"
+        return "${authSession!!.steam_id}||${authSession!!.access_token}"
     }
 
     fun writeSession(msg: SessionData) {
@@ -21,6 +21,6 @@ class SteamSessionController @Inject constructor(
     }
 
     fun signedIn() = authSession != null
-    fun steamId() = SteamID(authSession?.steamId ?: 0L)
+    fun steamId() = SteamID(authSession?.steam_id ?: 0L)
     fun isMe(steamid: SteamID) = steamId().equalsWith(steamid)
 }

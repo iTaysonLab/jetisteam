@@ -3,11 +3,7 @@ package bruhcollective.itaysonlab.jetisteam.repository
 import android.util.Base64
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
 import bruhcollective.itaysonlab.jetisteam.proto.SessionData
-import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcChannel
-import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcController
-import com.google.protobuf.ByteString
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
 import steam.auth.*
 import java.math.BigInteger
 import java.security.KeyFactory
@@ -19,80 +15,66 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthRepository @Inject constructor(
-    steamRpcChannel: SteamRpcChannel,
+    steamRpcClient: SteamRpcClient,
     private val steamSessionController: SteamSessionController
 ) {
-    private val stub = Authentication.newBlockingStub(steamRpcChannel)
+    private val stub = steamRpcClient.create<Authentication>()
     private var currentCredsSession: CAuthentication_BeginAuthSessionViaCredentials_Response? = null
 
-    suspend fun getRsaKey(username: String) = withContext(Dispatchers.IO) {
-        stub.getPasswordRSAPublicKey(
-            SteamRpcController(),
-            CAuthentication_GetPasswordRSAPublicKey_Request.newBuilder().setAccountName(username)
-                .build()
-        ).let { response ->
-            generateRsaKey(response.publickeyMod, response.publickeyExp) to response.timestamp
-        }
+    suspend fun getRsaKey(username: String) = stub.GetPasswordRSAPublicKey(
+        CAuthentication_GetPasswordRSAPublicKey_Request(account_name = username)
+    ).let { response ->
+        generateRsaKey(response.publickey_mod.orEmpty(), response.publickey_exp.orEmpty()) to (response.timestamp ?: 0)
     }
 
     suspend fun beginAuthSessionViaCredentials(
         username: String,
         encryptedTimestamp: Long,
         encryptedPassword: ByteArray
-    ) = withContext(Dispatchers.IO) {
-        stub.beginAuthSessionViaCredentials(
-            SteamRpcController(post = true), CAuthentication_BeginAuthSessionViaCredentials_Request
-                .newBuilder()
-                .setAccountName(username)
-                .setEncryptionTimestamp(encryptedTimestamp)
-                .setEncryptedPasswordBytes(ByteString.copyFrom(encryptedPassword))
-                .setRememberLogin(true)
-                .setPlatformType(EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp)
-                .setPersistence(ESessionPersistence.k_ESessionPersistence_Persistent)
-                .setWebsiteId("Mobile")
-                .build()
-        ).also { currentCredsSession = it }.allowedConfirmationsList.isNotEmpty()
-    }
+    ) = stub.BeginAuthSessionViaCredentials(
+        CAuthentication_BeginAuthSessionViaCredentials_Request(
+            account_name = username,
+            encryption_timestamp = encryptedTimestamp,
+            encrypted_password = encryptedPassword.decodeToString(),
+            remember_login = true,
+            platform_type = EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp,
+            persistence = ESessionPersistence.k_ESessionPersistence_Persistent,
+            website_id = "Mobile"
+        )
+    ).also { currentCredsSession = it }.allowed_confirmations.isNotEmpty()
 
     suspend fun enterDeviceCode(
         code: String
-    ): Boolean = withContext(Dispatchers.IO) {
-        stub.updateAuthSessionWithSteamGuardCode(
-            SteamRpcController(post = true), CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request
-                .newBuilder()
-                .setClientId(currentCredsSession!!.clientId)
-                .setSteamid(currentCredsSession!!.steamid)
-                .setCodeType(currentCredsSession!!.allowedConfirmationsList[0].confirmationType)
-                .setCode(code)
-                .build()
+    ): Boolean {
+        stub.UpdateAuthSessionWithSteamGuardCode(
+            CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request(
+                client_id = currentCredsSession!!.client_id,
+                steamid = currentCredsSession!!.steamid,
+                code_type = currentCredsSession!!.allowed_confirmations.first().confirmation_type,
+                code = code
+            )
         )
 
-        return@withContext stub.pollAuthSessionStatus(
-            SteamRpcController(post = true), CAuthentication_PollAuthSessionStatus_Request
-                .newBuilder()
-                .setClientId(currentCredsSession!!.clientId)
-                .setRequestId(currentCredsSession!!.requestId)
-                .build()
+        return stub.PollAuthSessionStatus(
+            CAuthentication_PollAuthSessionStatus_Request(
+                client_id = currentCredsSession!!.client_id,
+                request_id = currentCredsSession!!.request_id,
+            )
         ).let { response ->
-            return@let if (response.hasAccessToken()) {
+            return@let if (response.access_token != null) {
                 steamSessionController.writeSession(
-                    SessionData
-                        .newBuilder()
-                        .setSteamId(currentCredsSession!!.steamid)
-                        .setUsername(response.accountName)
-                        .setAccessToken(response.accessToken)
-                        .setRefreshToken(response.refreshToken)
-                        .build()
+                    SessionData(
+                        steam_id = currentCredsSession!!.steamid ?: 0,
+                        username = response.account_name.orEmpty(),
+                        access_token = response.access_token,
+                        refresh_token = response.refresh_token.orEmpty(),
+                    )
                 )
                 true
             } else {
                 false
             }
         }
-    }
-
-    suspend fun refreshSession() = withContext(Dispatchers.IO) {
-
     }
 
     private fun generateRsaKey(

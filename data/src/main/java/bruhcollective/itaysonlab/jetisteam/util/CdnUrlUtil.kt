@@ -19,7 +19,7 @@ object CdnUrlUtil {
         return "https://steamcommunity-a.akamaihd.net/economy/image/$url"
     }
 
-    fun buildAsset(template: String, fileName: String): String {
-        return "$MEDIA_CDN_URL/${template.replace("\${FILENAME}", fileName)}"
+    fun buildAsset(template: String?, fileName: String?): String? {
+        return "$MEDIA_CDN_URL/${template?.replace("\${FILENAME}", fileName ?: return null) ?: return null}"
     }
 }

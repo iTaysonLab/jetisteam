@@ -1,8 +1,8 @@
 package bruhcollective.itaysonlab.jetisteam.repository
 
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
-import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcChannel
-import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcController
+import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
+import kotlinx.coroutines.runBlocking
 import steam.auth.Authentication
 import steam.auth.CAuthentication_AccessToken_GenerateForApp_Request
 import javax.inject.Inject
@@ -11,21 +11,25 @@ import javax.inject.Singleton
 
 @Singleton
 class NeutralAuthRepository @Inject constructor(
-    @Named("neutralRpcChannel") steamRpcChannel: SteamRpcChannel,
+    @Named("neutralRpcClient") steamRpcClient: SteamRpcClient,
     private val steamSessionController: SteamSessionController
 ) {
-    private val stub = Authentication.newBlockingStub(steamRpcChannel)
+    private val stub = steamRpcClient.create<Authentication>()
 
     fun refreshSession() {
         val authSession = steamSessionController.authSession!!
 
-        stub.generateAccessTokenForApp(
-            SteamRpcController(post = true), CAuthentication_AccessToken_GenerateForApp_Request.newBuilder()
-                .setRefreshToken(authSession.refreshToken)
-                .setSteamid(authSession.steamId)
-                .build()
-        ).also {
-            steamSessionController.writeSession(authSession.toBuilder().setAccessToken(it.accessToken).build())
+        runBlocking {
+            stub.GenerateAccessTokenForApp(
+                CAuthentication_AccessToken_GenerateForApp_Request(
+                    refresh_token = authSession.refresh_token,
+                    steamid = authSession.steam_id,
+                )
+            )
+        }.also {
+            steamSessionController.writeSession(authSession.copy(
+                access_token = it.access_token.orEmpty()
+            ))
         }
     }
 }

@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.jetisteam.repository
 
-import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcChannel
-import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcController
+import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
 import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,56 +12,49 @@ import javax.inject.Singleton
 
 @Singleton
 class ProfileRepository @Inject constructor(
-    steamRpcChannel: SteamRpcChannel
+    steamRpcClient: SteamRpcClient,
 ) {
-    private val playerStub = Player.newBlockingStub(steamRpcChannel)
-    private val mobileAppStub = MobileApp.newBlockingStub(steamRpcChannel)
+    private val playerStub = steamRpcClient.create<Player>()
+    private val mobileAppStub = steamRpcClient.create<MobileApp>()
 
-    suspend fun getMyProfileSummary() = withContext(Dispatchers.IO) {
-        mobileAppStub.getMobileSummary(
-            SteamRpcController(post = true), CMobileApp_GetMobileSummary_Request.newBuilder().build()
-        )
-    }
+    suspend fun getMyProfileSummary() = mobileAppStub.GetMobileSummary(CMobileApp_GetMobileSummary_Request())
 
-    suspend fun getProfileItems(steamid: Long) = withContext(Dispatchers.IO) {
-        playerStub.getProfileItemsEquipped(
-            SteamRpcController(), CPlayer_GetProfileItemsEquipped_Request.newBuilder()
-                .setSteamid(steamid)
-                .setLanguage(LanguageUtil.currentLanguage)
-                .build()
+    suspend fun getProfileItems(steamid: Long) = playerStub.GetProfileItemsEquipped(
+        CPlayer_GetProfileItemsEquipped_Request(
+            steamid = steamid,
+            language = LanguageUtil.currentLanguage
         )
-    }
+    )
 
-    suspend fun getProfileCustomization(steamid: Long) = withContext(Dispatchers.IO) {
-        playerStub.getProfileCustomization(
-            SteamRpcController(), CPlayer_GetProfileCustomization_Request.newBuilder()
-                .setSteamid(steamid)
-                .setIncludeInactiveCustomizations(false)
-                .setIncludePurchasedCustomizations(false)
-                .build()
+    suspend fun getProfileCustomization(steamid: Long) = playerStub.GetProfileCustomization(
+        CPlayer_GetProfileCustomization_Request(
+            steamid = steamid,
+            include_inactive_customizations = false,
+            include_purchased_customizations = false
         )
-    }
+    )
 
     suspend fun getOwnedGames(steamid: Long) = withContext(Dispatchers.IO) {
-        playerStub.getOwnedGames(
-            SteamRpcController(), CPlayer_GetOwnedGames_Request.newBuilder()
-                .setSteamid(steamid)
-                .setSkipUnvettedApps(true)
-                .setIncludeAppinfo(true)
-                .setIncludeExtendedAppinfo(true)
-                .setIncludePlayedFreeGames(true)
-                .setLanguage(LanguageUtil.currentLanguage)
-                .build()
+        playerStub.GetOwnedGames(
+            CPlayer_GetOwnedGames_Request(
+                steamid = steamid,
+                language = LanguageUtil.currentLanguage,
+                skip_unvetted_apps = true,
+                include_appinfo = true,
+                include_extended_appinfo = true,
+                include_free_sub = true,
+                include_played_free_games = true
+            )
         )
     }
 
     suspend fun getAchievementsProgress(steamid: Long, appids: List<Int>) = withContext(Dispatchers.IO) {
-        playerStub.getAchievementsProgress(
-            SteamRpcController(post = true), CPlayer_GetAchievementsProgress_Request.newBuilder()
-                .setSteamid(steamid)
-                .addAllAppids(appids)
-                .setLanguage(LanguageUtil.currentLanguage)
-                .build()
+        playerStub.GetAchievementsProgress(
+            CPlayer_GetAchievementsProgress_Request(
+                steamid = steamid,
+                language = LanguageUtil.currentLanguage,
+                appids = appids
+            )
         )
     }
 }

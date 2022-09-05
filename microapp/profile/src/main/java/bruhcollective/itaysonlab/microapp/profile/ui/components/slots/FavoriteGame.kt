@@ -28,9 +28,9 @@ internal fun FavoriteGame(
         val data = getData(id)
 
         FavoriteGameModel(
-            name = data.first.name,
-            playtimeForever = data.first.playtimeForever,
-            achievementPercentage = data.second.percentage / 100f,
+            name = data.first.name!!,
+            playtimeForever = data.first.playtime_forever!!,
+            achievementPercentage = data.second.percentage!! / 100f,
             achievementString = "${data.second.unlocked} of ${data.second.total}"
         )
     }
@@ -67,7 +67,7 @@ internal fun FavoriteGame(
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .fillMaxWidth()) {
         Text(text = "Achievement Progress", color = Color.White, fontSize = 16.sp)
-        Text(text = content.name, color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp)
+        Text(text = content.achievementString, color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp)
     }
 }
 

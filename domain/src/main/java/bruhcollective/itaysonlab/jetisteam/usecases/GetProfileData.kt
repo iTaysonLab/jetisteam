@@ -30,7 +30,7 @@ class GetProfileData @Inject constructor(
 
         val customization =
             ProfileCustomization(profileRepository.getProfileCustomization(steamid.steamId))
-        val ownedGames = profileRepository.getOwnedGames(steamid.steamId).gamesList
+        val ownedGames = profileRepository.getOwnedGames(steamid.steamId).games
 
         val inSlotsWithAchievements = customization.profileCustomizationEntries
             .filter {
@@ -46,7 +46,7 @@ class GetProfileData @Inject constructor(
             .map { it.appId }
 
         val recentGames = ownedGames
-            .sortedByDescending { it.rtimeLastPlayed }
+            .sortedByDescending { it.rtime_last_played }
             .take(3)
 
         return ProfileData(
@@ -55,13 +55,13 @@ class GetProfileData @Inject constructor(
             summary = summary,
             equipment = ProfileEquipment(profileRepository.getProfileItems(steamid.steamId)),
             customization = customization,
-            ownedGames = ownedGames.associateBy { it.appid },
-            recentActivityPast2Weeks = recentGames.sumOf { it.playtime2Weeks },
+            ownedGames = ownedGames.associateBy { it.appid!! },
+            recentActivityPast2Weeks = recentGames.sumOf { it.playtime_2weeks ?: 0 },
             recentActivityGames = recentGames,
             achievementsProgress = profileRepository.getAchievementsProgress(
                 steamid.steamId,
-                inSlotsWithAchievements + recentGames.map { it.appid }
-            ).achievementProgressList.associateBy { it.appid }
+                inSlotsWithAchievements + recentGames.map { it.appid!! }
+            ).achievement_progress.associateBy { it.appid!! }
         )
     }
 

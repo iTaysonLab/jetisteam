@@ -23,7 +23,7 @@ import bruhcollective.itaysonlab.microapp.gamepage.R
 
 @Composable
 internal fun GamePageHeader(
-    backgroundUrl: String,
+    backgroundUrl: String?,
     gameTitle: String,
     reviews: GetGamePage.ReviewsInfo,
     tags: List<Pair<String, Int>>

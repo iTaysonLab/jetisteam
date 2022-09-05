@@ -9,5 +9,5 @@ import javax.inject.Inject
 class GetProfileOwnedGames @Inject constructor(
     private val profileRepository: ProfileRepository,
 ) {
-    suspend operator fun invoke(steamId: Long) = withContext(Dispatchers.Default) { profileRepository.getOwnedGames(steamId).gamesList.map(::OwnedGame) }
+    suspend operator fun invoke(steamId: Long) = withContext(Dispatchers.Default) { profileRepository.getOwnedGames(steamId).games.map(::OwnedGame) }
 }

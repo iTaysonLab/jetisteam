@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.jetisteam.usecases
 
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
-import bruhcollective.itaysonlab.jetisteam.models.Miniprofile
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.repository.EconRepository
 import bruhcollective.itaysonlab.jetisteam.repository.FriendsRepository
@@ -14,7 +13,6 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import steam.common.StoreBrowseItemDataRequest
 import steam.common.StoreItemID
-import steam.econ.CEconItem_Description
 import steam.steamnotification.SteamNotificationType
 import javax.inject.Inject
 
@@ -29,65 +27,62 @@ class GetNotifications @Inject constructor(
     suspend operator fun invoke() = withContext(Dispatchers.Default) {
         val apiNotifications = notificationsRepository.getNotifications()
 
-        val apiNotificationList = apiNotifications.notificationsList
+        val apiNotificationList = apiNotifications.notifications
             .groupBy { it.timestamp }
             .values
             .map { it.first() to (it.size - 1) }
             .sortedByDescending { it.first.timestamp }
 
         val shouldRequestFriends =
-            apiNotificationList.filter { it.first.notificationType == SteamNotificationType.FriendInvite }
+            apiNotificationList.filter { it.first.notification_type == SteamNotificationType.FriendInvite }
         val shouldRequestGames =
-            apiNotificationList.filter { it.first.notificationType == SteamNotificationType.Wishlist }
+            apiNotificationList.filter { it.first.notification_type == SteamNotificationType.Wishlist }
 
         val games = (if (shouldRequestGames.isNotEmpty()) storeRepository.getItems(
             shouldRequestGames.map {
-                StoreItemID.newBuilder().setAppid(JSONObject(it.first.bodyData).getInt("appid"))
-                    .build()
-            }, StoreBrowseItemDataRequest.newBuilder().setIncludeTagCount(0).setIncludeAssets(true).build()
-        ).storeItemsList else emptyList()).associateBy { it.appid }
+                StoreItemID(appid = JSONObject(it.first.body_data.orEmpty()).getInt("appid"))
+            }, StoreBrowseItemDataRequest(include_tag_count = 0, include_assets = true)
+        ).store_items else emptyList()).associateBy { it.appid }
 
         val friends =
-            (if (shouldRequestFriends.isNotEmpty()) friendsRepository.getFriendsList().friendslist.friendsList else emptyList()).filter {
+            (if (shouldRequestFriends.isNotEmpty()) friendsRepository.getFriendsList().friendslist?.friends else emptyList())?.filter {
                 it.efriendrelationship == 3
-            }.map {
-                SteamID(it.ulfriendid).accountId
-            }
+            }?.map {
+                SteamID(it.ulfriendid ?: 0).accountId
+            } ?: emptyList()
 
         NotificationsPage(
-            confirmationsCount = apiNotifications.confirmationCount,
+            confirmationsCount = apiNotifications.confirmation_count ?: 0,
             notifications = apiNotificationList.mapNotNull { pair ->
                 val notification = pair.first
                 val extra = pair.second
                 val haveExtra = extra > 0
 
-                when (notification.notificationType) {
+                when (notification.notification_type) {
                     SteamNotificationType.Wishlist -> {
-                        val game = games[JSONObject(notification.bodyData).getInt("appid")]!!
+                        val game = games[JSONObject(notification.body_data.orEmpty()).getInt("appid")]!!
 
                         Notification(
-                            timestamp = notification.timestamp,
-                            title = if (haveExtra) "${game.name} + $extra" else game.name,
-                            description = "is on sale for ${game.bestPurchaseOption.formattedFinalPrice}",
-                            icon = CdnUrlUtil.buildCommunityUrl(
-                                "images/apps/${game.appid}/${game.assets.communityIcon}.jpg"
-                            ),
-                            type = notification.notificationType
+                            timestamp = notification.timestamp ?: 0,
+                            title = if (haveExtra) "${game.name} + $extra" else game.name.orEmpty(),
+                            description = "is on sale for ${game.best_purchase_option?.formatted_final_price.orEmpty()}",
+                            icon = CdnUrlUtil.buildCommunityUrl("images/apps/${game.appid}/${game.assets?.community_icon}.jpg"),
+                            type = notification.notification_type!!
                         )
                     }
 
                     SteamNotificationType.FriendInvite -> {
                         val accountId =
-                            JSONObject(notification.bodyData).getInt("requestor_id").toLong()
+                            JSONObject(notification.body_data.orEmpty()).getInt("requestor_id").toLong()
                         val miniProfile = miniprofileService.getMiniprofile(accountId)
                         val inFriends = friends.contains(accountId)
 
                         Notification(
-                            timestamp = notification.timestamp,
+                            timestamp = notification.timestamp ?: 0,
                             title = if (haveExtra) "${miniProfile.personaName} + $extra" else miniProfile.personaName,
                             description = if (inFriends) "You are now friends" else "Awaiting response",
                             icon = miniProfile.avatarUrl,
-                            type = notification.notificationType
+                            type = notification.notification_type!!
                         )
                     }
 

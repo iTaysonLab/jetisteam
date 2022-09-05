@@ -26,9 +26,6 @@ kapt {
 
 dependencies {
     implementation project(":data")
-
-    implementation libs.protobufRuntime
-
     implementation libs.hiltAndroid
     kapt libs.hiltCompiler
 }

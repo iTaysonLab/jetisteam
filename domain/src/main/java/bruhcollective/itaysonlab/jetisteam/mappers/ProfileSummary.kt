@@ -8,8 +8,8 @@ class ProfileSummary(
     val walletBalance: String
 ) {
     constructor(proto: CMobileApp_GetMobileSummary_Response): this(
-        ownedGames = proto.ownedGames,
-        friendCount = proto.friendCount,
-        walletBalance = proto.walletBalance
+        ownedGames = proto.owned_games ?: 0,
+        friendCount = proto.friend_count ?: 0,
+        walletBalance = proto.wallet_balance.orEmpty()
     )
 }

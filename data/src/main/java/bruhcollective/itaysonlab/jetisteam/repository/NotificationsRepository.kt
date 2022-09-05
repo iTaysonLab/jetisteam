@@ -1,10 +1,6 @@
 package bruhcollective.itaysonlab.jetisteam.repository
 
-import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcChannel
-import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcController
-import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
 import steam.steamnotification.CSteamNotification_GetSteamNotifications_Request
 import steam.steamnotification.SteamNotification
 import javax.inject.Inject
@@ -12,13 +8,9 @@ import javax.inject.Singleton
 
 @Singleton
 class NotificationsRepository @Inject constructor(
-    steamRpcChannel: SteamRpcChannel,
+    steamRpcClient: SteamRpcClient,
 ) {
-    private val stub = SteamNotification.newBlockingStub(steamRpcChannel)
+    private val stub = steamRpcClient.create<SteamNotification>()
 
-    suspend fun getNotifications() = withContext(Dispatchers.IO) {
-        stub.getSteamNotifications(
-            SteamRpcController(), CSteamNotification_GetSteamNotifications_Request.getDefaultInstance()
-        )
-    }
+    suspend fun getNotifications() = stub.GetSteamNotifications(CSteamNotification_GetSteamNotifications_Request())
 }

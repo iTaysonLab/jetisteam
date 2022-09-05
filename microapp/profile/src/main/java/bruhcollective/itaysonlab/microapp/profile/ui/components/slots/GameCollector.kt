@@ -35,12 +35,12 @@ internal fun GameCollector(
         items(games) { game ->
             AsyncImage(
                 model = remember(game.appid) {
-                    CdnUrlUtil.buildAppUrl(game.appid, "capsule_231x87.jpg")
+                    CdnUrlUtil.buildAppUrl(game.appid!!, "capsule_231x87.jpg")
                 },
                 contentDescription = null,
                 contentScale = ContentScale.FillHeight,
                 modifier = Modifier
-                    .clickable { onGameClick(game.appid) }
+                    .clickable { onGameClick(game.appid!!) }
                     .wrapContentSize()
                     .height(70.dp)
             )

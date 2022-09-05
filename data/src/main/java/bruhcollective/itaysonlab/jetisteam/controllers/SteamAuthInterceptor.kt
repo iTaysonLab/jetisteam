@@ -41,7 +41,7 @@ class SteamAuthInterceptor @Inject constructor(
             )
         } else {
             url(
-                orig.url.newBuilder().addQueryParameter("access_token", authSession.accessToken).build()
+                orig.url.newBuilder().addQueryParameter("access_token", authSession.access_token).build()
             )
         }
 

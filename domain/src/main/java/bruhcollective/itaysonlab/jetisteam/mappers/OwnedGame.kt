@@ -16,19 +16,19 @@ class OwnedGame(
     val hasDlc: Boolean,
 ) {
     constructor(proto: CPlayer_GetOwnedGames_Response_Game): this(
-        appid = proto.appid,
-        name = proto.name,
-        icon = proto.imgIconUrl,
-        logo = proto.imgLogoUrl,
-        capsule = CdnUrlUtil.buildAppUrl(proto.appid, if (proto.hasCapsuleFilename()) {
-            proto.capsuleFilename
+        appid = proto.appid ?: 0,
+        name = proto.name.orEmpty(),
+        icon = proto.img_icon_url.orEmpty(),
+        logo = proto.img_logo_url.orEmpty(),
+        capsule = CdnUrlUtil.buildAppUrl(proto.appid ?: 0, if (proto.capsule_filename != null) {
+            proto.capsule_filename!!
         } else {
             "library_600x900.jpg"
         }) ,
-        communityVisibleStats = proto.hasCommunityVisibleStats,
-        hasWorkshop = proto.hasWorkshop,
-        hasMarket = proto.hasMarket,
-        hasDlc = proto.hasDlc,
+        communityVisibleStats = proto.has_community_visible_stats ?: false,
+        hasWorkshop = proto.has_workshop ?: false,
+        hasMarket = proto.has_market ?: false,
+        hasDlc = proto.has_dlc ?: false,
         playtime = OwnedGamePlaytime(proto)
     )
 }
@@ -42,11 +42,11 @@ class OwnedGamePlaytime(
     val lastPlayed: Int
 ) {
     constructor(proto: CPlayer_GetOwnedGames_Response_Game): this(
-        twoWeeks = proto.playtime2Weeks,
-        forever = proto.playtimeForever,
-        onWindows = proto.playtimeWindowsForever,
-        onMac = proto.playtimeMacForever,
-        onLinux = proto.playtimeLinuxForever,
-        lastPlayed = proto.rtimeLastPlayed
+        twoWeeks = proto.playtime_2weeks ?: 0,
+        forever = proto.playtime_forever ?: 0,
+        onWindows = proto.playtime_windows_forever ?: 0,
+        onMac = proto.playtime_mac_forever ?: 0,
+        onLinux = proto.playtime_linux_forever ?: 0,
+        lastPlayed = proto.rtime_last_played ?: 0
     )
 }

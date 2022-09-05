@@ -1,7 +1,8 @@
 package bruhcollective.itaysonlab.jetisteam.di
 
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamAuthInterceptor
-import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcChannel
+import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
+import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcProcessor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,13 +29,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @Named("neutralRpcChannel")
-    fun provideNeturalRpcChannel(
-        okHttpClient: OkHttpClient
-    ) = SteamRpcChannel(okHttpClient)
-
-    @Provides
-    @Singleton
     fun provideRetrofit(
         @Named("steamOkhttp") okHttpClient: OkHttpClient
     ) = Retrofit.Builder()
@@ -53,4 +47,17 @@ object NetworkModule {
         .addConverterFactory(MoshiConverterFactory.create())
         .baseUrl("https://store.steampowered.com/")
         .build()
+
+    @Provides
+    @Singleton
+    @Named("neutralRpcClient")
+    fun provideNeturalRpcClient(
+        @Named("neutralRpcProcessor") processor: SteamRpcProcessor
+    ) = SteamRpcClient(processor)
+    @Provides
+    @Singleton
+    @Named("neutralRpcProcessor")
+    fun provideNeturalRpcProcessor(
+        okHttpClient: OkHttpClient
+    ) = SteamRpcProcessor(okHttpClient)
 }

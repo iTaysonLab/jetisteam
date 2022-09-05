@@ -9,13 +9,13 @@ class ProfileCustomization(
     val profileCustomizationEntries: List<ProfileCustomizationEntry>,
     val slotsAvailable: Int,
     val profileTheme: ProfileTheme,
-    val profilePreferences: ProfilePreferences
+    val profilePreferences: ProfilePreferences?
 ) {
     constructor(proto: CPlayer_GetProfileCustomization_Response): this(
-        profileCustomizationEntries = proto.customizationsList.map { ProfileCustomizationEntry(it) },
-        slotsAvailable = proto.slotsAvailable,
-        profileTheme = ProfileTheme(proto.profileTheme),
-        profilePreferences = ProfilePreferences(proto.profilePreferences)
+        profileCustomizationEntries = proto.customizations.map { ProfileCustomizationEntry(it) },
+        slotsAvailable = proto.slots_available ?: 0,
+        profileTheme = proto.profile_theme?.let { ProfileTheme(it) } ?: error("Unknown ProfileTheme"),
+        profilePreferences = proto.profile_preferences?.let { ProfilePreferences(it) }
     )
 }
 
@@ -28,12 +28,12 @@ class ProfileCustomizationEntry(
     val slots: List<ProfileCustomizationSlot>
 ) {
     constructor(proto: steam.player.ProfileCustomization): this(
-        customizationType = proto.customizationType,
-        level = proto.level,
-        active = proto.active,
-        large = proto.large,
-        style = proto.customizationStyle,
-        slots = proto.slotsList.map { ProfileCustomizationSlot(it) },
+        customizationType = proto.customization_type ?: error("Unknown CustomizationType"),
+        level = proto.level ?: 0,
+        active = proto.active ?: false,
+        large = proto.large ?: false,
+        style = proto.customization_style ?: EProfileCustomizationStyle.k_EProfileCustomizationStyleDefault,
+        slots = proto.slots.map { ProfileCustomizationSlot(it) },
     )
 }
 
@@ -52,18 +52,18 @@ class ProfileCustomizationSlot(
     val banResult: EBanContentCheckResult
 ) {
     constructor(proto: steam.player.ProfileCustomizationSlot): this(
-        appId = proto.appid,
-        publishedFileId = proto.publishedfileid,
-        itemAssetId = proto.itemAssetid,
-        itemContextId = proto.itemContextid,
-        notes = proto.notes,
-        title = proto.title,
-        accountId = proto.accountid,
-        badgeId = proto.badgeid,
-        borderColor = proto.borderColor,
-        itemClassId = proto.itemClassid,
-        itemInstanceId = proto.itemInstanceid,
-        banResult = proto.banCheckResult,
+        appId = proto.appid ?: 0,
+        publishedFileId = proto.publishedfileid ?: 0,
+        itemAssetId = proto.item_assetid ?: 0,
+        itemContextId = proto.item_contextid ?: 0,
+        notes = proto.notes.orEmpty(),
+        title = proto.title.orEmpty(),
+        accountId = proto.accountid ?: 0,
+        badgeId = proto.badgeid ?: 0,
+        borderColor = proto.border_color ?: 0,
+        itemClassId = proto.item_classid ?: 0,
+        itemInstanceId = proto.item_instanceid ?: 0,
+        banResult = proto.ban_check_result ?: EBanContentCheckResult.k_EBanContentCheckResult_NotScanned,
     )
 }
 
@@ -72,8 +72,8 @@ class ProfileTheme(
     val title: String
 ) {
     constructor(proto: steam.player.ProfileTheme): this(
-        themeId = proto.themeId,
-        title = proto.title
+        themeId = proto.theme_id.orEmpty(),
+        title = proto.title.orEmpty()
     )
 }
 
@@ -81,6 +81,6 @@ class ProfilePreferences(
     val hideProfileAwards: Boolean
 ) {
     constructor(proto: steam.player.ProfilePreferences): this(
-        hideProfileAwards = proto.hideProfileAwards
+        hideProfileAwards = proto.hide_profile_awards ?: false
     )
 }
