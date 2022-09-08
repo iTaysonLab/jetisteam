@@ -81,7 +81,7 @@ internal fun GamePageHeader(
                     Button(
                         onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(32.dp),
-                            contentColor = Color.White
+                            contentColor = MaterialTheme.colorScheme.onSurface
                         ), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         Icon(imageVector = Icons.Rounded.Star, contentDescription = null)
@@ -98,7 +98,7 @@ internal fun GamePageHeader(
                     Button(
                         onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp),
-                            contentColor = Color.White
+                            contentColor = MaterialTheme.colorScheme.onSurface
                         ), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         Text(text = tag.first)
