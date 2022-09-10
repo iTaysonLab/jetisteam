@@ -11,11 +11,6 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class JetisteamApplication : Application(), ImageLoaderFactory {
-    override fun onCreate() {
-        super.onCreate()
-        CoreInit.init()
-    }
-
     override fun newImageLoader() = ImageLoader.Builder(applicationContext).components {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             add(ImageDecoderDecoder.Factory())

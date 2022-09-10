@@ -56,8 +56,6 @@ dependencies {
     implementation libs.mmkv
     implementation libs.okhttp
 
-    implementation libs.bouncyCastle
-
     implementation libs.bundles.retrofit
 
     implementation libs.hiltAndroid

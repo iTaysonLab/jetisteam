@@ -79,13 +79,13 @@ class AuthRepository @Inject constructor(
 
     private fun generateRsaKey(
         mod: String, exp: String
-    ) = KeyFactory.getInstance("RSA", "BC")
+    ) = KeyFactory.getInstance("RSA")
         .generatePublic(RSAPublicKeySpec(BigInteger(mod, 16), BigInteger(exp, 16)))
 
     fun encryptPassword(
         pwd: String, key: PublicKey
     ): ByteArray = Base64.encode(
-        Cipher.getInstance("RSA/None/PKCS1Padding", "BC").also { it.init(Cipher.ENCRYPT_MODE, key) }.doFinal(pwd.encodeToByteArray()),
+        Cipher.getInstance("RSA/None/PKCS1Padding").also { it.init(Cipher.ENCRYPT_MODE, key) }.doFinal(pwd.encodeToByteArray()),
         Base64.NO_PADDING or Base64.NO_WRAP
     )
 }
