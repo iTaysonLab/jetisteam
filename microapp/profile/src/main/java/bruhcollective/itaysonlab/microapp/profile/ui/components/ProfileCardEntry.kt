@@ -20,8 +20,6 @@ import bruhcollective.itaysonlab.microapp.profile.ui.GameToAchievements
 import bruhcollective.itaysonlab.microapp.profile.ui.LocalSteamTheme
 import bruhcollective.itaysonlab.microapp.profile.ui.components.slots.FavoriteGame
 import bruhcollective.itaysonlab.microapp.profile.ui.components.slots.GameCollector
-import steam.player.CPlayer_GetAchievementsProgress_Response_AchievementProgress
-import steam.player.CPlayer_GetOwnedGames_Response_Game
 import steam.player.EProfileCustomizationType
 
 @Composable
@@ -48,7 +46,7 @@ internal fun ProfileCardEntry(
             EProfileCustomizationType.k_EProfileCustomizationTypeGuides -> R.string.showcase_favorite_guide
             EProfileCustomizationType.k_EProfileCustomizationTypeAchievements -> R.string.showcase_achievements
             EProfileCustomizationType.k_EProfileCustomizationTypeSalien -> R.string.showcase_salien
-            else -> 0
+            else -> R.string.showcase_unknown
         }
     }
 
