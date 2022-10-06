@@ -41,12 +41,23 @@ class ConfigService @Inject constructor(
 
     // Abstracts
 
-    private inner class StringCfg (private val key: String, private val default: String) {
+    inner class LazyStringCfg (private val key: String, private val ifNotExists: () -> String) {
+        operator fun getValue(thisRef: Any?, property: KProperty<*>): String {
+            return if (instance.containsKey(key)) {
+                instance.getString(key, null) ?: error("This should not happen")
+            } else {
+                ifNotExists().also { instance.putString(key, it) }
+            }
+        }
+        operator fun setValue(thisRef: Any?, property: KProperty<*>, value: String) { instance.putString(key, value) }
+    }
+
+    inner class StringCfg (private val key: String, private val default: String) {
         operator fun getValue(thisRef: Any?, property: KProperty<*>) = instance.getString(key, default) ?: default
         operator fun setValue(thisRef: Any?, property: KProperty<*>, value: String) { instance.putString(key, value) }
     }
 
-    private inner class LongCfg (private val key: String, private val default: Long) {
+    inner class LongCfg (private val key: String, private val default: Long) {
         operator fun getValue(thisRef: Any?, property: KProperty<*>) = instance.getLong(key, default)
         operator fun setValue(thisRef: Any?, property: KProperty<*>, value: Long) { instance.putLong(key, value) }
     }
