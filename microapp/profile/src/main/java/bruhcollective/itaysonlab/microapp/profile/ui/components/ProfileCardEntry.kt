@@ -59,6 +59,7 @@ internal fun ProfileCardEntry(
     ) {
 
         Text(text = stringResource(id = name),
+            color = Color.White,
             modifier = Modifier
                 .background(LocalSteamTheme.current.colorShowcaseHeader)
                 .padding(16.dp)
