@@ -15,9 +15,10 @@ message GuardData {
     bytes shared_secret = 1;
     fixed64 serial_number = 2;
     string revocation_code = 3;
-    string otpUri = 4;
-    string account_name = 5;
-    string token_gid = 6;
-    bytes identity_secret = 7;
-    bytes secret_1 = 8;
+    string uri = 4;
+    uint64 server_time = 5;
+    string account_name = 6;
+    string token_gid = 7;
+    bytes identity_secret = 8;
+    bytes secret_1 = 9;
 }

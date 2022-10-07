@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="guard">Guard</string>
+
+    <string name="guard_title">Protect your account</string>
+    <string name="guard_desc">Sign in by scanning a QR code and easily approve logins.</string>
+    <string name="guard_setup">Add authenticator</string>
+
+    <string name="guard_setup_move">Move authenticator?</string>
+    <string name="guard_setup_move_desc">This account already has an authenticator enabled on another device.</string>
+    <string name="guard_setup_move_allow">Move</string>
+    <string name="guard_setup_move_cancel">Cancel</string>
+
+    <string name="guard_setup_enter_code">Enter the code we sent to your phone</string>
+    <string name="guard_setup_enter_code_resend">Resend</string>
+    <string name="guard_setup_enter_code_action">Verify code</string>
+
+    <string name="guard_recovery">Recovery Code</string>
+    <string name="guard_recovery_hint">Do not share this code with anyone.</string>
+    <string name="guard_recovery_desc">This code allows you to sign in and recover access to your account even if you have deleted this app without transferring the authenticator or losing the device.</string>
+    <string name="guard_recovery_action">Done</string>
+
+    <string name="guard_actions_remove">Remove Authenticator</string>
+    <string name="guard_actions_devices">Authorized Devices</string>
+    <string name="guard_actions_qr">Scan a QR code</string>
+    <string name="guard_actions_copy">Copy</string>
 </resources>
