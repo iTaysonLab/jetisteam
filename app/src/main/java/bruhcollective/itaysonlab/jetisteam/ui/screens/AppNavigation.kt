@@ -29,12 +29,10 @@ import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
 import bruhcollective.itaysonlab.jetisteam.repository.UserAccountRepository
 import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
-import bruhcollective.itaysonlab.microapp.core.ComposableMicroappEntry
-import bruhcollective.itaysonlab.microapp.core.Destinations
-import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
+import bruhcollective.itaysonlab.microapp.core.*
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
 import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
-import bruhcollective.itaysonlab.microapp.core.find
+import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
 import bruhcollective.itaysonlab.microapp.profile.ProfileMicroapp
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -91,18 +89,16 @@ fun AppNavigation (
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                dest.second.second,
-                                contentDescription = stringResource(dest.second.first)
+                                dest.icon(),
+                                contentDescription = stringResource(dest.name)
                             )
                         },
-                        label = { Text(stringResource(dest.second.first)) },
+                        label = { Text(stringResource(dest.name)) },
                         selected = navController.backQueue.any {
-                            it.destination.route?.startsWith(
-                                dest.first
-                            ) == true
+                            it.destination.route?.startsWith(dest.route) == true
                         },
                         onClick = {
-                            navController.navigate(dest.first) {
+                            navController.navigate(dest.route) {
                                 popUpTo(ROOT_NAV_GRAPH_ID) {
                                     saveState = true
                                 }
@@ -149,9 +145,10 @@ class AppNavigationViewModel @Inject constructor(
         .distinct()
 
     val bottomNavDestinations = listOf(
-        destinations.find<NotificationsMicroapp>().microappRoute to ( bruhcollective.itaysonlab.microapp.notifications.R.string.notifications to Icons.Rounded.Notifications ),
-        destinations.find<ProfileMicroapp>().microappRoute to (R.string.tab_profile to Icons.Rounded.Person),
-    )
+        destinations.find<NotificationsMicroapp>(),
+        destinations.find<GuardMicroapp>(),
+        destinations.find<ProfileMicroapp>(),
+    ).map(BottomNavigationCapable::bottomNavigationEntry)
 
     fun signedIn() = steamSessionController.signedIn()
     fun mySteamId() = steamSessionController.steamId().steamId

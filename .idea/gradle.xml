@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/microapp/core" />
             <option value="$PROJECT_DIR$/microapp/debug" />
             <option value="$PROJECT_DIR$/microapp/gamepage" />
+            <option value="$PROJECT_DIR$/microapp/guard" />
             <option value="$PROJECT_DIR$/microapp/home" />
             <option value="$PROJECT_DIR$/microapp/news" />
             <option value="$PROJECT_DIR$/microapp/notifications" />

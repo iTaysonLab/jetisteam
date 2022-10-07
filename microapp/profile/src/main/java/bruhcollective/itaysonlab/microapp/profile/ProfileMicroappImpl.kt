@@ -1,11 +1,15 @@
 package bruhcollective.itaysonlab.microapp.profile
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Notifications
+import androidx.compose.material.icons.rounded.Person
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import bruhcollective.itaysonlab.microapp.core.Destinations
+import bruhcollective.itaysonlab.microapp.core.NavigationEntry
 import bruhcollective.itaysonlab.microapp.core.find
 import bruhcollective.itaysonlab.microapp.gamepage.GamePageMicroapp
 import bruhcollective.itaysonlab.microapp.profile.ui.ProfileScreen
@@ -45,6 +49,12 @@ class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
             destinations.find<GamePageMicroapp>().gameDestination(appId)
         )
     }
+
+    override val bottomNavigationEntry = NavigationEntry(
+        route = microappRoute,
+        name = R.string.profile,
+        icon = { Icons.Rounded.Person }
+    )
 
     object InternalRoutes {
         const val NavGraph = "@profile"

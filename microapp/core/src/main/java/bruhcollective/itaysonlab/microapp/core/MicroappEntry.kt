@@ -1,6 +1,9 @@
 package bruhcollective.itaysonlab.microapp.core
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 
@@ -40,5 +43,16 @@ interface NestedMicroappEntry: MicroappEntry {
     fun NavGraphBuilder.navigation(navController: NavHostController, destinations: Destinations)
 }
 
+interface BottomNavigationCapable {
+    val bottomNavigationEntry: NavigationEntry
+}
+
 inline fun <reified T : MicroappEntry> Destinations.find(): T = findOrNull() ?: error("Destination '${T::class.java}' is not defined.")
 inline fun <reified T : MicroappEntry> Destinations.findOrNull(): T? = this[T::class.java] as? T
+
+@Stable
+class NavigationEntry(
+    val route: String,
+    @StringRes val name: Int,
+    val icon: () -> ImageVector
+)

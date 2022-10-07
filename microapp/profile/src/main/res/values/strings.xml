@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="profile">Profile</string>
     <string name="showcase_achievements_rarest">Rarest Achievement Showcase</string>
     <string name="showcase_collector_game">Game Collector</string>
     <string name="showcase_items">Item Showcase</string>
