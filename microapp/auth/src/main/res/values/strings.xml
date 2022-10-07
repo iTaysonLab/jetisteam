@@ -20,4 +20,6 @@
     <string name="auth_tfa_title">2FA</string>
     <string name="auth_tfa_guard_desc">To sign in, enter your Steam Guard code.</string>
     <string name="auth_tfa_hint">Code</string>
+
+    <string name="auth_tfa_remote">You can also open the Steam Mobile app and approve this login request.</string>
 </resources>

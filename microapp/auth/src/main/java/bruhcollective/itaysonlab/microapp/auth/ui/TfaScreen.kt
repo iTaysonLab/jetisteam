@@ -8,10 +8,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,13 +22,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.microapp.auth.R
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 fun TfaScreen(
     viewModel: TfaScreenViewModel = hiltViewModel()
 ) {
+    val authPollSignIn = viewModel.authFlow.collectAsStateWithLifecycle(initialValue = false)
+    
     val navController = LocalOuterNavigation.current
     val focusManager = LocalFocusManager.current
 
@@ -37,6 +44,12 @@ fun TfaScreen(
             code = code,
             onSuccess = navController::onSuccess
         )
+    }
+
+    if (authPollSignIn.value) {
+        LaunchedEffect(Unit) {
+            navController.onSuccess()
+        }
     }
 
     Box(
@@ -86,6 +99,16 @@ fun TfaScreen(
             )
 
             Spacer(modifier = Modifier.height(8.dp))
+
+            if (viewModel.isPollingActive) {
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = stringResource(R.string.auth_tfa_remote),
+                    fontSize = 14.sp,
+                    modifier = Modifier.alpha(0.7f)
+                )
+            }
 
             Box(
                 Modifier

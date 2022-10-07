@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bruhcollective.itaysonlab.jetisteam.usecases.BeginSignIn
+import bruhcollective.itaysonlab.jetisteam.usecases.auth.BeginSignIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +18,7 @@ internal class AuthScreenViewModel @Inject constructor(
     var isEmailError by mutableStateOf(false)
     var isPasswordError by mutableStateOf(false)
 
-    fun auth(username: String, password: String, onSuccess: () -> Unit) {
+    fun auth(username: String, password: String, onSuccess: (Boolean) -> Unit) {
         isEmailError = false
         isPasswordError = false
 
@@ -35,8 +35,10 @@ internal class AuthScreenViewModel @Inject constructor(
         viewModelScope.launch {
             isAuthInProgress = true
 
-            if (beginSignIn(username, password)) {
-                onSuccess()
+            val data = beginSignIn(username, password)
+
+            if (data.doesInfoMatch) {
+                onSuccess(data.canUseRemoteConfirmation)
             } else {
                 isEmailError = true
                 isPasswordError = true

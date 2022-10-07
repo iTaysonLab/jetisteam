@@ -1,4 +1,4 @@
-package bruhcollective.itaysonlab.jetisteam.usecases
+package bruhcollective.itaysonlab.jetisteam.usecases.auth
 
 import bruhcollective.itaysonlab.jetisteam.repository.AuthRepository
 import javax.inject.Inject

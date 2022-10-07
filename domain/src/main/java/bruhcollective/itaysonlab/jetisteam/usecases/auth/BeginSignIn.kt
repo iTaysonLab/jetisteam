@@ -1,4 +1,4 @@
-package bruhcollective.itaysonlab.jetisteam.usecases
+package bruhcollective.itaysonlab.jetisteam.usecases.auth
 
 import bruhcollective.itaysonlab.jetisteam.repository.AuthRepository
 import javax.inject.Inject
@@ -9,7 +9,7 @@ class BeginSignIn @Inject constructor(
     suspend operator fun invoke(
         username: String,
         password: String
-    ): Boolean {
+    ): AuthRepository.BeginAuthModel {
         return authRepository.getRsaKey(username).let { keyAndTimestamp ->
             authRepository.beginAuthSessionViaCredentials(username, keyAndTimestamp.second, authRepository.encryptPassword(password, keyAndTimestamp.first))
         }

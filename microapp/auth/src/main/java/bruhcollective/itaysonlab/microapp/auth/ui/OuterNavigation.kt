@@ -13,8 +13,8 @@ internal class OuterNavigation(
     private val controller: NavHostController,
     private val destinations: Destinations
 ) {
-    fun onPreauthSuccess() {
-        controller.navigate(AuthMicroappImpl.InternalRoutes.TfaScreen)
+    fun onPreauthSuccess(hasMobileAuth: Boolean) {
+        controller.navigate("auth/tfa/$hasMobileAuth")
     }
 
     fun onSuccess() {

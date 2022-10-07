@@ -41,11 +41,15 @@ class AuthRepository @Inject constructor(
             persistence = ESessionPersistence.k_ESessionPersistence_Persistent,
             website_id = "Mobile"
         )
-    ).also { currentCredsSession = it }.allowed_confirmations.isNotEmpty()
+    ).also { currentCredsSession = it }.let {
+        BeginAuthModel(it.allowed_confirmations.isNotEmpty() to (it.allowed_confirmations.firstOrNull { c -> c.confirmation_type == EAuthSessionGuardType.k_EAuthSessionGuardType_DeviceConfirmation } != null))
+    }
 
     suspend fun enterDeviceCode(
         code: String
     ): Boolean {
+        currentCredsSession ?: return false
+
         stub.UpdateAuthSessionWithSteamGuardCode(
             CAuthentication_UpdateAuthSessionWithSteamGuardCode_Request(
                 client_id = currentCredsSession!!.client_id,
@@ -54,6 +58,12 @@ class AuthRepository @Inject constructor(
                 code = code
             )
         )
+
+        return pollStatus()
+    }
+
+    suspend fun pollStatus(): Boolean {
+        currentCredsSession ?: return false
 
         return stub.PollAuthSessionStatus(
             CAuthentication_PollAuthSessionStatus_Request(
@@ -88,4 +98,10 @@ class AuthRepository @Inject constructor(
         Cipher.getInstance("RSA/None/PKCS1Padding").also { it.init(Cipher.ENCRYPT_MODE, key) }.doFinal(pwd.encodeToByteArray()),
         Base64.NO_PADDING or Base64.NO_WRAP
     )
+
+    @JvmInline
+    value class BeginAuthModel(private val packed: Pair<Boolean, Boolean>) {
+        val doesInfoMatch: Boolean get() = packed.first
+        val canUseRemoteConfirmation: Boolean get() = packed.second
+    }
 }

@@ -39,8 +39,10 @@ class AuthMicroappImpl @Inject constructor(): AuthMicroapp() {
     }
 
     internal object InternalRoutes {
+        const val ARG_MOBILE_ENABLED = "hasRemoteConfirmation"
+
         const val NavGraph = "@auth"
-        const val TfaScreen = "auth/tfa"
+        const val TfaScreen = "auth/tfa/{${ARG_MOBILE_ENABLED}}"
         const val AuthDisclaimer = "dialogs/authDisclaimer"
     }
 }
