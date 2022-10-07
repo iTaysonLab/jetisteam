@@ -42,8 +42,8 @@ class ProfileRepository @Inject constructor(
                 skip_unvetted_apps = true,
                 include_appinfo = true,
                 include_extended_appinfo = true,
-                include_free_sub = true,
-                include_played_free_games = true
+                include_free_sub = false,
+                include_played_free_games = false
             )
         )
     }
