@@ -31,7 +31,7 @@ internal fun GuardRecoveryCodeScreen(
             }
         )
     }, contentWindowInsets = EmptyWindowInsets) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(imageVector = Icons.Rounded.SettingsSuggest, contentDescription = null, modifier = Modifier.size(32.dp), tint = MaterialTheme.colorScheme.primary)
 

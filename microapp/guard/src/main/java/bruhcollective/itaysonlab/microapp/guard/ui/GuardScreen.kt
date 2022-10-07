@@ -29,7 +29,7 @@ internal fun GuardScreen(
             }
         )
     }, contentWindowInsets = EmptyWindowInsets) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(imageVector = Icons.Rounded.Lock, contentDescription = null, modifier = Modifier.size(32.dp), tint = MaterialTheme.colorScheme.primary)
 
