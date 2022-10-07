@@ -55,6 +55,7 @@ dependencies {
 
     implementation libs.mmkv
     implementation libs.okhttp
+    implementation "it.skrape:skrapeit:1.2.2"
 
     implementation libs.bundles.retrofit
 

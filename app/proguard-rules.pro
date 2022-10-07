@@ -46,8 +46,3 @@
 -keep class com.squareup.wire.** { *; }
 -keep class bruhcollective.itaysonlab.jetisteam.proto.** { *; }
 -keep class steam.** { *; }
-
-# BouncyCastle
-# TODO: need to research to see how we can replace this large library
--keep class org.bouncycastle.jcajce.provider.** { *; }
--keep class !org.bouncycastle.jce.provider.X509LDAPCertStoreSpi,org.bouncycastle.jce.provider.** { *; }
