@@ -7,9 +7,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import bruhcollective.itaysonlab.microapp.core.DestNode
 import bruhcollective.itaysonlab.microapp.core.Destinations
 import bruhcollective.itaysonlab.microapp.core.NavigationEntry
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
+import bruhcollective.itaysonlab.microapp.core.map
 import bruhcollective.itaysonlab.microapp.guard.ui.GuardScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.recovery.GuardRecoveryCodeScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreen
@@ -22,18 +24,24 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
     ) {
         navigation(startDestination = microappRoute, route = InternalRoutes.NavGraph) {
             composable(microappRoute) {
-                GuardScreen(dbg = {
-                    navController.navigate("guard/0/setup")
+                GuardScreen(onMoveClicked = { steamId ->
+                    navController.navigate(InternalRoutes.Move.map(mapOf(
+                        InternalRoutes.ARG_STEAM_ID to steamId.toString()
+                    )))
+                }, onAddClicked = { steamId ->
+                    navController.navigate(InternalRoutes.Setup.map(mapOf(
+                        InternalRoutes.ARG_STEAM_ID to steamId.toString()
+                    )))
                 })
             }
 
-            composable(InternalRoutes.Setup) {
+            composable(InternalRoutes.Setup.url) {
                 GuardSetupScreen(onBackClicked = navController::popBackStack, dbg = {
                     navController.navigate("guard/0/recovery")
                 })
             }
 
-            composable(InternalRoutes.Recovery) {
+            composable(InternalRoutes.Recovery.url) {
                 GuardRecoveryCodeScreen(onBackClicked = {
                     navController.navigate(microappRoute) {
                         popUpTo(ROOT_NAV_GRAPH_ID)
@@ -54,7 +62,8 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
 
         const val ARG_STEAM_ID = "steamid"
 
-        const val Setup = "guard/{$ARG_STEAM_ID}/setup"
-        const val Recovery = "guard/{$ARG_STEAM_ID}/recovery"
+        val Setup = DestNode("guard/{$ARG_STEAM_ID}/setup")
+        val Move = DestNode("guard/{$ARG_STEAM_ID}/move")
+        val Recovery = DestNode("guard/{$ARG_STEAM_ID}/recovery")
     }
 }

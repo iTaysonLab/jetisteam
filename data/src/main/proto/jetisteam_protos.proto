@@ -21,4 +21,5 @@ message GuardData {
     string token_gid = 7;
     bytes identity_secret = 8;
     bytes secret_1 = 9;
+    uint64 steam_id = 99; // reserved for future guard model structure updates
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Security
+import androidx.compose.material.icons.rounded.Update
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,13 +16,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.components.StateButton
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GuardScreen(
     viewModel: GuardViewModel = hiltViewModel(),
-    dbg: () -> Unit,
+    onMoveClicked: (Long) -> Unit,
+    onAddClicked: (Long) -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
+
     Scaffold(topBar = {
         TopAppBar(
             title = {
@@ -29,27 +34,91 @@ internal fun GuardScreen(
             }
         )
     }, contentWindowInsets = EmptyWindowInsets) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
-            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(imageVector = Icons.Rounded.Lock, contentDescription = null, modifier = Modifier.size(32.dp), tint = MaterialTheme.colorScheme.primary)
+        when (viewModel.addState) {
+            GuardViewModel.AddGuardState.RequestToMove -> {
+                AlertDialog(
+                    onDismissRequest = viewModel::resetAddState,
+                    title = {
+                        Text(text = stringResource(id = R.string.guard_setup_move))
+                    }, icon = {
+                        Icon(imageVector = Icons.Rounded.Update, contentDescription = null)
+                    }, text = {
+                        Text(text = stringResource(id = R.string.guard_setup_move_desc))
+                    }, confirmButton = {
+                        TextButton(onClick = { onMoveClicked(viewModel.steamId) }) {
+                            Text(text = stringResource(id = R.string.guard_setup_move_allow))
+                        }
+                    }, dismissButton = {
+                        TextButton(onClick = viewModel::resetAddState) {
+                            Text(text = stringResource(id = R.string.guard_setup_move_cancel))
+                        }
+                    }
+                )
+            }
 
-                Spacer(Modifier.height(8.dp))
-
-                CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.headlineMedium) {
-                    Text(text = stringResource(id = R.string.guard_title), modifier = Modifier.padding(horizontal = 16.dp))
+            is GuardViewModel.AddGuardState.AwaitForSms -> {
+                LaunchedEffect(Unit) {
+                    onAddClicked(viewModel.steamId)
                 }
+            }
 
-                Spacer(Modifier.height(4.dp))
+            GuardViewModel.AddGuardState.Noop -> {}
+        }
 
-                Text(text = stringResource(id = R.string.guard_desc), textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 16.dp))
+        when (viewModel.state) {
+            is GuardViewModel.GuardState.Available -> TODO()
 
-                Spacer(Modifier.height(8.dp))
+            GuardViewModel.GuardState.Setup -> GuardNoInstanceAvailableScreen(
+                onAddClicked = {
+                    scope.launch {
+                        viewModel.addAuthenticator()
+                    }
+                },
+                inLoadingState = viewModel.isTryingToAddAuth,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            )
+        }
+    }
+}
 
-                var inLoadingState by remember { mutableStateOf(false) }
+@Composable
+private fun GuardNoInstanceAvailableScreen(
+    modifier: Modifier,
+    inLoadingState: Boolean,
+    onAddClicked: () -> Unit
+) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                imageVector = Icons.Rounded.Lock,
+                contentDescription = null,
+                modifier = Modifier.size(32.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
 
-                StateButton(onClick = dbg, inLoadingState = inLoadingState) {
-                    Text(text = stringResource(id = R.string.guard_setup))
-                }
+            Spacer(Modifier.height(8.dp))
+
+            CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.headlineMedium) {
+                Text(
+                    text = stringResource(id = R.string.guard_title),
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+
+            Spacer(Modifier.height(4.dp))
+
+            Text(
+                text = stringResource(id = R.string.guard_desc),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            StateButton(onClick = onAddClicked, inLoadingState = inLoadingState) {
+                Text(text = stringResource(id = R.string.guard_setup))
             }
         }
     }

@@ -15,7 +15,9 @@ fun StateButton(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    Button(onClick = onClick, modifier = modifier) {
+    Button(onClick = {
+        if (!inLoadingState) onClick()
+    }, modifier = modifier) {
         Box(Modifier.animateContentSize()) {
             if (inLoadingState) {
                 ResizableCircularIndicator(

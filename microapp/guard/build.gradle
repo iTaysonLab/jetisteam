@@ -32,9 +32,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    
     composeOptions {
         kotlinCompilerExtensionVersion '1.3.2'
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -49,6 +51,8 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
     implementation project(':uikit')
+
+    implementation libs.kotlinDatetime
 
     implementation libs.bundles.compose
     implementation libs.bundles.accompanist

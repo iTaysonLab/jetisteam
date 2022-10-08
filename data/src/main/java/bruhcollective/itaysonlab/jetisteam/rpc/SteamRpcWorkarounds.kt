@@ -22,7 +22,9 @@ object SteamRpcWorkarounds {
         // MobileApp
         "/MobileApp/GetMobileSummary",
         // UserAccount
-        "/UserAccount/GetUserCountry"
+        "/UserAccount/GetUserCountry",
+        // TwoFactor
+        "/TwoFactor/AddAuthenticator"
     )
 
     /**
