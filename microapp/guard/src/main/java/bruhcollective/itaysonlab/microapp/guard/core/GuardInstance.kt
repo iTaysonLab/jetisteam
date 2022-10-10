@@ -58,6 +58,10 @@ class GuardInstance(
 
     @JvmInline
     value class CodeModel(private val packed: Pair<String, Float>) {
+        companion object {
+            val DefaultInstance = CodeModel("" to 0f)
+        }
+
         val code: String get() = packed.first
 
         @get:FloatRange(from = 0.0, to = 1.0)

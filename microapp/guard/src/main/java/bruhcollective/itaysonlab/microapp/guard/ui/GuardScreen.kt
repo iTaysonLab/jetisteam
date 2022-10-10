@@ -13,12 +13,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.StateButton
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
+import bruhcollective.itaysonlab.microapp.guard.core.GuardInstance
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun GuardScreen(
     viewModel: GuardViewModel = hiltViewModel(),
@@ -65,9 +68,14 @@ internal fun GuardScreen(
             GuardViewModel.AddGuardState.Noop -> {}
         }
 
-        when (viewModel.state) {
+        when (val state = viewModel.state) {
             is GuardViewModel.GuardState.Available -> {
+                val codeState = state.instance.code.collectAsStateWithLifecycle(initialValue = GuardInstance.CodeModel.DefaultInstance)
 
+                GuardInstanceAvailableScreen(
+                    modifier = Modifier.fillMaxSize().padding(innerPadding),
+                    code = codeState.value
+                )
             }
 
             GuardViewModel.GuardState.Setup -> GuardNoInstanceAvailableScreen(
@@ -124,4 +132,12 @@ private fun GuardNoInstanceAvailableScreen(
             }
         }
     }
+}
+
+@Composable
+private fun GuardInstanceAvailableScreen(
+    modifier: Modifier,
+    code: GuardInstance.CodeModel,
+) {
+
 }
