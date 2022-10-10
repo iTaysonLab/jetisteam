@@ -24,6 +24,7 @@
 
     <string name="guard_actions_remove">Remove Authenticator</string>
     <string name="guard_actions_devices">Authorized Devices</string>
-    <string name="guard_actions_qr">Scan a QR code</string>
+    <string name="guard_actions_qr">Sign in with QR</string>
     <string name="guard_actions_copy">Copy</string>
+    <string name="guard_actions_copy_snack">Code copied to clipboard</string>
 </resources>

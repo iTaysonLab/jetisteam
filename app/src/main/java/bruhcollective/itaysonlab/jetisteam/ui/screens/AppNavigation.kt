@@ -3,6 +3,8 @@ package bruhcollective.itaysonlab.jetisteam.ui.screens
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Gamepad
 import androidx.compose.material.icons.rounded.Home
@@ -36,15 +38,19 @@ import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
 import bruhcollective.itaysonlab.microapp.profile.ProfileMicroapp
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialNavigationApi::class)
 @Composable
-fun AppNavigation (
+fun AppNavigation(
     viewModel: AppNavigationViewModel = hiltViewModel()
 ) {
-    val navController = rememberNavController()
+    val bottomSheetNavigator = rememberBottomSheetNavigator()
+    val navController = rememberNavController(bottomSheetNavigator)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     LaunchedEffect(Unit) {
@@ -71,62 +77,79 @@ fun AppNavigation (
     val navOffset by animateDpAsState(if (shouldHideNavigationBar) 80.dp + navBarHeightDp else 0.dp)
     val navOffsetReverse by animateDpAsState(if (!shouldHideNavigationBar) 80.dp + navBarHeightDp else 0.dp)
 
-    Scaffold(
-        bottomBar = {
-            NavigationBar(
-                modifier = Modifier
-                    .offset {
-                        IntOffset(
-                            0,
-                            navOffset
-                                .toPx()
-                                .toInt()
+    ModalBottomSheetLayout(
+        bottomSheetNavigator = bottomSheetNavigator,
+        sheetShape = MaterialTheme.shapes.extraLarge.copy(bottomStart = CornerSize(0.dp), bottomEnd = CornerSize(0.dp)),
+        scrimColor = MaterialTheme.colorScheme.scrim.copy(0.5f),
+        sheetBackgroundColor = MaterialTheme.colorScheme.surface
+    ) {
+        Scaffold(
+            bottomBar = {
+                NavigationBar(
+                    modifier = Modifier
+                        .offset {
+                            IntOffset(0,
+                                navOffset
+                                    .toPx()
+                                    .toInt()
+                            )
+                        }
+                        .background(MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp))
+                        .navigationBarsPadding(),
+                ) {
+                    viewModel.bottomNavDestinations.forEach { dest ->
+                        NavigationBarItem(
+                            icon = {
+                                Icon(
+                                    dest.icon(),
+                                    contentDescription = stringResource(dest.name)
+                                )
+                            },
+                            label = { Text(stringResource(dest.name)) },
+                            selected = navController.backQueue.any {
+                                it.destination.route?.startsWith(dest.route) == true
+                            },
+                            onClick = {
+                                navController.navigate(dest.route) {
+                                    popUpTo(ROOT_NAV_GRAPH_ID) {
+                                        saveState = true
+                                    }
+
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }
                         )
                     }
-                    .background(MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp))
-                    .navigationBarsPadding(),
-            ) {
-                viewModel.bottomNavDestinations.forEach { dest ->
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
-                                dest.icon(),
-                                contentDescription = stringResource(dest.name)
-                            )
-                        },
-                        label = { Text(stringResource(dest.name)) },
-                        selected = navController.backQueue.any {
-                            it.destination.route?.startsWith(dest.route) == true
-                        },
-                        onClick = {
-                            navController.navigate(dest.route) {
-                                popUpTo(ROOT_NAV_GRAPH_ID) {
-                                    saveState = true
-                                }
-
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
-                    )
                 }
             }
-        }
-    ) { padding ->
-        NavHost(
-            navController = navController,
-            startDestination = "coreLoading",
-            route = ROOT_NAV_GRAPH_ID,
-            modifier = Modifier.padding(bottom = navOffsetReverse)
-        ) {
-            composable("coreLoading") {
-                // FullscreenLoading()
-            }
+        ) { padding ->
+            NavHost(
+                navController = navController,
+                startDestination = "coreLoading",
+                route = ROOT_NAV_GRAPH_ID,
+                modifier = Modifier.padding(bottom = navOffsetReverse)
+            ) {
+                composable("coreLoading") {
+                    // FullscreenLoading()
+                }
 
-            viewModel.destinations.forEach { (key, value) ->
-                when (value) {
-                    is ComposableMicroappEntry -> with(value) { composable(navController, viewModel.destinations) }
-                    is NestedMicroappEntry -> with(value) { navigation(navController, viewModel.destinations) }
+                viewModel.destinations.forEach { (key, value) ->
+                    when (value) {
+                        is ComposableMicroappEntry -> with(value) {
+                            composable(
+                                navController,
+                                viewModel.destinations
+                            )
+                        }
+
+                        is NestedMicroappEntry -> with(value) {
+                            navigation(
+                                navController,
+                                viewModel.destinations
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -139,7 +162,7 @@ class AppNavigationViewModel @Inject constructor(
     private val steamSessionController: SteamSessionController,
     val destinations: Destinations,
     val getUserCountry: GetUserCountry
-): ViewModel() {
+) : ViewModel() {
     val fullscreenDestinations = destinations
         .map { it.value.fullscreenRoutes }
         .flatten()

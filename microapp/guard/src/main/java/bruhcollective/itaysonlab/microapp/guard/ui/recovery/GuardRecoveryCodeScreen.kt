@@ -28,36 +28,64 @@ internal fun GuardRecoveryCodeScreen(
         TopAppBar(
             title = {}, navigationIcon = {
                 IconButton(onClick = onBackClicked) {
-                    Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = stringResource(id = android.R.string.cancel))
+                    Icon(
+                        imageVector = Icons.Rounded.ArrowBack,
+                        contentDescription = stringResource(id = android.R.string.cancel)
+                    )
                 }
             }
         )
     }, contentWindowInsets = EmptyWindowInsets) { innerPadding ->
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding), contentAlignment = Alignment.Center
+        ) {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(imageVector = Icons.Rounded.SettingsSuggest, contentDescription = null, modifier = Modifier.size(32.dp), tint = MaterialTheme.colorScheme.primary)
+                Icon(
+                    imageVector = Icons.Rounded.SettingsSuggest,
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
 
                 Spacer(Modifier.height(8.dp))
 
                 CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.headlineMedium) {
-                    Text(text = stringResource(id = R.string.guard_recovery), modifier = Modifier.padding(horizontal = 16.dp))
+                    Text(
+                        text = stringResource(id = R.string.guard_recovery),
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
                 }
 
                 Spacer(Modifier.height(4.dp))
 
-                Text(text = viewModel.revocationCode, textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 16.dp), fontSize = 40.sp, letterSpacing = 12.sp, color = MaterialTheme.colorScheme.primary)
+                Text(
+                    text = viewModel.revocationCode,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    fontSize = 40.sp,
+                    letterSpacing = 12.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
 
                 Spacer(Modifier.height(4.dp))
 
-                Text(text = stringResource(id = R.string.guard_recovery_hint), textAlign = TextAlign.Center, modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .alpha(0.7f))
+                Text(
+                    text = stringResource(id = R.string.guard_recovery_hint),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .alpha(0.7f)
+                )
 
                 Spacer(Modifier.height(4.dp))
 
-                Text(text = stringResource(id = R.string.guard_recovery_desc), textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 16.dp))
+                Text(
+                    text = stringResource(id = R.string.guard_recovery_desc),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
 
                 Spacer(Modifier.height(8.dp))
 

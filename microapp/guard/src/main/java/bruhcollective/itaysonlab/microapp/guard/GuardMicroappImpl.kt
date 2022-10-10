@@ -13,12 +13,16 @@ import bruhcollective.itaysonlab.microapp.core.NavigationEntry
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
 import bruhcollective.itaysonlab.microapp.core.map
 import bruhcollective.itaysonlab.microapp.guard.ui.GuardScreen
+import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardMoreOptionsSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.recovery.GuardRecoveryCodeScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.variants.GuardMoveScreen
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.bottomSheet
 import javax.inject.Inject
 
 class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
+    @OptIn(ExperimentalMaterialNavigationApi::class)
     override fun NavGraphBuilder.navigation(
         navController: NavHostController,
         destinations: Destinations
@@ -26,13 +30,11 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
         navigation(startDestination = microappRoute, route = InternalRoutes.NavGraph) {
             composable(microappRoute) {
                 GuardScreen(onMoveClicked = { steamId ->
-                    navController.navigate(InternalRoutes.Move.map(mapOf(
-                        InternalRoutes.ARG_STEAM_ID to steamId.toString()
-                    )))
+                    navController.navigate(InternalRoutes.Move.withSteamId(steamId))
                 }, onAddClicked = { steamId ->
-                    navController.navigate(InternalRoutes.Setup.map(mapOf(
-                        InternalRoutes.ARG_STEAM_ID to steamId.toString()
-                    )))
+                    navController.navigate(InternalRoutes.Setup.withSteamId(steamId))
+                }, onMoreClicked = { steamId ->
+                    navController.navigate(InternalRoutes.MoreOptions.withSteamId(steamId))
                 })
             }
 
@@ -44,9 +46,7 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
 
             composable(InternalRoutes.Move.url) {
                 GuardMoveScreen(onBackClicked = navController::popBackStack, onSuccess = { steamId ->
-                    navController.navigate(InternalRoutes.Recovery.map(mapOf(
-                        InternalRoutes.ARG_STEAM_ID to steamId.steamId.toString()
-                    )))
+                    navController.navigate(InternalRoutes.Recovery.withSteamId(steamId.steamId))
                 })
             }
 
@@ -57,8 +57,16 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
                     }
                 })
             }
+
+            bottomSheet(InternalRoutes.MoreOptions.url) {
+                GuardMoreOptionsSheet()
+            }
         }
     }
+
+    private fun DestNode.withSteamId(steamId: Long) = map(mapOf(
+        InternalRoutes.ARG_STEAM_ID to steamId.toString()
+    ))
 
     override val bottomNavigationEntry = NavigationEntry(
         route = microappRoute,
@@ -74,5 +82,6 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
         val Setup = DestNode("guard/{$ARG_STEAM_ID}/setup")
         val Move = DestNode("guard/{$ARG_STEAM_ID}/move")
         val Recovery = DestNode("guard/{$ARG_STEAM_ID}/recovery")
+        val MoreOptions = DestNode("guard/{$ARG_STEAM_ID}/more")
     }
 }

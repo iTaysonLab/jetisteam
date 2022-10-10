@@ -1,17 +1,28 @@
 package bruhcollective.itaysonlab.microapp.guard.ui
 
+import android.os.Build
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Lock
-import androidx.compose.material.icons.rounded.Security
-import androidx.compose.material.icons.rounded.Update
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -27,8 +38,13 @@ internal fun GuardScreen(
     viewModel: GuardViewModel = hiltViewModel(),
     onMoveClicked: (Long) -> Unit,
     onAddClicked: (Long) -> Unit,
+    onMoreClicked: (Long) -> Unit
 ) {
+    val clipboard = LocalClipboardManager.current
+    val context = LocalContext.current
+
     val scope = rememberCoroutineScope()
+    val snackState = remember { SnackbarHostState() }
 
     Scaffold(topBar = {
         TopAppBar(
@@ -36,7 +52,11 @@ internal fun GuardScreen(
                 Text(text = stringResource(id = R.string.guard))
             }
         )
-    }, contentWindowInsets = EmptyWindowInsets) { innerPadding ->
+    }, contentWindowInsets = EmptyWindowInsets, snackbarHost = {
+        SnackbarHost(hostState = snackState) {
+            Snackbar(snackbarData = it)
+        }
+    }) { innerPadding ->
         when (viewModel.addState) {
             GuardViewModel.AddGuardState.RequestToMove -> {
                 AlertDialog(
@@ -73,8 +93,21 @@ internal fun GuardScreen(
                 val codeState = state.instance.code.collectAsStateWithLifecycle(initialValue = GuardInstance.CodeModel.DefaultInstance)
 
                 GuardInstanceAvailableScreen(
-                    modifier = Modifier.fillMaxSize().padding(innerPadding),
-                    code = codeState.value
+                    modifier = Modifier.fillMaxSize(),
+                    code = codeState.value,
+                    onMoreSettingsClicked = {
+                        onMoreClicked(viewModel.steamId)
+                    }, onSignWithQrClicked = {
+
+                    }, onCopyClicked = {
+                        scope.launch {
+                            clipboard.setText(AnnotatedString(codeState.value.code))
+
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                                snackState.showSnackbar(message = context.getString(R.string.guard_actions_copy_snack))
+                            }
+                        }
+                    }
                 )
             }
 
@@ -138,6 +171,94 @@ private fun GuardNoInstanceAvailableScreen(
 private fun GuardInstanceAvailableScreen(
     modifier: Modifier,
     code: GuardInstance.CodeModel,
+    onSignWithQrClicked: () -> Unit,
+    onMoreSettingsClicked: () -> Unit,
+    onCopyClicked: () -> Unit
 ) {
+    Box(modifier = modifier) {
+        Box(
+            modifier = Modifier
+                .aspectRatio(1f)
+                .align(Alignment.Center)
+        ) {
+            GuardProgressCircle(
+                progress = code.progressRemaining,
+                modifier = Modifier
+                    .padding(32.dp)
+                    .fillMaxSize()
+            )
 
+            Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = code.code,
+                    textAlign = TextAlign.Center,
+                    fontSize = 40.sp,
+                    letterSpacing = 12.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                TextButton(onCopyClicked) {
+                    Icon(imageVector = Icons.Rounded.ContentCopy, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(stringResource(id = R.string.guard_actions_copy))
+                }
+            }
+        }
+
+        Row(modifier = Modifier
+            .align(Alignment.BottomStart)
+            .padding(16.dp)) {
+            TextButton(onClick = onSignWithQrClicked, enabled = false) {
+                Icon(imageVector = Icons.Rounded.QrCode, contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(stringResource(id = R.string.guard_actions_qr))
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            TextButton(onClick = onMoreSettingsClicked) {
+                Icon(imageVector = Icons.Rounded.Settings, contentDescription = null)
+            }
+        }
+    }
+}
+
+@Composable
+private fun GuardProgressCircle(
+    modifier: Modifier,
+    progress: Float
+) {
+    val colorForeground = MaterialTheme.colorScheme.primary
+    val colorBackground = MaterialTheme.colorScheme.surfaceVariant
+
+    val stroke = with(LocalDensity.current) {
+        Stroke(width = ProgressIndicatorDefaults.CircularStrokeWidth.toPx(), cap = StrokeCap.Round)
+    }
+    
+    val progressAnimated by animateFloatAsState(targetValue = progress, animationSpec = tween(1000))
+    
+    Canvas(modifier = modifier) {
+        val diameterOffset = stroke.width / 2
+        val arcDimen = size.width - 2 * diameterOffset
+
+        drawArc(
+            color = colorBackground,
+            startAngle = 270f,
+            sweepAngle = 360f,
+            useCenter = false,
+            topLeft = Offset(diameterOffset, diameterOffset),
+            size = Size(arcDimen, arcDimen),
+            style = stroke
+        )
+        
+        drawArc(
+            color = colorForeground,
+            startAngle = 270f,
+            sweepAngle = 360f * progressAnimated,
+            useCenter = false,
+            topLeft = Offset(diameterOffset, diameterOffset),
+            size = Size(arcDimen, arcDimen),
+            style = stroke
+        )
+    }
 }
