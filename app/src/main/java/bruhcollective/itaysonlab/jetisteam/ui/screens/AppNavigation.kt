@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import bruhcollective.itaysonlab.jetisteam.R
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
 import bruhcollective.itaysonlab.jetisteam.repository.UserAccountRepository
+import bruhcollective.itaysonlab.jetisteam.usecases.GetUserCountry
 import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
 import bruhcollective.itaysonlab.microapp.core.*
@@ -50,8 +51,8 @@ fun AppNavigation (
         if (navController.currentDestination?.route != "coreLoading") return@LaunchedEffect
 
         val startRoute = if (viewModel.signedIn()) {
-            LanguageUtil.currentRegion = viewModel.userAccountRepository.getUserCountry(viewModel.mySteamId())
-            viewModel.destinations.find<ProfileMicroapp>()
+            viewModel.loadAccountParameters()
+            viewModel.destinations.find<GuardMicroapp>()
         } else {
             viewModel.destinations.find<AuthMicroapp>()
         }.microappRoute
@@ -137,7 +138,7 @@ fun AppNavigation (
 class AppNavigationViewModel @Inject constructor(
     private val steamSessionController: SteamSessionController,
     val destinations: Destinations,
-    val userAccountRepository: UserAccountRepository
+    val getUserCountry: GetUserCountry
 ): ViewModel() {
     val fullscreenDestinations = destinations
         .map { it.value.fullscreenRoutes }
@@ -151,5 +152,9 @@ class AppNavigationViewModel @Inject constructor(
     ).map(BottomNavigationCapable::bottomNavigationEntry)
 
     fun signedIn() = steamSessionController.signedIn()
-    fun mySteamId() = steamSessionController.steamId().steamId
+    fun mySteamId() = steamSessionController.steamId()
+
+    suspend fun loadAccountParameters() {
+        LanguageUtil.currentRegion = getUserCountry(mySteamId())
+    }
 }
