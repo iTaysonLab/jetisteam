@@ -87,6 +87,8 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    suspend fun enumerateTokens() = stub.EnumerateTokens(CAuthentication_RefreshToken_Enumerate_Request())
+
     private fun generateRsaKey(
         mod: String, exp: String
     ) = KeyFactory.getInstance("RSA")

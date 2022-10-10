@@ -14,6 +14,7 @@ import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
 import bruhcollective.itaysonlab.microapp.core.map
 import bruhcollective.itaysonlab.microapp.guard.ui.GuardScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardMoreOptionsSheet
+import bruhcollective.itaysonlab.microapp.guard.ui.devices.GuardDevicesScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.recovery.GuardRecoveryCodeScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.variants.GuardMoveScreen
@@ -58,8 +59,21 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
                 })
             }
 
+            composable(InternalRoutes.Sessions.url) {
+                GuardDevicesScreen(onBackClicked = navController::popBackStack)
+            }
+
             bottomSheet(InternalRoutes.MoreOptions.url) {
-                GuardMoreOptionsSheet()
+                GuardMoreOptionsSheet(onDevicesClicked = { steamId ->
+                    navController.popBackStack()
+                    navController.navigate(InternalRoutes.Sessions.withSteamId(steamId))
+                }, onRemoveClicked = { steamId ->
+                    navController.popBackStack()
+                    // TODO
+                }, onRecoveryClicked = { steamId ->
+                    navController.popBackStack()
+                    navController.navigate(InternalRoutes.Recovery.withSteamId(steamId))
+                })
             }
         }
     }
@@ -82,6 +96,7 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
         val Setup = DestNode("guard/{$ARG_STEAM_ID}/setup")
         val Move = DestNode("guard/{$ARG_STEAM_ID}/move")
         val Recovery = DestNode("guard/{$ARG_STEAM_ID}/recovery")
+        val Sessions = DestNode("guard/{$ARG_STEAM_ID}/sessions")
         val MoreOptions = DestNode("guard/{$ARG_STEAM_ID}/more")
     }
 }
