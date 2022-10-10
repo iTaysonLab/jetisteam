@@ -3,7 +3,7 @@ package bruhcollective.itaysonlab.microapp.core
 @JvmInline
 value class DestNode(val url: String) {
     internal companion object {
-        val REGEX = "\\{(.+?)}".toRegex()
+        val REGEX = "\\{(.+?)\\}".toRegex()
     }
 }
 
