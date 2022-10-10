@@ -6,17 +6,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,8 +24,17 @@ fun CodeRow(
     state: CodeRowState
 ) {
     val focusManager = LocalFocusManager.current
+    val haptic = LocalHapticFeedback.current
 
     Row(horizontalArrangement = Arrangement.Center) {
+        if (state.error) {
+            LaunchedEffect(Unit) {
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                delay(1500L)
+                state.setErrorState(false)
+            }
+        }
+
         state.entries.forEachIndexed { index, entry ->
             OutlinedTextField(
                 value = entry.number,
@@ -53,6 +62,8 @@ fun CodeRow(
                     .focusProperties {
                         state.entries.getOrNull(index + 1)?.focus?.let { next = it }
                     },
+                enabled = state.inactive.not(),
+                isError = state.error,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
                         8.dp
@@ -71,12 +82,26 @@ fun CodeRow(
 
 class CodeRowState(
     count: Int,
-    private val onFinish: (String) -> Unit
+    private val onFinish: (CodeRowState, String) -> Unit
 ) {
+    var inactive by mutableStateOf(false)
+        private set
+
+    var error by mutableStateOf(false)
+        private set
+
     val entries = (1..count).map { CodeEntry() }
 
     fun finish() {
-        onFinish(entries.joinToString(separator = "") { e -> e.number.text })
+        onFinish(this, entries.joinToString(separator = "") { e -> e.number.text })
+    }
+
+    fun setInactiveState(inactive: Boolean) {
+        this.inactive = inactive
+    }
+
+    fun setErrorState(error: Boolean) {
+        this.error = inactive
     }
 
     class CodeEntry {

@@ -2,9 +2,7 @@ package bruhcollective.itaysonlab.jetisteam.repository
 
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
-import steam.twofactor.CTwoFactor_AddAuthenticator_Request
-import steam.twofactor.CTwoFactor_AddAuthenticator_Response
-import steam.twofactor.TwoFactor
+import steam.twofactor.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,6 +27,18 @@ class TwoFactorRepository @Inject constructor(
             AddAuthenticatorResponse.WaitingForPhoneConfirmation(response)
         }
     }
+
+    suspend fun moveStart() = stub.RemoveAuthenticatorViaChallengeStart(
+        CTwoFactor_RemoveAuthenticatorViaChallengeStart_Request()
+    )
+
+    suspend fun moveFinish(code: String) = stub.RemoveAuthenticatorViaChallengeContinue(
+        CTwoFactor_RemoveAuthenticatorViaChallengeContinue_Request(
+            sms_code = code,
+            generate_new_token = true,
+            version = 2
+        )
+    )
 
     sealed class AddAuthenticatorResponse {
         class WaitingForPhoneConfirmation(val wrapped: CTwoFactor_AddAuthenticator_Response): AddAuthenticatorResponse()

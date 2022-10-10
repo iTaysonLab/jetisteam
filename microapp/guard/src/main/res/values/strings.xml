@@ -4,7 +4,9 @@
 
     <string name="guard_title">Protect your account</string>
     <string name="guard_desc">Sign in by scanning a QR code and easily approve logins.</string>
+
     <string name="guard_setup">Add authenticator</string>
+    <string name="guard_setup_move_text">Move authenticator</string>
 
     <string name="guard_setup_move">Move authenticator?</string>
     <string name="guard_setup_move_desc">This account already has an authenticator enabled on another device.</string>

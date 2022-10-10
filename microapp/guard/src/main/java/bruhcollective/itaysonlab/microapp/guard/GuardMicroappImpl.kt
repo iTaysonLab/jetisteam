@@ -15,6 +15,7 @@ import bruhcollective.itaysonlab.microapp.core.map
 import bruhcollective.itaysonlab.microapp.guard.ui.GuardScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.recovery.GuardRecoveryCodeScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreen
+import bruhcollective.itaysonlab.microapp.guard.ui.setup.variants.GuardMoveScreen
 import javax.inject.Inject
 
 class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
@@ -36,8 +37,16 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
             }
 
             composable(InternalRoutes.Setup.url) {
-                GuardSetupScreen(onBackClicked = navController::popBackStack, dbg = {
+                /*GuardSetupScreen(onBackClicked = navController::popBackStack, dbg = {
                     navController.navigate("guard/0/recovery")
+                })*/
+            }
+
+            composable(InternalRoutes.Move.url) {
+                GuardMoveScreen(onBackClicked = navController::popBackStack, onSuccess = { steamId ->
+                    navController.navigate(InternalRoutes.Recovery.map(mapOf(
+                        InternalRoutes.ARG_STEAM_ID to steamId.steamId.toString()
+                    )))
                 })
             }
 

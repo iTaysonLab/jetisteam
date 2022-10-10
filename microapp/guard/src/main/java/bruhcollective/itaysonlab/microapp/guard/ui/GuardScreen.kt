@@ -66,7 +66,9 @@ internal fun GuardScreen(
         }
 
         when (viewModel.state) {
-            is GuardViewModel.GuardState.Available -> TODO()
+            is GuardViewModel.GuardState.Available -> {
+
+            }
 
             GuardViewModel.GuardState.Setup -> GuardNoInstanceAvailableScreen(
                 onAddClicked = {

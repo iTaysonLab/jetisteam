@@ -20,7 +20,7 @@ internal class GuardViewModel @Inject constructor(
     private val initializeAddTfa: InitializeAddTfa
 ): ViewModel() {
     val state by lazy {
-        when (val instance = guardController.getInstance(steamSessionController.steamId().steamId)) {
+        when (val instance = guardController.getInstance(steamSessionController.steamId())) {
             null -> GuardState.Setup
             else -> GuardState.Available(instance = instance)
         }

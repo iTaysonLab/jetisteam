@@ -24,7 +24,10 @@ object SteamRpcWorkarounds {
         // UserAccount
         "/UserAccount/GetUserCountry",
         // TwoFactor
-        "/TwoFactor/AddAuthenticator"
+        "/TwoFactor/AddAuthenticator",
+        "/TwoFactor/FinalizeAddAuthenticator",
+        "/TwoFactor/RemoveAuthenticatorViaChallengeStart",
+        "/TwoFactor/RemoveAuthenticatorViaChallengeContinue",
     )
 
     /**
