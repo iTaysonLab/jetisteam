@@ -2,7 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/data/src/main/proto/Protobufs" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/data/src/main/proto/steamdb" vcs="Git" />
   </component>
 </project>
