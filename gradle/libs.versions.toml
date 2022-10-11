@@ -8,6 +8,7 @@ retrofit = "2.9.0"
 richText = "0.13.0"
 protobuf = "3.21.5"
 wire = "4.4.1"
+camerax = "1.2.0-beta02"
 
 [plugins]
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
@@ -64,6 +65,12 @@ okhttp = "com.squareup.okhttp3:okhttp:4.10.0"
 
 protobufRuntime = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
 
+cameraxCore = { module = "androidx.camera:camera-core", version.ref = "camerax" }
+camerax2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
+cameraxLifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
+cameraxMlkit = { module = "androidx.camera:camera-mlkit-vision", version.ref = "camerax" }
+cameraxView = { module = "androidx.camera:camera-view", version.ref = "camerax" }
+
 [bundles]
 androidx = ["androidCoreKtx", "androidPalette", "androidLifecycleKtx", "androidCustomView", "androidCustomViewPoolingContainer"]
 compose = ["androidLifecycleCompose", "composeMaterial", "composeMaterialIcons", "composeMaterial3", "composeUi", "composeUiUtil", "composeNavigation", "composeActivity"]
@@ -72,3 +79,4 @@ hilt = ["hiltNavigation", "hiltAndroid", "hiltCompiler"]
 accompanist = ["accompanistNavigation", "accompanistSystemUi", "accompanistPager", "accompanistPagerIndicators"]
 retrofit = ["retrofit", "retrofitMoshi"]
 richText = ["richTextMaterial3", "richTextMarkdown"]
+camerax = ["cameraxCore", "camerax2", "cameraxLifecycle", "cameraxMlkit", "cameraxView"]

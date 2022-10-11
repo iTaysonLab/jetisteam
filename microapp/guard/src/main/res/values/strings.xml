@@ -27,4 +27,6 @@
     <string name="guard_actions_qr">Sign in with QR</string>
     <string name="guard_actions_copy">Copy</string>
     <string name="guard_actions_copy_snack">Code copied to clipboard</string>
+
+    <string name="guard_sessions_last_seen">last seen on %s</string>
 </resources>

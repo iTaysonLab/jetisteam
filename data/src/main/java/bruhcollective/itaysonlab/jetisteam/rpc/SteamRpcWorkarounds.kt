@@ -17,6 +17,7 @@ object SteamRpcWorkarounds {
         "/Authentication/UpdateAuthSessionWithSteamGuardCode",
         "/Authentication/PollAuthSessionStatus",
         "/Authentication/GenerateAccessTokenForApp",
+        "/Authentication/EnumerateTokens",
         // Player
         "/Player/GetAchievementsProgress",
         // MobileApp

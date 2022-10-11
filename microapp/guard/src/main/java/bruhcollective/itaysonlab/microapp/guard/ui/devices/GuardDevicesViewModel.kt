@@ -11,6 +11,7 @@ import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.GetAuthorizedDevic
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import steam.auth.CAuthentication_RefreshToken_Enumerate_Response
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,12 +31,12 @@ internal class GuardDevicesViewModel @Inject constructor(
     }
 
     private suspend fun loadSessions() {
-
+        state = State.Ready(getAuthorizedDevices())
     }
 
     sealed class State {
         class Ready(
-
+            val data: List<CAuthentication_RefreshToken_Enumerate_Response.RefreshTokenDescription>
         ): State()
 
         object Loading: State()

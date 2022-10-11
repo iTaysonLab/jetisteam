@@ -209,7 +209,7 @@ private fun GuardInstanceAvailableScreen(
             .align(Alignment.BottomStart)
             .padding(16.dp)) {
             TextButton(onClick = onSignWithQrClicked, enabled = false) {
-                Icon(imageVector = Icons.Rounded.QrCode, contentDescription = null)
+                Icon(imageVector = Icons.Rounded.QrCodeScanner, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(id = R.string.guard_actions_qr))
             }
