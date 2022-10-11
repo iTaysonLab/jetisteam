@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetisteam.repository
 
 import android.util.Base64
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
+import bruhcollective.itaysonlab.jetisteam.controllers.UuidController
 import bruhcollective.itaysonlab.jetisteam.proto.SessionData
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
 import steam.auth.*
@@ -16,7 +17,8 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepository @Inject constructor(
     steamRpcClient: SteamRpcClient,
-    private val steamSessionController: SteamSessionController
+    private val steamSessionController: SteamSessionController,
+    private val uuidController: UuidController
 ) {
     private val stub = steamRpcClient.create<Authentication>()
     private var currentCredsSession: CAuthentication_BeginAuthSessionViaCredentials_Response? = null
@@ -39,7 +41,13 @@ class AuthRepository @Inject constructor(
             remember_login = true,
             platform_type = EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp,
             persistence = ESessionPersistence.k_ESessionPersistence_Persistent,
-            website_id = "Mobile"
+            website_id = "Mobile",
+            device_details = CAuthentication_DeviceDetails(
+                device_friendly_name = "${uuidController.deviceName} (Jetisteam)",
+                platform_type = EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp,
+                os_type = uuidController.osType,
+                gaming_device_type = EGamingDeviceType.k_EGamingDeviceType_Phone
+            )
         )
     ).also { currentCredsSession = it }.let {
         BeginAuthModel(it.allowed_confirmations.isNotEmpty() to (it.allowed_confirmations.firstOrNull { c -> c.confirmation_type == EAuthSessionGuardType.k_EAuthSessionGuardType_DeviceConfirmation } != null))

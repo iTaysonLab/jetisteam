@@ -52,6 +52,76 @@ enum EAuthTokenRevokeAction {
 	k_EAuthTokenRevokeSupport = 3;
 }
 
+enum EGamingDeviceType {
+	k_EGamingDeviceType_Unknown = 0;
+	k_EGamingDeviceType_StandardPC = 1;
+	k_EGamingDeviceType_Console = 256;
+	k_EGamingDeviceType_PS3 = 272;
+	k_EGamingDeviceType_Steambox = 288;
+	k_EGamingDeviceType_Handheld = 512;
+	k_EGamingDeviceType_Phone = 528;
+	k_EGamingDeviceType_SteamDeck = 544;
+}
+
+enum EOSType {
+	k_eOSXboxOne = -800;
+	k_eOSWebClient = -700;
+	k_eOSEmbeddedClient = -675;
+	k_eTVOSUnknown = -650;
+	k_eTVOS9 = -649;
+	k_eTVOS9_1 = -648;
+	k_eTVOS9_2 = -647;
+	k_eTVOS9_3 = -646;
+	k_eTVOS10 = -645;
+	k_eTVOS10_1 = -644;
+	k_eTVOS10_2 = -643;
+	k_eTVOS11 = -642;
+	k_eTVOS11_1 = -641;
+	k_eTVOS11_2 = -640;
+	k_eTVOS11_3 = -639;
+	k_eTVOS11_4 = -638;
+	k_eTVOS12 = -637;
+	k_eTVOS12_1 = -636;
+	k_eIOSUnknown = -600;
+	k_eIOS1 = -599;
+	k_eIOS2 = -598;
+	k_eIOS3 = -597;
+	k_eIOS4 = -596;
+	k_eIOS5 = -595;
+	k_eIOS6 = -594;
+	k_eIOS6_1 = -593;
+	k_eIOS7 = -592;
+	k_eIOS7_1 = -591;
+	k_eIOS8 = -590;
+	k_eIOS8_1 = -589;
+	k_eIOS8_2 = -588;
+	k_eIOS8_3 = -587;
+	k_eIOS8_4 = -586;
+	k_eIOS9 = -585;
+	k_eIOS9_1 = -584;
+	k_eIOS9_2 = -583;
+	k_eIOS9_3 = -582;
+	k_eIOS10 = -581;
+	k_eIOS10_1 = -580;
+	k_eIOS10_2 = -579;
+	k_eIOS10_3 = -578;
+	k_eIOS11 = -577;
+	k_eIOS11_1 = -576;
+	k_eIOS11_2 = -575;
+	k_eIOS11_3 = -574;
+	k_eIOS11_4 = -573;
+	k_eIOS12 = -572;
+	k_eIOS12_1 = -571;
+	k_eIOSMax = -570;
+	k_eAndroidUnknown = -500;
+	k_eAndroid6 = -499;
+	k_eAndroid7 = -498;
+	k_eAndroid8 = -497;
+	k_eAndroid9 = -496;
+	k_eAndroidMax = -495;
+	k_eOSTypeMax = 32;
+}
+
 message CAuthentication_AccessToken_GenerateForApp_Request {
 	optional string refresh_token = 1;
 	optional fixed64 steamid = 2;
@@ -97,8 +167,8 @@ message CAuthentication_BeginAuthSessionViaQR_Request {
 message CAuthentication_DeviceDetails {
 	optional string device_friendly_name = 1 [(description) = "User-supplied, or client-supplied, friendly name of device"];
 	optional .EAuthTokenPlatformType platform_type = 2 [default = k_EAuthTokenPlatformType_Unknown, (description) = "EAuthTokenPlatformType, claimed, of device"];
-	optional int32 os_type = 3 [(description) = "EOSType, claimed, of authorized device"];
-	optional uint32 gaming_device_type = 4 [(description) = "EGamingDeviceType, claimed, of authorized device for steam client-type devices"];
+	optional .EOSType os_type = 3 [(description) = "EOSType, claimed, of authorized device"];
+	optional .EGamingDeviceType gaming_device_type = 4 [(description) = "EGamingDeviceType, claimed, of authorized device for steam client-type devices"];
 }
 
 message CAuthentication_BeginAuthSessionViaQR_Response {
@@ -212,7 +282,7 @@ message CAuthentication_RefreshToken_Enumerate_Response {
 		optional bool logged_in = 5 [(description) = "If true, this token is currently valid. False indicates it is a machine token - ok for steamguard if you know the credential"];
 		optional uint32 os_platform = 6 [(description) = "EPlatformType - rough classification of device OS, if known"];
 		optional uint32 auth_type = 7 [(description) = "EAuthTokenGuardType - device authorization mechanism, if known"];
-		optional uint32 gaming_device_type = 8 [(description) = "EGamingDeviceType - classify console/PC/SteamDeck, if known; applies only for Steam Client devices"];
+		optional EGamingDeviceType gaming_device_type = 8 [(description) = "EGamingDeviceType - classify console/PC/SteamDeck, if known; applies only for Steam Client devices"];
 		optional .CAuthentication_RefreshToken_Enumerate_Response.TokenUsageEvent first_seen = 9 [(description) = "Information about original authorization event"];
 		optional .CAuthentication_RefreshToken_Enumerate_Response.TokenUsageEvent last_seen = 10 [(description) = "Information about most-recently seen, if known for this device"];
 	}
