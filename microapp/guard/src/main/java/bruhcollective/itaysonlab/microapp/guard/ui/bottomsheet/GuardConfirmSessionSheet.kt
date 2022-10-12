@@ -184,9 +184,9 @@ internal fun GuardConfirmSessionSheet(
                         shape = MaterialTheme.shapes.large
                     ) {
                         if (viewModel.isApproving) {
-                            ResizableCircularIndicator(indicatorSize = 24.dp)
+                            ResizableCircularIndicator(indicatorSize = 19.dp, color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp)
                         } else {
-                            Text(text = stringResource(id = R.string.guard_confirm_sheet_action_approve))
+                            Text(text = stringResource(id = R.string.guard_confirm_sheet_action_approve), color = MaterialTheme.colorScheme.onPrimary)
                         }
                     }
 
@@ -200,9 +200,9 @@ internal fun GuardConfirmSessionSheet(
                         shape = MaterialTheme.shapes.large
                     ) {
                         if (viewModel.isDenying) {
-                            ResizableCircularIndicator(indicatorSize = 24.dp)
+                            ResizableCircularIndicator(indicatorSize = 19.dp, color = MaterialTheme.colorScheme.onSecondaryContainer, strokeWidth = 2.dp)
                         } else {
-                            Text(text = stringResource(id = R.string.guard_confirm_sheet_action_deny))
+                            Text(text = stringResource(id = R.string.guard_confirm_sheet_action_deny), color = MaterialTheme.colorScheme.onSecondaryContainer)
                         }
                     }
                 }
@@ -274,7 +274,7 @@ internal class GuardConfirmSessionViewModel @Inject constructor(
     private fun generateSignature(version: Int): ByteString {
         return ByteArrayOutputStream().apply {
             sink().buffer().use { sink ->
-                sink.writeIntLe(version)
+                sink.writeShortLe(version)
                 sink.writeLongLe(clientId)
                 sink.writeLongLe(steamId.steamId)
             }
