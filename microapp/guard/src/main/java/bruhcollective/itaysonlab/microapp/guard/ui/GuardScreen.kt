@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.microapp.guard.ui
 
 import android.os.Build
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -243,7 +244,7 @@ private fun GuardProgressCircle(
         Stroke(width = ProgressIndicatorDefaults.CircularStrokeWidth.toPx(), cap = StrokeCap.Round)
     }
     
-    val progressAnimated by animateFloatAsState(targetValue = progress, animationSpec = tween(1000))
+    val progressAnimated by animateFloatAsState(targetValue = progress, animationSpec = tween(1000, easing = LinearEasing))
     
     Canvas(modifier = modifier) {
         val diameterOffset = stroke.width / 2
