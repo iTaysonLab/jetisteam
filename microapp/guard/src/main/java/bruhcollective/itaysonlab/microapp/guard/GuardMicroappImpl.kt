@@ -16,6 +16,7 @@ import bruhcollective.itaysonlab.microapp.core.map
 import bruhcollective.itaysonlab.microapp.guard.ui.GuardScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardConfirmSessionSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardMoreOptionsSheet
+import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardRemoveSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.devices.GuardDevicesScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.recovery.GuardRecoveryCodeScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreen
@@ -75,8 +76,8 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
                     navController.popBackStack()
                     navController.navigate(InternalRoutes.Sessions.withSteamId(steamId))
                 }, onRemoveClicked = { steamId ->
-                    // TODO
                     navController.popBackStack()
+                    navController.navigate(InternalRoutes.Remove.withSteamId(steamId))
                 }, onRecoveryClicked = { steamId ->
                     navController.popBackStack()
                     navController.navigate(InternalRoutes.Recovery.withSteamId(steamId))
@@ -85,6 +86,14 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
 
             bottomSheet(InternalRoutes.ConfirmSignIn.url) {
                 GuardConfirmSessionSheet(onFinish = navController::popBackStack)
+            }
+
+            bottomSheet(InternalRoutes.Remove.url) {
+                GuardRemoveSheet(onGuardRemoved = {
+                    navController.navigate(microappRoute) {
+                        popUpTo(ROOT_NAV_GRAPH_ID)
+                    }
+                }, onGuardRemovalCancelled = navController::popBackStack)
             }
         }
     }
@@ -110,7 +119,7 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
         val Recovery = DestNode("guard/{$ARG_STEAM_ID}/recovery")
         val Sessions = DestNode("guard/{$ARG_STEAM_ID}/sessions")
         val MoreOptions = DestNode("guard/{$ARG_STEAM_ID}/more")
-
         val ConfirmSignIn = DestNode("guard/{$ARG_STEAM_ID}/confirm/{${ARG_CLIENT_ID}}")
+        val Remove = DestNode("guard/{$ARG_STEAM_ID}/remove")
     }
 }
