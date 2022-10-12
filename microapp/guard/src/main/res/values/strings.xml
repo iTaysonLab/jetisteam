@@ -29,4 +29,13 @@
     <string name="guard_actions_copy_snack">Code copied to clipboard</string>
 
     <string name="guard_sessions_last_seen">last seen on %s</string>
+
+    <string name="guard_as">as</string>
+    <string name="guard_confirm_sheet_header">Confirm sign in</string>
+    <string name="guard_confirm_sheet_location">Location</string>
+    <string name="guard_confirm_sheet_ip">IP</string>
+    <string name="guard_confirm_sheet_remember">Remember password</string>
+    <string name="guard_confirm_sheet_remember_subtitle">on this device</string>
+    <string name="guard_confirm_sheet_action_approve">Approve</string>
+    <string name="guard_confirm_sheet_action_deny">Deny</string>
 </resources>

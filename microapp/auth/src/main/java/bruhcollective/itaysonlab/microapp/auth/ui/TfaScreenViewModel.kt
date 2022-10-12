@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.microapp.auth.ui
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.usecases.auth.EnterCode
 import bruhcollective.itaysonlab.jetisteam.usecases.auth.PollAuthSession
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroappImpl
-import bruhcollective.itaysonlab.microapp.profile.ProfileMicroappImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow

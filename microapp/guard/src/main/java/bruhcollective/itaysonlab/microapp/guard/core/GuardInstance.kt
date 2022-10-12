@@ -18,7 +18,9 @@ class GuardInstance(
     private val configuration: GuardData
 ) {
     companion object {
-        private const val Algorithm = "HmacSHA1"
+        private const val AlgorithmTotp = "HmacSHA1"
+        private const val AlgorithmConfirmation = "HmacSHA256"
+
         private const val Digits = 5
         private val Period = 30.seconds.inWholeMilliseconds
         private val Alphabet = "23456789BCDFGHJKMNPQRTVWXY".toCharArray()
@@ -34,8 +36,8 @@ class GuardInstance(
     val revocationCode get() = configuration.revocation_code
     val username get() = configuration.account_name
 
-    private val secretKey = SecretKeySpec(configuration.shared_secret.toByteArray(), Algorithm)
-    private val digest = Mac.getInstance(Algorithm).also { it.init(secretKey) }
+    private val secretKey = SecretKeySpec(configuration.shared_secret.toByteArray(), AlgorithmTotp)
+    private val digest = Mac.getInstance(AlgorithmTotp).also { it.init(secretKey) }
 
     private fun generateCode(): CodeModel {
         val currentTime = clock.millis()
@@ -54,6 +56,12 @@ class GuardInstance(
                 remainingCodeInt /= 26
             }
         } to progress)
+    }
+
+    fun digestSha256(msg: ByteArray): ByteArray {
+        val localKey = SecretKeySpec(configuration.shared_secret.toByteArray(), AlgorithmConfirmation)
+        val localDigest = Mac.getInstance(AlgorithmConfirmation).also { it.init(localKey) }
+        return localDigest.doFinal(msg)
     }
 
     @JvmInline

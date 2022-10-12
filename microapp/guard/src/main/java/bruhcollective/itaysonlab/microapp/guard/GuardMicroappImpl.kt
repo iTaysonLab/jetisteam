@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.microapp.guard
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Security
@@ -13,6 +14,7 @@ import bruhcollective.itaysonlab.microapp.core.NavigationEntry
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
 import bruhcollective.itaysonlab.microapp.core.map
 import bruhcollective.itaysonlab.microapp.guard.ui.GuardScreen
+import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardConfirmSessionSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardMoreOptionsSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.devices.GuardDevicesScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.recovery.GuardRecoveryCodeScreen
@@ -36,6 +38,11 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
                     navController.navigate(InternalRoutes.Setup.withSteamId(steamId))
                 }, onMoreClicked = { steamId ->
                     navController.navigate(InternalRoutes.MoreOptions.withSteamId(steamId))
+                }, onSessionArrived = { steamId, clientId ->
+                    navController.navigate(InternalRoutes.ConfirmSignIn.map(mapOf(
+                        InternalRoutes.ARG_STEAM_ID to steamId.toString(),
+                        InternalRoutes.ARG_CLIENT_ID to clientId.toString(),
+                    )))
                 })
             }
 
@@ -68,12 +75,16 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
                     navController.popBackStack()
                     navController.navigate(InternalRoutes.Sessions.withSteamId(steamId))
                 }, onRemoveClicked = { steamId ->
-                    navController.popBackStack()
                     // TODO
+                    navController.popBackStack()
                 }, onRecoveryClicked = { steamId ->
                     navController.popBackStack()
                     navController.navigate(InternalRoutes.Recovery.withSteamId(steamId))
                 })
+            }
+
+            bottomSheet(InternalRoutes.ConfirmSignIn.url) {
+                GuardConfirmSessionSheet(onFinish = navController::popBackStack)
             }
         }
     }
@@ -91,12 +102,15 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
     internal object InternalRoutes {
         const val NavGraph = "@guard"
 
-        const val ARG_STEAM_ID = "steamid"
+        const val ARG_STEAM_ID = "steamId"
+        const val ARG_CLIENT_ID = "clientId"
 
         val Setup = DestNode("guard/{$ARG_STEAM_ID}/setup")
         val Move = DestNode("guard/{$ARG_STEAM_ID}/move")
         val Recovery = DestNode("guard/{$ARG_STEAM_ID}/recovery")
         val Sessions = DestNode("guard/{$ARG_STEAM_ID}/sessions")
         val MoreOptions = DestNode("guard/{$ARG_STEAM_ID}/more")
+
+        val ConfirmSignIn = DestNode("guard/{$ARG_STEAM_ID}/confirm/{${ARG_CLIENT_ID}}")
     }
 }

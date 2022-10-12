@@ -18,6 +18,8 @@ object SteamRpcWorkarounds {
         "/Authentication/PollAuthSessionStatus",
         "/Authentication/GenerateAccessTokenForApp",
         "/Authentication/EnumerateTokens",
+        "/Authentication/GetAuthSessionInfo",
+        "/Authentication/UpdateAuthSessionWithMobileConfirmation",
         // Player
         "/Player/GetAchievementsProgress",
         // MobileApp

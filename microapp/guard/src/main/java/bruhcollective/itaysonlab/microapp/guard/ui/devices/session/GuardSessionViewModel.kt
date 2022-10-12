@@ -8,5 +8,5 @@ import javax.inject.Inject
 class GuardSessionViewModel @Inject constructor(
 
 ): ViewModel() {
-    
+
 }

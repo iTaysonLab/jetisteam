@@ -5,6 +5,7 @@ import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
 import bruhcollective.itaysonlab.jetisteam.controllers.UuidController
 import bruhcollective.itaysonlab.jetisteam.proto.SessionData
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
+import okio.ByteString
 import steam.auth.*
 import java.math.BigInteger
 import java.security.KeyFactory
@@ -96,6 +97,23 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun enumerateTokens() = stub.EnumerateTokens(CAuthentication_RefreshToken_Enumerate_Request())
+    suspend fun getAuthSession(clientId: Long) = stub.GetAuthSessionInfo(CAuthentication_GetAuthSessionInfo_Request(client_id = clientId))
+    suspend fun getQueueOfSessions() = stub.GetAuthSessionsForAccount(CAuthentication_GetAuthSessionsForAccount_Request())
+    suspend fun updateSessionWithMobileAuth(
+        version: Int,
+        clientId: Long,
+        steamId: Long,
+        signature: ByteString,
+        confirm: Boolean,
+        persistence: ESessionPersistence
+    ) = stub.UpdateAuthSessionWithMobileConfirmation(CAuthentication_UpdateAuthSessionWithMobileConfirmation_Request(
+        version = version,
+        client_id = clientId,
+        steamid = steamId,
+        signature = signature,
+        confirm = confirm,
+        persistence = persistence
+    ))
 
     private fun generateRsaKey(
         mod: String, exp: String

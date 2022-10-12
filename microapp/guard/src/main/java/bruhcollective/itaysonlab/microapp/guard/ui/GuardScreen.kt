@@ -38,7 +38,8 @@ internal fun GuardScreen(
     viewModel: GuardViewModel = hiltViewModel(),
     onMoveClicked: (Long) -> Unit,
     onAddClicked: (Long) -> Unit,
-    onMoreClicked: (Long) -> Unit
+    onMoreClicked: (Long) -> Unit,
+    onSessionArrived: (steamId: Long, clientId: Long) -> Unit,
 ) {
     val clipboard = LocalClipboardManager.current
     val context = LocalContext.current
@@ -91,6 +92,13 @@ internal fun GuardScreen(
         when (val state = viewModel.state) {
             is GuardViewModel.GuardState.Available -> {
                 val codeState = state.instance.code.collectAsStateWithLifecycle(initialValue = GuardInstance.CodeModel.DefaultInstance)
+                val confirmState = viewModel.confirmationFlow.collectAsStateWithLifecycle(initialValue = 0L)
+
+                LaunchedEffect(confirmState.value) {
+                    if (confirmState.value != 0L) {
+                        onSessionArrived(viewModel.steamId, confirmState.value)
+                    }
+                }
 
                 GuardInstanceAvailableScreen(
                     modifier = Modifier.fillMaxSize(),
