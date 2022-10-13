@@ -24,6 +24,7 @@
 
     <string name="guard_actions_remove">Remove Authenticator</string>
     <string name="guard_actions_devices">Authorized Devices</string>
+    <string name="guard_actions_codes">Backup Codes</string>
     <string name="guard_actions_qr">Sign in with QR</string>
     <string name="guard_actions_copy">Copy</string>
     <string name="guard_actions_copy_snack">Code copied to clipboard</string>
@@ -31,6 +32,8 @@
     <string name="guard_sessions_last_seen">last seen on %s</string>
 
     <string name="guard_as">as</string>
+    <string name="guard_for">for</string>
+
     <string name="guard_confirm_sheet_header">Confirm sign in</string>
     <string name="guard_confirm_sheet_location">Location</string>
     <string name="guard_confirm_sheet_ip">IP</string>
@@ -38,4 +41,8 @@
     <string name="guard_confirm_sheet_remember_subtitle">on this device</string>
     <string name="guard_confirm_sheet_action_approve">Approve</string>
     <string name="guard_confirm_sheet_action_deny">Deny</string>
+
+    <string name="guard_remove_sheet_header">Remove authenticator?</string>
+    <string name="guard_remove_sheet_text">This will make your account less secure.</string>
+    <string name="guard_remove_sheet_warn">Trades and Market Listings will be held for up to 15 days if you disable Steam Guard.</string>
 </resources>

@@ -52,7 +52,7 @@ internal fun GuardRemoveSheet(
         )
 
         BottomSheetSubtitle(text = buildAnnotatedString {
-            append(stringResource(id = R.string.guard_as))
+            append(stringResource(id = R.string.guard_for))
             append(" ")
             withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
                 // append(viewModel.guardInstance.username)
