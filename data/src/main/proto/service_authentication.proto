@@ -162,6 +162,7 @@ message CAuthentication_BeginAuthSessionViaQR_Request {
 	optional string device_friendly_name = 1;
 	optional .EAuthTokenPlatformType platform_type = 2 [default = k_EAuthTokenPlatformType_Unknown];
 	optional .CAuthentication_DeviceDetails device_details = 3;
+	optional string website_id = 4 [default = "Unknown"];
 }
 
 message CAuthentication_DeviceDetails {
@@ -240,6 +241,7 @@ message CAuthentication_PollAuthSessionStatus_Response {
 	optional string access_token = 4;
 	optional bool had_remote_interaction = 5;
 	optional string account_name = 6;
+	optional string new_guard_data = 7;
 }
 
 message CAuthentication_UpdateAuthSessionWithMobileConfirmation_Request {
@@ -295,6 +297,9 @@ message CAuthentication_RefreshToken_Enumerate_Response_TokenUsageEvent {
 	optional uint32 time = 1;
 	optional .CMsgIPAddress ip = 2;
 	optional string locale = 3;
+	optional string country = 4;
+	optional string state = 5;
+	optional string city = 6;
 }
 
 message CAuthentication_RefreshToken_Revoke_Request {
