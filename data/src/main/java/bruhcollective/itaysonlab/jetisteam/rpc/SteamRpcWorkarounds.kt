@@ -31,6 +31,7 @@ object SteamRpcWorkarounds {
         "/TwoFactor/FinalizeAddAuthenticator",
         "/TwoFactor/RemoveAuthenticatorViaChallengeStart",
         "/TwoFactor/RemoveAuthenticatorViaChallengeContinue",
+        "/TwoFactor/RemoveAuthenticator",
     )
 
     /**

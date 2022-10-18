@@ -134,15 +134,15 @@ internal class GuardRemoveSheetViewModel @Inject constructor(
     fun launchRemoval(onSuccess: () -> Unit) {
         if (isRemoving) return
 
-        isRemoving = true
-
         viewModelScope.launch {
+            isRemoving = true
+
             if (removeSg(guardInstance.revocationCode, 1, 1).success == true) {
                 guardController.deleteInstance(steamId)
                 onSuccess()
             }
-        }
 
-        isRemoving = false
+            isRemoving = false
+        }
     }
 }
