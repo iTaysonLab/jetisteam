@@ -27,6 +27,7 @@ class ConfigService @Inject constructor(
     fun int(of: String, def: Int) = instance.getInt(of, def)
     fun long(of: String, def: Long) = instance.getLong(of, def)
     fun bytes(of: String, def: ByteArray) = instance.getBytes(of, def)!!
+    fun remove(key: String) = instance.removeValueForKey(key)
 
     fun put(to: String, what: Any) {
         when (what) {

@@ -1,8 +1,6 @@
 package bruhcollective.itaysonlab.microapp.guard
 
-import android.util.Log
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Security
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -19,7 +17,6 @@ import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardMoreOptionsS
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardRemoveSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.devices.GuardDevicesScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.recovery.GuardRecoveryCodeScreen
-import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.variants.GuardMoveScreen
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet

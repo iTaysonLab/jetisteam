@@ -39,5 +39,10 @@ class GuardController @Inject constructor(
         }
     }
 
+    fun deleteInstance(steamId: SteamID) {
+        configService.remove(steamIdKey(steamId))
+        lazyInstances.remove(steamId.steamId)
+    }
+
     private fun steamIdKey(steamId: SteamID) = "guard.${steamId.steamId}"
 }

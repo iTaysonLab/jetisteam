@@ -40,6 +40,15 @@ class TwoFactorRepository @Inject constructor(
         )
     )
 
+    suspend fun remove(
+        rvCode: String, reason: Int, scheme: Int, removeCookies: Boolean
+    ) = stub.RemoveAuthenticator(CTwoFactor_RemoveAuthenticator_Request(
+        revocation_code = rvCode,
+        revocation_reason = reason,
+        steamguard_scheme = scheme,
+        remove_all_steamguard_cookies = removeCookies
+    ))
+
     sealed class AddAuthenticatorResponse {
         class WaitingForPhoneConfirmation(val wrapped: CTwoFactor_AddAuthenticator_Response): AddAuthenticatorResponse()
         object AlreadyExists: AddAuthenticatorResponse()
