@@ -84,6 +84,12 @@ internal class GuardSetupViewModel @Inject constructor(
     suspend fun continueWithCode(code: String): Boolean {
         return finalizeAddTfa(steamId, code) {
             return@finalizeAddTfa localGenerator.generateCodeWithTime()
+        }.ifTrue {
+            guardController.saveInstance(steamId, localGenerator)
         }
+    }
+
+    private inline fun Boolean.ifTrue(func: () -> Unit) = apply {
+        if (this) func()
     }
 }

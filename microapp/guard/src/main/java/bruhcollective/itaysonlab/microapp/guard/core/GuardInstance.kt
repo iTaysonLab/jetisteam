@@ -35,6 +35,7 @@ class GuardInstance(
 
     val revocationCode get() = configuration.revocation_code
     val username get() = configuration.account_name
+    val configurationEncoded get() = GuardData.ADAPTER.encode(configuration)
 
     private val secretKey = SecretKeySpec(configuration.shared_secret.toByteArray(), AlgorithmTotp)
     private val digest = Mac.getInstance(AlgorithmTotp).also { it.init(secretKey) }
