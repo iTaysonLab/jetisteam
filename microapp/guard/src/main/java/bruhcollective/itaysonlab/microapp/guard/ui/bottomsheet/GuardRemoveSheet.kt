@@ -80,6 +80,21 @@ internal fun GuardRemoveSheet(
 
         Row(Modifier.padding(horizontal = 16.dp)) {
             Button(
+                onClick = onGuardRemovalCancelled,
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(16.dp),
+                colors = ButtonDefaults.filledTonalButtonColors(),
+                shape = MaterialTheme.shapes.large
+            ) {
+                Text(
+                    text = stringResource(id = R.string.guard_remove_sheet_action_cancel),
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            }
+            
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Button(
                 onClick = { viewModel.launchRemoval(onGuardRemoved) },
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(16.dp),
@@ -97,21 +112,6 @@ internal fun GuardRemoveSheet(
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Button(
-                onClick = onGuardRemovalCancelled,
-                modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(16.dp),
-                colors = ButtonDefaults.filledTonalButtonColors(),
-                shape = MaterialTheme.shapes.large
-            ) {
-                Text(
-                    text = stringResource(id = R.string.guard_remove_sheet_action_cancel),
-                    color = MaterialTheme.colorScheme.onSecondaryContainer
-                )
             }
         }
 

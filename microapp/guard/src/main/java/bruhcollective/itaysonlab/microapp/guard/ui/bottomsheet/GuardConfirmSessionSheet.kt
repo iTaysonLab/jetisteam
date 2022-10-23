@@ -178,21 +178,6 @@ internal fun GuardConfirmSessionSheet(
 
                 Row(Modifier.padding(horizontal = 16.dp)) {
                     Button(
-                        onClick = { viewModel.dispatchOperation(true, onFinish) },
-                        modifier = Modifier.weight(1f),
-                        contentPadding = PaddingValues(16.dp),
-                        shape = MaterialTheme.shapes.large
-                    ) {
-                        if (viewModel.isApproving) {
-                            ResizableCircularIndicator(indicatorSize = 19.dp, color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp)
-                        } else {
-                            Text(text = stringResource(id = R.string.guard_confirm_sheet_action_approve), color = MaterialTheme.colorScheme.onPrimary)
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Button(
                         onClick = { viewModel.dispatchOperation(false, onFinish) },
                         modifier = Modifier.weight(1f),
                         contentPadding = PaddingValues(16.dp),
@@ -203,6 +188,21 @@ internal fun GuardConfirmSessionSheet(
                             ResizableCircularIndicator(indicatorSize = 19.dp, color = MaterialTheme.colorScheme.onSecondaryContainer, strokeWidth = 2.dp)
                         } else {
                             Text(text = stringResource(id = R.string.guard_confirm_sheet_action_deny), color = MaterialTheme.colorScheme.onSecondaryContainer)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Button(
+                        onClick = { viewModel.dispatchOperation(true, onFinish) },
+                        modifier = Modifier.weight(1f),
+                        contentPadding = PaddingValues(16.dp),
+                        shape = MaterialTheme.shapes.large
+                    ) {
+                        if (viewModel.isApproving) {
+                            ResizableCircularIndicator(indicatorSize = 19.dp, color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp)
+                        } else {
+                            Text(text = stringResource(id = R.string.guard_confirm_sheet_action_approve), color = MaterialTheme.colorScheme.onPrimary)
                         }
                     }
                 }
