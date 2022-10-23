@@ -32,13 +32,14 @@ import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.core.GuardInstance
 import kotlinx.coroutines.launch
+import steam.twofactor.CTwoFactor_AddAuthenticator_Response
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun GuardScreen(
     viewModel: GuardViewModel = hiltViewModel(),
     onMoveClicked: (Long) -> Unit,
-    onAddClicked: (Long) -> Unit,
+    onAddClicked: (Long, CTwoFactor_AddAuthenticator_Response) -> Unit,
     onMoreClicked: (Long) -> Unit,
     onSessionArrived: (steamId: Long, clientId: Long) -> Unit,
 ) {
@@ -59,7 +60,7 @@ internal fun GuardScreen(
             Snackbar(snackbarData = it)
         }
     }) { innerPadding ->
-        when (viewModel.addState) {
+        when (val addState = viewModel.addState) {
             GuardViewModel.AddGuardState.RequestToMove -> {
                 AlertDialog(
                     onDismissRequest = viewModel::resetAddState,
@@ -83,7 +84,7 @@ internal fun GuardScreen(
 
             is GuardViewModel.AddGuardState.AwaitForSms -> {
                 LaunchedEffect(Unit) {
-                    onAddClicked(viewModel.steamId)
+                    onAddClicked(viewModel.steamId, addState.data)
                 }
             }
 

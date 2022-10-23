@@ -17,7 +17,7 @@ import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.MoveTfaRequestSms
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
 import bruhcollective.itaysonlab.microapp.guard.ui.components.CodeRowState
-import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreen
+import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreenImpl
 import bruhcollective.itaysonlab.microapp.guard.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -49,7 +49,7 @@ internal fun GuardMoveScreen (
                 })
             }
 
-            GuardSetupScreen(
+            GuardSetupScreenImpl(
                 onBackClicked = onBackClicked,
                 state = rowState,
                 icon = { Icons.Rounded.Update },

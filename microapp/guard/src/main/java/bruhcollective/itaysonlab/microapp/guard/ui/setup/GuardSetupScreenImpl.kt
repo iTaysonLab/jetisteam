@@ -18,7 +18,7 @@ import bruhcollective.itaysonlab.microapp.guard.ui.components.CodeRowState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun GuardSetupScreen(
+internal fun GuardSetupScreenImpl(
     onBackClicked: () -> Unit,
     state: CodeRowState,
     icon: () -> ImageVector,

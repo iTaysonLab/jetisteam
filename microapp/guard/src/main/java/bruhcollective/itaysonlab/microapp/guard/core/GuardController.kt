@@ -29,13 +29,15 @@ class GuardController @Inject constructor(
         }
     }
 
-    fun createInstance(steamId: SteamID, configuration: GuardData): GuardInstance {
+    fun createInstance(steamId: SteamID, configuration: GuardData, save: Boolean = true): GuardInstance {
         return GuardInstance(
             clock = sysClock,
             configuration = configuration
         ).also { instance ->
-            configService.put(steamIdKey(steamId), GuardData.ADAPTER.encode(configuration))
-            lazyInstances.put(steamId.steamId, instance)
+            if (save) {
+                configService.put(steamIdKey(steamId), GuardData.ADAPTER.encode(configuration))
+                lazyInstances.put(steamId.steamId, instance)
+            }
         }
     }
 

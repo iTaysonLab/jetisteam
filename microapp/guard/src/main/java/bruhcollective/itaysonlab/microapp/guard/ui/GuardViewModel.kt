@@ -73,7 +73,7 @@ internal class GuardViewModel @Inject constructor(
     }
 
     sealed class AddGuardState {
-        class AwaitForSms(val dataToMove: CTwoFactor_AddAuthenticator_Response): AddGuardState()
+        class AwaitForSms(val data: CTwoFactor_AddAuthenticator_Response): AddGuardState()
         object RequestToMove: AddGuardState()
         object Noop: AddGuardState()
     }

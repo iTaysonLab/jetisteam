@@ -49,6 +49,26 @@ class TwoFactorRepository @Inject constructor(
         remove_all_steamguard_cookies = removeCookies
     ))
 
+    suspend fun finalizeWithSms(
+        steamID: SteamID, code: String
+    ) = stub.FinalizeAddAuthenticator(
+        CTwoFactor_FinalizeAddAuthenticator_Request(
+            steamid = steamID.steamId,
+            activation_code = code,
+            validate_sms_code = true
+        )
+    )
+
+    suspend fun finalizeWithCode(
+        steamID: SteamID, code: String, codeGenTime: Long
+    ) = stub.FinalizeAddAuthenticator(
+        CTwoFactor_FinalizeAddAuthenticator_Request(
+            steamid = steamID.steamId,
+            authenticator_code = code,
+            authenticator_time = codeGenTime
+        )
+    )
+
     sealed class AddAuthenticatorResponse {
         class WaitingForPhoneConfirmation(val wrapped: CTwoFactor_AddAuthenticator_Response): AddAuthenticatorResponse()
         object AlreadyExists: AddAuthenticatorResponse()

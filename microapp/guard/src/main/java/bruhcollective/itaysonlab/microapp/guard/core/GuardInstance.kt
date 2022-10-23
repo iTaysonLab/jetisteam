@@ -58,6 +58,10 @@ class GuardInstance(
         } to progress)
     }
 
+    fun generateCodeWithTime(): Pair<String, Long> {
+        return generateCode().code to clock.millis()
+    }
+
     fun digestSha256(msg: ByteArray): ByteArray {
         val localKey = SecretKeySpec(configuration.shared_secret.toByteArray(), AlgorithmConfirmation)
         val localDigest = Mac.getInstance(AlgorithmConfirmation).also { it.init(localKey) }
