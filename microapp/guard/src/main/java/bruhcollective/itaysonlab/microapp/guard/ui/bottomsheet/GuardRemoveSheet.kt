@@ -91,7 +91,7 @@ internal fun GuardRemoveSheet(
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
-            
+
             Spacer(modifier = Modifier.width(8.dp))
 
             Button(
