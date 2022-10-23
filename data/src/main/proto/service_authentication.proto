@@ -283,8 +283,8 @@ message CAuthentication_RefreshToken_Enumerate_Response {
 		optional .EAuthTokenPlatformType platform_type = 4 [default = k_EAuthTokenPlatformType_Unknown, (description) = "gross platform type (mobile/client/browser)"];
 		optional bool logged_in = 5 [(description) = "If true, this token is currently valid. False indicates it is a machine token - ok for steamguard if you know the credential"];
 		optional uint32 os_platform = 6 [(description) = "EPlatformType - rough classification of device OS, if known"];
-		optional uint32 auth_type = 7 [(description) = "EAuthTokenGuardType - device authorization mechanism, if known"];
-		optional EGamingDeviceType gaming_device_type = 8 [(description) = "EGamingDeviceType - classify console/PC/SteamDeck, if known; applies only for Steam Client devices"];
+		optional .EAuthSessionGuardType auth_type = 7 [(description) = "EAuthTokenGuardType - device authorization mechanism, if known"];
+		optional .EGamingDeviceType gaming_device_type = 8 [(description) = "EGamingDeviceType - classify console/PC/SteamDeck, if known; applies only for Steam Client devices"];
 		optional .CAuthentication_RefreshToken_Enumerate_Response.TokenUsageEvent first_seen = 9 [(description) = "Information about original authorization event"];
 		optional .CAuthentication_RefreshToken_Enumerate_Response.TokenUsageEvent last_seen = 10 [(description) = "Information about most-recently seen, if known for this device"];
 	}
