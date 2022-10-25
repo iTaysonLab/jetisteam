@@ -272,7 +272,7 @@ internal class GuardConfirmSessionViewModel @Inject constructor(
     }
 
     private fun generateSignature(version: Int): ByteString {
-        return ByteArrayOutputStream().apply {
+        return ByteArrayOutputStream(2 + 8 + 8).apply {
             sink().buffer().use { sink ->
                 sink.writeShortLe(version)
                 sink.writeLongLe(clientId)
