@@ -1,15 +1,22 @@
 package bruhcollective.itaysonlab.microapp.guard.ui.devices.session
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -18,10 +25,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
+import bruhcollective.itaysonlab.microapp.guard.utils.SessionFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GuardSessionScreen(
+internal fun GuardSessionScreen(
     viewModel: GuardSessionViewModel = hiltViewModel(),
     onBackClicked: () -> Unit,
 ) {
@@ -44,8 +52,32 @@ fun GuardSessionScreen(
             .fillMaxSize()
             .nestedScroll(tas.nestedScrollConnection)
     ) { innerPadding ->
-        RoundedPage(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+        RoundedPage(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
             LazyColumn {
+                item {
+                    val visuals = remember(viewModel.sessionData) { SessionFormatter.formatSessionDescByTime(ctx, viewModel.sessionData) }
+
+                    SessionHeader(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = visuals.icon,
+                        title = visuals.fallbackName,
+                        text = stringResource(id = R.string.guard_sessions_last_seen, visuals.relativeLastSeen)
+                    )
+                }
+
+                item {
+                    SessionActionStrip(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 4.dp)
+                    )
+                }
+
                 items(viewModel.infoBlocks) { info ->
                     ListItem(
                         headlineText = {
@@ -59,9 +91,99 @@ fun GuardSessionScreen(
                         )
                     )
 
-                    Divider(color = MaterialTheme.colorScheme.surfaceVariant, modifier = Modifier.padding(start = 16.dp + 24.dp + 16.dp))
+                    Divider(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SessionHeader(
+    modifier: Modifier,
+    icon: () -> ImageVector,
+    title: String,
+    text: String
+) {
+    Column(modifier = modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Icon(
+            imageVector = icon(), tint = MaterialTheme.colorScheme.onPrimaryContainer, contentDescription = null, modifier = Modifier
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .padding(8.dp)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(text = title, style = MaterialTheme.typography.headlineSmall)
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Text(text = text)
+    }
+
+    /*Divider(
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = Modifier.fillMaxWidth()
+    )*/
+}
+
+@Composable
+private fun SessionActionStrip(
+    modifier: Modifier
+) {
+    Card(modifier, colors = CardDefaults.cardColors(
+        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(16.dp)
+    ), shape = MaterialTheme.shapes.large) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.height(IntrinsicSize.Min)) {
+            SessionActionStripButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+
+                    },
+                icon = Icons.Rounded.Delete,
+                text = "Revoke"
+            )
+
+            Box(
+                Modifier
+                    .fillMaxHeight()
+                    .width(2.dp)
+                    .background(color = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
+            )
+
+            SessionActionStripButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                               
+                    },
+                icon = Icons.Rounded.Help,
+                text = "Support"
+            )
+        }
+    }
+}
+
+@Composable
+private fun SessionActionStripButton(
+    modifier: Modifier,
+    text: String,
+    icon: ImageVector
+) {
+    Column(modifier = modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Icon(
+            imageVector = icon, tint = MaterialTheme.colorScheme.primary, contentDescription = null, modifier = Modifier
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Text(
+            text = text, color = MaterialTheme.colorScheme.primary
+        )
     }
 }

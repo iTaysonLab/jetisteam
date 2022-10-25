@@ -49,4 +49,8 @@
     <string name="guard_remove_sheet_action_cancel">Cancel</string>
 
     <string name="guard_session_info">Session information</string>
+    <string name="guard_session_info_signed">Authorized by</string>
+    <string name="guard_session_info_ip">IP</string>
+    <string name="guard_session_info_desc">Description</string>
+    <string name="guard_session_info_first">Signed on</string>
 </resources>
