@@ -122,6 +122,24 @@ enum EOSType {
 	k_eOSTypeMax = 32;
 }
 
+enum EPlatformType {
+	k_EPlatformTypeUnknown = 0;
+	k_EPlatformTypeWin32 = 1;
+	k_EPlatformTypeWin64 = 2;
+	k_EPlatformTypeLinux64 = 3;
+	k_EPlatformTypeOSX = 4;
+	k_EPlatformTypePS3 = 5;
+	k_EPlatformTypeLinux32 = 6;
+	k_EPlatformTypeAndroid32 = 7;
+	k_EPlatformTypeAndroid64 = 8;
+	k_EPlatformTypeIOS32 = 9;
+	k_EPlatformTypeIOS64 = 10;
+	k_EPlatformTypeTVOS = 11;
+	k_EPlatformTypeEmbeddedClient = 12;
+	k_EPlatformTypeBrowser = 13;
+	k_EPlatformTypeMax = 14;
+}
+
 message CAuthentication_AccessToken_GenerateForApp_Request {
 	optional string refresh_token = 1;
 	optional fixed64 steamid = 2;
@@ -274,6 +292,9 @@ message CAuthentication_RefreshToken_Enumerate_Response {
 		optional uint32 time = 1 [(description) = "Approximate time of history event (may be deliberately fuzzed or omitted)"];
 		optional .CMsgIPAddress ip = 2 [(description) = "IP at which event was observed"];
 		optional string locale = 3 [(description) = "city/location name, if known"];
+		optional string country = 4;
+		optional string state = 5;
+		optional string city = 6;
 	}
 
 	message RefreshTokenDescription {
@@ -282,7 +303,7 @@ message CAuthentication_RefreshToken_Enumerate_Response {
 		optional uint32 time_updated = 3;
 		optional .EAuthTokenPlatformType platform_type = 4 [default = k_EAuthTokenPlatformType_Unknown, (description) = "gross platform type (mobile/client/browser)"];
 		optional bool logged_in = 5 [(description) = "If true, this token is currently valid. False indicates it is a machine token - ok for steamguard if you know the credential"];
-		optional uint32 os_platform = 6 [(description) = "EPlatformType - rough classification of device OS, if known"];
+		optional .EPlatformType os_platform = 6 [(description) = "EPlatformType - rough classification of device OS, if known"];
 		optional .EAuthSessionGuardType auth_type = 7 [(description) = "EAuthTokenGuardType - device authorization mechanism, if known"];
 		optional .EGamingDeviceType gaming_device_type = 8 [(description) = "EGamingDeviceType - classify console/PC/SteamDeck, if known; applies only for Steam Client devices"];
 		optional .CAuthentication_RefreshToken_Enumerate_Response.TokenUsageEvent first_seen = 9 [(description) = "Information about original authorization event"];
@@ -291,15 +312,6 @@ message CAuthentication_RefreshToken_Enumerate_Response {
 
 	repeated .CAuthentication_RefreshToken_Enumerate_Response.RefreshTokenDescription refresh_tokens = 1;
 	optional fixed64 requesting_token = 2;
-}
-
-message CAuthentication_RefreshToken_Enumerate_Response_TokenUsageEvent {
-	optional uint32 time = 1;
-	optional .CMsgIPAddress ip = 2;
-	optional string locale = 3;
-	optional string country = 4;
-	optional string state = 5;
-	optional string city = 6;
 }
 
 message CAuthentication_RefreshToken_Revoke_Request {
