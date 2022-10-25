@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -135,6 +136,8 @@ private fun SessionHeader(
 private fun SessionActionStrip(
     modifier: Modifier
 ) {
+    val uriHandler = LocalUriHandler.current
+
     Card(modifier, colors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(16.dp)
     ), shape = MaterialTheme.shapes.large) {
@@ -160,7 +163,8 @@ private fun SessionActionStrip(
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
-                               
+                        // TODO: maybe add some sort of WebView
+                        uriHandler.openUri("https://help.steampowered.com/")
                     },
                 icon = Icons.Rounded.Help,
                 text = "Support"

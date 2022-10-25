@@ -48,6 +48,14 @@ internal class GuardSessionViewModel @Inject constructor(
             ))
         )
 
+        if (!sessionData.last_seen?.city.isNullOrEmpty()) {
+            add(
+                ListItem(Triple(
+                    { Icons.Rounded.LocationOn }, R.string.guard_session_info_loc, "${sessionData.last_seen?.city}, ${sessionData.last_seen?.state}, ${sessionData.last_seen?.country}"
+                ))
+            )
+        }
+
         add(
             ListItem(Triple(
                 { Icons.Rounded.Key }, R.string.guard_session_info_signed, when (sessionData.auth_type) {
@@ -62,11 +70,13 @@ internal class GuardSessionViewModel @Inject constructor(
             ))
         )
 
-        add(
-            ListItem(Triple(
-                { Icons.Rounded.Router }, R.string.guard_session_info_ip, sessionData.last_seen?.ip?.ipString ?: "Unknown"
-            ))
-        )
+        if (sessionData.last_seen?.ip != null) {
+            add(
+                ListItem(Triple(
+                    { Icons.Rounded.Router }, R.string.guard_session_info_ip, sessionData.last_seen?.ip?.ipString ?: "Unknown"
+                ))
+            )
+        }
     }
 
     @JvmInline

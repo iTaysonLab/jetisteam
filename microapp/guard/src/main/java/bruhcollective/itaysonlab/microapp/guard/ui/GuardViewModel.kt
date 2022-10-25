@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.microapp.guard.ui
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -45,7 +44,6 @@ internal class GuardViewModel @Inject constructor(
     var confirmationFlow = flow {
         coroutineScope {
             while (isPollingActive) {
-                Log.d("Guard", "Polling AuthSessions...")
                 emit(getQueueOfSessions())
                 delay(5000L)
             }

@@ -53,4 +53,5 @@
     <string name="guard_session_info_ip">IP</string>
     <string name="guard_session_info_desc">Description</string>
     <string name="guard_session_info_first">Signed on</string>
+    <string name="guard_session_info_loc">Location</string>
 </resources>
