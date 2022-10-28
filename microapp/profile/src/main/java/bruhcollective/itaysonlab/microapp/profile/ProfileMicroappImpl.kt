@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.microapp.profile
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Person
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -12,8 +11,8 @@ import bruhcollective.itaysonlab.microapp.core.Destinations
 import bruhcollective.itaysonlab.microapp.core.NavigationEntry
 import bruhcollective.itaysonlab.microapp.core.find
 import bruhcollective.itaysonlab.microapp.gamepage.GamePageMicroapp
+import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
 import bruhcollective.itaysonlab.microapp.profile.ui.ProfileScreen
-import bruhcollective.itaysonlab.microapp.profile.ui.screens.library.LibraryScreen
 import javax.inject.Inject
 
 class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
@@ -27,27 +26,15 @@ class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
                     onGameClick = { appId ->
                         navController.navigateToGame(destinations, appId)
                     }, onLibraryClick = { steamId ->
-                        navController.navigate(
-                            libraryDestination(steamId)
-                        )
+                        navController.navigate(LibraryMicroapp.libraryOf(steamId))
                     }
-                )
-            }
-
-            composable(InternalRoutes.Library) {
-                LibraryScreen(
-                    onGameClick = { appId ->
-                        navController.navigateToGame(destinations, appId)
-                    }, onBackClick = navController::popBackStack
                 )
             }
         }
     }
 
     private fun NavController.navigateToGame(destinations: Destinations, appId: Int) {
-        navigate(
-            destinations.find<GamePageMicroapp>().gameDestination(appId)
-        )
+        navigate(GamePageMicroapp.gameDestination(appId))
     }
 
     override val bottomNavigationEntry = NavigationEntry(
@@ -60,7 +47,5 @@ class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
         const val NavGraph = "@profile"
 
         const val ARG_ID = "id"
-
-        const val Library = "profile/{$ARG_ID}/library"
     }
 }

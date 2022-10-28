@@ -21,12 +21,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
-import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetHandle
-import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetHeader
-import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetSubtitle
-import bruhcollective.itaysonlab.jetisteam.uikit.components.ResizableCircularIndicator
+import bruhcollective.itaysonlab.jetisteam.uikit.components.*
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.GetFutureAuthSession
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.UpdateSessionWithMobileAuth
+import bruhcollective.itaysonlab.microapp.core.ext.getLongFromString
+import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
@@ -49,26 +48,17 @@ internal fun GuardConfirmSessionSheet(
     viewModel: GuardConfirmSessionViewModel = hiltViewModel(),
     onFinish: () -> Unit
 ) {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-    ) {
-        BottomSheetHandle(modifier = Modifier.align(Alignment.CenterHorizontally))
-
-        BottomSheetHeader(
-            text = stringResource(id = R.string.guard_confirm_sheet_header),
-            modifier = Modifier.padding(bottom = 4.dp)
-        )
-
-        BottomSheetSubtitle(text = buildAnnotatedString {
+    BottomSheetLayout(title = {
+        stringResource(id = R.string.guard_confirm_sheet_header)
+    }, subtitle = {
+        buildAnnotatedString {
             append(stringResource(id = R.string.guard_as))
             append(" ")
             withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
                 append(viewModel.guardInstance.username)
             }
-        }, modifier = Modifier.padding(bottom = 16.dp))
-
+        }
+    }) {
         when (val state = viewModel.state) {
             GuardConfirmSessionViewModel.State.Loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -228,8 +218,8 @@ internal class GuardConfirmSessionViewModel @Inject constructor(
     var isApproving by mutableStateOf(false)
     var isDenying by mutableStateOf(false)
 
-    val steamId = SteamID(savedStateHandle.get<String>(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)!!.toLong())
-    val clientId = savedStateHandle.get<String>(GuardMicroappImpl.InternalRoutes.ARG_CLIENT_ID)!!.toLong()
+    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
+    val clientId = savedStateHandle.getLongFromString(GuardMicroappImpl.InternalRoutes.ARG_CLIENT_ID)
 
     val guardInstance = guardController.getInstance(steamId) ?: error("Guard is not installed!")
 

@@ -37,7 +37,7 @@ internal fun ProfileScreen(
 
         CompositionLocalProvider(LocalSteamTheme provides theme) {
             Scaffold(topBar = {
-                SmallTopAppBar(title = {
+                TopAppBar(title = {
 
                 }, scrollBehavior = tas, colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = Color.Transparent,

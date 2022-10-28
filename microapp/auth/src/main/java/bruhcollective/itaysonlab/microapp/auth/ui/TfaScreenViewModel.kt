@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.usecases.auth.EnterCode
 import bruhcollective.itaysonlab.jetisteam.usecases.auth.PollAuthSession
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroappImpl
+import bruhcollective.itaysonlab.microapp.core.ext.getBooleanFromString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
@@ -20,7 +21,7 @@ class TfaScreenViewModel @Inject constructor(
     private val pollAuthSession: PollAuthSession,
     savedState: SavedStateHandle,
 ): ViewModel(), CoroutineScope by MainScope() {
-    var isPollingActive = savedState.get<String>(AuthMicroappImpl.InternalRoutes.ARG_MOBILE_ENABLED)!!.toBoolean()
+    var isPollingActive = savedState.getBooleanFromString(AuthMicroappImpl.InternalRoutes.ARG_MOBILE_ENABLED)
     private set
 
     var isAuthInProgress by mutableStateOf(false)

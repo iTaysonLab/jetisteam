@@ -16,9 +16,9 @@ abstract class GamePageMicroapp : ComposableMicroappEntry {
             }
         )
 
-    fun gameDestination(gameId: Int) = "game/${gameId}"
+    companion object {
+        internal const val GAME_ID = "gameId"
 
-    internal companion object {
-        const val GAME_ID = "gameId"
+        fun gameDestination(gameId: Int) = "game/${gameId}"
     }
 }

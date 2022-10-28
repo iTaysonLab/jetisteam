@@ -84,6 +84,7 @@ dependencies {
     implementation project(":microapp:debug")
     implementation project(":microapp:gamepage")
     implementation project(":microapp:guard")
+    implementation project(":microapp:library")
 
     implementation 'com.github.penfeizhou.android.animation:apng:2.23.0'
 

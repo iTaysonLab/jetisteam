@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.GetAuthorizedDevices
+import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ internal class GuardDevicesViewModel @Inject constructor(
     var state by mutableStateOf<State>(State.Loading)
         private set
 
-    val steamId = SteamID(savedStateHandle.get<String>(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)!!.toLong())
+    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
 
     init {
         viewModelScope.launch {

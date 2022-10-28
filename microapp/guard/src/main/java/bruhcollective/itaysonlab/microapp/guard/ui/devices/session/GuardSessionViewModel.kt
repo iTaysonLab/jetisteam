@@ -8,12 +8,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetisteam.ext.ipString
-import bruhcollective.itaysonlab.jetisteam.models.SteamID
+import bruhcollective.itaysonlab.microapp.core.ext.getBase64
+import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
 import bruhcollective.itaysonlab.microapp.guard.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import okio.ByteString.Companion.decodeBase64
 import steam.auth.CAuthentication_RefreshToken_Enumerate_Response
 import steam.auth.EAuthSessionGuardType
 import javax.inject.Inject
@@ -23,14 +23,11 @@ internal class GuardSessionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     @ApplicationContext context: Context
 ) : ViewModel() {
-    val steamId = SteamID(
-        savedStateHandle.get<String>(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)!!.toLong()
-    )
+    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
 
     val sessionData =
         CAuthentication_RefreshToken_Enumerate_Response.RefreshTokenDescription.ADAPTER.decode(
-            savedStateHandle.get<String>(GuardMicroappImpl.InternalRoutes.ARG_SESSION_DATA)!!
-                .decodeBase64()!!
+            savedStateHandle.getBase64(GuardMicroappImpl.InternalRoutes.ARG_SESSION_DATA)
         )
 
     val infoBlocks = buildListBlocks(context)

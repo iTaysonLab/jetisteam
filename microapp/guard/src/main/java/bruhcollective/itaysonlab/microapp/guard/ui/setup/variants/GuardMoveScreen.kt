@@ -14,6 +14,7 @@ import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenError
 import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenLoading
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.MoveTfaAfterSms
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.MoveTfaRequestSms
+import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
 import bruhcollective.itaysonlab.microapp.guard.ui.components.CodeRowState
@@ -73,7 +74,7 @@ internal class GuardMoveViewModel @Inject constructor(
     var smsState by mutableStateOf<SmsState>(SmsState.Awaiting)
         private set
 
-    val steamId = SteamID(savedStateHandle.get<String>(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)!!.toLong())
+    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
 
     init {
         viewModelScope.launch {

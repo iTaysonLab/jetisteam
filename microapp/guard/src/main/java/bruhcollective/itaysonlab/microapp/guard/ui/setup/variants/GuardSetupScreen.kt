@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.proto.GuardData
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.FinalizeAddTfa
+import bruhcollective.itaysonlab.microapp.core.ext.getBase64
+import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
+import bruhcollective.itaysonlab.microapp.core.ext.getString
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
@@ -62,9 +65,9 @@ internal class GuardSetupViewModel @Inject constructor(
     private val finalizeAddTfa: FinalizeAddTfa,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
-    val steamId = SteamID(savedStateHandle.get<String>(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)!!.toLong())
+    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
 
-    private val localGuardData = CTwoFactor_AddAuthenticator_Response.ADAPTER.decode(savedStateHandle.get<String>(GuardMicroappImpl.InternalRoutes.ARG_GC_DATA)!!.decodeBase64()!!).let { data ->
+    private val localGuardData = CTwoFactor_AddAuthenticator_Response.ADAPTER.decode(savedStateHandle.getBase64(GuardMicroappImpl.InternalRoutes.ARG_GC_DATA)).let { data ->
         GuardData(
             shared_secret = data.shared_secret!!,
             serial_number = data.serial_number!!,

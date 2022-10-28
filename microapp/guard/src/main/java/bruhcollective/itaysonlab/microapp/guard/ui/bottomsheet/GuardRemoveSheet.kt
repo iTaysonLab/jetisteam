@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -18,12 +17,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bruhcollective.itaysonlab.jetisteam.models.SteamID
-import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetHandle
-import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetHeader
-import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetSubtitle
+import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetLayout
 import bruhcollective.itaysonlab.jetisteam.uikit.components.ResizableCircularIndicator
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.RemoveSg
+import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
@@ -37,27 +34,19 @@ internal fun GuardRemoveSheet(
     onGuardRemoved: () -> Unit,
     onGuardRemovalCancelled: () -> Unit
 ) {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-    ) {
-
-        BottomSheetHandle(modifier = Modifier.align(Alignment.CenterHorizontally))
-
-        BottomSheetHeader(
-            text = stringResource(id = R.string.guard_remove_sheet_header),
-            modifier = Modifier.padding(bottom = 4.dp)
-        )
-
-        BottomSheetSubtitle(text = buildAnnotatedString {
-            append(stringResource(id = R.string.guard_for))
-            append(" ")
-            withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                append(viewModel.guardInstance.username)
+    BottomSheetLayout(
+        title = {
+            stringResource(id = R.string.guard_remove_sheet_header)
+        }, subtitle = {
+            buildAnnotatedString {
+                append(stringResource(id = R.string.guard_for))
+                append(" ")
+                withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                    append(viewModel.guardInstance.username)
+                }
             }
-        }, modifier = Modifier.padding(bottom = 16.dp))
-
+        }
+    ) {
         Card(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -125,7 +114,7 @@ internal class GuardRemoveSheetViewModel @Inject constructor(
     private val guardController: GuardController,
     private val removeSg: RemoveSg
 ) : ViewModel() {
-    val steamId = SteamID(savedStateHandle.get<String>(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)!!.toLong())
+    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
     val guardInstance = guardController.getInstance(steamId)!!
 
     var isRemoving by mutableStateOf(false)
