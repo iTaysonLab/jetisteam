@@ -29,16 +29,23 @@ class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
             }
 
             composable(InternalRoutes.Library.url) {
-                LibraryScreen(onGameClick = { steamId, gameId ->
+                LibraryScreen(onGameClick = { steamId, gameInfo ->
                     navController.navigate(InternalRoutes.GameDetail.map(mapOf(
                         InternalRoutes.ARG_STEAM_ID to steamId.toString(),
-                        InternalRoutes.ARG_GAME_INFO to gameId.toString(),
+                        InternalRoutes.ARG_GAME_INFO to gameInfo,
                     )))
                 }, onBackClick = navController::popBackStack)
             }
 
             bottomSheet(InternalRoutes.GameDetail.url) {
-                OwnedGameBottomSheet()
+                OwnedGameBottomSheet(onNavigateToAchievements = { steamId, appId ->
+                    navController.popBackStack()
+                }, onNavigateToGamePage = { appId ->
+                    navController.popBackStack()
+                    navController.navigate(GamePageMicroapp.gameDestination(appId))
+                }, onOpenRemoteInstallations = { steamId, appId ->
+                    navController.popBackStack()
+                })
             }
         }
     }
@@ -57,6 +64,6 @@ class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
         const val ARG_MACHINE_INFO = "machineData"
 
         val Library = DestNode("library/{$ARG_STEAM_ID}")
-        val GameDetail = DestNode("library/{$ARG_STEAM_ID}/games/{${ARG_GAME_INFO}}?machineInfo=1")
+        val GameDetail = DestNode("library/{$ARG_STEAM_ID}/games/{${ARG_GAME_INFO}}")
     }
 }

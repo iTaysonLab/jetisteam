@@ -36,6 +36,6 @@ internal class LibraryScreenViewModel @Inject constructor(
         getProfileLibrary(steamId)
             .also { library = it; machines = it.machines; }
             .games
-            .sortedBy { it.name }
+            .sortedBy { it.proto.name }
     }
 }

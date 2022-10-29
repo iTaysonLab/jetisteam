@@ -13,6 +13,7 @@ import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.proto.GuardData
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.FinalizeAddTfa
 import bruhcollective.itaysonlab.microapp.core.ext.getBase64
+import bruhcollective.itaysonlab.microapp.core.ext.getProto
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.core.ext.getString
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
@@ -67,7 +68,7 @@ internal class GuardSetupViewModel @Inject constructor(
 ): ViewModel() {
     val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
 
-    private val localGuardData = CTwoFactor_AddAuthenticator_Response.ADAPTER.decode(savedStateHandle.getBase64(GuardMicroappImpl.InternalRoutes.ARG_GC_DATA)).let { data ->
+    private val localGuardData = savedStateHandle.getProto<CTwoFactor_AddAuthenticator_Response>(GuardMicroappImpl.InternalRoutes.ARG_GC_DATA).let { data ->
         GuardData(
             shared_secret = data.shared_secret!!,
             serial_number = data.serial_number!!,

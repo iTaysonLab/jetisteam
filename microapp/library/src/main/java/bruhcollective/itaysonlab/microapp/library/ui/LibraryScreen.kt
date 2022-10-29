@@ -22,12 +22,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
 import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
+import bruhcollective.itaysonlab.microapp.core.ext.asBase64
 import coil.compose.AsyncImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LibraryScreen(
-    onGameClick: (Long, Int) -> Unit,
+    onGameClick: (Long, String) -> Unit,
     onBackClick: () -> Unit,
     viewModel: LibraryScreenViewModel = hiltViewModel()
 ) {
@@ -92,7 +93,7 @@ internal fun LibraryScreen(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         itemsIndexed(data) { index, game ->
-                            LibraryItem(game.capsule, modifier = Modifier
+                            LibraryItem(game.capsuleUrl, modifier = Modifier
                                 .fillMaxWidth()
                                 .height(180.dp)
                                 .let {
@@ -116,7 +117,7 @@ internal fun LibraryScreen(
                                         else -> it
                                     }
                                 }
-                                .clickable { onGameClick(viewModel.longSteamId, game.appid) })
+                                .clickable { onGameClick(viewModel.longSteamId, game.proto.asBase64()) })
                         }
                     }
                 }
