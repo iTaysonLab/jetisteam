@@ -41,7 +41,10 @@ android {
 }
 
 dependencies {
+    implementation libs.coilCompose
+
     implementation libs.bundles.compose
     implementation libs.bundles.accompanist
+    
     debugImplementation libs.bundles.composeDebug
 }

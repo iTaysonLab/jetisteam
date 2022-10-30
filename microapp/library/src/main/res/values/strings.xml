@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="library">Library</string>
+    <string name="library_sheet_achv">Achievements</string>
+    <string name="library_sheet_achv_none">Not available</string>
+    <string name="library_sheet_store">Open Store Page</string>
+    <string name="library_sheet_remote">Manage remote installation</string>
 </resources>
