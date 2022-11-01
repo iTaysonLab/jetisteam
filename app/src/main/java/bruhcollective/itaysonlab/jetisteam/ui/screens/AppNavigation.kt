@@ -1,22 +1,16 @@
 package bruhcollective.itaysonlab.jetisteam.ui.screens
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Gamepad
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.Notifications
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -26,9 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import bruhcollective.itaysonlab.jetisteam.R
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
-import bruhcollective.itaysonlab.jetisteam.repository.UserAccountRepository
 import bruhcollective.itaysonlab.jetisteam.usecases.GetUserCountry
 import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
@@ -38,13 +30,19 @@ import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
 import bruhcollective.itaysonlab.microapp.profile.ProfileMicroapp
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import soup.compose.material.motion.navigation.MaterialMotionNavHost
+import soup.compose.material.motion.navigation.rememberMaterialMotionNavController
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialNavigationApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialNavigationApi::class,
+    ExperimentalAnimationApi::class
+)
 @Composable
 fun AppNavigation(
     viewModel: AppNavigationViewModel = hiltViewModel()
@@ -88,7 +86,8 @@ fun AppNavigation(
                 NavigationBar(
                     modifier = Modifier
                         .offset {
-                            IntOffset(0,
+                            IntOffset(
+                                0,
                                 navOffset
                                     .toPx()
                                     .toInt()
@@ -98,6 +97,10 @@ fun AppNavigation(
                         .navigationBarsPadding(),
                 ) {
                     viewModel.bottomNavDestinations.forEach { dest ->
+                        val selected = navController.backQueue.any {
+                            it.destination.route?.startsWith(dest.route) == true
+                        }
+
                         NavigationBarItem(
                             icon = {
                                 Icon(
@@ -106,13 +109,13 @@ fun AppNavigation(
                                 )
                             },
                             label = { Text(stringResource(dest.name)) },
-                            selected = navController.backQueue.any {
-                                it.destination.route?.startsWith(dest.route) == true
-                            },
+                            selected = selected,
                             onClick = {
+                                if (selected) return@NavigationBarItem
                                 navController.navigate(dest.route) {
                                     popUpTo(ROOT_NAV_GRAPH_ID) {
                                         saveState = true
+                                        inclusive = true
                                     }
 
                                     launchSingleTop = true
