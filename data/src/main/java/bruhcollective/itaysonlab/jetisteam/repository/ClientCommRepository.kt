@@ -16,13 +16,13 @@ class ClientCommRepository @Inject constructor(
         CClientComm_GetAllClientLogonInfo_Request()
     ).sessions
 
-    suspend fun getInstalledApps(clientId: Long) = stub.GetClientAppList(
+    suspend fun getInstalledApps(clientId: Long, withInfo: Boolean = false, filters: String = "none") = stub.GetClientAppList(
         CClientComm_GetClientAppList_Request(
             client_instanceid = clientId,
             language = LanguageUtil.currentLanguage,
-            include_client_info = false,
-            fields = "",
-            filters = ""
+            include_client_info = withInfo,
+            fields = "games",
+            filters = filters
         )
     )
 

@@ -20,6 +20,10 @@ abstract class PageViewModel <T> : ViewModel() {
         viewModelScope.launch { loadInternal() }
     }
 
+    fun setState(data: T) {
+        state = State.Loaded(data)
+    }
+
     private suspend fun loadInternal() {
         state = try {
             State.Loaded(data = load())

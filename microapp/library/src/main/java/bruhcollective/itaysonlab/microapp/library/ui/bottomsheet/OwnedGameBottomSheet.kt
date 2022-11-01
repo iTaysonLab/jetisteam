@@ -199,7 +199,7 @@ fun OwnedGameBottomSheet(
                     Icon(imageVector = Icons.Rounded.Download, contentDescription = null)
                 },
                 headlineText = {
-                    Text(text = "Manage remote installation")
+                    Text(text = stringResource(id = R.string.library_sheet_remote))
                 },
                 modifier = Modifier.clickable(onClick = {
                     onOpenRemoteInstallations(
@@ -219,7 +219,7 @@ fun OwnedGameBottomSheet(
                     Icon(imageVector = Icons.Rounded.Store, contentDescription = null)
                 },
                 headlineText = {
-                    Text(text = "Open Store Page")
+                    Text(text = stringResource(id = R.string.library_sheet_store))
                 },
                 modifier = Modifier.clickable(onClick = { onNavigateToGamePage(viewModel.appId) }),
                 colors = ListItemDefaults.colors(
