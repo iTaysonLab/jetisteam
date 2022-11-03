@@ -1,36 +1,58 @@
 package bruhcollective.itaysonlab.jetisteam.usecases
 
-import bruhcollective.itaysonlab.jetisteam.models.GameDetails
+import bruhcollective.itaysonlab.jetisteam.controllers.CdnController
+import bruhcollective.itaysonlab.jetisteam.models.GameFullDetailsData
 import bruhcollective.itaysonlab.jetisteam.models.Language
-import bruhcollective.itaysonlab.jetisteam.models.SteamDeckSupport
+import bruhcollective.itaysonlab.jetisteam.models.Reviews
+import bruhcollective.itaysonlab.jetisteam.models.SteamDeckSupportReport
 import bruhcollective.itaysonlab.jetisteam.repository.GameRepository
 import bruhcollective.itaysonlab.jetisteam.repository.StoreRepository
-import bruhcollective.itaysonlab.jetisteam.util.CdnUrlUtil
 import steam.common.StoreBrowseItemDataRequest
 import steam.common.StoreItemID
 import javax.inject.Inject
 
 class GetGamePage @Inject constructor(
     private val gameRepository: GameRepository,
-    private val storeRepository: StoreRepository
+    private val storeRepository: StoreRepository,
+    private val cdnController: CdnController
 ) {
-    suspend operator fun invoke(gameId: Int): GamePage {
-        val details = gameRepository.getGameDetails(gameId.toString())
+    suspend operator fun invoke(appId: Int): GamePage {
+        val strId = appId.toString()
+
+        val details = gameRepository.getGameDetails(strId)
+        val deckCompat = gameRepository.getDeckCompat(strId)
+        val reviews = gameRepository.getReviewsPreview(strId)
+
+        val libraryHeroUrl = cdnController.buildAppUrl(appId, "library_hero.jpg")
+        val logoUrl = cdnController.buildAppUrl(appId, "logo.png")
+        val fallbackUrl = cdnController.buildAppUrl(appId, "portrait.png")
+
+        val readyBgUrl = if (cdnController.exists(libraryHeroUrl)) {
+            libraryHeroUrl to false
+        } else {
+            fallbackUrl to true
+        }
+
+        val readyLogoUrl = if (cdnController.exists(logoUrl)) {
+            logoUrl to false
+        } else {
+            "" to true
+        }
 
         val storeItem = storeRepository.getItems(
-            ids = listOf(StoreItemID(appid = gameId)),
+            ids = listOf(StoreItemID(appid = appId)),
             dataRequest = StoreBrowseItemDataRequest(
                 include_tag_count = 5,
                 include_assets = true,
-                include_platforms = true,
-                include_basic_info = true,
-                include_ratings = true,
-                include_all_purchase_options = true,
-                include_reviews = true,
-                include_trailers = true,
+                include_platforms = false,
+                include_basic_info = false,
+                include_ratings = false,
+                include_all_purchase_options = false,
+                include_reviews = false,
+                include_trailers = false,
                 include_supported_languages = true,
-                include_screenshots = true,
-                include_release = true,
+                include_screenshots = false,
+                include_release = false,
             )
         ).store_items.first()
 
@@ -39,11 +61,6 @@ class GetGamePage @Inject constructor(
                 storeItem.tags.sortedByDescending { it.weight }
                     .map { locale[it.tagid]!! to it.tagid!! }
             }
-
-        val combinedScreenshots =
-            (storeItem.screenshots!!.all_ages_screenshots + storeItem.screenshots!!.mature_content_screenshots)
-                .sortedBy { it.ordinal }
-                .map { "${CdnUrlUtil.MEDIA_CDN_URL}/${it.filename}" }
 
         val langMatrix = storeItem.supported_languages.mapNotNull {
             LanguageMatrixEntry(
@@ -55,42 +72,28 @@ class GetGamePage @Inject constructor(
         }
 
         return GamePage(
-            details = details,
-            tags = tags,
-            screenshots = combinedScreenshots,
+            fullDetails = details,
             languageMatrix = langMatrix,
-            reviewsInfo = ReviewsInfo(
-                storeItem.reviews?.summary_filtered?.review_count ?: 0,
-                storeItem.reviews?.summary_filtered?.percent_positive ?: 0,
-                storeItem.reviews?.summary_filtered?.review_score ?: 0,
-                storeItem.reviews?.summary_filtered?.review_score_label.orEmpty()
-            ),
-            shareUrl = storeItem.store_url_path.orEmpty(),
-            platformInfo = PlatformInfo(
-                windows = storeItem.platforms?.windows ?: false,
-                mac = storeItem.platforms?.mac ?: false,
-                linux = storeItem.platforms?.linux ?: false,
-                steamDeckSupport = SteamDeckSupport.Unsupported // TODO
-            ),
-            purchaseOptions = storeItem.purchase_options.map { PurchaseOption(it.purchase_option_name.orEmpty(), it.formatted_final_price.orEmpty()) },
-            releaseDate = storeItem.release?.steam_release_date ?: 0,
-            backgroundUrl = CdnUrlUtil.buildAsset(storeItem.assets?.asset_url_format, if (storeItem.assets?.page_background != null) storeItem.assets?.page_background else storeItem.assets?.library_hero),
-            logoUrl = CdnUrlUtil.buildAsset(storeItem.assets?.asset_url_format, "logo.png")
+            headerBackgroundUrl = readyBgUrl.first,
+            headerBackgroundAutogenerated = readyBgUrl.second,
+            logoUrl = readyLogoUrl.first,
+            logoUrlAbsent = readyLogoUrl.second,
+            tags = tags,
+            deckSupportReport = deckCompat,
+            reviews = reviews
         )
     }
 
     class GamePage(
-        val details: GameDetails,
-        val tags: List<Pair<String, Int>>,
-        val screenshots: List<String>,
+        val fullDetails: GameFullDetailsData,
         val languageMatrix: List<LanguageMatrixEntry>,
-        val reviewsInfo: ReviewsInfo,
-        val shareUrl: String,
-        val platformInfo: PlatformInfo,
-        val purchaseOptions: List<PurchaseOption>,
-        val releaseDate: Int,
-        val backgroundUrl: String?,
-        val logoUrl: String?
+        val headerBackgroundUrl: String,
+        val headerBackgroundAutogenerated: Boolean,
+        val logoUrl: String,
+        val logoUrlAbsent: Boolean,
+        val tags: List<Pair<String, Int>>,
+        val deckSupportReport: SteamDeckSupportReport,
+        val reviews: Reviews
     )
 
     class LanguageMatrixEntry(
@@ -98,24 +101,5 @@ class GetGamePage @Inject constructor(
         val ui: Boolean,
         val fullAudio: Boolean,
         val subtitles: Boolean,
-    )
-
-    class ReviewsInfo(
-        val reviews: Int,
-        val positivePercent: Int,
-        val score: Int,
-        val scoreLabel: String
-    )
-
-    class PlatformInfo(
-        val windows: Boolean,
-        val mac: Boolean,
-        val linux: Boolean,
-        val steamDeckSupport: SteamDeckSupport
-    )
-
-    class PurchaseOption(
-        val name: String,
-        val price: String
     )
 }

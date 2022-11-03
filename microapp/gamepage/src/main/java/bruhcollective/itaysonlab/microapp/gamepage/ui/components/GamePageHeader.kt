@@ -1,112 +1,78 @@
 package bruhcollective.itaysonlab.microapp.gamepage.ui.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material3.*
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import bruhcollective.itaysonlab.jetisteam.usecases.GetGamePage
 import coil.compose.AsyncImage
-import bruhcollective.itaysonlab.microapp.gamepage.R
+import coil.request.ImageRequest
+import coil.transform.BlurTransformation
 
 @Composable
 internal fun GamePageHeader(
-    backgroundUrl: String?,
-    gameTitle: String,
-    reviews: GetGamePage.ReviewsInfo,
-    tags: List<Pair<String, Int>>
+    background: String,
+    backgroundBlurred: Boolean,
+    logoUrl: String,
+    useTextLogo: Boolean,
+    name: String
 ) {
-    val surfaceColor = MaterialTheme.colorScheme.surface
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
     ) {
-
         AsyncImage(
-            model = backgroundUrl,
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize()
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(background)
+                .transformations(
+                    if (backgroundBlurred) listOf(
+                        BlurTransformation(LocalContext.current, 20f, 4f)
+                    ) else emptyList()
+                )
+                .build(), contentDescription = null, modifier = Modifier
+                .height(300.dp)
                 .drawWithContent {
                     drawContent()
                     drawRect(
-                        Brush.verticalGradient(
-                            colorStops = arrayOf(
-                                0f to Color.Transparent,
-                                1f to surfaceColor,
-                            )
+                        brush = Brush.linearGradient(
+                            colors = listOf(Color.Black.copy(alpha = 0.8f), Color.Transparent),
+                            start = Offset(x = size.width / 2f, y = 0f),
+                            end = Offset(x = size.width / 2f, y = size.height),
                         )
                     )
-                },
-            contentScale = ContentScale.Crop
+                }, contentScale = ContentScale.Crop
         )
 
-        Column(Modifier.padding(bottom = 8.dp)) {
-            Spacer(modifier = Modifier.height(150.dp))
-
-            Text(
-                text = gameTitle,
-                fontSize = 28.sp,
-                lineHeight = 31.sp,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                item {
-                    Button(
-                        onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(32.dp),
-                            contentColor = MaterialTheme.colorScheme.onSurface
-                        ), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        Icon(imageVector = Icons.Rounded.Star, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Column {
-                            Text(text = reviews.scoreLabel)
-                            Text(text = stringResource(id = R.string.gamepage_review_coef, "${reviews.positivePercent}%", reviews.reviews), fontWeight = FontWeight.Normal)
-                        }
-                        Spacer(modifier = Modifier.width(4.dp))
-                    }
-                }
-
-                items(tags) { tag ->
-                    Button(
-                        onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp),
-                            contentColor = MaterialTheme.colorScheme.onSurface
-                        ), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        Text(text = tag.first)
-                    }
-                }
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (useTextLogo) {
+                Text(
+                    text = name,
+                    color = Color.White,
+                    fontSize = 21.sp,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    textAlign = TextAlign.Center
+                )
+            } else {
+                AsyncImage(
+                    model = logoUrl,
+                    contentDescription = null,
+                    modifier = Modifier.heightIn(min = 0.dp, max = 100.dp),
+                    contentScale = ContentScale.FillHeight
+                )
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
