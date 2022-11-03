@@ -19,8 +19,8 @@ class GameCompatDetailsData(
     @JsonClass(generateAdapter = true)
     class Owner(
         val steamid: Long,
-        @Json(name = "playtime_twoweeks") twoWeeksPlaytime: Int,
-        @Json(name = "playtime_total") totalPlaytime: Int,
+        @Json(name = "playtime_twoweeks") val twoWeeksPlaytime: Int,
+        @Json(name = "playtime_total") val totalPlaytime: Int,
     ) {
         val steamId get() = SteamID(steamid)
     }

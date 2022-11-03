@@ -16,7 +16,7 @@ import javax.inject.Singleton
 object ApiModule {
     @Provides
     @Singleton
-    fun provideMiniprofileService(retrofit: Retrofit) = retrofit.create<MiniprofileService>()
+    fun provideMiniprofileService(@Named("steamCommunityRetrofit") retrofit: Retrofit) = retrofit.create<MiniprofileService>()
 
     @Provides
     @Singleton

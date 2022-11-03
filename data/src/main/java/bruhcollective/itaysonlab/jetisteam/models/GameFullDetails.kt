@@ -18,7 +18,8 @@ class GameFullDetailsData(
     val dlc: List<Int>,
     @Json(name = "short_description") val shortDescription: String,
     @Json(name = "detailed_description") val fullDescription: String,
-    @Json(name = "about_the_game") val aboutDescription: String,
+    @Json(name = "about_the_game") val aboutDescription: String?,
+    @Json(name = "reviews") val reviews: String?,
     @Json(name = "legal_notice") val legalNotice: String,
     @Json(name = "supported_languages") val supportedLanguages: String,
     val developers: List<String>,
@@ -32,16 +33,18 @@ class GameFullDetailsData(
     @Json(name = "mac_requirements") val macRequirements: Requirements,
     val platforms: Platforms,
     val categories: List<KeyValue>,
-    val genre: List<KeyValue>,
+    val genres: List<KeyValue>,
+    @Json(name = "drm_notice") val drmNotice: String?,
     @Json(name = "release_date") val releaseDate: ReleaseDate,
     @Json(name = "support_info") val supportInfo: SupportInfo,
     val screenshots: List<Screenshot>,
     val movies: List<Movie>,
+    val metacritic: MetacriticLocator?
 ) {
     @JsonClass(generateAdapter = true)
     class Requirements(
         val minimum: String,
-        val recommended: String
+        val recommended: String?
     )
 
     @JsonClass(generateAdapter = true)
@@ -89,4 +92,10 @@ class GameFullDetailsData(
             @Json(name = "max") val hd: String
         )
     }
+
+    @JsonClass(generateAdapter = true)
+    class MetacriticLocator(
+        val score: Int,
+        val url: String
+    )
 }

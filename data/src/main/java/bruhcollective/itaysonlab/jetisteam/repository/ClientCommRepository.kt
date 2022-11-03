@@ -1,14 +1,15 @@
 package bruhcollective.itaysonlab.jetisteam.repository
 
+import bruhcollective.itaysonlab.jetisteam.controllers.LocaleService
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
-import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
 import steam.clientcomm.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ClientCommRepository @Inject constructor(
-    steamRpcClient: SteamRpcClient
+    steamRpcClient: SteamRpcClient,
+    private val localeService: LocaleService
 ) {
     private val stub = steamRpcClient.create<ClientComm>()
 
@@ -19,7 +20,7 @@ class ClientCommRepository @Inject constructor(
     suspend fun getInstalledApps(clientId: Long, withInfo: Boolean = false, filters: String = "none") = stub.GetClientAppList(
         CClientComm_GetClientAppList_Request(
             client_instanceid = clientId,
-            language = LanguageUtil.currentLanguage,
+            language = localeService.language,
             include_client_info = withInfo,
             fields = "games",
             filters = filters

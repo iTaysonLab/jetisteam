@@ -13,7 +13,7 @@ interface GameService {
 
     @GET("/api/appdetails")
     suspend fun getGameDetails(
-        @Query("appid") appId: String,
+        @Query("appids") appId: String,
         @Query("l") language: String,
         @Query("cc") country: String,
     ): Map<String, GameFullDetails>

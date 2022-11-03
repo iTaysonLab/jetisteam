@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.jetisteam.repository
 
+import bruhcollective.itaysonlab.jetisteam.controllers.LocaleService
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
-import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
 import steam.common.CStoreBrowse_GetItems_Request
 import steam.common.StoreBrowseContext
 import steam.common.StoreBrowseItemDataRequest
@@ -15,6 +15,7 @@ import javax.inject.Singleton
 @Singleton
 class StoreRepository @Inject constructor(
     steamRpcClient: SteamRpcClient,
+    private val localeService: LocaleService,
 ) {
     private val stub = steamRpcClient.create<Store>()
     private val browseStub = steamRpcClient.create<StoreBrowse>()
@@ -27,8 +28,8 @@ class StoreRepository @Inject constructor(
             ids = ids,
             data_request = dataRequest,
             context = StoreBrowseContext(
-                language = LanguageUtil.currentLanguage,
-                country_code = LanguageUtil.currentRegion
+                language = localeService.language,
+                country_code = localeService.myCountry()
             ),
         )
     )
@@ -38,7 +39,7 @@ class StoreRepository @Inject constructor(
     ) = stub.GetLocalizedNameForTags(
         CStore_GetLocalizedNameForTags_Request(
             tagids = ids,
-            language = LanguageUtil.currentLanguage
+            language = localeService.language
         )
     ).tags.associate { it.tagid to it.name }
 }

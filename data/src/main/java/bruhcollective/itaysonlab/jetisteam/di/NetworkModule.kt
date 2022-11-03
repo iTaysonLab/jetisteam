@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetisteam.di
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamAuthInterceptor
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcProcessor
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +23,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideMoshi() = Moshi.Builder().build()
+
+    @Provides
+    @Singleton
     @Named("steamOkhttp")
     fun provideSteamOkhttp(
         steamAuthInterceptor: SteamAuthInterceptor
@@ -29,22 +34,25 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(
-        @Named("steamOkhttp") okHttpClient: OkHttpClient
+    @Named("steamCommunityRetrofit")
+    fun provideSteamCommunityRetrofit(
+        @Named("steamOkhttp") okHttpClient: OkHttpClient,
+        moshi: Moshi
     ) = Retrofit.Builder()
         .client(okHttpClient)
-        .addConverterFactory(MoshiConverterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
         .baseUrl("https://steamcommunity.com/")
         .build()
 
     @Provides
     @Singleton
     @Named("steamPoweredRetrofit")
-    fun provideStoreSteamPoweredRetrofit(
-        okHttpClient: OkHttpClient
+    fun provideSteamStoreRetrofit(
+        @Named("steamOkhttp") okHttpClient: OkHttpClient,
+        moshi: Moshi
     ) = Retrofit.Builder()
         .client(okHttpClient)
-        .addConverterFactory(MoshiConverterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
         .baseUrl("https://store.steampowered.com/")
         .build()
 

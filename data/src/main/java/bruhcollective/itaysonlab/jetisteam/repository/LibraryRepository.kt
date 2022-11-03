@@ -1,12 +1,10 @@
 package bruhcollective.itaysonlab.jetisteam.repository
 
-import android.util.Log
-import bruhcollective.itaysonlab.jetisteam.controllers.ConfigService
+import bruhcollective.itaysonlab.jetisteam.controllers.CacheService
+import bruhcollective.itaysonlab.jetisteam.controllers.LocaleService
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
-import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
-import okhttp3.internal.EMPTY_BYTE_ARRAY
 import steam.player.CPlayer_GetOwnedGames_Request
 import steam.player.CPlayer_GetOwnedGames_Response
 import steam.player.CPlayer_GetOwnedGames_Response_Game
@@ -18,7 +16,8 @@ import kotlin.time.Duration.Companion.hours
 @Singleton
 class LibraryRepository @Inject constructor(
     steamRpcClient: SteamRpcClient,
-    private val configService: ConfigService,
+    private val cacheService: CacheService,
+    private val localeService: LocaleService,
     private val sessionController: SteamSessionController
 ) {
     companion object {
@@ -32,29 +31,23 @@ class LibraryRepository @Inject constructor(
             return getLibraryNetwork(steamId).games
         }
 
-        val key = key(steamId)
-        val cachedTime = configService.long("$key.lastSavedAt", 0)
-        val cachedData = configService.bytes(key, EMPTY_BYTE_ARRAY)
-
-        return if (force || cachedData.isEmpty() || System.currentTimeMillis() - cachedTime >= LibraryCacheDuration.inWholeMilliseconds) {
-            try {
-                getLibraryNetwork(steamId).also { data ->
-                    configService.put(key, data.encode())
-                    configService.put("$key.lastSavedAt", System.currentTimeMillis())
-                }.games
-            } catch (e: Exception) {
-                e.printStackTrace()
-                emptyList()
+        return cacheService.protoEntry(
+            key = key(steamId),
+            adapter = CPlayer_GetOwnedGames_Response.ADAPTER,
+            maxCacheTime = LibraryCacheDuration,
+            force = force,
+            networkFunc = {
+                getLibraryNetwork(steamId)
+            }, defaultFunc = {
+                CPlayer_GetOwnedGames_Response()
             }
-        } else {
-            CPlayer_GetOwnedGames_Response.ADAPTER.decode(cachedData).games
-        }
+        ).games
     }
 
     private suspend fun getLibraryNetwork(steamId: SteamID): CPlayer_GetOwnedGames_Response {
         return playerStub.GetOwnedGames(CPlayer_GetOwnedGames_Request(
             steamid = steamId.steamId,
-            language = LanguageUtil.currentLanguage,
+            language = localeService.language,
             skip_unvetted_apps = true,
             include_appinfo = true,
             include_extended_appinfo = true,

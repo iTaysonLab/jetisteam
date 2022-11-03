@@ -63,7 +63,6 @@ class ConfigService @Inject constructor(
         operator fun setValue(thisRef: Any?, property: KProperty<*>, value: Long) { instance.putLong(key, value) }
     }
 
-    // experimental json delegating
     inner class ProtoCfg <T: Message<T, *>> (private val key: String, type: Class<T>) {
         // protobuf parsing isn't cheap, so we cache it
         private var _value: T? = null

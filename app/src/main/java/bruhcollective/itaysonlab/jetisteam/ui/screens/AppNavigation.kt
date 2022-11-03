@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetisteam.ui.screens
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,8 +20,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
-import bruhcollective.itaysonlab.jetisteam.usecases.GetUserCountry
-import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
 import bruhcollective.itaysonlab.microapp.core.*
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
@@ -30,19 +27,13 @@ import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
 import bruhcollective.itaysonlab.microapp.profile.ProfileMicroapp
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
-import soup.compose.material.motion.navigation.MaterialMotionNavHost
-import soup.compose.material.motion.navigation.rememberMaterialMotionNavController
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialNavigationApi::class,
-    ExperimentalAnimationApi::class
-)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialNavigationApi::class)
 @Composable
 fun AppNavigation(
     viewModel: AppNavigationViewModel = hiltViewModel()
@@ -55,7 +46,6 @@ fun AppNavigation(
         if (navController.currentDestination?.route != "coreLoading") return@LaunchedEffect
 
         val startRoute = if (viewModel.signedIn()) {
-            viewModel.loadAccountParameters()
             viewModel.destinations.find<GuardMicroapp>()
         } else {
             viewModel.destinations.find<AuthMicroapp>()
@@ -164,7 +154,6 @@ fun AppNavigation(
 class AppNavigationViewModel @Inject constructor(
     private val steamSessionController: SteamSessionController,
     val destinations: Destinations,
-    val getUserCountry: GetUserCountry
 ) : ViewModel() {
     val fullscreenDestinations = destinations
         .map { it.value.fullscreenRoutes }
@@ -179,8 +168,4 @@ class AppNavigationViewModel @Inject constructor(
 
     fun signedIn() = steamSessionController.signedIn()
     fun mySteamId() = steamSessionController.steamId()
-
-    suspend fun loadAccountParameters() {
-        LanguageUtil.currentRegion = getUserCountry(mySteamId())
-    }
 }

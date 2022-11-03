@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.jetisteam.repository
 
+import bruhcollective.itaysonlab.jetisteam.controllers.LocaleService
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
-import bruhcollective.itaysonlab.jetisteam.util.LanguageUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import steam.mobileapp.CMobileApp_GetMobileSummary_Request
@@ -13,6 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class ProfileRepository @Inject constructor(
     steamRpcClient: SteamRpcClient,
+    private val localeService: LocaleService
 ) {
     private val playerStub = steamRpcClient.create<Player>()
     private val mobileAppStub = steamRpcClient.create<MobileApp>()
@@ -22,7 +23,7 @@ class ProfileRepository @Inject constructor(
     suspend fun getProfileItems(steamid: Long) = playerStub.GetProfileItemsEquipped(
         CPlayer_GetProfileItemsEquipped_Request(
             steamid = steamid,
-            language = LanguageUtil.currentLanguage
+            language = localeService.language
         )
     )
 
@@ -38,7 +39,7 @@ class ProfileRepository @Inject constructor(
         playerStub.GetOwnedGames(
             CPlayer_GetOwnedGames_Request(
                 steamid = steamid,
-                language = LanguageUtil.currentLanguage,
+                language = localeService.language,
                 skip_unvetted_apps = true,
                 include_appinfo = true,
                 include_extended_appinfo = true,
@@ -52,7 +53,7 @@ class ProfileRepository @Inject constructor(
         playerStub.GetAchievementsProgress(
             CPlayer_GetAchievementsProgress_Request(
                 steamid = steamid,
-                language = LanguageUtil.currentLanguage,
+                language = localeService.language,
                 appids = appids
             )
         )
