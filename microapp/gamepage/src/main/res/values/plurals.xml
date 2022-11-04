@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="gamepage_developers">
+        <item quantity="one">Developer</item>
+        <item quantity="other">Developers</item>
+    </plurals>
+
+    <plurals name="gamepage_publishers">
+        <item quantity="one">Publisher</item>
+        <item quantity="other">Publishers</item>
+    </plurals>
+</resources>

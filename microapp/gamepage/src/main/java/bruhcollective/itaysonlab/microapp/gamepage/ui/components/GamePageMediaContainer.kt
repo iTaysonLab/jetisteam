@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,7 +22,7 @@ import com.google.accompanist.pager.rememberPagerState
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-internal fun GamePageScreenshots(
+internal fun GamePageMediaContainer(
     urls: List<String>
 ) {
     val pagerState = rememberPagerState()
@@ -31,7 +30,6 @@ internal fun GamePageScreenshots(
     Box(
         Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
             .height(200.dp)
     ) {
         HorizontalPager(count = urls.size, state = pagerState) { page ->

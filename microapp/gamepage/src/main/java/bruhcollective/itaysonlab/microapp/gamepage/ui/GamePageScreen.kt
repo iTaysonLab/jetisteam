@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.BackHand
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,9 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
 import bruhcollective.itaysonlab.jetisteam.util.SteamBbToMarkdown
-import bruhcollective.itaysonlab.microapp.gamepage.ui.components.GamePageHeader
-import bruhcollective.itaysonlab.microapp.gamepage.ui.components.GamePageInfo
-import bruhcollective.itaysonlab.microapp.gamepage.ui.components.GamePageScreenshots
+import bruhcollective.itaysonlab.microapp.gamepage.ui.components.*
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.material3.Material3RichText
 
@@ -62,28 +60,43 @@ internal fun GamePageScreen(
                     )
                 }
 
-                /*item {
-                    GamePageScreenshots(
-                        urls = data.screenshots
-                    )
-                }
-
                 item {
                     GamePageInfo(
-                        publishers = data.details.publishers.orEmpty(),
-                        developers = data.details.developers.orEmpty(),
-                        franchises = data.details.franchises.orEmpty(),
-                        releaseDate = data.releaseDate
+                        publishers = data.fullDetails.publishers,
+                        developers = data.fullDetails.developers,
+                        releaseDate = data.fullDetails.releaseDate
                     )
                 }
 
                 item {
-                    Material3RichText(modifier = Modifier.padding(16.dp)) {
-                        Markdown(content = remember(data.details.fullDescription) {
-                            SteamBbToMarkdown.bbcodeToMarkdown(data.details.fullDescription)
-                        })
+                    Text(text = data.fullDetails.shortDescription, modifier = Modifier.padding(16.dp))
+                }
+
+                item {
+                    GamePageTagList(
+                        tags = data.tags,
+                        genres = data.fullDetails.genres,
+                        metaCritic = data.fullDetails.metacritic
+                    )
+                }
+
+                item {
+                    GamePageMediaContainer(
+                        urls = remember(data.fullDetails) {
+                            data.fullDetails.screenshots.map { it.thumbnail }
+                        }
+                    )
+                }
+
+                item {
+                    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
+                        Material3RichText(modifier = Modifier.padding(16.dp)) {
+                            Markdown(content = remember(data.fullDetails.fullDescription) {
+                                SteamBbToMarkdown.prettifyHtml(data.fullDetails.fullDescription)
+                            })
+                        }
                     }
-                }*/
+                }
             }
         }
     }

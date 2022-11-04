@@ -5,4 +5,6 @@
     <string name="gamepage_developers">Developer</string>
     <string name="gamepage_franchises">Franchise</string>
     <string name="gamepage_release">Release Date</string>
+    <string name="gamepage_tags">Tags</string>
+    <string name="gamepage_genres">Genres</string>
 </resources>

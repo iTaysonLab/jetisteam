@@ -1,10 +1,18 @@
 package bruhcollective.itaysonlab.microapp.gamepage.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.PlaylistAdd
+import androidx.compose.material.icons.rounded.ShoppingBag
+import androidx.compose.material.icons.rounded.ShoppingBasket
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -26,6 +34,8 @@ internal fun GamePageHeader(
     useTextLogo: Boolean,
     name: String
 ) {
+    val additionalStatusbarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,7 +50,7 @@ internal fun GamePageHeader(
                     ) else emptyList()
                 )
                 .build(), contentDescription = null, modifier = Modifier
-                .height(300.dp)
+                .height(300.dp + additionalStatusbarHeight)
                 .drawWithContent {
                     drawContent()
                     drawRect(
@@ -54,7 +64,9 @@ internal fun GamePageHeader(
         )
 
         Column(
-            modifier = Modifier.align(Alignment.Center),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(top = additionalStatusbarHeight),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (useTextLogo) {
@@ -73,6 +85,42 @@ internal fun GamePageHeader(
                     contentScale = ContentScale.FillHeight
                 )
             }
+
+            /*
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(onClick = { /*TODO*/ }, shape = MaterialTheme.shapes.small, colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black
+                ), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)) {
+                    Icon(imageVector = Icons.Rounded.ShoppingBasket, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("from 69.99 CA$")
+                }
+
+                Button(onClick = { /*TODO*/ }, shape = MaterialTheme.shapes.small, colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White.copy(alpha = 0.5f),
+                    contentColor = Color.Black
+                ), contentPadding = PaddingValues(8.dp)) {
+                    Icon(imageVector = Icons.Rounded.PlaylistAdd, contentDescription = null)
+                }
+            }
+            */
         }
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .clip(
+                    MaterialTheme.shapes.extraLarge.copy(
+                        bottomStart = CornerSize(0.dp),
+                        bottomEnd = CornerSize(0.dp)
+                    )
+                )
+                .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
+                .fillMaxWidth()
+                .height(16.dp)
+        )
     }
 }
