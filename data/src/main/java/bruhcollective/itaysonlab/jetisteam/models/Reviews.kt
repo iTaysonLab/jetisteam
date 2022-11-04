@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 class Reviews(
     val success: Int,
-    @Json(name = "query_summary") val summary: ReviewQuerySummary,
+    @Json(name = "query_summary") val summary: ReviewQuerySummary?,
     val reviews: List<Review>
 ) {
     @JsonClass(generateAdapter = true)

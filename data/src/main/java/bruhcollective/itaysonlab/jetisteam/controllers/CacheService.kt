@@ -51,7 +51,7 @@ class CacheService @Inject constructor(
         networkFunc: suspend () -> T,
         defaultFunc: () -> T
     ): T {
-        val cachedMeta = meta(key) { string(it, "") }
+        val cachedMeta = meta(key) { stringNull(it, null) }
 
         return if (force || cachedMeta.isExpired(maxCacheTime)) {
             network(
@@ -112,7 +112,7 @@ class CacheService @Inject constructor(
         }
     }
 
-    private fun <T: Any> meta(key: String, dataFetch: ConfigService.(String) -> T): EntryMeta<T> {
+    private fun <T: Any> meta(key: String, dataFetch: ConfigService.(String) -> T?): EntryMeta<T> {
         return EntryMeta(
             time = configService.long(key and SUFFIX_LAST_CACHED, 0),
             data = if (configService.has(key)) dataFetch(configService, key) else null
@@ -122,7 +122,6 @@ class CacheService @Inject constructor(
     private fun <T, Wrap : Any> T.cacheAs(key: String, encoder: (T) -> Wrap): T {
         configService.put(key, encoder(this))
         configService.put(key and SUFFIX_LAST_CACHED, System.currentTimeMillis())
-
         return this
     }
 

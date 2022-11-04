@@ -55,7 +55,7 @@ class GameRepository @Inject constructor(
 
     suspend fun getReviewsPreview(appId: String, force: Boolean = false): Reviews {
         return cacheService.jsonEntry<Reviews>(
-            key = key(appId, "deckReport"),
+            key = key(appId, "reviewsPreview"),
             force = force,
             maxCacheTime = GameReviewPreviewCacheDuration,
             adapter = moshi.adapter(Reviews::class.java),

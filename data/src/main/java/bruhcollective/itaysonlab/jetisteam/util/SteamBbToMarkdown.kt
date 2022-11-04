@@ -15,7 +15,17 @@ object SteamBbToMarkdown {
             }
     }
 
+    fun prettifyHtml(src: String): String {
+        return src.replace("<img src=\"(.+?)\" />".toRegex()) { result ->
+            "![image](${result.groupValues[1]})"
+        }
+    }
+
     private fun String.replaceTagWith(tag: String, func: (String) -> String) = replace(
         "\\[$tag](.+?)\\[/$tag]".toRegex()
+    ) { result -> func(result.groupValues[1]) }
+
+    private fun String.replaceHtmlTagWith(tag: String, func: (String) -> String) = replace(
+        "<$tag>(.+?)</$tag>".toRegex()
     ) { result -> func(result.groupValues[1]) }
 }

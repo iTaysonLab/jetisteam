@@ -23,6 +23,9 @@ class ConfigService @Inject constructor(
     fun has(what: String) = instance.containsKey(what)
 
     fun string(of: String, def: String) = instance.getString(of, def)!!
+
+    fun stringNull(of: String, def: String?): String? = instance.getString(of, null)
+
     fun boolean(of: String, def: Boolean) = instance.getBoolean(of, def)
     fun int(of: String, def: Int) = instance.getInt(of, def)
     fun long(of: String, def: Long) = instance.getLong(of, def)

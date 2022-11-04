@@ -19,9 +19,9 @@ class GetGamePage @Inject constructor(
     suspend operator fun invoke(appId: Int): GamePage {
         val strId = appId.toString()
 
-        val details = gameRepository.getGameDetails(strId)
-        val deckCompat = gameRepository.getDeckCompat(strId)
-        val reviews = gameRepository.getReviewsPreview(strId)
+        val details = gameRepository.getGameDetails(strId, false)
+        val deckCompat = gameRepository.getDeckCompat(strId, false)
+        val reviews = gameRepository.getReviewsPreview(strId, false)
 
         val libraryHeroUrl = cdnController.buildAppUrl(appId, "library_hero.jpg")
         val logoUrl = cdnController.buildAppUrl(appId, "logo.png")
