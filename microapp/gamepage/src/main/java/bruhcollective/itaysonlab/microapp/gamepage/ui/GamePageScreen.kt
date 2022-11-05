@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.microapp.gamepage.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -33,11 +35,13 @@ internal fun GamePageScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { data.fullDetails.name },
+                    title = {
+                        Text(data.fullDetails.name, modifier = Modifier.alpha(alpha = topAppBarState.overlappedFraction))
+                    },
                     scrollBehavior = scrollBehavior,
                     colors = TopAppBarDefaults.smallTopAppBarColors(
                         containerColor = Color.Transparent,
-                        actionIconContentColor = Color.White,
+                        scrolledContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
                     ),
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
@@ -69,7 +73,10 @@ internal fun GamePageScreen(
                 }
 
                 item {
-                    Text(text = data.fullDetails.shortDescription, modifier = Modifier.padding(16.dp))
+                    Text(
+                        text = data.fullDetails.shortDescription,
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
 
                 item {
@@ -89,13 +96,12 @@ internal fun GamePageScreen(
                 }
 
                 item {
-                    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-                        Material3RichText(modifier = Modifier.padding(16.dp)) {
-                            Markdown(content = remember(data.fullDetails.fullDescription) {
-                                SteamBbToMarkdown.prettifyHtml(data.fullDetails.fullDescription)
-                            })
-                        }
-                    }
+                    GamePageDescription(
+                        html = data.fullDescription,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    )
                 }
             }
         }

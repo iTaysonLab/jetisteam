@@ -7,6 +7,9 @@ import bruhcollective.itaysonlab.jetisteam.models.Reviews
 import bruhcollective.itaysonlab.jetisteam.models.SteamDeckSupportReport
 import bruhcollective.itaysonlab.jetisteam.repository.GameRepository
 import bruhcollective.itaysonlab.jetisteam.repository.StoreRepository
+import io.github.furstenheim.CopyDown
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import steam.common.StoreBrowseItemDataRequest
 import steam.common.StoreItemID
 import javax.inject.Inject
@@ -80,7 +83,8 @@ class GetGamePage @Inject constructor(
             logoUrlAbsent = readyLogoUrl.second,
             tags = tags,
             deckSupportReport = deckCompat,
-            reviews = reviews
+            reviews = reviews,
+            fullDescription = withContext(Dispatchers.Default) { CopyDown().convert(details.fullDescription) }
         )
     }
 
@@ -93,7 +97,8 @@ class GetGamePage @Inject constructor(
         val logoUrlAbsent: Boolean,
         val tags: List<Pair<String, Int>>,
         val deckSupportReport: SteamDeckSupportReport,
-        val reviews: Reviews
+        val reviews: Reviews,
+        val fullDescription: String
     )
 
     class LanguageMatrixEntry(

@@ -28,9 +28,9 @@ class GameFullDetailsData(
     @Json(name = "background") val backgroundImage: String,
     @Json(name = "background_raw") val rawBackgroundImage: String,
     val website: String?,
-    @Json(name = "pc_requirements") val pcRequirements: Requirements,
+    /*@Json(name = "pc_requirements") val pcRequirements: Requirements,
     @Json(name = "linux_requirements") val linuxRequirements: Requirements,
-    @Json(name = "mac_requirements") val macRequirements: Requirements,
+    @Json(name = "mac_requirements") val macRequirements: Requirements,*/
     val platforms: Platforms,
     val categories: List<KeyValue>,
     val genres: List<KeyValue>,

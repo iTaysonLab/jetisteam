@@ -27,5 +27,8 @@ kapt {
 dependencies {
     implementation project(":data")
     implementation libs.hiltAndroid
+
+    implementation 'io.github.furstenheim:copy_down:1.1'
+    
     kapt libs.hiltCompiler
 }
