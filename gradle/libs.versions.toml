@@ -41,6 +41,7 @@ accompanistNavigationAnimation = { module = "com.google.accompanist:accompanist-
 accompanistSystemUi = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanistPager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 accompanistPagerIndicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
+accompanistSwipeRefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 
 composeMotionCore = { module = "io.github.fornewid:material-motion-compose-core", version.ref = "compose_motion" }
 composeMotionNavigation = { module = "io.github.fornewid:material-motion-compose-navigation", version.ref = "compose_motion" }
@@ -76,7 +77,7 @@ androidx = ["androidCoreKtx", "androidPalette", "androidLifecycleKtx", "androidC
 compose = ["androidLifecycleCompose", "composeMaterial", "composeMaterialIcons", "composeMaterial3", "composeUi", "composeUiUtil", "composeNavigation", "composeActivity", "composeMotionCore", "composeMotionNavigation"]
 composeDebug = ["composeUiTooling", "composeUiToolingPreview", "composeTestManifest"]
 hilt = ["hiltNavigation", "hiltAndroid", "hiltCompiler"]
-accompanist = ["accompanistNavigation", "accompanistSystemUi", "accompanistPager", "accompanistPagerIndicators", "accompanistNavigationAnimation"]
+accompanist = ["accompanistNavigation", "accompanistSystemUi", "accompanistPager", "accompanistPagerIndicators", "accompanistNavigationAnimation", "accompanistSwipeRefresh"]
 retrofit = ["retrofit", "retrofitMoshi"]
 richText = ["richTextMaterial3", "richTextMarkdown"]
 camerax = ["cameraxCore", "camerax2", "cameraxLifecycle", "cameraxMlkit", "cameraxView"]

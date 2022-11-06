@@ -8,7 +8,6 @@ import bruhcollective.itaysonlab.jetisteam.models.Miniprofile
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.repository.ProfileRepository
 import bruhcollective.itaysonlab.jetisteam.service.MiniprofileService
-import steam.player.CPlayer_GetAchievementsProgress_Response
 import steam.player.CPlayer_GetAchievementsProgress_Response_AchievementProgress
 import steam.player.CPlayer_GetOwnedGames_Response_Game
 import steam.player.EProfileCustomizationType

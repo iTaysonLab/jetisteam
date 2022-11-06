@@ -17,4 +17,5 @@
     <string name="showcase_info">Custom Info Box</string>
     <string name="showcase_unknown">Unknown card</string>
     <string name="library">Library</string>
+    <string name="friends">Friends</string>
 </resources>

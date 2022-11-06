@@ -58,6 +58,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @Named("steamApiRetrofit")
+    fun provideSteamApiRetrofit(
+        @Named("steamOkhttp") okHttpClient: OkHttpClient,
+        moshi: Moshi
+    ) = Retrofit.Builder()
+        .client(okHttpClient)
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .baseUrl("https://api.steampowered.com/")
+        .build()
+
+    @Provides
+    @Singleton
     @Named("neutralRpcClient")
     fun provideNeturalRpcClient(
         @Named("neutralRpcProcessor") processor: SteamRpcProcessor

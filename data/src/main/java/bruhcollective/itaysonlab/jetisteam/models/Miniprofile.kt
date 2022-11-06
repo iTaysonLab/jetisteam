@@ -27,3 +27,15 @@ class MiniprofileIngame(
     val logo: String,
     @Json(name = "rich_presence") val richPresence: String
 )
+
+@JsonClass(generateAdapter = true)
+class FriendApiResponse (
+    @Json(name = "steamid") val steamId: Long,
+    @Json(name = "avatarfull") val avatarUrl: String,
+    @Json(name = "personaname") val personaName: String,
+    @Json(name = "personastate") val personaState: Int,
+    @Json(name = "profilestate") val profileState: Int,
+    @Json(name = "lastlogoff") val lastLogoff: Long? = null,
+    @Json(name = "gameid") val gameId: Long? = null,
+    @Json(name = "gameextrainfo") val gameName: String? = null,
+)

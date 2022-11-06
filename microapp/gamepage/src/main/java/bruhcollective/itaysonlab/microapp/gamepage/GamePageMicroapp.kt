@@ -6,7 +6,7 @@ import androidx.navigation.navArgument
 import bruhcollective.itaysonlab.microapp.core.ComposableMicroappEntry
 
 abstract class GamePageMicroapp : ComposableMicroappEntry {
-    override val microappRoute = "game/{${GAME_ID}}"
+    override val microappRoute = "game/{$GAME_ID}"
 
     override val arguments: List<NamedNavArgument> =
         listOf(
