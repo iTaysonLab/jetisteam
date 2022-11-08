@@ -12,7 +12,7 @@ class UuidController @Inject constructor(
     configService: ConfigService,
     @ApplicationContext private val context: Context
 ) {
-    val uuid by configService.LazyStringCfg("app.uuid") { "android:${UUID.randomUUID()}" }
+    val uuid by configService.LazyStringCfg(key = "app.uuid") { "android:${UUID.randomUUID()}" }
 
     val deviceName by lazy {
         return@lazy if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {

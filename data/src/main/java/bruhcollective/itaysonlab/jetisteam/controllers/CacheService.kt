@@ -17,6 +17,8 @@ class CacheService @Inject constructor(
         const val SUFFIX_LAST_CACHED = "lastSavedAt"
     }
 
+    private val cacheInstance get() = configService.get(ConfigService.Instance.Cache)
+
     suspend fun <T : Message<T, *>> protoEntry(
         key: String,
         adapter: ProtoAdapter<T>,
@@ -25,7 +27,7 @@ class CacheService @Inject constructor(
         networkFunc: suspend () -> T,
         defaultFunc: () -> T
     ): T {
-        val cachedMeta = meta(key) { bytes(it, EMPTY_BYTE_ARRAY) }
+        val cachedMeta = meta(key) { configService.getBytes(ConfigService.Instance.Cache, it, EMPTY_BYTE_ARRAY) }
 
         return if (force || cachedMeta.isExpired(maxCacheTime)) {
             network(
@@ -51,7 +53,7 @@ class CacheService @Inject constructor(
         networkFunc: suspend () -> T,
         defaultFunc: () -> T
     ): T {
-        val cachedMeta = meta(key) { stringNull(it, null) }
+        val cachedMeta = meta(key) { cacheInstance.getString(it, null) }
 
         return if (force || cachedMeta.isExpired(maxCacheTime)) {
             network(
@@ -114,14 +116,14 @@ class CacheService @Inject constructor(
 
     private fun <T: Any> meta(key: String, dataFetch: ConfigService.(String) -> T?): EntryMeta<T> {
         return EntryMeta(
-            time = configService.long(key and SUFFIX_LAST_CACHED, 0),
-            data = if (configService.has(key)) dataFetch(configService, key) else null
+            time = cacheInstance.getLong(key and SUFFIX_LAST_CACHED, 0),
+            data = if (configService.containsKey(ConfigService.Instance.Cache, key)) dataFetch(configService, key) else null
         )
     }
 
     private fun <T, Wrap : Any> T.cacheAs(key: String, encoder: (T) -> Wrap): T {
-        configService.put(key, encoder(this))
-        configService.put(key and SUFFIX_LAST_CACHED, System.currentTimeMillis())
+        configService.put(ConfigService.Instance.Cache, key, encoder(this))
+        configService.put(ConfigService.Instance.Cache, key and SUFFIX_LAST_CACHED, System.currentTimeMillis())
         return this
     }
 

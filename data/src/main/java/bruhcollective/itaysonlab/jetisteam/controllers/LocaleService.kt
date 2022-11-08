@@ -30,7 +30,7 @@ class LocaleService @Inject constructor(
             },
             defaultFunc = { DEFAULT_COUNTRY_CODE },
             cacheFunc = { internalKey ->
-                string(internalKey, DEFAULT_COUNTRY_CODE)
+                get(ConfigService.Instance.Cache).getString(internalKey, DEFAULT_COUNTRY_CODE) ?: DEFAULT_COUNTRY_CODE
             }
         )
     }

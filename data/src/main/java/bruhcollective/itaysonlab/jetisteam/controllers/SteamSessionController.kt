@@ -9,7 +9,7 @@ import javax.inject.Singleton
 class SteamSessionController @Inject constructor(
     cfgService: ConfigService,
 ) {
-    internal var authSession by cfgService.protoCfg<SessionData>("steam.session")
+    internal var authSession by cfgService.protoCfg<SessionData>(key = "steam.session")
         private set
 
     internal fun buildSteamLoginSecureCookie(): String {
