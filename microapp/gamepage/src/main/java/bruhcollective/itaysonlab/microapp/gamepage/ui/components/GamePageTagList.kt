@@ -41,7 +41,8 @@ internal fun GamePageTagList(
         Modifier
             .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
             .fillMaxWidth()
-            .padding(top = 12.dp).padding(bottom = if (metaCritic == null) 12.dp else 0.dp)
+            .padding(top = 12.dp)
+            .padding(bottom = if (metaCritic == null) 12.dp else 0.dp)
     ) {
         GPTList(
             title = stringResource(id = R.string.gamepage_tags),
@@ -66,7 +67,7 @@ internal fun GamePageTagList(
 
             ListItem(
                 supportingText = {
-                    Text(text = "Metacritic Score", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(text = stringResource(id = R.string.gamepage_metacritic), color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }, headlineText = {
                     Text(text = metaCritic.score.toString(), color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp)
                 }, leadingContent = {
@@ -85,9 +86,11 @@ internal fun GamePageTagList(
                     Icon(imageVector = Icons.Rounded.ChevronRight, contentDescription = null)
                 }, colors = ListItemDefaults.colors(
                     containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
-                ), modifier = Modifier.fillMaxWidth().clickable {
-                    uriHandler.openUri(metaCritic.url)
-                }
+                ), modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        uriHandler.openUri(metaCritic.url)
+                    }
             )
         }
     }

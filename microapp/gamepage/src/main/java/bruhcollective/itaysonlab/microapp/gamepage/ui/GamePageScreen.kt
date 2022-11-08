@@ -1,26 +1,27 @@
 package bruhcollective.itaysonlab.microapp.gamepage.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
-import bruhcollective.itaysonlab.jetisteam.util.SteamBbToMarkdown
+import bruhcollective.itaysonlab.microapp.gamepage.R
 import bruhcollective.itaysonlab.microapp.gamepage.ui.components.*
-import com.halilibo.richtext.markdown.Markdown
-import com.halilibo.richtext.ui.material3.Material3RichText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,6 +103,26 @@ internal fun GamePageScreen(
                             .fillMaxWidth()
                             .padding(16.dp)
                     )
+                }
+
+                item {
+                    Column(Modifier.padding(horizontal = 16.dp)) {
+                        Text(
+                            text = stringResource(id = R.string.gamepage_reviews),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 18.sp
+                        )
+
+                        Text(
+                            text = stringResource(id = R.string.gamepage_reviews_desc, data.reviews.summary?.reviewScoreDesc ?: "", data.reviews.summary?.positiveReviews ?: 0, data.reviews.summary?.negativeReviews ?: 0),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
+
+                items(data.reviews.reviews) { review ->
+                    GamePageReview(review = review, modifier = Modifier.padding(16.dp))
                 }
             }
         }
