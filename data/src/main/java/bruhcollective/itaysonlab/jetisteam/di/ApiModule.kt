@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetisteam.di
 
+import bruhcollective.itaysonlab.jetisteam.service.ApiService
 import bruhcollective.itaysonlab.jetisteam.service.GameService
 import bruhcollective.itaysonlab.jetisteam.service.MiniprofileService
 import dagger.Module
@@ -17,6 +18,10 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideMiniprofileService(@Named("steamCommunityRetrofit") retrofit: Retrofit) = retrofit.create<MiniprofileService>()
+
+    @Provides
+    @Singleton
+    fun provideApiService(@Named("steamCommunityRetrofit") retrofit: Retrofit) = retrofit.newBuilder().baseUrl("https://api.steampowered.com/").build().create<ApiService>()
 
     @Provides
     @Singleton
