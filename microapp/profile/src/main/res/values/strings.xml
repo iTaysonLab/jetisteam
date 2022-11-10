@@ -17,4 +17,38 @@
     <string name="showcase_info">Custom Info Box</string>
     <string name="showcase_unknown">Unknown card</string>
     <string name="library">Library</string>
+    <string name="friends">Friends</string>
+
+    <string name="friends_group_playing">Playing</string>
+    <string name="friends_group_online">Online</string>
+    <string name="friends_group_offline">Offline</string>
+    <string name="friends_offline_last_seen">Last seen %s ago</string>
+    <string name="friends_status_online">Online</string>
+    <string name="friends_status_busy">Busy</string>
+    <string name="friends_status_away">Away</string>
+    <string name="friends_status_snooze">Snooze</string>
+    <string name="friends_status_looking_to_play">Looking to play</string>
+    <string name="friends_status_looking_to_trade">Looking to trade</string>
+    <string name="friends_status_offline">Offline</string>
+
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="months">
+        <item quantity="one">%d month</item>
+        <item quantity="other">%d months</item>
+    </plurals>
+    <plurals name="years">
+        <item quantity="one">%d year</item>
+        <item quantity="other">%d years</item>
+    </plurals>
 </resources>

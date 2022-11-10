@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.IosShare
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.*
@@ -25,6 +26,8 @@ import bruhcollective.itaysonlab.microapp.profile.ui.components.ProfileHeader
 internal fun ProfileScreen(
     onGameClick: (Int) -> Unit,
     onLibraryClick: (Long) -> Unit,
+    onFriendsClick: (Long) -> Unit,
+    onBackClick: (() -> Unit)?,
     viewModel: ProfileScreenViewModel = hiltViewModel()
 ) {
     val tab = rememberTopAppBarState()
@@ -50,6 +53,12 @@ internal fun ProfileScreen(
                     IconButton(onClick = { /*TODO*/ }) {
                         Icon(imageVector = Icons.Rounded.Settings, contentDescription = null)
                     }
+                }, navigationIcon = {
+                    onBackClick?.let {
+                        IconButton(onClick = onBackClick) {
+                            Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
+                        }
+                    }
                 })
             }, modifier = Modifier.nestedScroll(tas.nestedScrollConnection).fillMaxSize()) {
                 LazyColumn(modifier = Modifier.background(theme.gradientBackground.copy(alpha = 1f)).fillMaxSize()) {
@@ -60,9 +69,8 @@ internal fun ProfileScreen(
                             avatarFrameUrl = data.equipment.avatarFrame?.imageLarge,
                             personaName = data.miniProfile.personaName,
                             summary = data.summary,
-                            onLibraryClick = {
-                                onLibraryClick(data.steamID.steamId)
-                            }
+                            onLibraryClick = { onLibraryClick(data.steamID.steamId) },
+                            onFriendsClick = { onFriendsClick(data.steamID.steamId) },
                         )
                     }
 
