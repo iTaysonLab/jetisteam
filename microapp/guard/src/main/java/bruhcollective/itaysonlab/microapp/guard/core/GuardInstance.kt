@@ -1,11 +1,13 @@
 package bruhcollective.itaysonlab.microapp.guard.core
 
 import androidx.annotation.FloatRange
+import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.proto.GuardData
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
+import okio.ByteString
 import okio.ByteString.Companion.toByteString
 import okio.buffer
 import okio.sink
@@ -76,6 +78,16 @@ class GuardInstance(
         val localKey = SecretKeySpec(configuration.shared_secret.toByteArray(), AlgorithmConfirmation)
         val localDigest = Mac.getInstance(AlgorithmConfirmation).also { it.init(localKey) }
         return localDigest.doFinal(msg)
+    }
+
+    fun sgCreateSignature(version: Int, clientId: Long, steamId: SteamID): ByteString {
+        return ByteArrayOutputStream(2 + 8 + 8).apply {
+            sink().buffer().use { sink ->
+                sink.writeShortLe(version)
+                sink.writeLongLe(clientId)
+                sink.writeLongLe(steamId.steamId)
+            }
+        }.toByteArray().let(this::digestSha256).toByteString()
     }
 
     fun confirmationTicket(tag: String): Pair<String, Long> {

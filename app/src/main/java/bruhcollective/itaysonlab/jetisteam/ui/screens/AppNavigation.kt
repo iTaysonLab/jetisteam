@@ -105,7 +105,6 @@ fun AppNavigation(
                                 navController.navigate(dest.route) {
                                     popUpTo(ROOT_NAV_GRAPH_ID) {
                                         saveState = true
-                                        inclusive = true
                                     }
 
                                     launchSingleTop = true

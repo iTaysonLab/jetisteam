@@ -17,6 +17,7 @@ import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardMoreOptionsS
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardRemoveSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.devices.GuardDevicesScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.devices.session.GuardSessionScreen
+import bruhcollective.itaysonlab.microapp.guard.ui.qrsign.QrSignScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.recovery.GuardRecoveryCodeScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.variants.GuardMoveScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.variants.GuardSetupScreen
@@ -48,6 +49,8 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
                         InternalRoutes.ARG_STEAM_ID to steamId.toString(),
                         InternalRoutes.ARG_CLIENT_ID to clientId.toString(),
                     )))
+                }, onQrClicked = { steamId ->
+                    navController.navigate(InternalRoutes.ScanQrCode.withSteamId(steamId))
                 })
             }
 
@@ -82,6 +85,10 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
 
             composable(InternalRoutes.SessionInfo.url) {
                 GuardSessionScreen(onBackClicked = navController::popBackStack)
+            }
+
+            composable(InternalRoutes.ScanQrCode.url) {
+                QrSignScreen(onBackClicked = navController::popBackStack)
             }
 
             bottomSheet(InternalRoutes.MoreOptions.url) {
@@ -138,5 +145,6 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
         val MoreOptions = DestNode("guard/{$ARG_STEAM_ID}/more")
         val ConfirmSignIn = DestNode("guard/{$ARG_STEAM_ID}/confirm/{${ARG_CLIENT_ID}}")
         val Remove = DestNode("guard/{$ARG_STEAM_ID}/remove")
+        val ScanQrCode = DestNode("guard/{$ARG_STEAM_ID}/qrscan")
     }
 }

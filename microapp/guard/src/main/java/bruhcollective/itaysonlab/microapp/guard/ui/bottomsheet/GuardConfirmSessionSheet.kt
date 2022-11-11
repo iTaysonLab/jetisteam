@@ -248,7 +248,7 @@ internal class GuardConfirmSessionViewModel @Inject constructor(
                 clientId = clientId,
                 steamId = steamId.steamId,
                 allow = allow,
-                signature = generateSignature(version),
+                signature = guardInstance.sgCreateSignature(version, clientId, steamId),
                 persistence = if (rememberPassword) {
                     ESessionPersistence.k_ESessionPersistence_Persistent
                 } else {
@@ -259,18 +259,6 @@ internal class GuardConfirmSessionViewModel @Inject constructor(
             setDynState(allow, false)
             onFinish()
         }
-    }
-
-    private fun generateSignature(version: Int): ByteString {
-        return ByteArrayOutputStream(2 + 8 + 8).apply {
-            sink().buffer().use { sink ->
-                sink.writeShortLe(version)
-                sink.writeLongLe(clientId)
-                sink.writeLongLe(steamId.steamId)
-            }
-        }.toByteArray().let {
-            guardInstance.digestSha256(it)
-        }.toByteString()
     }
 
     private fun setDynState(allow: Boolean, state: Boolean) {

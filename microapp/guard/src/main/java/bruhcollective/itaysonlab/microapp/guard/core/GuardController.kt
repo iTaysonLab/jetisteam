@@ -17,10 +17,10 @@ class GuardController @Inject constructor(
         val key = steamIdKey(steamId)
         return if (lazyInstances.containsKey(steamId.steamId)) {
             lazyInstances[steamId.steamId]!!
-        } else if (configService.has(key)) {
+        } else if (configService.containsKey(key = key)) {
             GuardInstance(
                 clock = sysClock,
-                configuration = GuardData.ADAPTER.decode(configService.bytes(key, EMPTY_BYTE_ARRAY))
+                configuration = GuardData.ADAPTER.decode(configService.getBytes(key = key, default = EMPTY_BYTE_ARRAY))
             ).also { instance ->
                 lazyInstances.put(steamId.steamId, instance)
             }
@@ -41,12 +41,12 @@ class GuardController @Inject constructor(
     }
 
     fun saveInstance(steamId: SteamID, instance: GuardInstance) {
-        configService.put(steamIdKey(steamId), instance.configurationEncoded)
+        configService.put(to = steamIdKey(steamId), what = instance.configurationEncoded)
         lazyInstances.put(steamId.steamId, instance)
     }
 
     fun deleteInstance(steamId: SteamID) {
-        configService.remove(steamIdKey(steamId))
+        configService.deleteKey(key = steamIdKey(steamId))
         lazyInstances.remove(steamId.steamId)
     }
 

@@ -31,6 +31,9 @@ import bruhcollective.itaysonlab.jetisteam.uikit.components.StateButton
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.core.GuardInstance
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.launch
 import steam.twofactor.CTwoFactor_AddAuthenticator_Response
 
@@ -42,6 +45,7 @@ internal fun GuardScreen(
     onAddClicked: (Long, CTwoFactor_AddAuthenticator_Response) -> Unit,
     onMoreClicked: (Long) -> Unit,
     onSessionArrived: (steamId: Long, clientId: Long) -> Unit,
+    onQrClicked: (Long) -> Unit,
 ) {
     val clipboard = LocalClipboardManager.current
     val context = LocalContext.current
@@ -108,7 +112,7 @@ internal fun GuardScreen(
                     onMoreSettingsClicked = {
                         onMoreClicked(viewModel.steamId)
                     }, onSignWithQrClicked = {
-
+                        onQrClicked(viewModel.steamId)
                     }, onCopyClicked = {
                         scope.launch {
                             clipboard.setText(AnnotatedString(codeState.value.code))
@@ -177,6 +181,7 @@ private fun GuardNoInstanceAvailableScreen(
     }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun GuardInstanceAvailableScreen(
     modifier: Modifier,
@@ -185,6 +190,30 @@ private fun GuardInstanceAvailableScreen(
     onMoreSettingsClicked: () -> Unit,
     onCopyClicked: () -> Unit
 ) {
+    val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+    var showPermissionAlert by remember { mutableStateOf(false) }
+
+    if (showPermissionAlert) {
+        AlertDialog(onDismissRequest = { showPermissionAlert = false }, icon = {
+            Icon(imageVector = Icons.Rounded.PhotoCamera, contentDescription = null)
+        }, title = {
+            Text(stringResource(id = R.string.guard_camera_permission_title))
+        }, text = {
+            Text(stringResource(id = R.string.guard_camera_permission_text))
+        }, confirmButton = {
+            TextButton(onClick = {
+                cameraPermissionState.launchPermissionRequest()
+                showPermissionAlert = false
+            }) {
+                Text(stringResource(id = R.string.guard_camera_permission_allow))
+            }
+        }, dismissButton = {
+            TextButton(onClick = { showPermissionAlert = false }) {
+                Text(stringResource(id = R.string.guard_camera_permission_dismiss))
+            }
+        })
+    }
+
     Box(modifier = modifier) {
         Box(
             modifier = Modifier
@@ -218,7 +247,14 @@ private fun GuardInstanceAvailableScreen(
         Row(modifier = Modifier
             .align(Alignment.BottomStart)
             .padding(16.dp)) {
-            TextButton(onClick = onSignWithQrClicked, enabled = false) {
+
+            TextButton(onClick = {
+                if (cameraPermissionState.status.isGranted) {
+                    onSignWithQrClicked()
+                } else {
+                    showPermissionAlert = true
+                }
+            }) {
                 Icon(imageVector = Icons.Rounded.QrCodeScanner, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(id = R.string.guard_actions_qr))
