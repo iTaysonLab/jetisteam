@@ -60,4 +60,7 @@ dependencies {
 
     implementation libs.hiltAndroid
     kapt libs.hiltCompiler
+
+    testImplementation libs.junit
+    androidTestImplementation libs.androidTest
 }

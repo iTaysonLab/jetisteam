@@ -34,7 +34,7 @@ class SteamRpcProcessor @Inject constructor(
 
         // 3. Make the request and parse the response
         return@withContext okHttpClient.newCall(requestCall).execute().use { response ->
-            responseAdapter.decode(response.body!!.source())!!
+            responseAdapter.decode(response.body.source())!!
         }
     }
 

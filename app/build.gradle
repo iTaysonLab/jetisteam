@@ -44,7 +44,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.3.2'
+        kotlinCompilerExtensionVersion '1.4.0-alpha01'
     }
 
     packagingOptions {
@@ -99,9 +99,8 @@ dependencies {
     implementation libs.hiltAndroid
     kapt libs.hiltCompiler
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    // androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    testImplementation libs.junit
+    androidTestImplementation libs.androidTest
+
     debugImplementation libs.bundles.composeDebug
 }
