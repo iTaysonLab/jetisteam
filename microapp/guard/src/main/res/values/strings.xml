@@ -56,7 +56,7 @@
     <string name="guard_session_info_loc">Location</string>
 
     <string name="guard_qr_dialog_title">Sign in?</string>
-    <string name="guard_qr_dialog_action">Approve as %s</string>
+    <string name="guard_qr_dialog_action">Approve</string>
     <string name="guard_qr_dialog_close">Deny</string>
 
     <string name="guard_camera_permission_title">Allow access to camera</string>

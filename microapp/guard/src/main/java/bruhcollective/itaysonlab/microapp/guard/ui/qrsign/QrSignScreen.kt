@@ -16,6 +16,10 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
@@ -106,6 +110,17 @@ private fun QrSignDialog(
                     style = MaterialTheme.typography.headlineSmall
                 )
 
+                Text(
+                    buildAnnotatedString {
+                        append(stringResource(id = R.string.guard_as))
+                        append(" ")
+                        withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                            append(guardAccountName)
+                        }
+                    },
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Card {
@@ -144,7 +159,7 @@ private fun QrSignDialog(
                         shape = MaterialTheme.shapes.medium,
                         inLoadingState = operation == QrSignScreenViewModel.CurrentOperation.Approve
                     ) {
-                        Text(stringResource(id = R.string.guard_qr_dialog_action, guardAccountName))
+                        Text(stringResource(id = R.string.guard_qr_dialog_action))
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
