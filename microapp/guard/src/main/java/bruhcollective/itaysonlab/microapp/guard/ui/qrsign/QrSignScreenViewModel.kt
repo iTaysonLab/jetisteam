@@ -68,7 +68,7 @@ class QrSignScreenViewModel @Inject constructor(
 
                 if (toDetectedJob == null) {
                     toDetectedJob = viewModelScope.launch {
-                        delay(1000L)
+                        delay(500L)
                         isProcessingLogin = LoginProcessState.Idle
                         state = QrState.Detected
                         loadSessionData(result.rawValue ?: "")
