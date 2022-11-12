@@ -38,7 +38,7 @@ class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
     }
 
     override val bottomNavigationEntry = NavigationEntry(
-        route = microappRoute,
+        route = InternalRoutes.NavGraph,
         name = R.string.profile,
         icon = { Icons.Rounded.Person }
     )

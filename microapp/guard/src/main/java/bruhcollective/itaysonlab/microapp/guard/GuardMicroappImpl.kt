@@ -124,7 +124,7 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
     ))
 
     override val bottomNavigationEntry = NavigationEntry(
-        route = microappRoute,
+        route = InternalRoutes.NavGraph,
         name = R.string.guard,
         icon = { Icons.Rounded.Security }
     )

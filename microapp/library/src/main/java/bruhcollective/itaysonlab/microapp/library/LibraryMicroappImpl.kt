@@ -61,7 +61,7 @@ class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
     }
 
     override val bottomNavigationEntry = NavigationEntry(
-        route = microappRoute,
+        route = InternalRoutes.NavGraph,
         name = R.string.library,
         icon = { Icons.Rounded.GridView }
     )
