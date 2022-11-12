@@ -204,7 +204,7 @@ class AppNavigationViewModel @Inject constructor(
         val tsIndex = bottomNavDestinations.indexOfFirst { it.route == tsRoute }
 
         return builder(
-            isRoute == tsRoute || tsIndex > isIndex
+            tsIndex == -1 || isRoute == tsRoute || tsIndex > isIndex
         )
     }
 
