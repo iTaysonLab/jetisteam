@@ -19,6 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keepattributes *Annotation*
+
 -renamesourcefileattribute
 -repackageclasses
 -allowaccessmodification
@@ -40,9 +42,9 @@
 	public static void throwIllegalState(...);
 }
 
--dontwarn kotlin.**
+-assumenosideeffects class android.util.Log {
+    public static void d(...);
+    public static void v(...);
+}
 
-# TODO: Wire should use less code, but we are still using reflection
--keep class com.squareup.wire.** { *; }
--keep class bruhcollective.itaysonlab.jetisteam.proto.** { *; }
--keep class steam.** { *; }
+-dontwarn kotlin.**

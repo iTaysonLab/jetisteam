@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetisteam.rpc
 
-import com.squareup.wire.Service
 import com.squareup.wire.WireRpc
 import java.lang.reflect.Proxy
 import javax.inject.Inject

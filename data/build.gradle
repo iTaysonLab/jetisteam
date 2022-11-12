@@ -48,6 +48,10 @@ kapt {
     correctErrorTypes = true
 }
 
+moshi {
+    enableSealed.set(true)
+}
+
 dependencies {
     api libs.wireRuntime
 
