@@ -54,6 +54,8 @@
     <string name="guard_session_info_desc">Description</string>
     <string name="guard_session_info_first">Signed on</string>
     <string name="guard_session_info_loc">Location</string>
+    <string name="guard_session_info_action_revoke">Revoke</string>
+    <string name="guard_session_info_action_support">Support</string>
 
     <string name="guard_qr_dialog_title">Sign in?</string>
     <string name="guard_qr_dialog_action">Approve</string>

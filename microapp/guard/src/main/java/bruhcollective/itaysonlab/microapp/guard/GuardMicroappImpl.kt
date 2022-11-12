@@ -1,10 +1,11 @@
 package bruhcollective.itaysonlab.microapp.guard
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Security
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
+import com.google.accompanist.navigation.animation.composable
 import androidx.navigation.navigation
 import bruhcollective.itaysonlab.microapp.core.DestNode
 import bruhcollective.itaysonlab.microapp.core.Destinations
@@ -28,7 +29,7 @@ import steam.twofactor.CTwoFactor_AddAuthenticator_Response
 import javax.inject.Inject
 
 class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
-    @OptIn(ExperimentalMaterialNavigationApi::class)
+    @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
     override fun NavGraphBuilder.navigation(
         navController: NavHostController,
         destinations: Destinations

@@ -125,11 +125,6 @@ private fun SessionHeader(
 
         Text(text = text)
     }
-
-    /*Divider(
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = Modifier.fillMaxWidth()
-    )*/
 }
 
 @Composable
@@ -149,7 +144,7 @@ private fun SessionActionStrip(
 
                     },
                 icon = Icons.Rounded.Delete,
-                text = "Revoke"
+                text = stringResource(id = R.string.guard_session_info_action_revoke)
             )
 
             Box(
@@ -167,7 +162,7 @@ private fun SessionActionStrip(
                         uriHandler.openUri("https://help.steampowered.com/")
                     },
                 icon = Icons.Rounded.Help,
-                text = "Support"
+                text = stringResource(id = R.string.guard_session_info_action_support)
             )
         }
     }

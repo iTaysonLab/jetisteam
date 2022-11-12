@@ -1,10 +1,11 @@
 package bruhcollective.itaysonlab.microapp.library
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.GridView
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
+import com.google.accompanist.navigation.animation.composable
 import androidx.navigation.navigation
 import bruhcollective.itaysonlab.microapp.core.DestNode
 import bruhcollective.itaysonlab.microapp.core.Destinations
@@ -19,7 +20,7 @@ import com.google.accompanist.navigation.material.bottomSheet
 import javax.inject.Inject
 
 class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
-    @OptIn(ExperimentalMaterialNavigationApi::class)
+    @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
     override fun NavGraphBuilder.navigation(
         navController: NavHostController,
         destinations: Destinations
