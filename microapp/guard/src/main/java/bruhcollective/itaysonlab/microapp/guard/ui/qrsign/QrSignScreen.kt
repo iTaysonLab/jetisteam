@@ -28,6 +28,8 @@ import bruhcollective.itaysonlab.jetisteam.uikit.components.StateTonalButton
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.ui.qrsign.camerakit.CameraView
+import soup.compose.material.motion.animation.materialSharedAxisY
+import soup.compose.material.motion.animation.rememberSlideDistance
 import steam.auth.CAuthentication_GetAuthSessionInfo_Response
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,7 +66,7 @@ fun QrSignScreen(
                         viewModel.updateCurrentSignIn(true, onBackClicked)
                     },
                     onDeny = {
-                        viewModel.updateCurrentSignIn(false, onBackClicked)
+                        viewModel.updateCurrentSignIn(false, null)
                     },
                     data = viewModel.qrSessionInfo,
                     guardAccountName = viewModel.username,
@@ -86,11 +88,13 @@ private fun QrSignDialog(
     processState: QrSignScreenViewModel.LoginProcessState,
     operation: QrSignScreenViewModel.CurrentOperation
 ) {
+    val slideDistance = rememberSlideDistance()
+
     AnimatedContent(targetState = data, transitionSpec = {
         if (data != null) {
-            slideInVertically { height -> height } + fadeIn() with slideOutVertically { height -> -height } + fadeOut()
+            materialSharedAxisY(forward = true, slideDistance = slideDistance)
         } else {
-            slideInVertically { height -> -height } + fadeIn() with slideOutVertically { height -> height } + fadeOut()
+            materialSharedAxisY(forward = false, slideDistance = slideDistance)
         }.using(
             SizeTransform(clip = false)
         )

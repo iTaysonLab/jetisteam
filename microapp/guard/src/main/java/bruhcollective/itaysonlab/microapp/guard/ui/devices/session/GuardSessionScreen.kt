@@ -9,9 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,9 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
+import bruhcollective.itaysonlab.jetisteam.uikit.components.StateButton
+import bruhcollective.itaysonlab.jetisteam.uikit.components.StateTextButton
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.utils.SessionFormatter
+import steam.auth.CAuthentication_RefreshToken_Enumerate_Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +37,42 @@ internal fun GuardSessionScreen(
 ) {
     val ctx = LocalContext.current
     val tas = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
+    var requestSessionRevoke by remember { mutableStateOf(false) }
+
+    if (requestSessionRevoke) {
+        AlertDialog(onDismissRequest = {
+            if (!viewModel.revokingSession) {
+                requestSessionRevoke = false
+            }
+        }, icon = {
+            Icon(
+                imageVector = Icons.Rounded.Delete,
+                contentDescription = null
+            )
+        }, title = {
+            Text(text = stringResource(id = R.string.guard_revoke_alert_title))
+        }, text = {
+            Text(text = stringResource(id = R.string.guard_revoke_alert_text))
+        }, confirmButton = {
+            StateTextButton(onClick = {
+                viewModel.requestRevokeSession {
+                    requestSessionRevoke = false
+                    onBackClicked()
+                }
+            }, inLoadingState = viewModel.revokingSession) {
+                Text(text = stringResource(id = R.string.guard_revoke_alert_confirm))
+            }
+        }, dismissButton = {
+            TextButton(onClick = {
+                if (!viewModel.revokingSession) {
+                    requestSessionRevoke = false
+                }
+            }) {
+                Text(text = stringResource(id = R.string.guard_revoke_alert_dismiss))
+            }
+        })
+    }
 
     Scaffold(
         topBar = {
@@ -48,7 +85,8 @@ internal fun GuardSessionScreen(
             }, scrollBehavior = tas, colors = TopAppBarDefaults.largeTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surface,
                 scrolledContainerColor = MaterialTheme.colorScheme.surface,
-            ))
+            )
+            )
         }, contentWindowInsets = EmptyWindowInsets, modifier = Modifier
             .fillMaxSize()
             .nestedScroll(tas.nestedScrollConnection)
@@ -60,13 +98,21 @@ internal fun GuardSessionScreen(
         ) {
             LazyColumn {
                 item {
-                    val visuals = remember(viewModel.sessionData) { SessionFormatter.formatSessionDescByTime(ctx, viewModel.sessionData) }
+                    val visuals = remember(viewModel.sessionData) {
+                        SessionFormatter.formatSessionDescByTime(
+                            ctx,
+                            viewModel.sessionData
+                        )
+                    }
 
                     SessionHeader(
                         modifier = Modifier.fillMaxWidth(),
                         icon = visuals.icon,
                         title = visuals.fallbackName,
-                        text = stringResource(id = R.string.guard_sessions_last_seen, visuals.relativeLastSeen)
+                        text = stringResource(
+                            id = R.string.guard_sessions_last_seen,
+                            visuals.relativeLastSeen
+                        )
                     )
                 }
 
@@ -75,7 +121,9 @@ internal fun GuardSessionScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
-                            .padding(bottom = 4.dp)
+                            .padding(bottom = 4.dp), onRevokeRequest = {
+                            requestSessionRevoke = true
+                        }
                     )
                 }
 
@@ -111,7 +159,10 @@ private fun SessionHeader(
 ) {
     Column(modifier = modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(
-            imageVector = icon(), tint = MaterialTheme.colorScheme.onPrimaryContainer, contentDescription = null, modifier = Modifier
+            imageVector = icon(),
+            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+            contentDescription = null,
+            modifier = Modifier
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(8.dp)
@@ -129,20 +180,24 @@ private fun SessionHeader(
 
 @Composable
 private fun SessionActionStrip(
+    onRevokeRequest: () -> Unit,
     modifier: Modifier
 ) {
     val uriHandler = LocalUriHandler.current
 
-    Card(modifier, colors = CardDefaults.cardColors(
-        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(16.dp)
-    ), shape = MaterialTheme.shapes.large) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.height(IntrinsicSize.Min)) {
+    Card(
+        modifier, colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(16.dp)
+        ), shape = MaterialTheme.shapes.large
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.height(IntrinsicSize.Min)
+        ) {
             SessionActionStripButton(
                 modifier = Modifier
                     .weight(1f)
-                    .clickable {
-
-                    },
+                    .clickable(onClick = onRevokeRequest),
                 icon = Icons.Rounded.Delete,
                 text = stringResource(id = R.string.guard_session_info_action_revoke)
             )
@@ -174,9 +229,16 @@ private fun SessionActionStripButton(
     text: String,
     icon: ImageVector
 ) {
-    Column(modifier = modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+    Column(
+        modifier = modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         Icon(
-            imageVector = icon, tint = MaterialTheme.colorScheme.primary, contentDescription = null, modifier = Modifier
+            imageVector = icon,
+            tint = MaterialTheme.colorScheme.primary,
+            contentDescription = null,
+            modifier = Modifier
         )
 
         Spacer(modifier = Modifier.height(4.dp))

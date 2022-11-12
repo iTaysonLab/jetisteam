@@ -8,8 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -50,7 +49,9 @@ internal fun GuardDevicesScreen(
             .fillMaxSize()
             .nestedScroll(tas.nestedScrollConnection)
     ) { innerPadding ->
-        RoundedPage(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+        RoundedPage(modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize()) {
             when (val state = viewModel.state) {
                 GuardDevicesViewModel.State.Loading -> FullscreenLoading()
 

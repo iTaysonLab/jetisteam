@@ -90,6 +90,14 @@ class GuardInstance(
         }.toByteArray().let(this::digestSha256).toByteString()
     }
 
+    fun sgCreateRevokeSignature(tokenId: Long): ByteString {
+        return ByteArrayOutputStream(20).apply {
+            sink().buffer().use { sink ->
+                sink.writeLong(tokenId)
+            }
+        }.toByteArray().let(this::digestSha256).toByteString()
+    }
+
     fun confirmationTicket(tag: String): Pair<String, Long> {
         val currentTime = clock.millis()
 

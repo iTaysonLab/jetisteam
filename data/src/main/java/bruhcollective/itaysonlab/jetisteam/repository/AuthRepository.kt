@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetisteam.repository
 import android.util.Base64
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
 import bruhcollective.itaysonlab.jetisteam.controllers.UuidController
+import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.proto.SessionData
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
 import okio.ByteString
@@ -113,6 +114,15 @@ class AuthRepository @Inject constructor(
         signature = signature,
         confirm = confirm,
         persistence = persistence
+    ))
+
+    suspend fun revokeSession(
+        steamId: SteamID, tokenId: Long, signature: ByteString
+    ) = stub.RevokeRefreshToken(CAuthentication_RefreshToken_Revoke_Request(
+        steamid = steamId.steamId,
+        token_id = tokenId,
+        signature = signature,
+        revoke_action = EAuthTokenRevokeAction.k_EAuthTokenRevokePermanent
     ))
 
     private fun generateRsaKey(

@@ -20,6 +20,7 @@ object SteamRpcWorkarounds {
         "/Authentication/EnumerateTokens",
         "/Authentication/GetAuthSessionInfo",
         "/Authentication/UpdateAuthSessionWithMobileConfirmation",
+        "/Authentication/RevokeRefreshToken",
         // Player
         "/Player/GetAchievementsProgress",
         // MobileApp
