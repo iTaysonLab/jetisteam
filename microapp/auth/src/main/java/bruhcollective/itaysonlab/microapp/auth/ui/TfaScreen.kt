@@ -22,9 +22,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import bruhcollective.itaysonlab.jetisteam.uikit.components.StateButton
 import bruhcollective.itaysonlab.microapp.auth.R
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
@@ -114,10 +114,10 @@ fun TfaScreen(
                 Modifier
                     .fillMaxWidth()
             ) {
-                Button(
+                StateButton(
                     shape = RoundedCornerShape(8.dp),
                     onClick = authFunc,
-                    enabled = !viewModel.isAuthInProgress,
+                    inLoadingState = viewModel.isAuthInProgress,
                     modifier = Modifier.align(Alignment.CenterEnd)
                 ) {
                     Text(stringResource(R.string.login))

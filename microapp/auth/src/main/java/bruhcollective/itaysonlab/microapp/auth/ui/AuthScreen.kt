@@ -32,6 +32,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import bruhcollective.itaysonlab.jetisteam.uikit.components.StateButton
 import bruhcollective.itaysonlab.microapp.auth.R
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
@@ -195,10 +196,10 @@ internal fun AuthScreen(
                     Text(stringResource(R.string.disclaimers))
                 }
 
-                Button(
+                StateButton(
                     shape = RoundedCornerShape(8.dp),
                     onClick = authFunc,
-                    enabled = !viewModel.isAuthInProgress,
+                    inLoadingState = viewModel.isAuthInProgress,
                     modifier = Modifier.align(Alignment.CenterEnd)
                 ) {
                     Text(stringResource(R.string.login))
