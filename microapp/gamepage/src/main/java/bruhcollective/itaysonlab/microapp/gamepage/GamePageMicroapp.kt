@@ -4,21 +4,24 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import bruhcollective.itaysonlab.microapp.core.ComposableMicroappEntry
+import bruhcollective.itaysonlab.microapp.core.DestNode
+import bruhcollective.itaysonlab.microapp.core.mapArgs
 
 abstract class GamePageMicroapp : ComposableMicroappEntry {
-    override val microappRoute = "game/{$GAME_ID}"
+    override val microappRoute = InternalRoutes.Game.url
+    override val arguments: List<NamedNavArgument> = listOf(Arguments.GameId)
 
-    override val arguments: List<NamedNavArgument> =
-        listOf(
-            navArgument(GAME_ID) {
-                type = NavType.IntType
-                nullable = false
-            }
-        )
+    fun gameDestination(gameId: Int) = InternalRoutes.Game.mapArgs(mapOf(
+        Arguments.GameId to gameId
+    ))
 
-    companion object {
-        internal const val GAME_ID = "gameId"
+    internal object Arguments {
+        val GameId = navArgument("gameId") {
+            type = NavType.IntType
+        }
+    }
 
-        fun gameDestination(gameId: Int) = "game/${gameId}"
+    internal object InternalRoutes {
+        val Game = DestNode("game/{${Arguments.GameId.name}}")
     }
 }

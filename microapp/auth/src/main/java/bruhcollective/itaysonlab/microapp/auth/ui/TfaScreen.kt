@@ -30,11 +30,11 @@ import bruhcollective.itaysonlab.microapp.auth.R
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 fun TfaScreen(
-    viewModel: TfaScreenViewModel = hiltViewModel()
+    viewModel: TfaScreenViewModel = hiltViewModel(),
+    onSuccess: () -> Unit
 ) {
     val authPollSignIn = viewModel.authFlow.collectAsStateWithLifecycle(initialValue = false)
-    
-    val navController = LocalOuterNavigation.current
+
     val focusManager = LocalFocusManager.current
 
     val (code, setCode) = rememberSaveable { mutableStateOf("") }
@@ -42,13 +42,13 @@ fun TfaScreen(
     val authFunc = {
         viewModel.enterCode(
             code = code,
-            onSuccess = navController::onSuccess
+            onSuccess = onSuccess
         )
     }
 
     if (authPollSignIn.value) {
         LaunchedEffect(Unit) {
-            navController.onSuccess()
+            onSuccess()
         }
     }
 

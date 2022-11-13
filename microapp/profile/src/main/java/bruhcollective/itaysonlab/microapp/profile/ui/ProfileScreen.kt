@@ -69,8 +69,8 @@ internal fun ProfileScreen(
                             avatarFrameUrl = data.equipment.avatarFrame?.imageLarge,
                             personaName = data.miniProfile.personaName,
                             summary = data.summary,
-                            onLibraryClick = { onLibraryClick(data.steamID.steamId) },
-                            onFriendsClick = { onFriendsClick(data.steamID.steamId) },
+                            onLibraryClick = { onLibraryClick(viewModel.steamId.steamId) },
+                            onFriendsClick = { onFriendsClick(viewModel.steamId.steamId) },
                         )
                     }
 

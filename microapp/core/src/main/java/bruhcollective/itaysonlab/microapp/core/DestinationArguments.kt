@@ -1,5 +1,7 @@
 package bruhcollective.itaysonlab.microapp.core
 
+import androidx.navigation.NamedNavArgument
+
 @JvmInline
 value class DestNode(val url: String) {
     internal companion object {
@@ -7,8 +9,16 @@ value class DestNode(val url: String) {
     }
 }
 
-fun DestNode.map(arguments: Map<String, String>): String {
+fun DestNode.map(arguments: Map<String, Any>): String {
     return url.replace(DestNode.REGEX) { result ->
-        arguments[result.groupValues[1]]!!
+        arguments[result.groupValues[1]]!!.toString()
+    }
+}
+
+fun DestNode.mapArgs(arguments: Map<NamedNavArgument, Any>): String {
+    val argMap = arguments.mapKeys { it.key.name }
+
+    return url.replace(DestNode.REGEX) { result ->
+        argMap[result.groupValues[1]].toString()
     }
 }

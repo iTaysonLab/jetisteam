@@ -13,5 +13,5 @@ class GamePageViewModel @Inject constructor(
     private val savedState: SavedStateHandle
 ) : PageViewModel<GetGamePage.GamePage>() {
     init { reload() }
-    override suspend fun load() = getGamePage(savedState.get<Int>(GamePageMicroapp.GAME_ID) ?: 0)
+    override suspend fun load() = getGamePage(savedState.get<Int>(GamePageMicroapp.Arguments.GameId.name) ?: 0)
 }

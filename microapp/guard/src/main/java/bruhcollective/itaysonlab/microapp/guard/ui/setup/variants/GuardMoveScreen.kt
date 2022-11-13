@@ -15,7 +15,8 @@ import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenLoading
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.MoveTfaAfterSms
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.MoveTfaRequestSms
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
+import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
+import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
 import bruhcollective.itaysonlab.microapp.guard.ui.components.CodeRowState
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreenImpl
@@ -70,11 +71,11 @@ internal class GuardMoveViewModel @Inject constructor(
     private val moveTfaRequestSms: MoveTfaRequestSms,
     private val moveTfaAfterSms: MoveTfaAfterSms,
     savedStateHandle: SavedStateHandle
-): ViewModel() {
+) : ViewModel() {
     var smsState by mutableStateOf<SmsState>(SmsState.Awaiting)
         private set
 
-    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
+    val steamId = savedStateHandle.getSteamId()
 
     init {
         viewModelScope.launch {
@@ -93,26 +94,28 @@ internal class GuardMoveViewModel @Inject constructor(
         if (result.success == true) {
             val data = result.replacement_token!!
 
-            guardController.createInstance(steamId = steamId, configuration = GuardData(
-                shared_secret = data.shared_secret!!,
-                serial_number = data.serial_number!!,
-                revocation_code = data.revocation_code!!,
-                uri = data.uri!!,
-                server_time = data.server_time!!,
-                account_name = data.account_name!!,
-                token_gid = data.token_gid!!,
-                identity_secret = data.identity_secret!!,
-                secret_1 = data.secret_1!!,
-                steam_id = steamId.steamId,
-            ))
+            guardController.createInstance(
+                steamId = steamId, configuration = GuardData(
+                    shared_secret = data.shared_secret!!,
+                    serial_number = data.serial_number!!,
+                    revocation_code = data.revocation_code!!,
+                    uri = data.uri!!,
+                    server_time = data.server_time!!,
+                    account_name = data.account_name!!,
+                    token_gid = data.token_gid!!,
+                    identity_secret = data.identity_secret!!,
+                    secret_1 = data.secret_1!!,
+                    steam_id = steamId.steamId,
+                )
+            )
         }
 
         return result.success == true
     }
 
     sealed class SmsState {
-        object ReadyToEnter: SmsState()
-        object Awaiting: SmsState()
-        class Error(val exception: Exception): SmsState()
+        object ReadyToEnter : SmsState()
+        object Awaiting : SmsState()
+        class Error(val exception: Exception) : SmsState()
     }
 }

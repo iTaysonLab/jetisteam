@@ -8,10 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.controllers.CdnController
 import bruhcollective.itaysonlab.jetisteam.usecases.game.GetGameAchievementCard
-import bruhcollective.itaysonlab.jetisteam.util.CdnUrlUtil
 import bruhcollective.itaysonlab.microapp.core.ext.getProto
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.library.LibraryMicroappImpl
+import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import steam.player.CPlayer_GetOwnedGames_Response_Game
@@ -22,9 +21,9 @@ class OwnedGameBottomSheetViewModel @Inject constructor(
     savedState: SavedStateHandle,
     private val getGameAchievementCard: GetGameAchievementCard,
     private val cdnController: CdnController
-): ViewModel() {
-    private val steamId = savedState.getSteamId(LibraryMicroappImpl.InternalRoutes.ARG_STEAM_ID)
-    private val gameInfo = savedState.getProto<CPlayer_GetOwnedGames_Response_Game>(LibraryMicroappImpl.InternalRoutes.ARG_GAME_INFO)
+) : ViewModel() {
+    private val steamId = savedState.getSteamId()
+    private val gameInfo = savedState.getProto<CPlayer_GetOwnedGames_Response_Game>(LibraryMicroapp.Arguments.GameData.name)
 
     val longSteamId = steamId.steamId
     val appId = gameInfo.appid ?: 0
@@ -76,7 +75,11 @@ class OwnedGameBottomSheetViewModel @Inject constructor(
     private suspend fun loadAchievements() {
         achievementCardState = try {
             getGameAchievementCard(steamId, appId).let { prg ->
-                AchievementCardState.Ready(available = (prg.total ?: 0) > 0, formattedString = "${prg.unlocked} / ${prg.total}", percentage = (prg.percentage ?: 0f) / 100f)
+                AchievementCardState.Ready(
+                    available = (prg.total ?: 0) > 0,
+                    formattedString = "${prg.unlocked} / ${prg.total}",
+                    percentage = (prg.percentage ?: 0f) / 100f
+                )
             }
         } catch (e: Exception) {
             AchievementCardState.Error
@@ -84,13 +87,15 @@ class OwnedGameBottomSheetViewModel @Inject constructor(
     }
 
     sealed class AchievementCardState {
-        class Ready(val available: Boolean, val formattedString: String, val percentage: Float): AchievementCardState()
-        object Loading: AchievementCardState()
-        object Error: AchievementCardState()
+        class Ready(val available: Boolean, val formattedString: String, val percentage: Float) :
+            AchievementCardState()
+
+        object Loading : AchievementCardState()
+        object Error : AchievementCardState()
     }
 
     @JvmInline
-    value class BlurrableImageUrl (private val packed: Pair<String, Boolean>) {
+    value class BlurrableImageUrl(private val packed: Pair<String, Boolean>) {
         val url get() = packed.first
         val blur get() = packed.second
     }

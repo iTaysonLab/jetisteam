@@ -20,26 +20,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.uikit.components.*
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.GetFutureAuthSession
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.UpdateSessionWithMobileAuth
-import bruhcollective.itaysonlab.microapp.core.ext.getLongFromString
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
+import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
+import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
 import bruhcollective.itaysonlab.microapp.guard.utils.SessionFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okio.ByteString
-import okio.ByteString.Companion.toByteString
-import okio.buffer
-import okio.sink
-import okio.use
 import steam.auth.CAuthentication_GetAuthSessionInfo_Response
 import steam.auth.ESessionPersistence
-import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -218,8 +211,8 @@ internal class GuardConfirmSessionViewModel @Inject constructor(
     var isApproving by mutableStateOf(false)
     var isDenying by mutableStateOf(false)
 
-    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
-    val clientId = savedStateHandle.getLongFromString(GuardMicroappImpl.InternalRoutes.ARG_CLIENT_ID)
+    val steamId = savedStateHandle.getSteamId()
+    val clientId = savedStateHandle.get<Long>(GuardMicroapp.Arguments.ClientId.name)!!
 
     val guardInstance = guardController.getInstance(steamId) ?: error("Guard is not installed!")
 
@@ -231,7 +224,8 @@ internal class GuardConfirmSessionViewModel @Inject constructor(
 
     private suspend fun loadInfo() {
         state = State.Ready(getFutureAuthSession(clientId).also {
-            rememberPassword = it.requested_persistence == ESessionPersistence.k_ESessionPersistence_Persistent
+            rememberPassword =
+                it.requested_persistence == ESessionPersistence.k_ESessionPersistence_Persistent
         })
     }
 

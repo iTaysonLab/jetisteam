@@ -4,9 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
 import bruhcollective.itaysonlab.jetisteam.usecases.remote.GetRemoteMachineSummary
-import bruhcollective.itaysonlab.microapp.core.ext.getLongFromString
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.library.LibraryMicroappImpl
+import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,9 +14,9 @@ import javax.inject.Inject
 class RemoteMachineViewModel @Inject constructor(
     savedState: SavedStateHandle,
     private val getRemoteMachineSummary: GetRemoteMachineSummary
-): PageViewModel<GetRemoteMachineSummary.RemoteMachineSummary>() {
-    private val steamId = savedState.getSteamId(LibraryMicroappImpl.InternalRoutes.ARG_STEAM_ID)
-    private val machineId = savedState.getLongFromString(LibraryMicroappImpl.InternalRoutes.ARG_MACHINE_ID)
+) : PageViewModel<GetRemoteMachineSummary.RemoteMachineSummary>() {
+    private val steamId = savedState.getSteamId()
+    private val machineId = savedState.get<Long>(LibraryMicroapp.Arguments.MachineId.name)!!
 
     init {
         viewModelScope.launch {

@@ -38,9 +38,10 @@ import bruhcollective.itaysonlab.microapp.auth.R
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 internal fun AuthScreen(
-    viewModel: AuthScreenViewModel = hiltViewModel()
+    viewModel: AuthScreenViewModel = hiltViewModel(),
+    onProceedToNextStep: (Boolean) -> Unit,
+    onOpenDisclaimer: () -> Unit
 ) {
-    val navController = LocalOuterNavigation.current
     val autofill = LocalAutofill.current
     val focusManager = LocalFocusManager.current
 
@@ -54,7 +55,7 @@ internal fun AuthScreen(
         viewModel.auth(
             username = username,
             password = password,
-            onSuccess = navController::onPreauthSuccess
+            onSuccess = onProceedToNextStep
         )
     }
 
@@ -189,7 +190,7 @@ internal fun AuthScreen(
             ) {
                 OutlinedButton(
                     shape = RoundedCornerShape(8.dp),
-                    onClick = navController::openAuthDisclaimer,
+                    onClick = onOpenDisclaimer,
                     modifier = Modifier.align(Alignment.CenterStart),
                     colors = ButtonDefaults.outlinedButtonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant, contentColor = MaterialTheme.colorScheme.onSurface,)
                 ) {

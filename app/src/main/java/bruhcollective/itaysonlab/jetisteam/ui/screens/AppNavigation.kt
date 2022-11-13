@@ -60,7 +60,7 @@ fun AppNavigation(
             viewModel.destinations.find<GuardMicroapp>()
         } else {
             viewModel.destinations.find<AuthMicroapp>()
-        }.microappRoute
+        }.graphRoute
 
         navController.navigateRoot(startRoute)
     }
@@ -98,8 +98,8 @@ fun AppNavigation(
                         .navigationBarsPadding(),
                 ) {
                     viewModel.bottomNavDestinations.forEach { dest ->
-                        val selected = navController.backQueue.any {
-                            it.destination.route?.startsWith(dest.route) == true
+                        val selected = navController.backQueue.any { entry ->
+                            entry.destination.route?.startsWith(dest.route) == true
                         }
 
                         NavigationBarItem(
@@ -181,8 +181,9 @@ class AppNavigationViewModel @Inject constructor(
     private val steamSessionController: SteamSessionController,
     val destinations: Destinations,
 ) : ViewModel() {
-    val fullscreenDestinations = destinations
-        .map { it.value.fullscreenRoutes }
+    val fullscreenDestinations = destinations.values
+        .filterIsInstance<HasFullscreenRoutes>()
+        .map { it.fullscreenRoutes }
         .flatten()
         .distinct()
 

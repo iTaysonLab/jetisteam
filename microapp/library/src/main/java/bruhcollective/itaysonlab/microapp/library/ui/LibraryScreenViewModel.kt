@@ -15,7 +15,7 @@ import bruhcollective.itaysonlab.jetisteam.mappers.OwnedGame
 import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
 import bruhcollective.itaysonlab.jetisteam.usecases.GetProfileLibrary
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.library.LibraryMicroappImpl
+import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
 import bruhcollective.itaysonlab.microapp.library.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,8 +28,8 @@ import javax.inject.Inject
 internal class LibraryScreenViewModel @Inject constructor(
     private val getProfileLibrary: GetProfileLibrary,
     savedState: SavedStateHandle
-): PageViewModel<List<OwnedGame>>() {
-    private val steamId = savedState.getSteamId(LibraryMicroappImpl.InternalRoutes.ARG_STEAM_ID)
+) : PageViewModel<List<OwnedGame>>() {
+    private val steamId = savedState.getSteamId()
     private var oneOffJob: Job? = null
 
     var library by mutableStateOf(GetProfileLibrary.Library(emptyList(), emptyList()))
@@ -40,7 +40,9 @@ internal class LibraryScreenViewModel @Inject constructor(
 
     val longSteamId get() = steamId.steamId
 
-    init { reload() }
+    init {
+        reload()
+    }
 
     override suspend fun load() = withContext(Dispatchers.Default) {
         getProfileLibrary(steamId)
@@ -60,8 +62,12 @@ internal class LibraryScreenViewModel @Inject constructor(
                     .let { gameList ->
                         when (sortMode) {
                             SortMode.ByName -> gameList.sortedBy { it.proto.name }
-                            SortMode.ByPlaytime -> gameList.sortedByDescending { it.proto.playtime_forever ?: 0 }
-                            SortMode.ByLaunchDate -> gameList.sortedByDescending { it.proto.rtime_last_played ?: 0 }
+                            SortMode.ByPlaytime -> gameList.sortedByDescending {
+                                it.proto.playtime_forever ?: 0
+                            }
+                            SortMode.ByLaunchDate -> gameList.sortedByDescending {
+                                it.proto.rtime_last_played ?: 0
+                            }
                         }
                     }
             )
@@ -71,12 +77,21 @@ internal class LibraryScreenViewModel @Inject constructor(
     }
 
     enum class SortMode(@StringRes val nameRes: Int, val iconFunc: () -> ImageVector) {
-        ByName(R.string.library_sort_name, { androidx.compose.material.icons.Icons.Rounded.SortByAlpha }),
-        ByPlaytime(R.string.library_sort_time, { androidx.compose.material.icons.Icons.Rounded.Timer }),
-        ByLaunchDate(R.string.library_sort_date, { androidx.compose.material.icons.Icons.Rounded.History }),
+        ByName(
+            R.string.library_sort_name,
+            { androidx.compose.material.icons.Icons.Rounded.SortByAlpha }),
+        ByPlaytime(
+            R.string.library_sort_time,
+            { androidx.compose.material.icons.Icons.Rounded.Timer }),
+        ByLaunchDate(
+            R.string.library_sort_date,
+            { androidx.compose.material.icons.Icons.Rounded.History }),
     }
 
-    private inline fun <T> List<T>.filterIf(predicate: Boolean, crossinline func: (T) -> Boolean): List<T> {
+    private inline fun <T> List<T>.filterIf(
+        predicate: Boolean,
+        crossinline func: (T) -> Boolean
+    ): List<T> {
         return if (predicate) {
             this.filter(func)
         } else {

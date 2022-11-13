@@ -12,7 +12,8 @@ import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.GetFutureAuthSessi
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.UpdateSessionWithMobileAuth
 import bruhcollective.itaysonlab.jetisteam.util.Regexes
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
+import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
+import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
 import com.google.mlkit.vision.barcode.common.Barcode
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,9 +28,10 @@ class QrSignScreenViewModel @Inject constructor(
     private val updateSessionWithMobileAuth: UpdateSessionWithMobileAuth,
     savedStateHandle: SavedStateHandle,
     guardController: GuardController
-): ViewModel() {
-    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
-    private val guardInstance = guardController.getInstance(steamId) ?: error("GuardInstance is not available for use ${steamId.steamId}")
+) : ViewModel() {
+    val steamId = savedStateHandle.getSteamId()
+    private val guardInstance = guardController.getInstance(steamId)
+        ?: error("GuardInstance is not available for use ${steamId.steamId}")
     val username = guardInstance.username
 
     private var toDetectedJob: Job? = null
@@ -115,7 +117,8 @@ class QrSignScreenViewModel @Inject constructor(
                 steamId = steamId.steamId,
                 allow = allow,
                 signature = guardInstance.sgCreateSignature(version, clientId, steamId),
-                persistence = qrSessionInfo?.requested_persistence ?: ESessionPersistence.k_ESessionPersistence_Ephemeral
+                persistence = qrSessionInfo?.requested_persistence
+                    ?: ESessionPersistence.k_ESessionPersistence_Ephemeral
             )
 
             isProcessingLogin = LoginProcessState.Success

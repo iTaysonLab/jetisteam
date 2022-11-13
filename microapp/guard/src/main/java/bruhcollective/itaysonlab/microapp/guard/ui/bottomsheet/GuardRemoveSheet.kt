@@ -21,7 +21,8 @@ import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetLayout
 import bruhcollective.itaysonlab.jetisteam.uikit.components.ResizableCircularIndicator
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.RemoveSg
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
+import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
+import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -114,7 +115,7 @@ internal class GuardRemoveSheetViewModel @Inject constructor(
     private val guardController: GuardController,
     private val removeSg: RemoveSg
 ) : ViewModel() {
-    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
+    val steamId = savedStateHandle.getSteamId()
     val guardInstance = guardController.getInstance(steamId)!!
 
     var isRemoving by mutableStateOf(false)

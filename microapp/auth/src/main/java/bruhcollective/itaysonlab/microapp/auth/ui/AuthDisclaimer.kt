@@ -13,10 +13,10 @@ import bruhcollective.itaysonlab.microapp.auth.R
 
 @Composable
 internal fun AuthDisclaimer(
-    navController: NavController
+    onBackPressed: () -> Unit
 ) {
     AlertDialog(
-        onDismissRequest = { navController.popBackStack() },
+        onDismissRequest = onBackPressed,
         icon = {
             Icon(Icons.Rounded.Warning, null)
         },
@@ -27,7 +27,7 @@ internal fun AuthDisclaimer(
             Text(stringResource(id = R.string.auth_disclaimer_text))
         },
         confirmButton = {
-            TextButton(onClick = { navController.popBackStack() }) {
+            TextButton(onClick = onBackPressed) {
                 Text(stringResource(id = R.string.auth_disclaimer_confirm))
             }
         })

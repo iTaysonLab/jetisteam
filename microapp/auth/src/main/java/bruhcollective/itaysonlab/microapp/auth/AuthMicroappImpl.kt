@@ -1,50 +1,43 @@
 package bruhcollective.itaysonlab.microapp.auth
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.composable
 import androidx.navigation.compose.dialog
-import androidx.navigation.navigation
 import bruhcollective.itaysonlab.microapp.auth.ui.*
-import bruhcollective.itaysonlab.microapp.auth.ui.AuthDisclaimer
-import bruhcollective.itaysonlab.microapp.auth.ui.AuthScreen
-import bruhcollective.itaysonlab.microapp.auth.ui.LocalOuterNavigation
-import bruhcollective.itaysonlab.microapp.auth.ui.OuterNavigation
 import bruhcollective.itaysonlab.microapp.core.Destinations
+import bruhcollective.itaysonlab.microapp.core.find
+import bruhcollective.itaysonlab.microapp.core.mapArgs
+import bruhcollective.itaysonlab.microapp.profile.ProfileMicroapp
+import com.google.accompanist.navigation.animation.composable
 import javax.inject.Inject
 
 class AuthMicroappImpl @Inject constructor(): AuthMicroapp() {
     @OptIn(ExperimentalAnimationApi::class)
-    override fun NavGraphBuilder.navigation(
+    override fun NavGraphBuilder.buildGraph(
         navController: NavHostController,
         destinations: Destinations
     ) {
-        navigation(startDestination = microappRoute, route = InternalRoutes.NavGraph) {
-            composable(microappRoute) {
-                CompositionLocalProvider(LocalOuterNavigation provides OuterNavigation(navController, destinations)) {
-                    AuthScreen()
-                }
-            }
-
-            composable(InternalRoutes.TfaScreen) {
-                CompositionLocalProvider(LocalOuterNavigation provides OuterNavigation(navController, destinations)) {
-                    TfaScreen()
-                }
-            }
-
-            dialog(InternalRoutes.AuthDisclaimer) {
-                AuthDisclaimer(navController)
-            }
+        composable(InternalRoutes.MainScreen.url) {
+            AuthScreen(onOpenDisclaimer = {
+                navController.navigate(InternalRoutes.AuthDisclaimer.url)
+            }, onProceedToNextStep = { hasMobileAuth ->
+                navController.navigate(InternalRoutes.TfaScreen.mapArgs(mapOf(
+                    Arguments.MobileAuthEnabled to hasMobileAuth
+                )))
+            })
         }
-    }
 
-    internal object InternalRoutes {
-        const val ARG_MOBILE_ENABLED = "hasRemoteConfirmation"
+        composable(InternalRoutes.TfaScreen.url) {
+            TfaScreen(onSuccess = {
+                navController.navigate(
+                    destinations.find<ProfileMicroapp>().myProfileDestination()
+                )
+            })
+        }
 
-        const val NavGraph = "@auth"
-        const val TfaScreen = "auth/tfa/{${ARG_MOBILE_ENABLED}}"
-        const val AuthDisclaimer = "dialogs/authDisclaimer"
+        dialog(InternalRoutes.AuthDisclaimer.url) {
+            AuthDisclaimer(onBackPressed = navController::popBackStack)
+        }
     }
 }

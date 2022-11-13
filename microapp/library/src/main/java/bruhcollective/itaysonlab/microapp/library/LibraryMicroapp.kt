@@ -1,15 +1,41 @@
 package bruhcollective.itaysonlab.microapp.library
 
-import bruhcollective.itaysonlab.microapp.core.BottomNavigationCapable
-import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
-import bruhcollective.itaysonlab.microapp.core.map
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.GridView
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import bruhcollective.itaysonlab.microapp.core.*
+import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 
 abstract class LibraryMicroapp: NestedMicroappEntry, BottomNavigationCapable {
-    override val microappRoute = "library"
+    override val graphRoute = InternalRoutes.NavGraph
+    override val startDestination = InternalRoutes.Library.url
 
-    companion object {
-        fun libraryOf(steamId: Long) = LibraryMicroappImpl.InternalRoutes.Library.map(mapOf(
-            LibraryMicroappImpl.InternalRoutes.ARG_STEAM_ID to steamId.toString()
-        ))
+    override val bottomNavigationEntry = NavigationEntry(
+        route = InternalRoutes.NavGraph,
+        name = R.string.library,
+        icon = { Icons.Rounded.GridView }
+    )
+
+    fun libraryOf(steamId: Long) = InternalRoutes.Library.mapArgs(mapOf(
+        CommonArguments.SteamId to steamId
+    ))
+
+    internal object Arguments {
+        val MachineId = navArgument("machineId") {
+            type = NavType.LongType
+        }
+
+        val GameData = navArgument("gameData") {
+            type = NavType.StringType
+        }
+    }
+
+    internal object InternalRoutes {
+        const val NavGraph = "@library"
+
+        val Library = DestNode("library/{${CommonArguments.SteamId.name}}")
+        val GameDetail = DestNode("library/{${CommonArguments.SteamId.name}}/games/{${Arguments.GameData.name}}")
+        val RemoteMachineInfo = DestNode("library/{${CommonArguments.SteamId.name}}/machines/{${Arguments.MachineId.name}}")
     }
 }

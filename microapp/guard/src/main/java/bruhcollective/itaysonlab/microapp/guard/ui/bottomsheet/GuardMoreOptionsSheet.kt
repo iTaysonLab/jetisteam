@@ -15,7 +15,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetLayout
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
+import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
+import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -80,6 +81,6 @@ internal fun GuardMoreOptionsSheet(
 @HiltViewModel
 internal class GuardMoreOptionsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
-): ViewModel() {
-    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
+) : ViewModel() {
+    val steamId = savedStateHandle.getSteamId()
 }

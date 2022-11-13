@@ -16,7 +16,8 @@ import bruhcollective.itaysonlab.microapp.core.ext.getBase64
 import bruhcollective.itaysonlab.microapp.core.ext.getProto
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.core.ext.getString
-import bruhcollective.itaysonlab.microapp.guard.GuardMicroappImpl
+import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
+import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
 import bruhcollective.itaysonlab.microapp.guard.ui.components.CodeRowState
@@ -65,25 +66,33 @@ internal class GuardSetupViewModel @Inject constructor(
     private val guardController: GuardController,
     private val finalizeAddTfa: FinalizeAddTfa,
     savedStateHandle: SavedStateHandle
-): ViewModel() {
-    val steamId = savedStateHandle.getSteamId(GuardMicroappImpl.InternalRoutes.ARG_STEAM_ID)
+) : ViewModel() {
+    val steamId = savedStateHandle.getSteamId()
 
-    private val localGuardData = savedStateHandle.getProto<CTwoFactor_AddAuthenticator_Response>(GuardMicroappImpl.InternalRoutes.ARG_GC_DATA).let { data ->
-        GuardData(
-            shared_secret = data.shared_secret!!,
-            serial_number = data.serial_number!!,
-            revocation_code = data.revocation_code!!,
-            uri = data.uri!!,
-            server_time = data.server_time!!,
-            account_name = data.account_name!!,
-            token_gid = data.token_gid!!,
-            identity_secret = data.identity_secret!!,
-            secret_1 = data.secret_1!!,
-            steam_id = steamId.steamId,
+    private val localGuardData =
+        savedStateHandle.getProto<CTwoFactor_AddAuthenticator_Response>(GuardMicroapp.Arguments.GuardData.name)
+            .let { data ->
+                GuardData(
+                    shared_secret = data.shared_secret!!,
+                    serial_number = data.serial_number!!,
+                    revocation_code = data.revocation_code!!,
+                    uri = data.uri!!,
+                    server_time = data.server_time!!,
+                    account_name = data.account_name!!,
+                    token_gid = data.token_gid!!,
+                    identity_secret = data.identity_secret!!,
+                    secret_1 = data.secret_1!!,
+                    steam_id = steamId.steamId,
+                )
+            }
+
+    private val localGenerator by lazy {
+        guardController.createInstance(
+            steamId = steamId,
+            configuration = localGuardData,
+            save = false
         )
     }
-
-    private val localGenerator by lazy { guardController.createInstance(steamId = steamId, configuration = localGuardData, save = false) }
 
     suspend fun continueWithCode(code: String): Boolean {
         return finalizeAddTfa(steamId, code) {
