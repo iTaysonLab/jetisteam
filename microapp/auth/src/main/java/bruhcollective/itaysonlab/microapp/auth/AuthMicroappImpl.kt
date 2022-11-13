@@ -1,9 +1,10 @@
 package bruhcollective.itaysonlab.microapp.auth
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
+import com.google.accompanist.navigation.animation.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.navigation
 import bruhcollective.itaysonlab.microapp.auth.ui.*
@@ -15,6 +16,7 @@ import bruhcollective.itaysonlab.microapp.core.Destinations
 import javax.inject.Inject
 
 class AuthMicroappImpl @Inject constructor(): AuthMicroapp() {
+    @OptIn(ExperimentalAnimationApi::class)
     override fun NavGraphBuilder.navigation(
         navController: NavHostController,
         destinations: Destinations

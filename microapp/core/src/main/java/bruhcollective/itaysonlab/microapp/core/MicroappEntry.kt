@@ -1,11 +1,12 @@
 package bruhcollective.itaysonlab.microapp.core
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.*
-import androidx.navigation.compose.composable
+import com.google.accompanist.navigation.animation.composable
 
 typealias Destinations = Map<Class<out MicroappEntry>, @JvmSuppressWildcards MicroappEntry>
 
@@ -23,6 +24,7 @@ interface MicroappEntry {
 }
 
 interface ComposableMicroappEntry: MicroappEntry {
+    @OptIn(ExperimentalAnimationApi::class)
     fun NavGraphBuilder.composable(navController: NavHostController, destinations: Destinations) {
         composable(
             microappRoute, arguments, deepLinks

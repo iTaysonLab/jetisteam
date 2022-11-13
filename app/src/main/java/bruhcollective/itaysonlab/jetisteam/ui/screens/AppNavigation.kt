@@ -1,5 +1,7 @@
 package bruhcollective.itaysonlab.jetisteam.ui.screens
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,10 +17,10 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
 import bruhcollective.itaysonlab.microapp.core.*
@@ -27,19 +29,28 @@ import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
 import bruhcollective.itaysonlab.microapp.profile.ProfileMicroapp
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import soup.compose.material.motion.animation.materialSharedAxisXIn
+import soup.compose.material.motion.animation.materialSharedAxisXOut
+import soup.compose.material.motion.animation.rememberSlideDistance
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialNavigationApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialNavigationApi::class,
+    ExperimentalAnimationApi::class
+)
 @Composable
 fun AppNavigation(
     viewModel: AppNavigationViewModel = hiltViewModel()
 ) {
     val bottomSheetNavigator = rememberBottomSheetNavigator()
-    val navController = rememberNavController(bottomSheetNavigator)
+    val navController = rememberAnimatedNavController(bottomSheetNavigator)
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     LaunchedEffect(Unit) {
@@ -61,9 +72,9 @@ fun AppNavigation(
     }
 
     val navBarHeightDp = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-
     val navOffset by animateDpAsState(if (shouldHideNavigationBar) 80.dp + navBarHeightDp else 0.dp)
     val navOffsetReverse by animateDpAsState(if (!shouldHideNavigationBar) 80.dp + navBarHeightDp else 0.dp)
+    val slideDistance = rememberSlideDistance()
 
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
@@ -116,11 +127,27 @@ fun AppNavigation(
                 }
             }
         ) { padding ->
-            NavHost(
+            AnimatedNavHost(
                 navController = navController,
                 startDestination = "coreLoading",
                 route = ROOT_NAV_GRAPH_ID,
-                modifier = Modifier.padding(bottom = navOffsetReverse)
+                modifier = Modifier.padding(bottom = navOffsetReverse),
+                enterTransition = {
+                    viewModel.buildAnimation(this) { forwardDirection ->
+                        materialSharedAxisXIn(forward = forwardDirection, slideDistance = slideDistance)
+                    }
+                },
+                exitTransition = {
+                    viewModel.buildAnimation(this) { forwardDirection ->
+                        materialSharedAxisXOut(forward = forwardDirection, slideDistance = slideDistance)
+                    }
+                },
+                popEnterTransition = {
+                    materialSharedAxisXIn(forward = false, slideDistance = slideDistance)
+                },
+                popExitTransition = {
+                    materialSharedAxisXOut(forward = false, slideDistance = slideDistance)
+                }
             ) {
                 composable("coreLoading") {
                     // FullscreenLoading()
@@ -167,4 +194,21 @@ class AppNavigationViewModel @Inject constructor(
 
     fun signedIn() = steamSessionController.signedIn()
     fun mySteamId() = steamSessionController.steamId()
+
+    @OptIn(ExperimentalAnimationApi::class)
+    fun <T> buildAnimation(scope: AnimatedContentScope<NavBackStackEntry>, builder: (forwardDirection: Boolean) -> T): T {
+        val isRoute = getStartingRoute(scope.initialState.destination)
+        val tsRoute = getStartingRoute(scope.targetState.destination)
+
+        val isIndex = bottomNavDestinations.indexOfFirst { it.route == isRoute }
+        val tsIndex = bottomNavDestinations.indexOfFirst { it.route == tsRoute }
+
+        return builder(
+            tsIndex == -1 || isRoute == tsRoute || tsIndex > isIndex
+        )
+    }
+
+    private fun getStartingRoute(destination: NavDestination): String {
+        return destination.hierarchy.toList().let { it[it.lastIndex - 1] }.route.orEmpty()
+    }
 }

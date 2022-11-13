@@ -101,7 +101,7 @@ class QrSignScreenViewModel @Inject constructor(
         qrSessionInfo = getFutureAuthSession(qrData!!.sessionId)
     }
 
-    fun updateCurrentSignIn(allow: Boolean, invokeOnDone: () -> Unit) {
+    fun updateCurrentSignIn(allow: Boolean, invokeOnDone: (() -> Unit)?) {
         isProcessingLogin = LoginProcessState.Processing
         currentOperation = if (allow) CurrentOperation.Approve else CurrentOperation.Deny
 
@@ -128,8 +128,10 @@ class QrSignScreenViewModel @Inject constructor(
 
             delay(1000L)
 
-            withContext(Dispatchers.Main) {
-                invokeOnDone()
+            if (invokeOnDone != null) {
+                withContext(Dispatchers.Main) {
+                    invokeOnDone()
+                }
             }
 
             finishJob = null

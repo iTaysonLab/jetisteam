@@ -16,6 +16,10 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
@@ -24,6 +28,8 @@ import bruhcollective.itaysonlab.jetisteam.uikit.components.StateTonalButton
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.ui.qrsign.camerakit.CameraView
+import soup.compose.material.motion.animation.materialSharedAxisY
+import soup.compose.material.motion.animation.rememberSlideDistance
 import steam.auth.CAuthentication_GetAuthSessionInfo_Response
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +66,7 @@ fun QrSignScreen(
                         viewModel.updateCurrentSignIn(true, onBackClicked)
                     },
                     onDeny = {
-                        viewModel.updateCurrentSignIn(false, onBackClicked)
+                        viewModel.updateCurrentSignIn(false, null)
                     },
                     data = viewModel.qrSessionInfo,
                     guardAccountName = viewModel.username,
@@ -82,11 +88,13 @@ private fun QrSignDialog(
     processState: QrSignScreenViewModel.LoginProcessState,
     operation: QrSignScreenViewModel.CurrentOperation
 ) {
+    val slideDistance = rememberSlideDistance()
+
     AnimatedContent(targetState = data, transitionSpec = {
         if (data != null) {
-            slideInVertically { height -> height } + fadeIn() with slideOutVertically { height -> -height } + fadeOut()
+            materialSharedAxisY(forward = true, slideDistance = slideDistance)
         } else {
-            slideInVertically { height -> -height } + fadeIn() with slideOutVertically { height -> height } + fadeOut()
+            materialSharedAxisY(forward = false, slideDistance = slideDistance)
         }.using(
             SizeTransform(clip = false)
         )
@@ -104,6 +112,17 @@ private fun QrSignDialog(
                 Text(
                     stringResource(id = R.string.guard_qr_dialog_title),
                     style = MaterialTheme.typography.headlineSmall
+                )
+
+                Text(
+                    buildAnnotatedString {
+                        append(stringResource(id = R.string.guard_as))
+                        append(" ")
+                        withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                            append(guardAccountName)
+                        }
+                    },
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -144,7 +163,7 @@ private fun QrSignDialog(
                         shape = MaterialTheme.shapes.medium,
                         inLoadingState = operation == QrSignScreenViewModel.CurrentOperation.Approve
                     ) {
-                        Text(stringResource(id = R.string.guard_qr_dialog_action, guardAccountName))
+                        Text(stringResource(id = R.string.guard_qr_dialog_action))
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
