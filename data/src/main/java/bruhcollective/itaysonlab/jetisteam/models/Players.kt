@@ -21,11 +21,11 @@ class Player(
     val avatarhash: String,
     val lastlogoff: Long,
     val timecreated: Long,
-    val loccountrycode: String,
+    val loccountrycode: String?,
     val primaryclanid: String,
     val realname: String?,
     val gameextrainfo: String?,
-    val gameid: Int?
+    val gameid: Long?
 ) {
     val steamId get() = SteamID(steamid.toLong())
 }

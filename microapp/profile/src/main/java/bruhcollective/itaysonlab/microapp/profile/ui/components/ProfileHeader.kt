@@ -1,7 +1,5 @@
 package bruhcollective.itaysonlab.microapp.profile.ui.components
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
@@ -28,6 +26,7 @@ internal fun ProfileHeader(
     personaName: String,
     summary: ProfileSummary?,
     onLibraryClick: () -> Unit,
+    onFriendsClick: () -> Unit,
 ) {
     val theme = LocalSteamTheme.current
 
@@ -78,12 +77,21 @@ internal fun ProfileHeader(
                 )
             }
 
-            Text(text = personaName, fontSize = 21.sp, modifier = Modifier.padding(horizontal = 16.dp), color = Color.White)
+            Text(
+                text = personaName,
+                fontSize = 21.sp,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                color = Color.White,
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             if (summary != null) {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(horizontal = 16.dp), modifier = Modifier.fillMaxWidth().height(40.dp)) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    modifier = Modifier.fillMaxWidth().height(40.dp),
+                ) {
                     item {
                         Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
                             containerColor = theme.btnBackground,
@@ -94,7 +102,7 @@ internal fun ProfileHeader(
                     }
 
                     item {
-                        Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
+                        Button(onClick = onFriendsClick, colors = ButtonDefaults.buttonColors(
                             containerColor = theme.btnBackground.copy(alpha = 0.5f),
                             contentColor = Color.White
                         ), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {

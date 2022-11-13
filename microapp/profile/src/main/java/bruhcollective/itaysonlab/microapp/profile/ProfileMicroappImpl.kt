@@ -10,10 +10,10 @@ import com.google.accompanist.navigation.animation.composable
 import androidx.navigation.navigation
 import bruhcollective.itaysonlab.microapp.core.Destinations
 import bruhcollective.itaysonlab.microapp.core.NavigationEntry
-import bruhcollective.itaysonlab.microapp.core.find
 import bruhcollective.itaysonlab.microapp.gamepage.GamePageMicroapp
 import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
 import bruhcollective.itaysonlab.microapp.profile.ui.ProfileScreen
+import bruhcollective.itaysonlab.microapp.profile.ui.screens.friends.FriendsScreen
 import javax.inject.Inject
 
 class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
@@ -22,14 +22,30 @@ class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
         navController: NavHostController,
         destinations: Destinations
     ) {
-        navigation(startDestination = microappRoute, route = InternalRoutes.NavGraph) {
-            composable(microappRoute) {
+        navigation(startDestination = myProfileDestination(), route = InternalRoutes.NavGraph) {
+            composable(InternalRoutes.Profile) {
                 ProfileScreen(
                     onGameClick = { appId ->
                         navController.navigateToGame(destinations, appId)
                     }, onLibraryClick = { steamId ->
                         navController.navigate(LibraryMicroapp.libraryOf(steamId))
-                    }
+                    }, onFriendsClick = { steamId ->
+                        navController.navigate(
+                            friendsDestination(steamId)
+                        )
+                    }, onBackClick = if (navController.backQueue.size > 3) {
+                        { navController.popBackStack() }
+                    } else null
+                )
+            }
+
+            composable(InternalRoutes.Friends) {
+                FriendsScreen(
+                    onFriendClick = { steamId ->
+                        navController.navigate(
+                            profileDestination(steamId)
+                        )
+                    }, onBackClick = navController::popBackStack
                 )
             }
         }
@@ -48,6 +64,10 @@ class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
     object InternalRoutes {
         const val NavGraph = "@profile"
 
-        const val ARG_ID = "id"
+        const val ARG_ID = "steam_id"
+        const val ARG_MY_PROFILE = "my"
+
+        const val Profile = "profile/{$ARG_ID}"
+        const val Friends = "profile/{$ARG_ID}/friends"
     }
 }

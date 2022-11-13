@@ -19,7 +19,7 @@ internal class OuterNavigation(
 
     fun onSuccess() {
         controller.navigate(
-            destinations.find<ProfileMicroapp>().microappRoute
+            destinations.find<ProfileMicroapp>().myProfileDestination()
         )
     }
 
