@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.microapp.gamepage.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.surfaceColorAtElevation
@@ -31,6 +32,7 @@ internal fun GamePageMediaContainer(
         Modifier
             .fillMaxWidth()
             .height(200.dp)
+            .clip(MaterialTheme.shapes.large.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp)))
     ) {
         HorizontalPager(count = urls.size, state = pagerState) { page ->
             AsyncImage(

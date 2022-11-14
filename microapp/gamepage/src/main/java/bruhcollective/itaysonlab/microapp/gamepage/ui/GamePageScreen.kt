@@ -1,11 +1,10 @@
 package bruhcollective.itaysonlab.microapp.gamepage.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
@@ -13,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -37,7 +37,10 @@ internal fun GamePageScreen(
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(data.fullDetails.name, modifier = Modifier.alpha(alpha = topAppBarState.overlappedFraction))
+                        Text(
+                            data.fullDetails.name,
+                            modifier = Modifier.alpha(alpha = topAppBarState.overlappedFraction)
+                        )
                     },
                     scrollBehavior = scrollBehavior,
                     colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -97,16 +100,34 @@ internal fun GamePageScreen(
                 }
 
                 item {
+                    Spacer(Modifier.height(16.dp))
+
                     GamePageDescription(
                         html = data.fullDescription,
                         modifier = Modifier
+                            .clip(MaterialTheme.shapes.large)
                             .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
                             .padding(16.dp)
                     )
+
+                    Spacer(Modifier.height(16.dp))
                 }
 
                 item {
-                    Column(Modifier.padding(horizontal = 16.dp)) {
+                    Column(
+                        Modifier
+                            .clip(
+                                MaterialTheme.shapes.large.copy(
+                                    bottomStart = CornerSize(0.dp),
+                                    bottomEnd = CornerSize(0.dp)
+                                )
+                            )
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 16.dp, bottom = 8.dp)
+                    ) {
                         Text(
                             text = stringResource(id = R.string.gamepage_reviews),
                             color = MaterialTheme.colorScheme.onSurface,
@@ -114,7 +135,12 @@ internal fun GamePageScreen(
                         )
 
                         Text(
-                            text = stringResource(id = R.string.gamepage_reviews_desc, data.reviews.summary?.reviewScoreDesc ?: "", data.reviews.summary?.positiveReviews ?: 0, data.reviews.summary?.negativeReviews ?: 0),
+                            text = stringResource(
+                                id = R.string.gamepage_reviews_desc,
+                                data.reviews.summary?.reviewScoreDesc ?: "",
+                                data.reviews.summary?.positiveReviews ?: 0,
+                                data.reviews.summary?.negativeReviews ?: 0
+                            ),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 13.sp
                         )
@@ -122,7 +148,12 @@ internal fun GamePageScreen(
                 }
 
                 items(data.reviews.reviews) { review ->
-                    GamePageReview(review = review, modifier = Modifier.padding(16.dp))
+                    GamePageReview(
+                        review = review,
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
                 }
             }
         }
