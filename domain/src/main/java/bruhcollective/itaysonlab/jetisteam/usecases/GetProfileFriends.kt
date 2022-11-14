@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.jetisteam.usecases
 
-import android.util.Log
 import bruhcollective.itaysonlab.jetisteam.mappers.FriendProfile
 import bruhcollective.itaysonlab.jetisteam.repository.FriendsRepository
 import bruhcollective.itaysonlab.jetisteam.service.ApiService
@@ -15,7 +14,6 @@ class GetProfileFriends @Inject constructor(
 
     suspend operator fun invoke() = withContext(Dispatchers.Default) {
         friendsRepository.getFriendsList().friendslist?.let {
-            Log.i("GetFriends", it.friends.toString())
             apiService.resolvePlayers(
                 it.friends.filter { f -> f.efriendrelationship == 3 }
                     .map { f -> f.ulfriendid }.joinToString(separator = ",")

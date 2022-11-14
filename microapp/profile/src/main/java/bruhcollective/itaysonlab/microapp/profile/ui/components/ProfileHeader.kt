@@ -6,25 +6,37 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import bruhcollective.itaysonlab.jetisteam.mappers.FriendStatus
 import bruhcollective.itaysonlab.jetisteam.mappers.ProfileSummary
+import bruhcollective.itaysonlab.jetisteam.mappers.toFriendStatus
+import bruhcollective.itaysonlab.jetisteam.models.Player
+import bruhcollective.itaysonlab.microapp.profile.R
 import bruhcollective.itaysonlab.microapp.profile.ui.LocalSteamTheme
+import bruhcollective.itaysonlab.microapp.profile.ui.screens.friends.FriendGroups
+import bruhcollective.itaysonlab.microapp.profile.ui.screens.friends.toLastSeenDate
+import bruhcollective.itaysonlab.microapp.profile.ui.screens.friends.toStringRes
 import coil.compose.AsyncImage
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun ProfileHeader(
     backgroundUrl: String?,
     avatarUrl: String?,
     avatarFrameUrl: String?,
-    personaName: String,
     summary: ProfileSummary?,
+    profile: Player,
     onLibraryClick: () -> Unit,
     onFriendsClick: () -> Unit,
 ) {
@@ -78,10 +90,25 @@ internal fun ProfileHeader(
             }
 
             Text(
-                text = personaName,
+                text = profile.personaname,
                 fontSize = 21.sp,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 color = Color.White,
+            )
+
+            val friendStatus = remember(profile) {
+                profile.personastate.toFriendStatus(profile)
+            }
+
+            Text(
+                text = when {
+                    profile.gameid != null -> "Playing ${profile.gameextrainfo.orEmpty()}"
+                    friendStatus is FriendStatus.Offline -> stringResource(id = R.string.friends_offline_last_seen, friendStatus.lastLogoff.toLastSeenDate())
+                    else -> stringResource(id = friendStatus.toStringRes())
+                },
+                fontSize = 16.sp,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                color = Color.White.copy(alpha = 0.7f),
             )
 
             Spacer(modifier = Modifier.height(12.dp))

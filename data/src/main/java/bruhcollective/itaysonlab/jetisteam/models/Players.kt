@@ -25,7 +25,7 @@ class Player(
     val primaryclanid: String,
     val realname: String?,
     val gameextrainfo: String?,
-    val gameid: Long?
+    val gameid: Int?
 ) {
     val steamId get() = SteamID(steamid.toLong())
 }

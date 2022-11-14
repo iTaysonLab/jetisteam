@@ -30,57 +30,57 @@ internal fun FriendListItem(
     friend: FriendProfile,
     onFriendClick: (Long) -> Unit,
 ) {
-    with(friend) {
-        Box(modifier = Modifier
-            .clip(CardDefaults.shape)
-            .clickable { onFriendClick(steamId) }
-            .padding(4.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                AsyncImage(
-                    model = avatarUrl,
-                    contentDescription = null,
+    Box(modifier = Modifier
+        .padding(horizontal = 16.dp)
+        .clip(CardDefaults.shape)
+        .clickable { onFriendClick(friend.steamId) }
+        .padding(4.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            AsyncImage(
+                model = friend.avatarUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(48.dp)
+                    .border(2.dp, group.color, CardDefaults.shape)
+                    .clip(CardDefaults.shape),
+                contentScale = ContentScale.Crop,
+            )
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()) {
+                Text(
+                    text = friend.name,
+                    fontSize = 16.sp,
+                    lineHeight = 22.sp,
                     modifier = Modifier
-                        .size(48.dp)
-                        .border(2.dp, group.color, CardDefaults.shape)
-                        .clip(CardDefaults.shape),
-                    contentScale = ContentScale.Crop,
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    fontWeight = FontWeight.SemiBold,
                 )
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()) {
-                    Text(
-                        text = friend.name,
-                        fontSize = 16.sp,
-                        lineHeight = 22.sp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        fontWeight = FontWeight.SemiBold,
-                    )
 
-                    val statusText = when(group) {
-                        FriendGroups.PLAYING -> playingGame!!.name
-                        FriendGroups.ONLINE -> stringResource(id = status.toStringRes())
-                        FriendGroups.OFFLINE -> stringResource(
-                            id = R.string.friends_offline_last_seen,
-                            (status as FriendStatus.Offline).lastLogoff.toLastSeenDate()
-                        )
-                    }
-                    Text(
-                        text = statusText,
-                        fontSize = 14.sp,
-                        lineHeight = 18.sp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+                val statusText = when (group) {
+                    FriendGroups.PLAYING -> friend.playingGame!!.name
+                    FriendGroups.ONLINE -> stringResource(id = friend.status.toStringRes())
+                    FriendGroups.OFFLINE -> stringResource(
+                        id = R.string.friends_offline_last_seen,
+                        (friend.status as FriendStatus.Offline).lastLogoff.toLastSeenDate()
                     )
                 }
+
+                Text(
+                    text = statusText,
+                    fontSize = 14.sp,
+                    lineHeight = 18.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
             }
         }
     }
 }
 
-private fun FriendStatus.toStringRes() = when (this) {
+fun FriendStatus.toStringRes() = when (this) {
         FriendStatus.Online -> R.string.friends_status_online
         FriendStatus.Busy -> R.string.friends_status_busy
         FriendStatus.Away -> R.string.friends_status_away
@@ -92,7 +92,7 @@ private fun FriendStatus.toStringRes() = when (this) {
 
 @ExperimentalComposeUiApi
 @Composable
-private fun Long.toLastSeenDate(): String {
+fun Long.toLastSeenDate(): String {
     val date = LocalDateTime.ofInstant(Instant.ofEpochSecond(this), ZoneId.systemDefault())
     val currentDate = LocalDateTime.now()
     val timeDiff = Duration.between(date, currentDate)

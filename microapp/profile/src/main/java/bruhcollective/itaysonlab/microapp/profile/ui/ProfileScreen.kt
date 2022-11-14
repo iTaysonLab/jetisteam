@@ -42,7 +42,7 @@ internal fun ProfileScreen(
             Scaffold(topBar = {
                 TopAppBar(title = {
 
-                }, scrollBehavior = tas, colors = TopAppBarDefaults.smallTopAppBarColors(
+                }, scrollBehavior = tas, colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     actionIconContentColor = Color.White,
                 ), actions = {
@@ -65,9 +65,9 @@ internal fun ProfileScreen(
                     item {
                         ProfileHeader(
                             backgroundUrl = data.equipment.background?.imageLarge,
-                            avatarUrl = data.miniProfile.avatarUrl,
+                            avatarUrl = data.playerProfile.avatarfull,
                             avatarFrameUrl = data.equipment.avatarFrame?.imageLarge,
-                            personaName = data.miniProfile.personaName,
+                            profile = data.playerProfile,
                             summary = data.summary,
                             onLibraryClick = { onLibraryClick(viewModel.steamId.steamId) },
                             onFriendsClick = { onFriendsClick(viewModel.steamId.steamId) },

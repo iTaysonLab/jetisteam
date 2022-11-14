@@ -1,6 +1,8 @@
 package bruhcollective.itaysonlab.jetisteam.ui.screens
 
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -133,13 +135,21 @@ fun AppNavigation(
                 route = ROOT_NAV_GRAPH_ID,
                 modifier = Modifier.padding(bottom = navOffsetReverse),
                 enterTransition = {
-                    viewModel.buildAnimation(this) { forwardDirection ->
-                        materialSharedAxisXIn(forward = forwardDirection, slideDistance = slideDistance)
+                    if (initialState.destination.route == "coreLoading") {
+                        EnterTransition.None
+                    } else {
+                        viewModel.buildAnimation(this) { forwardDirection ->
+                            materialSharedAxisXIn(forward = forwardDirection, slideDistance = slideDistance)
+                        }
                     }
                 },
                 exitTransition = {
-                    viewModel.buildAnimation(this) { forwardDirection ->
-                        materialSharedAxisXOut(forward = forwardDirection, slideDistance = slideDistance)
+                    if (initialState.destination.route == "coreLoading") {
+                        ExitTransition.None
+                    } else {
+                        viewModel.buildAnimation(this) { forwardDirection ->
+                            materialSharedAxisXOut(forward = forwardDirection, slideDistance = slideDistance)
+                        }
                     }
                 },
                 popEnterTransition = {

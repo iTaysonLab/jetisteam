@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetisteam.uikit.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.surfaceColorAtElevation
@@ -13,7 +14,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun RoundedPage(
     modifier: Modifier,
-    content: @Composable () -> Unit
+    content: @Composable BoxScope.() -> Unit
 ) {
     Box(
         modifier

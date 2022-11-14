@@ -13,6 +13,4 @@ class UserService @Inject constructor(
     suspend fun resolveUsers(steamIds: List<Long>): Map<SteamID, Player> {
         return apiService.resolvePlayers(steamIds.joinToString(",")).players.associateBy { it.steamId }
     }
-
-    private fun key(steamId: Long) = "steam.profiles.$steamId"
 }

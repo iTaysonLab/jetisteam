@@ -19,7 +19,7 @@ class FriendProfile(
 
 }
 
-class GameInfo(val id: Long, val name: String)
+class GameInfo(val id: Int, val name: String)
 
 sealed class FriendStatus {
     class Offline(val lastLogoff: Long) : FriendStatus()

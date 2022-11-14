@@ -147,6 +147,94 @@ object SteamColors {
             btnBackground = Color(0xFF40245c),
             btnOutline = Color(0xFF603689)
         ),
+
+        "WinterProfile2020Theme" to ColorTheme(
+            gradientBackground = Color(0x34526F88),
+            colorShowcaseHeader = Color(0xFF07817f),
+            gradientShowcaseHeaderLeft = Color(0xFF34526F),
+            btnBackground = Color(0xFF34526F),
+            btnOutline = Color(0xFF34526F)
+        ),
+
+        "GoldenWeekProfile2021Theme" to ColorTheme(
+            gradientBackground = Color(0x134061aa),
+            colorShowcaseHeader = Color(0xFF389bb0),
+            gradientShowcaseHeaderLeft = Color(0xFF2c5e83),
+            btnBackground = Color(0xFF2c5e83),
+            btnOutline = Color(0xFF2c5e83)
+        ),
+
+        "Summer2021Theme" to ColorTheme(
+            gradientBackground = Color(0xFF344f68),
+            colorShowcaseHeader = Color(0xb03849a1),
+            gradientShowcaseHeaderLeft = Color(0xFF2e6986),
+            btnBackground = Color(0xFF309186),
+            btnOutline = Color(0xFF2c5e83)
+        ),
+
+        "GreenSlimeTheme" to ColorTheme(
+            gradientBackground = Color(35, 58, 26, alpha(0.58f)),
+            colorShowcaseHeader = Color(0xFF1b2612),
+            gradientShowcaseHeaderLeft = Color(0xFF718d2e),
+            btnBackground = Color(0xFF212d14),
+            btnOutline = Color(0xFF566d25)
+        ),
+
+        "GhostTheme" to ColorTheme(
+            gradientBackground = Color(93, 123, 137, alpha = alpha(0.32f)),
+            colorShowcaseHeader = Color(69, 32, 46),
+            gradientShowcaseHeaderLeft = Color(93, 123, 136),
+            btnBackground = Color(93, 122, 135),
+            btnOutline = Color(126, 126, 126)
+        ),
+
+        "ColorNightmareTheme" to ColorTheme(
+            gradientBackground = Color(58, 183, 180, alpha = alpha(0.51f)),
+            colorShowcaseHeader = Color(57, 144, 152),
+            gradientShowcaseHeaderLeft = Color(198, 96, 50),
+            btnBackground = Color(45, 114, 123),
+            btnOutline = Color(196, 96, 50)
+        ),
+
+        "MurugiahTheme" to ColorTheme(
+            gradientBackground = Color(84, 75, 158),
+            colorShowcaseHeader = Color(11, 160, 232),
+            gradientShowcaseHeaderLeft = Color(11, 160, 232),
+            btnBackground = Color(225, 69, 40),
+            btnOutline = Color(225, 69, 40)
+        ),
+
+        "Winter2021Theme" to ColorTheme(
+            gradientBackground = Color(22, 77, 81, alpha = alpha(0.88f)),
+            colorShowcaseHeader = Color(184, 99, 69),
+            gradientShowcaseHeaderLeft = Color(207, 132, 36),
+            btnBackground = Color(184, 99, 69),
+            btnOutline = Color(196, 96, 50)
+        ),
+
+        "Lunar2022Theme" to ColorTheme(
+            gradientBackground = Color(58, 44, 122, alpha = alpha(0.83f)),
+            colorShowcaseHeader = Color(86, 62, 173),
+            gradientShowcaseHeaderLeft = Color(234, 101, 69),
+            btnBackground = Color(86, 62, 173),
+            btnOutline = Color(173, 85, 113)
+        ),
+
+        "SteamDeckTheme" to ColorTheme(
+            gradientBackground = Color.Black,
+            colorShowcaseHeader = Color(149, 1, 169, alpha = alpha(0.19f)),
+            gradientShowcaseHeaderLeft = Color(87, 89, 123),
+            btnBackground = Color(29, 10, 25),
+            btnOutline = Color(29, 10, 25)
+        ),
+
+        "Steam3000Theme" to ColorTheme(
+            gradientBackground = Color.Black,
+            colorShowcaseHeader = Color(231, 196, 52),
+            gradientShowcaseHeaderLeft = Color(239, 0, 255),
+            btnBackground = Color.Black,
+            btnOutline = Color.Black
+        ),
     )
 
     fun getColorTheme(id: String) = registeredThemes[id] ?: default()
@@ -162,150 +250,3 @@ object SteamColors {
 
     private fun alpha(prcnt: Float): Int = (prcnt * 255f).toInt()
 }
-
-/*
-
-body.WinterProfile2020Theme {
-	--gradient-right: #7770A988;
-    --gradient-left: #34526F88;
-    --gradient-background: #34526F88;
-	--gradient-background-right: rgba(25, 20, 65, 0.333);
-	--gradient-background-left: rgba(3, 7, 12, 0.333);
-	--color-showcase-header: #07817f;
-    --gradient-showcase-header-left: #34526F;
-	--btn-background: #34526F;
-    --btn-background-hover: rgb(54, 104, 151);
-	--btn-outline: #34526F;
-}
-
-body.GoldenWeekProfile2021Theme {
-    --gradient-right: #389bb0aa;
-    --gradient-left: #2c5e83aa;
-    --gradient-background: #134061aa;
-    --gradient-background-right: #389bb066;
-    --gradient-background-left: #2c5e8333;
-    --color-showcase-header: #389bb0;
-    --gradient-showcase-header-left: #2c5e83;
-    --btn-background: #2c5e83;
-    --btn-background-hover: #1b6daa;
-    --btn-outline: #2c5e83;
-}
-
-body.Summer2021Theme {
-    --gradient-right: #344f68;
-    --gradient-left: #ee3b57b8;
-    --gradient-background: #000000cc;
-    --gradient-background-right: #c1ad4c52;
-    --gradient-background-left: #2e6ea2a3;
-    --color-showcase-header: #b03849a1;
-    --gradient-showcase-header-left: #2e6986;
-    --btn-background: #309186;
-    --btn-background-hover: #3aa89c;
-    --btn-outline: #2c5e83;
-}
-
-/* Halloween 2021 */
-body.GreenSlimeTheme {
-	--gradient-right: rgb(254 249 156 / 30%);
-    --gradient-left: rgb(98 145 152 / 34%);
-    --gradient-background: rgb(35 58 26 / 58%);
-    --gradient-background-right: rgb(0 0 0);
-    --gradient-background-left: rgb(0 0 0);
-    --color-showcase-header: rgb(27 38 18);
-    --gradient-showcase-header-left: rgb(113 141 46);
-    --btn-background: rgb(33 45 20);
-    --btn-background-hover: rgb(80 101 35);
-    --btn-outline: rgb(86 109 37);
-}
-
-body.GhostTheme {
-	--gradient-right: rgb(82 64 83 / 52%);
-    --gradient-left: rgb(3 3 4 / 46%);
-    --gradient-background: rgb(93 123 137 / 32%);
-    --gradient-background-right: rgb(72 31 46);
-    --gradient-background-left: rgb(0 0 0);
-    --color-showcase-header: rgb(69 32 46);
-    --gradient-showcase-header-left: rgb(93 123 136);
-    --btn-background: rgb(93 122 135);
-    --btn-background-hover: rgb(112 151 169);
-    --btn-outline: rgb(126 126 126 / 27%);
-}
-
-body.ColorNightmareTheme {
-	--gradient-right: rgb(58 183 180 / 51%);
-    --gradient-left: rgb(243 106 9 / 25%);
-    --gradient-background: rgb(0 0 0 / 50%);
-    --gradient-background-right: rgb(0 0 0);
-    --gradient-background-left: rgb(9 243 217 / 33%);
-    --color-showcase-header: rgb(57 144 152 / 61%);
-    --gradient-showcase-header-left: rgb(198 96 50);
-    --btn-background: rgb(45 114 123);
-    --btn-background-hover: rgb(196 96 50);
-    --btn-outline: rgb(196 96 50);
-}
-
-body.MurugiahTheme {
-	--gradient-right: rgb(84 75 158);
-    --gradient-left: rgb(84 75 158);
-    --gradient-background: rgb(84 75 158);
-    --gradient-background-right: rgb(84 75 158);
-    --gradient-background-left: rgb(84 75 158);
-    --color-showcase-header: rgb(11 160 232);
-    --gradient-showcase-header-left: rgb(11 160 232);
-    --btn-background: rgb(225 69 40);
-    --btn-background-hover: rgb(145 181 69);
-    --btn-outline: rgb(225 69 40);
-}
-
-body.Winter2021Theme {
-	--gradient-right: rgb(87 136 137 / 14%);
-    --gradient-left: rgb(157 204 199 / 35%);
-    --gradient-background: rgb(22 77 81 / 88%);
-    --gradient-background-right: rgb(95 165 155 / 15%);
-    --gradient-background-left: rgb(9 243 217 / 33%);
-    --color-showcase-header: rgb(184 99 69);
-    --gradient-showcase-header-left: rgb(207 132 36);
-    --btn-background: rgb(184 99 69);
-    --btn-background-hover: rgb(206 131 36);
-    --btn-outline: rgb(196 96 50);
-}
-
-body.Lunar2022Theme {
-	--gradient-right: rgb(232 63 12 / 78%);
-    --gradient-left: rgb(239 65 12);
-    --gradient-background: rgb(58 44 122 / 83%);
-    --gradient-background-right: rgb(135 25 2 / 65%);
-    --gradient-background-left: rgb(211 72 31 / 60%);
-    --color-showcase-header: rgb(86 62 173);
-    --gradient-showcase-header-left: rgb(234 101 69);
-    --btn-background: rgb(86 62 173);
-    --btn-background-hover: rgb(146 78 131);
-    --btn-outline: rgb(173 85 113);
-}
-
-body.SteamDeckTheme {
-	--gradient-right: transparent;
-    --gradient-left: transparent;
-    --gradient-background: transparent;
-    --gradient-background-right: transparent;
-    --gradient-background-left: transparent;
-    --color-showcase-header: rgb(149 1 169 / 19%);
-    --gradient-showcase-header-left: rgb(87 89 123 / 0%);
-    --btn-background: rgb(29 10 25 / 10%);
-    --btn-background-hover: rgb(175 52 149 / 21%);
-    --btn-outline: rgb(29 10 25 / 0%);
-}
-
-body.Steam3000Theme {
---gradient-right: rgba(0, 0, 0, 0);
---gradient-left: rgba(0, 0, 0, 0);
---gradient-background: rgba(0, 0, 0, 0);
---gradient-background-right: rgba(0, 0, 0, 0);
---gradient-background-left: rgba(0, 0, 0, 0);
---color-showcase-header: rgb(231 196 52);
---gradient-showcase-header-left: rgb(239 0 255);
---btn-background: rgba(0, 0, 0, 0);
---btn-background-hover: rgb(46, 46, 46);
---btn-outline: rgba(0, 0, 0, 0);
-}
- */
