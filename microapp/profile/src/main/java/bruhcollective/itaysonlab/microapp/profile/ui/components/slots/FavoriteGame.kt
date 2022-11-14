@@ -29,9 +29,10 @@ internal fun FavoriteGame(
 
         FavoriteGameModel(
             name = data.first.name!!,
-            playtimeForever = data.first.playtime_forever!!,
+            playtimeForever = data.first.playtime_forever,
             achievementPercentage = data.second.percentage!! / 100f,
-            achievementString = "${data.second.unlocked} of ${data.second.total}"
+            achievementString = "${data.second.unlocked} of ${data.second.total}",
+            hasAchievements = data.second.total != null && data.second.total != 0
         )
     }
 
@@ -42,7 +43,7 @@ internal fun FavoriteGame(
             .padding(16.dp)) {
         AsyncImage(
             model = remember(id) {
-                CdnUrlUtil.buildAppUrl(id, "capsule_467x181.jpg")
+                CdnUrlUtil.buildAppUrl(id, "capsule_616x353.jpg")
             },
             contentDescription = null,
             modifier = Modifier.height(96.dp),
@@ -53,27 +54,32 @@ internal fun FavoriteGame(
 
         Text(text = content.name, color = Color.White, fontSize = 21.sp)
 
-        Text(text = remember(content.playtimeForever) {
-            "${content.playtimeForever / 60} hours played"
-        }, color = Color.White.copy(alpha = 0.7f), fontSize = 16.sp)
+        if (content.playtimeForever != null && content.playtimeForever != 0) {
+            Text(text = remember(content.playtimeForever) {
+                "${content.playtimeForever / 60} hours played"
+            }, color = Color.White.copy(alpha = 0.7f), fontSize = 16.sp)
+        }
     }
 
-    Column(
-        Modifier
-            .drawBehind {
-                drawRect(Color.Black.copy(alpha = 0.15f))
-                drawRect(completedColor, size = size.copy(width = size.width * content.achievementPercentage))
-            }
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-            .fillMaxWidth()) {
-        Text(text = "Achievement Progress", color = Color.White, fontSize = 16.sp)
-        Text(text = content.achievementString, color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp)
+    if (content.hasAchievements) {
+        Column(
+            Modifier
+                .drawBehind {
+                    drawRect(Color.Black.copy(alpha = 0.15f))
+                    drawRect(completedColor, size = size.copy(width = size.width * content.achievementPercentage))
+                }
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .fillMaxWidth()) {
+            Text(text = "Achievement Progress", color = Color.White, fontSize = 16.sp)
+            Text(text = content.achievementString, color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp)
+        }
     }
 }
 
 private class FavoriteGameModel(
     val name: String,
-    val playtimeForever: Int,
+    val playtimeForever: Int?,
     val achievementPercentage: Float,
     val achievementString: String,
+    val hasAchievements: Boolean
 )

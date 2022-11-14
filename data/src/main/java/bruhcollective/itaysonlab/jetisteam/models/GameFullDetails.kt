@@ -14,13 +14,13 @@ class GameFullDetailsData(
     val type: String,
     val name: String,
     @Json(name = "steam_appid") val appId: Int,
-    @Json(name = "controller_support") val controllerSupport: String,
+    @Json(name = "controller_support") val controllerSupport: String?,
     val dlc: List<Int>?,
     @Json(name = "short_description") val shortDescription: String,
     @Json(name = "detailed_description") val fullDescription: String,
     @Json(name = "about_the_game") val aboutDescription: String?,
     @Json(name = "reviews") val reviews: String?,
-    @Json(name = "legal_notice") val legalNotice: String,
+    @Json(name = "legal_notice") val legalNotice: String?,
     @Json(name = "supported_languages") val supportedLanguages: String,
     val developers: List<String>,
     val publishers: List<String>,
@@ -38,7 +38,7 @@ class GameFullDetailsData(
     @Json(name = "release_date") val releaseDate: ReleaseDate,
     @Json(name = "support_info") val supportInfo: SupportInfo,
     val screenshots: List<Screenshot>,
-    val movies: List<Movie>,
+    val movies: List<Movie>?,
     val metacritic: MetacriticLocator?
 ) {
     @JsonClass(generateAdapter = true)

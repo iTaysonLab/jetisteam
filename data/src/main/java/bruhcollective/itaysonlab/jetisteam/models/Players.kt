@@ -10,8 +10,8 @@ class Players(
 @JsonClass(generateAdapter = true)
 class Player(
     val steamid: String,
-    val communityvisibilitystate: Int,
-    val profilestate: Int,
+    // val communityvisibilitystate: Int,
+    // val profilestate: Int,
     val personastate: Int,
     val personaname: String,
     val profileurl: String,
@@ -22,7 +22,7 @@ class Player(
     val lastlogoff: Long,
     val timecreated: Long,
     val loccountrycode: String?,
-    val primaryclanid: String,
+    val primaryclanid: String?,
     val realname: String?,
     val gameextrainfo: String?,
     val gameid: Int?

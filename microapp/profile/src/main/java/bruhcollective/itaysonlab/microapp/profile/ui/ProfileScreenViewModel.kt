@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class ProfileScreenViewModel @Inject constructor(
     private val getProfileData: GetProfileData,
-    private val savedState: SavedStateHandle,
+    savedState: SavedStateHandle,
     steamSessionController: SteamSessionController
 ): PageViewModel<GetProfileData.ProfileData>() {
     val steamId = if (savedState.get<Long>(CommonArguments.SteamId.name) == 0L) {
@@ -28,7 +28,15 @@ internal class ProfileScreenViewModel @Inject constructor(
     override suspend fun load() = getProfileData(steamId)
 
     fun gameToAchievements(id: Int) = data!!.let { data ->
-        data.ownedGames[id]!! to data.achievementsProgress[id]!!
+        val unknownApp = data.otherAppsInfo[id]
+
+        data.ownedGames.getOrDefault(id, CPlayer_GetOwnedGames_Response_Game(
+            name = unknownApp?.second.orEmpty()
+        )) to data.achievementsProgress.getOrDefault(id, CPlayer_GetAchievementsProgress_Response_AchievementProgress(
+            total = 0,
+            unlocked = 0,
+            percentage = 0f
+        ))
     }
 
     fun game(id: Int) = data!!.ownedGames[id]!!

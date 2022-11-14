@@ -35,16 +35,16 @@ class ProfileRepository @Inject constructor(
         )
     )
 
-    suspend fun getOwnedGames(steamid: Long) = withContext(Dispatchers.IO) {
+    suspend fun getOwnedGames(steamid: Long, includeFreeToPlay: Boolean = false) = withContext(Dispatchers.IO) {
         playerStub.GetOwnedGames(
             CPlayer_GetOwnedGames_Request(
                 steamid = steamid,
                 language = localeService.language,
-                skip_unvetted_apps = true,
+                skip_unvetted_apps = false,
                 include_appinfo = true,
                 include_extended_appinfo = true,
-                include_free_sub = false,
-                include_played_free_games = false
+                include_free_sub = includeFreeToPlay,
+                include_played_free_games = includeFreeToPlay
             )
         )
     }

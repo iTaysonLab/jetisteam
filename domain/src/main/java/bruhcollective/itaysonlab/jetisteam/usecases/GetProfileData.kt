@@ -6,14 +6,11 @@ import bruhcollective.itaysonlab.jetisteam.controllers.UserService
 import bruhcollective.itaysonlab.jetisteam.mappers.ProfileCustomization
 import bruhcollective.itaysonlab.jetisteam.mappers.ProfileEquipment
 import bruhcollective.itaysonlab.jetisteam.mappers.ProfileSummary
-import bruhcollective.itaysonlab.jetisteam.models.Miniprofile
 import bruhcollective.itaysonlab.jetisteam.models.Player
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.repository.ProfileRepository
 import bruhcollective.itaysonlab.jetisteam.repository.StoreRepository
-import bruhcollective.itaysonlab.jetisteam.service.MiniprofileService
 import steam.common.StoreBrowseItemDataRequest
-import steam.common.StoreItem
 import steam.common.StoreItemID
 import steam.player.CPlayer_GetAchievementsProgress_Response_AchievementProgress
 import steam.player.CPlayer_GetOwnedGames_Response_Game
@@ -24,7 +21,8 @@ class GetProfileData @Inject constructor(
     private val steamSessionController: SteamSessionController,
     private val profileRepository: ProfileRepository,
     private val userService: UserService,
-    private val cdnController: CdnController
+    private val cdnController: CdnController,
+    private val storeRepository: StoreRepository
 ) {
     suspend operator fun invoke(
         steamid: SteamID = steamSessionController.steamId()
@@ -35,9 +33,9 @@ class GetProfileData @Inject constructor(
             null
         }
 
-        val customization =
-            ProfileCustomization(profileRepository.getProfileCustomization(steamid.steamId))
-        val ownedGames = profileRepository.getOwnedGames(steamid.steamId).games
+        val customization = ProfileCustomization(profileRepository.getProfileCustomization(steamid.steamId))
+        val ownedGames = profileRepository.getOwnedGames(steamid.steamId, includeFreeToPlay = true).games
+        val assocOwnedGames = ownedGames.associateBy { it.appid!! }
 
         val inSlotsWithAchievements = customization.profileCustomizationEntries
             .filter {
@@ -58,23 +56,32 @@ class GetProfileData @Inject constructor(
 
         val playerProfile = userService.resolveUsers(listOf(steamid.steamId)).values.first()
 
+        val notOwnedButSpecifiedGames = inSlotsWithAchievements.filterNot { appId ->
+            assocOwnedGames.containsKey(appId)
+        }
+
         return ProfileData(
             steamID = steamid,
             playerProfile = playerProfile,
             summary = summary,
             equipment = ProfileEquipment(profileRepository.getProfileItems(steamid.steamId)),
             customization = customization,
-            ownedGames = ownedGames.associateBy { it.appid!! },
+            ownedGames = assocOwnedGames,
             recentActivityPast2Weeks = recentGames.sumOf { it.playtime_2weeks ?: 0 },
             recentActivityGames = recentGames,
             achievementsProgress = profileRepository.getAchievementsProgress(
                 steamid.steamId,
                 inSlotsWithAchievements + recentGames.map { it.appid!! }
             ).achievement_progress.associateBy { it.appid!! },
-            currentGameUrl = if (playerProfile.gameid != null) {
-                cdnController.buildAppUrl(playerProfile.gameid!!, "portrait.png")
+            otherAppsInfo = if (notOwnedButSpecifiedGames.isNotEmpty()) {
+                storeRepository.getItems(
+                    ids = notOwnedButSpecifiedGames.map { StoreItemID(appid = it) },
+                    dataRequest = StoreBrowseItemDataRequest()
+                ).store_items.map {
+                    it.appid!! to it.name.orEmpty()
+                }.associateBy { it.first }
             } else {
-                null
+                emptyMap()
             }
         )
     }
@@ -89,6 +96,6 @@ class GetProfileData @Inject constructor(
         val recentActivityPast2Weeks: Int,
         val recentActivityGames: List<CPlayer_GetOwnedGames_Response_Game>,
         val achievementsProgress: Map<Int, CPlayer_GetAchievementsProgress_Response_AchievementProgress>,
-        val currentGameUrl: String?
+        val otherAppsInfo: Map<Int, Pair<Int, String>>
     )
 }

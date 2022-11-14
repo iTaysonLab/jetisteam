@@ -1,7 +1,9 @@
 package bruhcollective.itaysonlab.jetisteam.usecases
 
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
+import bruhcollective.itaysonlab.jetisteam.controllers.UserService
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
+import bruhcollective.itaysonlab.jetisteam.models.steamIdFromAccountId
 import bruhcollective.itaysonlab.jetisteam.repository.EconRepository
 import bruhcollective.itaysonlab.jetisteam.repository.FriendsRepository
 import bruhcollective.itaysonlab.jetisteam.repository.NotificationsRepository
