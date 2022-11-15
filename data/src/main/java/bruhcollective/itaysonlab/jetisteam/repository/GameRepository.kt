@@ -3,9 +3,7 @@ package bruhcollective.itaysonlab.jetisteam.repository
 import bruhcollective.itaysonlab.jetisteam.controllers.CacheService
 import bruhcollective.itaysonlab.jetisteam.controllers.LocaleService
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
-import bruhcollective.itaysonlab.jetisteam.models.GameFullDetailsData
-import bruhcollective.itaysonlab.jetisteam.models.Reviews
-import bruhcollective.itaysonlab.jetisteam.models.SteamDeckSupportReport
+import bruhcollective.itaysonlab.jetisteam.models.*
 import bruhcollective.itaysonlab.jetisteam.service.GameService
 import com.squareup.moshi.Moshi
 import javax.inject.Inject
@@ -21,6 +19,7 @@ class GameRepository @Inject constructor(
 ) {
     companion object {
         private val GameReviewPreviewCacheDuration = 1.hours
+        private val GameCompatCacheDuration = 2.hours
         private val GameDetailCacheDuration = 24.hours
         private val GameDeckReportCacheDuration = 7.days
     }
@@ -63,6 +62,20 @@ class GameRepository @Inject constructor(
                 gameService.getReviews(appId = appId, language = localeService.language, reviewLanguages = localeService.language)
             }, defaultFunc = {
                 Reviews(success = 0, summary = Reviews.ReviewQuerySummary(0, 0, "", 0, 0, 0), reviews = emptyList())
+            }
+        )
+    }
+
+    suspend fun getGameCompat(appId: String, force: Boolean = false): GameCompatDetails {
+        return cacheService.jsonEntry<GameCompatDetails>(
+            key = key(appId, "gameCompat"),
+            force = force,
+            maxCacheTime = GameCompatCacheDuration,
+            adapter = moshi.adapter(GameCompatDetails::class.java),
+            networkFunc = {
+                gameService.getGameCompat(appIds = appId).values.first()
+            }, defaultFunc = {
+                GameCompatDetails(success = false, data = null)
             }
         )
     }

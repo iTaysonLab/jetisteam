@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -43,9 +44,9 @@ internal fun GamePageScreen(
                         )
                     },
                     scrollBehavior = scrollBehavior,
-                    colors = TopAppBarDefaults.smallTopAppBarColors(
+                    colors = topAppBarColors(
                         containerColor = Color.Transparent,
-                        scrolledContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
+                        scrolledContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
                     ),
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
@@ -86,8 +87,7 @@ internal fun GamePageScreen(
                 item {
                     GamePageTagList(
                         tags = data.tags,
-                        genres = data.fullDetails.genres,
-                        metaCritic = data.fullDetails.metacritic
+                        genres = data.fullDetails.genres
                     )
                 }
 
@@ -96,6 +96,15 @@ internal fun GamePageScreen(
                         urls = remember(data.fullDetails) {
                             data.fullDetails.screenshots.map { it.thumbnail }
                         }
+                    )
+                }
+
+                item {
+                    Spacer(Modifier.height(16.dp))
+
+                    GamePageCritics(
+                        metaCritic = data.fullDetails.metacritic,
+                        deckReport = data.deckSupportReport
                     )
                 }
 
