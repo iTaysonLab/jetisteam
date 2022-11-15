@@ -15,14 +15,20 @@ class SteamDeckSupportReport(
     @Json(name = "resolved_category") val resolvedCategory: Int,
     @Json(name = "resolved_items") val resolvedItems: List<SupportItem>
 ) {
-    @Transient val category = SteamDeckSupport.values().firstOrNull { it.enumInt == resolvedCategory } ?: SteamDeckSupport.Unknown
+    @delegate:Transient
+    val category by lazy {
+        SteamDeckSupport.values().firstOrNull { it.enumInt == resolvedCategory } ?: SteamDeckSupport.Unknown
+    }
 
     @JsonClass(generateAdapter = true)
     class SupportItem(
         @Json(name = "display_type") val type: Int,
         @Json(name = "loc_token") val stringRef: String,
     ) {
-        @Transient val displayType = SteamDeckTestResult.values().firstOrNull { it.enumInt == type }
+        @delegate:Transient
+        val displayType by lazy {
+            SteamDeckTestResult.values().firstOrNull { it.enumInt == type }
+        }
     }
 }
 
