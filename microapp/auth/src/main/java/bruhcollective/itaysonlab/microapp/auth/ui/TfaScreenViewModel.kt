@@ -20,7 +20,7 @@ class TfaScreenViewModel @Inject constructor(
     private val pollAuthSession: PollAuthSession,
     savedState: SavedStateHandle,
 ): ViewModel(), CoroutineScope by MainScope() {
-    var isPollingActive = savedState.get<Boolean>(AuthMicroapp.Arguments.MobileAuthEnabled.name) ?: false
+    var isPollingActive = savedState.get<String>(AuthMicroapp.Arguments.MobileAuthEnabled.name).toBoolean()
     private set
 
     var isAuthInProgress by mutableStateOf(false)
