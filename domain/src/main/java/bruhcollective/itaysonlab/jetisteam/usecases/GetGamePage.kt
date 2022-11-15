@@ -1,12 +1,10 @@
 package bruhcollective.itaysonlab.jetisteam.usecases
 
 import bruhcollective.itaysonlab.jetisteam.controllers.CdnController
-import bruhcollective.itaysonlab.jetisteam.models.GameFullDetailsData
-import bruhcollective.itaysonlab.jetisteam.models.Language
-import bruhcollective.itaysonlab.jetisteam.models.Reviews
-import bruhcollective.itaysonlab.jetisteam.models.SteamDeckSupportReport
+import bruhcollective.itaysonlab.jetisteam.models.*
 import bruhcollective.itaysonlab.jetisteam.repository.GameRepository
 import bruhcollective.itaysonlab.jetisteam.repository.StoreRepository
+import bruhcollective.itaysonlab.jetisteam.util.SteamBbToMarkdown
 import io.github.furstenheim.CopyDown
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,6 +23,7 @@ class GetGamePage @Inject constructor(
         val details = gameRepository.getGameDetails(strId, false)
         val deckCompat = gameRepository.getDeckCompat(strId, false)
         val reviews = gameRepository.getReviewsPreview(strId, false)
+        val compat = gameRepository.getGameCompat(strId, false)
 
         val libraryHeroUrl = cdnController.buildAppUrl(appId, "library_hero.jpg")
         val logoUrl = cdnController.buildAppUrl(appId, "logo.png")
@@ -84,7 +83,8 @@ class GetGamePage @Inject constructor(
             tags = tags,
             deckSupportReport = deckCompat,
             reviews = reviews,
-            fullDescription = withContext(Dispatchers.Default) { CopyDown().convert(details.fullDescription) }
+            fullDescription = withContext(Dispatchers.Default) { CopyDown().convert(SteamBbToMarkdown.prettifyHtml(details.fullDescription)) },
+            gameCompatDetails = compat
         )
     }
 
@@ -98,7 +98,8 @@ class GetGamePage @Inject constructor(
         val tags: List<Pair<String, Int>>,
         val deckSupportReport: SteamDeckSupportReport,
         val reviews: Reviews,
-        val fullDescription: String
+        val fullDescription: String,
+        val gameCompatDetails: GameCompatDetails
     )
 
     class LanguageMatrixEntry(
