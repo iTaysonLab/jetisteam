@@ -5,7 +5,7 @@ import bruhcollective.itaysonlab.jetisteam.models.Player
 class FriendProfile(
     val steamId: Long,
     val name: String,
-    val avatarUrl: String,
+    val avatarUrl: String?,
     val status: FriendStatus,
     val playingGame: GameInfo?
 ) {
