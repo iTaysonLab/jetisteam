@@ -12,7 +12,8 @@ fun BottomSheetLayout(
     modifier: Modifier = Modifier,
     title: @Composable (() -> String)? = null,
     subtitle: @Composable (() -> AnnotatedString)? = null,
-    content: @Composable ColumnScope.() -> Unit
+    hasSubtitlePadding: Boolean = true,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
         modifier
@@ -28,7 +29,7 @@ fun BottomSheetLayout(
         }
 
         if (subtitle != null) {
-            BottomSheetSubtitle(text = subtitle(), modifier = Modifier.padding(bottom = 16.dp))
+            BottomSheetSubtitle(text = subtitle(), modifier = Modifier.padding(bottom = if (hasSubtitlePadding) 16.dp else 0.dp))
         }
 
         content()

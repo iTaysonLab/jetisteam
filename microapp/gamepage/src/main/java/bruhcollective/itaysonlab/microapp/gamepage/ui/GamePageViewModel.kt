@@ -10,8 +10,9 @@ import javax.inject.Inject
 @HiltViewModel
 class GamePageViewModel @Inject constructor(
     private val getGamePage: GetGamePage,
-    private val savedState: SavedStateHandle
+    savedState: SavedStateHandle
 ) : PageViewModel<GetGamePage.GamePage>() {
+    val appId = savedState.get<Int>(GamePageMicroapp.Arguments.GameId.name) ?: 0
     init { reload() }
-    override suspend fun load() = getGamePage(savedState.get<Int>(GamePageMicroapp.Arguments.GameId.name) ?: 0)
+    override suspend fun load() = getGamePage(appId)
 }

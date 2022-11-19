@@ -28,7 +28,8 @@ import bruhcollective.itaysonlab.microapp.gamepage.ui.components.*
 @Composable
 internal fun GamePageScreen(
     onBackClick: () -> Unit,
-    viewModel: GamePageViewModel = hiltViewModel()
+    viewModel: GamePageViewModel = hiltViewModel(),
+    onDeckReportClicked: (Int) -> Unit
 ) {
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(state = topAppBarState)
@@ -104,7 +105,8 @@ internal fun GamePageScreen(
 
                     GamePageCritics(
                         metaCritic = data.fullDetails.metacritic,
-                        deckReport = data.deckSupportReport
+                        deckReport = data.deckSupportReport,
+                        onDeckClicked = { onDeckReportClicked(viewModel.appId) }
                     )
                 }
 

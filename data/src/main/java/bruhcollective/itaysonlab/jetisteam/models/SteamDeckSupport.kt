@@ -27,7 +27,7 @@ class SteamDeckSupportReport(
     ) {
         @delegate:Transient
         val displayType by lazy {
-            SteamDeckTestResult.values().firstOrNull { it.enumInt == type }
+            SteamDeckTestResult.values().firstOrNull { it.enumInt == type } ?: SteamDeckTestResult.Note
         }
     }
 }

@@ -11,8 +11,10 @@
     <string name="gamepage_reviews_desc">%s: %d positive, %d negative</string>
     <string name="gamepage_metacritic">Metacritic Score</string>
 
+    <string name="gamepage_for">for</string>
     <string name="gamepage_deckcompat_title">Steam Deck compatibility</string>
     <string name="gamepage_deckcompat_type_verified">Verified</string>
     <string name="gamepage_deckcompat_type_playable">Playable</string>
     <string name="gamepage_deckcompat_type_unsupported">Unsupported</string>
+    <string name="gamepage_deckcompat_type_unknown">Unknown</string>
 </resources>

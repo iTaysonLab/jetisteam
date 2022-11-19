@@ -28,7 +28,7 @@ class GameCompatDetailsData(
     @JsonClass(generateAdapter = true)
     class Recommendations(
         @Json(name = "totalfriends") val friendsWithReviews: Int,
-        val friends: List<FriendReview>
+        val friends: List<FriendReview>?
     ) {
         @JsonClass(generateAdapter = true)
         class FriendReview(

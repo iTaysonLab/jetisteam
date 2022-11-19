@@ -31,7 +31,8 @@ import bruhcollective.itaysonlab.microapp.gamepage.R
 @Composable
 internal fun GamePageCritics(
     deckReport: SteamDeckSupportReport,
-    metaCritic: GameFullDetailsData.MetacriticLocator?
+    metaCritic: GameFullDetailsData.MetacriticLocator?,
+    onDeckClicked: () -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -44,10 +45,10 @@ internal fun GamePageCritics(
         ListItem(
             supportingText = {
                 Text(text = when (deckReport.category) {
-                    SteamDeckSupport.Unknown -> "Unknown"
-                    SteamDeckSupport.Unsupported -> "Unsupported"
-                    SteamDeckSupport.Playable -> "Playable"
-                    SteamDeckSupport.Verified -> "Verified"
+                    SteamDeckSupport.Unknown -> stringResource(id = R.string.gamepage_deckcompat_type_unknown)
+                    SteamDeckSupport.Unsupported -> stringResource(id = R.string.gamepage_deckcompat_type_unsupported)
+                    SteamDeckSupport.Playable -> stringResource(id = R.string.gamepage_deckcompat_type_playable)
+                    SteamDeckSupport.Verified -> stringResource(id = R.string.gamepage_deckcompat_type_verified)
                 }, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }, headlineText = {
                 Text(
@@ -58,19 +59,19 @@ internal fun GamePageCritics(
             }, leadingContent = {
                 Icon(imageVector = when (deckReport.category) {
                     SteamDeckSupport.Unknown -> Icons.Rounded.Help
-                    SteamDeckSupport.Unsupported -> Icons.Rounded.RemoveCircle
+                    SteamDeckSupport.Unsupported -> Icons.Rounded.Cancel
                     SteamDeckSupport.Playable -> Icons.Rounded.Error
                     SteamDeckSupport.Verified -> Icons.Rounded.CheckCircle
                 }, contentDescription = null)
             }, trailingContent = {
-                Icon(imageVector = Icons.Rounded.ChevronRight, contentDescription = null)
+                if (deckReport.category != SteamDeckSupport.Unknown) {
+                    Icon(imageVector = Icons.Rounded.ChevronRight, contentDescription = null)
+                }
             }, colors = ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
             ), modifier = Modifier
                 .fillMaxWidth()
-                .clickable {
-
-                }
+                .clickable(enabled = deckReport.category != SteamDeckSupport.Unknown, onClick = onDeckClicked)
         )
 
         if (metaCritic != null) {
