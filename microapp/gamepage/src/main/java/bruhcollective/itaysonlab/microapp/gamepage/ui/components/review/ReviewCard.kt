@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.EmojiEmotions
-import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.ThumbDown
 import androidx.compose.material.icons.rounded.ThumbUp
 import androidx.compose.material3.*
@@ -13,9 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.res.stringResource
@@ -28,9 +24,7 @@ import bruhcollective.itaysonlab.jetisteam.models.Review
 import bruhcollective.itaysonlab.jetisteam.util.DateUtil
 import bruhcollective.itaysonlab.microapp.gamepage.R
 import coil.compose.AsyncImage
-import kotlin.math.ln
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReviewCard(
     review: Review,
@@ -46,6 +40,8 @@ fun ReviewCard(
     val compositedColor = reviewColor.copy(alpha = 0.25f)
         .compositeOver(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
     val compositedColorLight = reviewColor.copy(alpha = 0.5f)
+        .compositeOver(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
+    val compositedColorOverLight = reviewColor.copy(alpha = 0.75f)
         .compositeOver(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
 
     val headerSubtitle = remember(review) {
@@ -171,7 +167,7 @@ fun ReviewCard(
                                     )
                                 }, content = {
                                     Text(text = review.markedAsHelpful.toString(), color = MaterialTheme.colorScheme.onSurface)
-                                }, background = compositedColor
+                                }, background = compositedColorOverLight
                             )
                         }
 
@@ -186,7 +182,7 @@ fun ReviewCard(
                                     )
                                 }, content = {
                                     Text(text = review.markedAsFunny.toString(), color = MaterialTheme.colorScheme.onSurface)
-                                }, background = compositedColor
+                                }, background = compositedColorOverLight
                             )
                         }
                     }
