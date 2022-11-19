@@ -17,4 +17,11 @@
     <string name="gamepage_deckcompat_type_playable">Playable</string>
     <string name="gamepage_deckcompat_type_unsupported">Unsupported</string>
     <string name="gamepage_deckcompat_type_unknown">Unknown</string>
+
+    <string name="gamepage_reviews_recommend">Recommended</string>
+    <string name="gamepage_reviews_not_recommend">Not Recommended</string>
+    <string name="gamepage_reviews_header">%s hrs on record</string>
+    <string name="gamepage_reviews_header_diff">%s hrs on record (%s hrs on review time)</string>
+    <string name="gamepage_reviews_author">Review by</string>
+    <string name="gamepage_reviews_posted">Posted on %s</string>
 </resources>

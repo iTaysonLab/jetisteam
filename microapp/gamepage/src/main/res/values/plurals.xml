@@ -9,4 +9,16 @@
         <item quantity="one">Publisher</item>
         <item quantity="other">Publishers</item>
     </plurals>
+
+    <plurals name="gamepage_hours">
+        <item quantity="other">%d hours</item>
+        <item quantity="one">%d hour</item>
+        <item quantity="few">%d hours</item>
+    </plurals>
+
+    <plurals name="gamepage_minutes">
+        <item quantity="other">%d minutes</item>
+        <item quantity="one">%d minute</item>
+        <item quantity="few">%d minutes</item>
+    </plurals>
 </resources>

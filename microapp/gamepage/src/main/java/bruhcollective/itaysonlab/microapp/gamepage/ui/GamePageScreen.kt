@@ -20,9 +20,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
 import bruhcollective.itaysonlab.microapp.gamepage.R
 import bruhcollective.itaysonlab.microapp.gamepage.ui.components.*
+import bruhcollective.itaysonlab.microapp.gamepage.ui.components.review.ReviewCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -159,8 +161,9 @@ internal fun GamePageScreen(
                 }
 
                 items(data.reviews.reviews) { review ->
-                    GamePageReview(
+                    ReviewCard(
                         review = review,
+                        reviewer = remember(review.author.steamId) { data.reviewers[SteamID(review.author.steamid)]!! },
                         modifier = Modifier
                             .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
                             .padding(horizontal = 16.dp, vertical = 8.dp)

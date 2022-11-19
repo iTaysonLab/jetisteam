@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.controllers.CdnController
+import bruhcollective.itaysonlab.jetisteam.ext.roundUpTo
 import bruhcollective.itaysonlab.jetisteam.usecases.game.GetGameAchievementCard
 import bruhcollective.itaysonlab.microapp.core.ext.getProto
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
@@ -35,17 +36,10 @@ class OwnedGameBottomSheetViewModel @Inject constructor(
     var headerLogoUrl by mutableStateOf<String?>(null)
         private set
 
-    val totalPlaytime = "${((gameInfo.playtime_forever ?: 0) / 60f).round(1)} h"
+    val totalPlaytime = "${((gameInfo.playtime_forever ?: 0) / 60f).roundUpTo(1)} h"
 
     var achievementCardState by mutableStateOf<AchievementCardState>(AchievementCardState.Loading)
         private set
-
-    // https://discuss.kotlinlang.org/t/how-do-you-round-a-number-to-n-decimal-places/8843
-    private fun Float.round(decimals: Int): Double {
-        var multiplier = 1.0
-        repeat(decimals) { multiplier *= 10 }
-        return kotlin.math.round(this * multiplier) / multiplier
-    }
 
     init {
         viewModelScope.launch {

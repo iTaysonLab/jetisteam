@@ -33,7 +33,7 @@ sealed class FriendStatus {
 
 // https://partner.steamgames.com/doc/api/ISteamFriends#EPersonaState
 fun Int.toFriendStatus(summary: Player) = when(this) {
-    0 -> FriendStatus.Offline(summary.lastlogoff)
+    0 -> FriendStatus.Offline(summary.lastlogoff ?: 0L)
     1 -> FriendStatus.Online
     2 -> FriendStatus.Busy
     3 -> FriendStatus.Away

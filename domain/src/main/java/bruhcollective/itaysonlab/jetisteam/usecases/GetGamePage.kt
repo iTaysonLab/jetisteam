@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetisteam.usecases
 
 import bruhcollective.itaysonlab.jetisteam.controllers.CdnController
+import bruhcollective.itaysonlab.jetisteam.controllers.UserService
 import bruhcollective.itaysonlab.jetisteam.models.*
 import bruhcollective.itaysonlab.jetisteam.repository.GameRepository
 import bruhcollective.itaysonlab.jetisteam.repository.StoreRepository
@@ -15,7 +16,8 @@ import javax.inject.Inject
 class GetGamePage @Inject constructor(
     private val gameRepository: GameRepository,
     private val storeRepository: StoreRepository,
-    private val cdnController: CdnController
+    private val cdnController: CdnController,
+    private val userService: UserService
 ) {
     suspend operator fun invoke(appId: Int): GamePage {
         val strId = appId.toString()
@@ -84,7 +86,12 @@ class GetGamePage @Inject constructor(
             deckSupportReport = deckCompat,
             reviews = reviews,
             fullDescription = withContext(Dispatchers.Default) { CopyDown().convert(SteamBbToMarkdown.prettifyHtml(details.fullDescription)) },
-            gameCompatDetails = compat
+            gameCompatDetails = compat,
+            reviewers = if (reviews.reviews.isNotEmpty()) {
+                userService.resolveUsers(reviews.reviews.map { it.author.steamid })
+            } else {
+                emptyMap()
+            }
         )
     }
 
@@ -99,7 +106,8 @@ class GetGamePage @Inject constructor(
         val deckSupportReport: SteamDeckSupportReport,
         val reviews: Reviews,
         val fullDescription: String,
-        val gameCompatDetails: GameCompatDetails
+        val gameCompatDetails: GameCompatDetails,
+        val reviewers: Map<SteamID, Player>
     )
 
     class LanguageMatrixEntry(
