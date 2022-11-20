@@ -20,7 +20,7 @@ fun StateButton(
     Button(onClick = {
         if (!inLoadingState) onClick()
     }, modifier = modifier, shape = shape) {
-        StateButtonContent(inLoadingState, MaterialTheme.colorScheme.onPrimaryContainer, content)
+        StateButtonContent(inLoadingState, content)
     }
 }
 
@@ -35,7 +35,7 @@ fun StateTonalButton(
     FilledTonalButton(onClick = {
         if (!inLoadingState) onClick()
     }, modifier = modifier, shape = shape) {
-        StateButtonContent(inLoadingState, MaterialTheme.colorScheme.onSecondaryContainer, content)
+        StateButtonContent(inLoadingState, content)
     }
 }
 
@@ -50,21 +50,20 @@ fun StateTextButton(
     TextButton(onClick = {
         if (!inLoadingState) onClick()
     }, modifier = modifier, shape = shape) {
-        StateButtonContent(inLoadingState, MaterialTheme.colorScheme.primary, content)
+        StateButtonContent(inLoadingState, content)
     }
 }
 
 @Composable
 private fun StateButtonContent(
     inLoadingState: Boolean,
-    containerColor: Color,
     content: @Composable () -> Unit,
 ) {
     Box(Modifier.animateContentSize()) {
         if (inLoadingState) {
             ResizableCircularIndicator(
                 modifier = Modifier,
-                color = containerColor,
+                color = LocalContentColor.current,
                 indicatorSize = 24.dp,
                 strokeWidth = 2.dp
             )
