@@ -89,6 +89,7 @@ internal fun GuardScreen(
             is GuardViewModel.AddGuardState.AwaitForSms -> {
                 LaunchedEffect(Unit) {
                     onAddClicked(viewModel.steamId, addState.data)
+                    viewModel.resetAddState()
                 }
             }
 
