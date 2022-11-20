@@ -25,6 +25,10 @@ class CdnController @Inject constructor(
         return "$MEDIA_CDN_COMMUNITY_URL/images/${fileName ?: return null}"
     }
 
+    fun publicItemImage(fileName: String?): String? {
+        return "$MEDIA_CDN_COMMUNITY_URL/images/items/${fileName ?: return null}"
+    }
+
     fun buildAppUrl(appId: Int, fileName: String): String {
         return "$STORE_ICON_BASE_URL/$appId/$fileName"
     }

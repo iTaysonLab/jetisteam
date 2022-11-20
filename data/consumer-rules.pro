@@ -38,3 +38,7 @@
 -keep,allowobfuscation,allowoptimization class steam.clientcomm.CClientComm_UninstallClientApp_Response {
     *;
 }
+
+-keep,allowobfuscation,allowoptimization class steam.player.CPlayer_Set*_Response {
+    *;
+}

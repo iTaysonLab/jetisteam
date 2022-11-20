@@ -23,6 +23,15 @@ object SteamRpcWorkarounds {
         "/Authentication/RevokeRefreshToken",
         // Player
         "/Player/GetAchievementsProgress",
+        "/Player/SetAnimatedAvatar",
+        "/Player/SetAvatarFrame",
+        "/Player/SetCommunityPreferences",
+        "/Player/SetEquippedProfileItemFlags",
+        "/Player/SetMiniProfileBackground",
+        "/Player/SetPerFriendPreferences",
+        "/Player/SetProfileBackground",
+        "/Player/SetProfilePreferences",
+        "/Player/SetProfileTheme",
         // MobileApp
         "/MobileApp/GetMobileSummary",
         // UserAccount
@@ -33,6 +42,8 @@ object SteamRpcWorkarounds {
         "/TwoFactor/RemoveAuthenticatorViaChallengeStart",
         "/TwoFactor/RemoveAuthenticatorViaChallengeContinue",
         "/TwoFactor/RemoveAuthenticator",
+        // Quest
+        "/Quest/ActivateProfileModifierItem"
     )
 
     /**

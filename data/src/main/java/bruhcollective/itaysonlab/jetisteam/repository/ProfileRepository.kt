@@ -27,6 +27,13 @@ class ProfileRepository @Inject constructor(
         )
     )
 
+    suspend fun getProfileItemsOwned(filter: ECommunityItemClass) = playerStub.GetProfileItemsOwned(
+        CPlayer_GetProfileItemsOwned_Request(
+            language = localeService.language,
+            filters = listOf(filter)
+        )
+    )
+
     suspend fun getProfileCustomization(steamid: Long) = playerStub.GetProfileCustomization(
         CPlayer_GetProfileCustomization_Request(
             steamid = steamid,
@@ -57,5 +64,45 @@ class ProfileRepository @Inject constructor(
                 appids = appids
             )
         )
+    }
+
+    suspend fun getEquippedProfileItem(steamid: Long, clazz: ECommunityItemClass) = when (clazz) {
+        ECommunityItemClass.k_ECommunityItemClass_ProfileBackground -> {
+            playerStub.GetProfileBackground(CPlayer_GetProfileBackground_Request(steamid, localeService.language)).profile_background
+        }
+
+        ECommunityItemClass.k_ECommunityItemClass_MiniProfileBackground -> {
+            playerStub.GetMiniProfileBackground(CPlayer_GetMiniProfileBackground_Request(steamid, localeService.language)).profile_background
+        }
+
+        ECommunityItemClass.k_ECommunityItemClass_AvatarFrame -> {
+            playerStub.GetAvatarFrame(CPlayer_GetAvatarFrame_Request(steamid, localeService.language)).avatar_frame
+        }
+
+        ECommunityItemClass.k_ECommunityItemClass_AnimatedAvatar -> {
+            playerStub.GetAnimatedAvatar(CPlayer_GetAnimatedAvatar_Request(steamid, localeService.language)).avatar
+        }
+
+        else -> error("Type $clazz is not requestable separately")
+    }
+
+    suspend fun setEquippedProfileItem(itemId: Long, clazz: ECommunityItemClass) = when (clazz) {
+        ECommunityItemClass.k_ECommunityItemClass_ProfileBackground -> {
+            playerStub.SetProfileBackground(CPlayer_SetProfileBackground_Request(itemId))
+        }
+
+        ECommunityItemClass.k_ECommunityItemClass_MiniProfileBackground -> {
+            playerStub.SetMiniProfileBackground(CPlayer_SetMiniProfileBackground_Request(itemId))
+        }
+
+        ECommunityItemClass.k_ECommunityItemClass_AvatarFrame -> {
+            playerStub.SetAvatarFrame(CPlayer_SetAvatarFrame_Request(itemId))
+        }
+
+        ECommunityItemClass.k_ECommunityItemClass_AnimatedAvatar -> {
+            playerStub.SetAnimatedAvatar(CPlayer_SetAnimatedAvatar_Request(itemId))
+        }
+
+        else -> error("Type $clazz is not settable in generic type")
     }
 }
