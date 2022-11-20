@@ -18,7 +18,7 @@ class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
         navController: NavHostController,
         destinations: Destinations
     ) {
-        composable(InternalRoutes.Profile.url, arguments = listOf(CommonArguments.SteamIdWithDefault)) {
+        composable(Routes.Profile.url, arguments = listOf(CommonArguments.SteamIdWithDefault)) {
             ProfileScreen(
                 onGameClick = { appId ->
                     navController.navigateToGame(destinations, appId)
@@ -34,7 +34,7 @@ class ProfileMicroappImpl @Inject constructor(): ProfileMicroapp() {
             )
         }
 
-        composable(InternalRoutes.Friends.url, arguments = listOf(CommonArguments.SteamId)) {
+        composable(Routes.Friends.url, arguments = listOf(CommonArguments.SteamId)) {
             FriendsScreen(
                 onFriendClick = { steamId ->
                     navController.navigate(

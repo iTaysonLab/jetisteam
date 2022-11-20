@@ -7,13 +7,13 @@ import bruhcollective.itaysonlab.microapp.core.HasFullscreenRoutes
 import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
 
 abstract class AuthMicroapp : NestedMicroappEntry, HasFullscreenRoutes {
-    override val graphRoute = InternalRoutes.NavGraph
-    override val startDestination = InternalRoutes.MainScreen.url
+    override val graphRoute = Routes.NavGraph
+    override val startDestination = Routes.MainScreen.url
 
     override val fullscreenRoutes = listOf(
-        InternalRoutes.MainScreen.url,
-        InternalRoutes.AuthDisclaimer.url,
-        InternalRoutes.TfaScreen.url
+        Routes.MainScreen.url,
+        Routes.AuthDisclaimer.url,
+        Routes.TfaScreen.url
     )
 
     internal object Arguments {
@@ -22,7 +22,7 @@ abstract class AuthMicroapp : NestedMicroappEntry, HasFullscreenRoutes {
         }
     }
 
-    internal object InternalRoutes {
+    internal object Routes {
         const val NavGraph = "@auth"
 
         val MainScreen = DestNode("auth")

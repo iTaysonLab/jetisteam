@@ -6,31 +6,31 @@ import bruhcollective.itaysonlab.microapp.core.*
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 
 abstract class ProfileMicroapp: NestedMicroappEntry, BottomNavigationCapable {
-    override val graphRoute = InternalRoutes.NavGraph
-    override val startDestination = InternalRoutes.Profile.url
+    override val graphRoute = Routes.NavGraph
+    override val startDestination = Routes.Profile.url
 
     override val bottomNavigationEntry = NavigationEntry(
-        route = InternalRoutes.NavGraph,
+        route = Routes.NavGraph,
         name = R.string.profile,
         icon = { Icons.Rounded.Person }
     )
 
     fun myProfileDestination() =
-        InternalRoutes.Profile.mapArgs(mapOf(
+        Routes.Profile.mapArgs(mapOf(
             CommonArguments.SteamId to 0L
         ))
 
     fun profileDestination(steamId: Long) =
-        InternalRoutes.Profile.mapArgs(mapOf(
+        Routes.Profile.mapArgs(mapOf(
             CommonArguments.SteamId to steamId
         ))
 
     fun friendsDestination(steamId: Long) =
-        InternalRoutes.Friends.mapArgs(mapOf(
+        Routes.Friends.mapArgs(mapOf(
             CommonArguments.SteamId to steamId
         ))
 
-    object InternalRoutes {
+    object Routes {
         const val NavGraph = "@profile"
 
         val Profile = DestNode("profile/{${CommonArguments.SteamId.name}}")

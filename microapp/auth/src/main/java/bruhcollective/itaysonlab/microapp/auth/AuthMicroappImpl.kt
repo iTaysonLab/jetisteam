@@ -18,17 +18,17 @@ class AuthMicroappImpl @Inject constructor(): AuthMicroapp() {
         navController: NavHostController,
         destinations: Destinations
     ) {
-        composable(InternalRoutes.MainScreen.url) {
+        composable(Routes.MainScreen.url) {
             AuthScreen(onOpenDisclaimer = {
-                navController.navigate(InternalRoutes.AuthDisclaimer.url)
+                navController.navigate(Routes.AuthDisclaimer.url)
             }, onProceedToNextStep = { hasMobileAuth ->
-                navController.navigate(InternalRoutes.TfaScreen.mapArgs(mapOf(
+                navController.navigate(Routes.TfaScreen.mapArgs(mapOf(
                     Arguments.MobileAuthEnabled to hasMobileAuth
                 )))
             })
         }
 
-        composable(InternalRoutes.TfaScreen.url) {
+        composable(Routes.TfaScreen.url) {
             TfaScreen(onSuccess = {
                 navController.navigate(
                     destinations.find<ProfileMicroapp>().myProfileDestination()
@@ -36,7 +36,7 @@ class AuthMicroappImpl @Inject constructor(): AuthMicroapp() {
             })
         }
 
-        dialog(InternalRoutes.AuthDisclaimer.url) {
+        dialog(Routes.AuthDisclaimer.url) {
             AuthDisclaimer(onBackPressed = navController::popBackStack)
         }
     }

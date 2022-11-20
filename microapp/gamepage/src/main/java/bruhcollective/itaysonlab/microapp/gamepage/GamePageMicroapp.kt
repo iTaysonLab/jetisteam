@@ -7,10 +7,10 @@ import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
 import bruhcollective.itaysonlab.microapp.core.mapArgs
 
 abstract class GamePageMicroapp : NestedMicroappEntry {
-    override val graphRoute = InternalRoutes.NavGraph
+    override val graphRoute = Routes.NavGraph
     override val startDestination = "TODO"
 
-    fun gameDestination(gameId: Int) = InternalRoutes.Game.mapArgs(mapOf(
+    fun gameDestination(gameId: Int) = Routes.Game.mapArgs(mapOf(
         Arguments.GameId to gameId
     ))
 
@@ -20,7 +20,7 @@ abstract class GamePageMicroapp : NestedMicroappEntry {
         }
     }
 
-    internal object InternalRoutes {
+    internal object Routes {
         const val NavGraph = "@gamepage"
 
         val Game = DestNode("game/{${Arguments.GameId.name}}")

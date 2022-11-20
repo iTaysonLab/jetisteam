@@ -19,15 +19,15 @@ class GamePageMicroappImpl @Inject constructor() : GamePageMicroapp() {
         navController: NavHostController,
         destinations: Destinations
     ) {
-        composable(InternalRoutes.Game.url, arguments = listOf(Arguments.GameId)) {
+        composable(Routes.Game.url, arguments = listOf(Arguments.GameId)) {
             GamePageScreen(onBackClick = navController::popBackStack, onDeckReportClicked = { appId ->
-                navController.navigate(InternalRoutes.DeckReport.mapArgs(mapOf(
+                navController.navigate(Routes.DeckReport.mapArgs(mapOf(
                     Arguments.GameId to appId
                 )))
             })
         }
 
-        bottomSheet(InternalRoutes.DeckReport.url, arguments = listOf(Arguments.GameId)) {
+        bottomSheet(Routes.DeckReport.url, arguments = listOf(Arguments.GameId)) {
             DeckReportBottomSheet(onBackClick = navController::popBackStack)
         }
     }

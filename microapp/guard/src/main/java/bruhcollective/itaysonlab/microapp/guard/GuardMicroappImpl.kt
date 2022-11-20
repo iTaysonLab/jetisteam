@@ -36,52 +36,52 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
         navController: NavHostController,
         destinations: Destinations
     ) {
-        composable(InternalRoutes.MainScreen.url) {
+        composable(Routes.MainScreen.url) {
             GuardScreen(onMoveClicked = { steamId ->
-                navController.navigate(InternalRoutes.Move.withSteamId(steamId))
+                navController.navigate(Routes.Move.withSteamId(steamId))
             }, onAddClicked = { steamId, data ->
-                navController.navigate(InternalRoutes.Setup.mapArgs(mapOf(
+                navController.navigate(Routes.Setup.mapArgs(mapOf(
                     CommonArguments.SteamId to steamId,
                     Arguments.GuardData to CTwoFactor_AddAuthenticator_Response.ADAPTER.encodeByteString(
                         data
                     ).base64Url()
                 )))
             }, onMoreClicked = { steamId ->
-                navController.navigate(InternalRoutes.MoreOptions.withSteamId(steamId))
+                navController.navigate(Routes.MoreOptions.withSteamId(steamId))
             }, onSessionArrived = { steamId, clientId ->
-                navController.navigate(InternalRoutes.ConfirmSignIn.mapArgs(mapOf(
+                navController.navigate(Routes.ConfirmSignIn.mapArgs(mapOf(
                     CommonArguments.SteamId to steamId,
                     Arguments.ClientId to clientId,
                 )))
             }, onQrClicked = { steamId ->
-                navController.navigate(InternalRoutes.ScanQrCode.withSteamId(steamId))
+                navController.navigate(Routes.ScanQrCode.withSteamId(steamId))
             })
         }
 
-        composable(InternalRoutes.Setup.url, arguments = listOf(
+        composable(Routes.Setup.url, arguments = listOf(
             CommonArguments.SteamId,
             Arguments.GuardData
         )) {
             GuardSetupScreen(onBackClicked = navController::popBackStack, onSuccess = { steamId ->
-                navController.navigate(InternalRoutes.Recovery.withSteamId(steamId.steamId))
+                navController.navigate(Routes.Recovery.withSteamId(steamId.steamId))
             })
         }
 
-        composable(InternalRoutes.Move.url, arguments = listOf(CommonArguments.SteamId)) {
+        composable(Routes.Move.url, arguments = listOf(CommonArguments.SteamId)) {
             GuardMoveScreen(onBackClicked = navController::popBackStack, onSuccess = { steamId ->
-                navController.navigate(InternalRoutes.Recovery.withSteamId(steamId.steamId))
+                navController.navigate(Routes.Recovery.withSteamId(steamId.steamId))
             })
         }
 
-        composable(InternalRoutes.Recovery.url, arguments = listOf(CommonArguments.SteamId)) {
+        composable(Routes.Recovery.url, arguments = listOf(CommonArguments.SteamId)) {
             GuardRecoveryCodeScreen(onBackClicked = {
                 navController.navigateToRoot()
             })
         }
 
-        composable(InternalRoutes.Sessions.url, arguments = listOf(CommonArguments.SteamId)) {
+        composable(Routes.Sessions.url, arguments = listOf(CommonArguments.SteamId)) {
             GuardDevicesScreen(onBackClicked = navController::popBackStack, onSessionClicked = { steamId, tokenDesc ->
-                navController.navigate(InternalRoutes.SessionInfo.mapArgs(mapOf(
+                navController.navigate(Routes.SessionInfo.mapArgs(mapOf(
                     CommonArguments.SteamId to steamId,
                     Arguments.SessionData to CAuthentication_RefreshToken_Enumerate_Response.RefreshTokenDescription.ADAPTER.encodeByteString(
                         tokenDesc
@@ -90,14 +90,14 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
             })
         }
 
-        composable(InternalRoutes.SessionInfo.url, arguments = listOf(
+        composable(Routes.SessionInfo.url, arguments = listOf(
             CommonArguments.SteamId,
             Arguments.SessionData
         )) {
             GuardSessionScreen(onBackClicked = navController::popBackStack)
         }
 
-        composable(InternalRoutes.ScanQrCode.url, arguments = listOf(CommonArguments.SteamId), enterTransition = {
+        composable(Routes.ScanQrCode.url, arguments = listOf(CommonArguments.SteamId), enterTransition = {
             materialSharedAxisYIn(forward = true, slideDistance = 300)
         }, exitTransition = {
             materialSharedAxisYOut(forward = true, slideDistance = 300)
@@ -109,27 +109,27 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
             QrSignScreen(onBackClicked = navController::popBackStack)
         }
 
-        bottomSheet(InternalRoutes.MoreOptions.url, arguments = listOf(CommonArguments.SteamId)) {
+        bottomSheet(Routes.MoreOptions.url, arguments = listOf(CommonArguments.SteamId)) {
             GuardMoreOptionsSheet(onDevicesClicked = { steamId ->
                 navController.popBackStack()
-                navController.navigate(InternalRoutes.Sessions.withSteamId(steamId))
+                navController.navigate(Routes.Sessions.withSteamId(steamId))
             }, onRemoveClicked = { steamId ->
                 navController.popBackStack()
-                navController.navigate(InternalRoutes.Remove.withSteamId(steamId))
+                navController.navigate(Routes.Remove.withSteamId(steamId))
             }, onRecoveryClicked = { steamId ->
                 navController.popBackStack()
-                navController.navigate(InternalRoutes.Recovery.withSteamId(steamId))
+                navController.navigate(Routes.Recovery.withSteamId(steamId))
             })
         }
 
-        bottomSheet(InternalRoutes.ConfirmSignIn.url, arguments = listOf(
+        bottomSheet(Routes.ConfirmSignIn.url, arguments = listOf(
             CommonArguments.SteamId,
             Arguments.ClientId
         )) {
             GuardConfirmSessionSheet(onFinish = navController::popBackStack)
         }
 
-        bottomSheet(InternalRoutes.Remove.url, arguments = listOf(CommonArguments.SteamId)) {
+        bottomSheet(Routes.Remove.url, arguments = listOf(CommonArguments.SteamId)) {
             GuardRemoveSheet(onGuardRemoved = {
                 navController.popBackStack()
                 navController.navigateToRoot()
@@ -142,13 +142,13 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
     ))
 
     private fun NavHostController.navigateToRoot() {
-        navigate(InternalRoutes.MainScreen.url) {
+        navigate(Routes.MainScreen.url) {
             popUpTo(ROOT_NAV_GRAPH_ID)
         }
     }
 
     override val bottomNavigationEntry = NavigationEntry(
-        route = InternalRoutes.NavGraph,
+        route = Routes.NavGraph,
         name = R.string.guard,
         icon = { Icons.Rounded.Security }
     )

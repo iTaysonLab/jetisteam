@@ -8,16 +8,16 @@ import bruhcollective.itaysonlab.microapp.core.*
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 
 abstract class LibraryMicroapp: NestedMicroappEntry, BottomNavigationCapable {
-    override val graphRoute = InternalRoutes.NavGraph
-    override val startDestination = InternalRoutes.Library.url
+    override val graphRoute = Routes.NavGraph
+    override val startDestination = Routes.Library.url
 
     override val bottomNavigationEntry = NavigationEntry(
-        route = InternalRoutes.NavGraph,
+        route = Routes.NavGraph,
         name = R.string.library,
         icon = { Icons.Rounded.GridView }
     )
 
-    fun libraryOf(steamId: Long) = InternalRoutes.Library.mapArgs(mapOf(
+    fun libraryOf(steamId: Long) = Routes.Library.mapArgs(mapOf(
         CommonArguments.SteamId to steamId
     ))
 
@@ -31,7 +31,7 @@ abstract class LibraryMicroapp: NestedMicroappEntry, BottomNavigationCapable {
         }
     }
 
-    internal object InternalRoutes {
+    internal object Routes {
         const val NavGraph = "@library"
 
         val Library = DestNode("library/{${CommonArguments.SteamId.name}}")

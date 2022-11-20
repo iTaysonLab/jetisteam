@@ -8,8 +8,8 @@ import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 
 abstract class GuardMicroapp: NestedMicroappEntry, BottomNavigationCapable {
-    override val graphRoute = InternalRoutes.NavGraph
-    override val startDestination = InternalRoutes.MainScreen.url
+    override val graphRoute = Routes.NavGraph
+    override val startDestination = Routes.MainScreen.url
 
     internal object Arguments {
         val ClientId = navArgument("clientId") {
@@ -25,7 +25,7 @@ abstract class GuardMicroapp: NestedMicroappEntry, BottomNavigationCapable {
         }
     }
 
-    internal object InternalRoutes {
+    internal object Routes {
         const val NavGraph = "@guard"
 
         val MainScreen = DestNode("guard")

@@ -22,25 +22,25 @@ class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
         navController: NavHostController,
         destinations: Destinations
     ) {
-        composable(InternalRoutes.Library.url, arguments = listOf(CommonArguments.SteamId)) {
+        composable(Routes.Library.url, arguments = listOf(CommonArguments.SteamId)) {
             LibraryScreen(onGameClick = { steamId, gameInfo ->
-                navController.navigate(InternalRoutes.GameDetail.mapArgs(mapOf(
+                navController.navigate(Routes.GameDetail.mapArgs(mapOf(
                     CommonArguments.SteamId to steamId,
                     Arguments.GameData to gameInfo,
                 )))
             }, onBackClick = navController::popBackStack, onRemoteClick = { steamId, machineId ->
-                navController.navigate(InternalRoutes.RemoteMachineInfo.mapArgs(mapOf(
+                navController.navigate(Routes.RemoteMachineInfo.mapArgs(mapOf(
                     CommonArguments.SteamId to steamId,
                     Arguments.MachineId to machineId,
                 )))
             })
         }
 
-        composable(InternalRoutes.RemoteMachineInfo.url, arguments = listOf(CommonArguments.SteamId, Arguments.MachineId)) {
+        composable(Routes.RemoteMachineInfo.url, arguments = listOf(CommonArguments.SteamId, Arguments.MachineId)) {
             RemoteMachineScreen(onBackClick = navController::popBackStack)
         }
 
-        bottomSheet(InternalRoutes.GameDetail.url, arguments = listOf(CommonArguments.SteamId, Arguments.GameData)) {
+        bottomSheet(Routes.GameDetail.url, arguments = listOf(CommonArguments.SteamId, Arguments.GameData)) {
             OwnedGameBottomSheet(onNavigateToAchievements = { steamId, appId ->
                 navController.popBackStack()
             }, onNavigateToGamePage = { appId ->
