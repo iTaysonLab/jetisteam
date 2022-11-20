@@ -5,8 +5,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Security
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import bruhcollective.itaysonlab.microapp.core.*
+import bruhcollective.itaysonlab.microapp.core.DestNode
+import bruhcollective.itaysonlab.microapp.core.Destinations
+import bruhcollective.itaysonlab.microapp.core.NavigationEntry
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
+import bruhcollective.itaysonlab.microapp.core.mapArgs
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 import bruhcollective.itaysonlab.microapp.guard.ui.GuardScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardConfirmSessionSheet
@@ -21,6 +24,8 @@ import bruhcollective.itaysonlab.microapp.guard.ui.setup.variants.GuardSetupScre
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
+import soup.compose.material.motion.animation.materialSharedAxisYIn
+import soup.compose.material.motion.animation.materialSharedAxisYOut
 import steam.auth.CAuthentication_RefreshToken_Enumerate_Response
 import steam.twofactor.CTwoFactor_AddAuthenticator_Response
 import javax.inject.Inject
@@ -92,7 +97,15 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
             GuardSessionScreen(onBackClicked = navController::popBackStack)
         }
 
-        composable(InternalRoutes.ScanQrCode.url, arguments = listOf(CommonArguments.SteamId)) {
+        composable(InternalRoutes.ScanQrCode.url, arguments = listOf(CommonArguments.SteamId), enterTransition = {
+            materialSharedAxisYIn(forward = true, slideDistance = 300)
+        }, exitTransition = {
+            materialSharedAxisYOut(forward = true, slideDistance = 300)
+        }, popEnterTransition = {
+            materialSharedAxisYIn(forward = false, slideDistance = 300)
+        }, popExitTransition = {
+            materialSharedAxisYOut(forward = false, slideDistance = 300)
+        }) {
             QrSignScreen(onBackClicked = navController::popBackStack)
         }
 
