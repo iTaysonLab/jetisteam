@@ -14,7 +14,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,10 +22,9 @@ import bruhcollective.itaysonlab.jetisteam.mappers.ProfileSummary
 import bruhcollective.itaysonlab.jetisteam.mappers.toFriendStatus
 import bruhcollective.itaysonlab.jetisteam.models.Player
 import bruhcollective.itaysonlab.microapp.profile.R
+import bruhcollective.itaysonlab.microapp.profile.ext.toLastSeenDate
+import bruhcollective.itaysonlab.microapp.profile.ext.toStringRes
 import bruhcollective.itaysonlab.microapp.profile.ui.LocalSteamTheme
-import bruhcollective.itaysonlab.microapp.profile.ui.screens.friends.FriendGroups
-import bruhcollective.itaysonlab.microapp.profile.ui.screens.friends.toLastSeenDate
-import bruhcollective.itaysonlab.microapp.profile.ui.screens.friends.toStringRes
 import coil.compose.AsyncImage
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -39,6 +37,7 @@ internal fun ProfileHeader(
     profile: Player,
     onLibraryClick: () -> Unit,
     onFriendsClick: () -> Unit,
+    onEditClick: () -> Unit,
 ) {
     val theme = LocalSteamTheme.current
 
@@ -120,7 +119,7 @@ internal fun ProfileHeader(
                     modifier = Modifier.fillMaxWidth().height(40.dp),
                 ) {
                     item {
-                        Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
+                        Button(onClick = onEditClick, colors = ButtonDefaults.buttonColors(
                             containerColor = theme.btnBackground,
                             contentColor = Color.White
                         )) {

@@ -4,7 +4,9 @@ import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.mappers.FriendProfile
 import bruhcollective.itaysonlab.jetisteam.mappers.FriendStatus
 import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
-import bruhcollective.itaysonlab.jetisteam.usecases.GetProfileFriends
+import bruhcollective.itaysonlab.jetisteam.usecases.profile.GetProfileFriends
+import bruhcollective.itaysonlab.microapp.profile.ext.FriendGroups
+import bruhcollective.itaysonlab.microapp.profile.ext.toSortingInt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,14 +46,4 @@ internal class FriendsScreenViewModel @Inject constructor(
             _swipeRefreshLoading.value = false
         }
     }
-}
-
-fun FriendStatus.toSortingInt() = when(this) {
-    FriendStatus.LookingToPlay -> 0
-    FriendStatus.LookingToTrade -> 1
-    FriendStatus.Online -> 2
-    FriendStatus.Busy -> 3
-    FriendStatus.Away -> 4
-    FriendStatus.Snooze -> 5
-    is FriendStatus.Offline -> 6
 }

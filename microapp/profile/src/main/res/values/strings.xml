@@ -31,6 +31,16 @@
     <string name="friends_status_looking_to_trade">Looking to trade</string>
     <string name="friends_status_offline">Offline</string>
 
+    <string name="edit_title">Edit Profile</string>
+    <string name="edit_type_avatar">Avatar</string>
+    <string name="edit_type_avatar_frame">Avatar Frame</string>
+    <string name="edit_type_profile_bg">Profile Background</string>
+    <string name="edit_type_miniprofile_bg">Mini Profile Background</string>
+    <string name="edit_type_theme">Theme</string>
+    <string name="edit_type_preferences">Community Preferences</string>
+    <string name="edit_type_none">Not set</string>
+    <string name="edit_type_general">General</string>
+
     <plurals name="minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>

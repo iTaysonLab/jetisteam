@@ -104,9 +104,3 @@ internal fun FriendsScreen(
         }
     }
 }
-
-enum class FriendGroups(val stringRes: Int, val color: Color) {
-    OFFLINE(R.string.friends_group_offline, Color(0xFF898989)),
-    ONLINE(R.string.friends_group_online, Color(0xFF57cbde)),
-    PLAYING(R.string.friends_group_playing, Color(0xFFa3cf06))
-}

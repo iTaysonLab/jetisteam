@@ -13,9 +13,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.mappers.OwnedGame
 import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
-import bruhcollective.itaysonlab.jetisteam.usecases.GetProfileLibrary
+import bruhcollective.itaysonlab.jetisteam.usecases.profile.GetProfileLibrary
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
 import bruhcollective.itaysonlab.microapp.library.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

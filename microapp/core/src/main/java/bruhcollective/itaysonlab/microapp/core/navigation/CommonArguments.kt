@@ -12,4 +12,8 @@ object CommonArguments {
         type = NavType.LongType
         defaultValue = 0L
     }
+
+    val ForceReload = navArgument("sys_forceReload") {
+        type = NavType.BoolType
+    }
 }
