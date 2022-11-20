@@ -2,12 +2,10 @@ package bruhcollective.itaysonlab.jetisteam.uikit.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Button
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 
@@ -22,7 +20,7 @@ fun StateButton(
     Button(onClick = {
         if (!inLoadingState) onClick()
     }, modifier = modifier, shape = shape) {
-        StateButtonContent(inLoadingState, content)
+        StateButtonContent(inLoadingState, MaterialTheme.colorScheme.onPrimaryContainer, content)
     }
 }
 
@@ -37,7 +35,7 @@ fun StateTonalButton(
     FilledTonalButton(onClick = {
         if (!inLoadingState) onClick()
     }, modifier = modifier, shape = shape) {
-        StateButtonContent(inLoadingState, content)
+        StateButtonContent(inLoadingState, MaterialTheme.colorScheme.onSecondaryContainer, content)
     }
 }
 
@@ -52,20 +50,21 @@ fun StateTextButton(
     TextButton(onClick = {
         if (!inLoadingState) onClick()
     }, modifier = modifier, shape = shape) {
-        StateButtonContent(inLoadingState, content)
+        StateButtonContent(inLoadingState, MaterialTheme.colorScheme.primary, content)
     }
 }
 
 @Composable
 private fun StateButtonContent(
     inLoadingState: Boolean,
-    content: @Composable () -> Unit
+    containerColor: Color,
+    content: @Composable () -> Unit,
 ) {
     Box(Modifier.animateContentSize()) {
         if (inLoadingState) {
             ResizableCircularIndicator(
                 modifier = Modifier,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                color = containerColor,
                 indicatorSize = 24.dp,
                 strokeWidth = 2.dp
             )
