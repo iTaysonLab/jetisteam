@@ -1,12 +1,10 @@
-package bruhcollective.itaysonlab.jetisteam.usecases
+package bruhcollective.itaysonlab.jetisteam.usecases.profile
 
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
 import bruhcollective.itaysonlab.jetisteam.mappers.OwnedGame
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.repository.ClientCommRepository
 import bruhcollective.itaysonlab.jetisteam.repository.LibraryRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import steam.clientcomm.CClientComm_GetAllClientLogonInfo_Response_Session
 import javax.inject.Inject
 

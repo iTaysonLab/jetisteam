@@ -1,4 +1,4 @@
-package bruhcollective.itaysonlab.jetisteam.usecases
+package bruhcollective.itaysonlab.jetisteam.usecases.profile
 
 import bruhcollective.itaysonlab.jetisteam.mappers.FriendProfile
 import bruhcollective.itaysonlab.jetisteam.repository.FriendsRepository

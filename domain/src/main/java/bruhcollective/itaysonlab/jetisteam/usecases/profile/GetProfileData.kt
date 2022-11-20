@@ -1,4 +1,4 @@
-package bruhcollective.itaysonlab.jetisteam.usecases
+package bruhcollective.itaysonlab.jetisteam.usecases.profile
 
 import bruhcollective.itaysonlab.jetisteam.controllers.CdnController
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController

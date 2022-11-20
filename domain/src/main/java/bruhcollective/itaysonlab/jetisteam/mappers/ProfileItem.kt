@@ -15,7 +15,8 @@ class ProfileItem(
     val movieMp4: String?,
     val movieWebmSmall: String?,
     val movieMp4Small: String?,
-    val flags: Int
+    val flags: Int,
+    val itemId: Long
 ) {
     constructor(proto: steam.player.ProfileItem): this(
         imageSmall = CdnUrlUtil.buildPublicUrl(proto.image_small),
@@ -30,7 +31,8 @@ class ProfileItem(
         movieMp4 = CdnUrlUtil.buildPublicUrl(proto.movie_mp4),
         movieWebmSmall = CdnUrlUtil.buildPublicUrl(proto.movie_webm_small),
         movieMp4Small = CdnUrlUtil.buildPublicUrl(proto.movie_mp4_small),
-        flags = proto.equipped_flags ?: 0
+        flags = proto.equipped_flags ?: 0,
+        itemId = proto.communityitemid ?: 0
     )
 }
 
