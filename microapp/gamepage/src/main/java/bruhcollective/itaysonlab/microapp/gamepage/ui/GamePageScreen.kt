@@ -110,11 +110,11 @@ internal fun GamePageScreen(
                         deckReport = data.deckSupportReport,
                         onDeckClicked = { onDeckReportClicked(viewModel.appId) }
                     )
+
+                    Spacer(Modifier.height(16.dp))
                 }
 
-                item {
-                    Spacer(Modifier.height(16.dp))
-
+                item(key = "gameDesc", contentType = { "GPD" }) {
                     GamePageDescription(
                         html = data.fullDescription,
                         modifier = Modifier
@@ -123,11 +123,11 @@ internal fun GamePageScreen(
                             .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
                             .padding(16.dp)
                     )
-
-                    Spacer(Modifier.height(16.dp))
                 }
 
                 item {
+                    Spacer(Modifier.height(16.dp))
+
                     Column(
                         Modifier
                             .clip(
@@ -160,7 +160,11 @@ internal fun GamePageScreen(
                     }
                 }
 
-                items(data.reviews.reviews) { review ->
+                items(data.reviews.reviews, key = {
+                    "gameReview-${it.id}"
+                }, contentType = {
+                    "GRC"
+                }) { review ->
                     ReviewCard(
                         review = review,
                         reviewer = remember(review.author.steamId) { data.reviewers[SteamID(review.author.steamid)]!! },

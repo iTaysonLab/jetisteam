@@ -3,4 +3,7 @@
     <string name="err_text">An error occurred while loading the page.</string>
     <string name="err_act_copy">Copy details</string>
     <string name="err_act_reload">Reload</string>
+
+    <string name="text_expand">Expand text</string>
+    <string name="text_shorten">Shorten text</string>
 </resources>

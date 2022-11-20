@@ -7,9 +7,12 @@ object SteamBbToMarkdown {
             .replace("[*]", "* ")
             .replace("[list]", "")
             .replace("[/list]", "")
-            .replaceTagWith("h2") { "# $it" }
+            .replaceTagWith("h2") { "## $it" }
+            .replaceTagWith("h1") { "# $it" }
+            .replaceTagWith("hr") { "---" }
             .replaceTagWith("img") { "![image]($it)" }
             .replaceTagWith("b") { "**$it**" }
+            .replaceTagWith("i") { "_${it}_" }
             .replace("\\[url=(.+?)](.+?)\\[/url]".toRegex()) { result ->
                 "[${result.groupValues[2]}](${result.groupValues[1]})"
             }
@@ -20,7 +23,7 @@ object SteamBbToMarkdown {
     }
 
     private fun String.replaceTagWith(tag: String, func: (String) -> String) = replace(
-        "\\[$tag](.+?)\\[/$tag]".toRegex()
+        "\\[$tag](.*?)\\[/$tag]".toRegex()
     ) { result -> func(result.groupValues[1]) }
 
     private fun String.replaceHtmlTagWith(tag: String, func: (String) -> String) = replace(

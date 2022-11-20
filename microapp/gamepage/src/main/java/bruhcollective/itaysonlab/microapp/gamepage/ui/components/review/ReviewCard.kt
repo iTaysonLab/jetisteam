@@ -9,21 +9,29 @@ import androidx.compose.material.icons.rounded.ThumbUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetisteam.ext.roundUpTo
 import bruhcollective.itaysonlab.jetisteam.models.Player
 import bruhcollective.itaysonlab.jetisteam.models.Review
+import bruhcollective.itaysonlab.jetisteam.uikit.components.ExpandableRichText
 import bruhcollective.itaysonlab.jetisteam.util.DateUtil
+import bruhcollective.itaysonlab.jetisteam.util.SteamBbToMarkdown
 import bruhcollective.itaysonlab.microapp.gamepage.R
 import coil.compose.AsyncImage
+import com.halilibo.richtext.markdown.Markdown
+import com.halilibo.richtext.ui.RichTextStyle
+import com.halilibo.richtext.ui.material3.Material3RichText
+import com.halilibo.richtext.ui.string.RichTextStringStyle
 
 @Composable
 fun ReviewCard(
@@ -41,8 +49,12 @@ fun ReviewCard(
         .compositeOver(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
     val compositedColorLight = reviewColor.copy(alpha = 0.5f)
         .compositeOver(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
-    val compositedColorOverLight = reviewColor.copy(alpha = 0.75f)
-        .compositeOver(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
+    val compositedColorOverLight = reviewColor.copy(alpha = 0.85f)
+        .compositeOver(MaterialTheme.colorScheme.surfaceColorAtElevation(16.dp))
+
+    val reviewModel = rememberSaveable(review.review) {
+        SteamBbToMarkdown.bbcodeToMarkdown(review.review)
+    }
 
     val headerSubtitle = remember(review) {
         if (review.author.reviewPlaytime == review.author.totalPlaytime) {
@@ -112,9 +124,37 @@ fun ReviewCard(
                 }
             }
 
-            Text(text = review.review, modifier = Modifier.padding(horizontal = 16.dp))
+            if (reviewModel.length > 240) {
+                ExpandableRichText(
+                    markdown = reviewModel,
+                    textColor = reviewColor,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    backgroundColor = compositedColor
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+            } else {
+                Material3RichText(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    style = RichTextStyle(
+                        stringStyle = RichTextStringStyle(
+                            linkStyle = SpanStyle(
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        )
+                    )
+                ) {
+                    Markdown(
+                        content = reviewModel
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
             Column(
                 modifier = Modifier
@@ -166,7 +206,10 @@ fun ReviewCard(
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }, content = {
-                                    Text(text = review.markedAsHelpful.toString(), color = MaterialTheme.colorScheme.onSurface)
+                                    Text(
+                                        text = review.markedAsHelpful.toString(),
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
                                 }, background = compositedColorOverLight
                             )
                         }
@@ -181,7 +224,10 @@ fun ReviewCard(
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }, content = {
-                                    Text(text = review.markedAsFunny.toString(), color = MaterialTheme.colorScheme.onSurface)
+                                    Text(
+                                        text = review.markedAsFunny.toString(),
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
                                 }, background = compositedColorOverLight
                             )
                         }
