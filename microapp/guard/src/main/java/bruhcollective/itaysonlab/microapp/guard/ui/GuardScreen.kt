@@ -1,6 +1,9 @@
 package bruhcollective.itaysonlab.microapp.guard.ui
 
 import android.os.Build
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -35,6 +38,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.launch
+import soup.compose.material.motion.animation.materialSharedAxisY
+import soup.compose.material.motion.animation.rememberSlideDistance
 import steam.twofactor.CTwoFactor_AddAuthenticator_Response
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
@@ -182,7 +187,7 @@ private fun GuardNoInstanceAvailableScreen(
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalAnimationApi::class)
 @Composable
 private fun GuardInstanceAvailableScreen(
     modifier: Modifier,
@@ -191,6 +196,7 @@ private fun GuardInstanceAvailableScreen(
     onMoreSettingsClicked: () -> Unit,
     onCopyClicked: () -> Unit
 ) {
+    val slideDistance = rememberSlideDistance()
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
     var showPermissionAlert by remember { mutableStateOf(false) }
 
@@ -229,13 +235,20 @@ private fun GuardInstanceAvailableScreen(
             )
 
             Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = code.code,
-                    textAlign = TextAlign.Center,
-                    fontSize = 40.sp,
-                    letterSpacing = 12.sp,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                AnimatedContent(targetState = code.code, transitionSpec = {
+                    materialSharedAxisY(forward = true, slideDistance = slideDistance).using(
+                        SizeTransform(clip = false)
+                    )
+                }) { code ->
+                    Text(
+                        text = code,
+                        textAlign = TextAlign.Center,
+                        fontSize = 40.sp,
+                        letterSpacing = 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
                 TextButton(onCopyClicked) {
                     Icon(imageVector = Icons.Rounded.ContentCopy, contentDescription = null)
