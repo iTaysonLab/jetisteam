@@ -41,6 +41,19 @@
     <string name="edit_type_none">Not set</string>
     <string name="edit_type_general">General</string>
 
+    <string name="edit_theme_default">Default</string>
+    <string name="edit_theme_summer">Summer</string>
+    <string name="edit_theme_midnight">Midnight</string>
+    <string name="edit_theme_steel">Steel</string>
+    <string name="edit_theme_cosmic">Cosmic</string>
+    <string name="edit_theme_dark">Dark Mode</string>
+
+    <string name="edit_default">Default</string>
+    <string name="edit_debut">The Debut Collection</string>
+
+    <string name="edit_theme_specials">Special Profiles</string>
+    <string name="edit_theme_special_info">Applying a Special Profile will override your current profile items. You can change them later.</string>
+
     <plurals name="minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>

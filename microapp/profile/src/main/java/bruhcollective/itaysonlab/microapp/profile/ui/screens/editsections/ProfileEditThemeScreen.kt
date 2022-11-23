@@ -33,15 +33,14 @@ import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.profile.R
 import bruhcollective.itaysonlab.microapp.profile.core.ProfileEditEvent
-import bruhcollective.itaysonlab.microapp.profile.core.SectionType
 import coil.compose.AsyncImage
 import soup.compose.material.motion.animation.materialSharedAxisY
 import soup.compose.material.motion.animation.rememberSlideDistance
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-internal fun ProfileEditSectionScreen(
-    viewModel: ProfileEditSectionViewModel = hiltViewModel(),
+internal fun ProfileEditThemeScreen(
+    viewModel: ProfileEditThemeViewModel = hiltViewModel(),
     onBackClicked: () -> Unit,
     onChangesCommitted: (ProfileEditEvent) -> Unit
 ) {
@@ -52,15 +51,7 @@ internal fun ProfileEditSectionScreen(
         topBar = {
             LargeTopAppBar(title = {
                 Text(
-                    text = stringResource(
-                        id = when (viewModel.currentSectionType) {
-                            SectionType.Avatar -> R.string.edit_type_avatar
-                            SectionType.AvatarFrame -> R.string.edit_type_avatar_frame
-                            SectionType.ProfileBackground -> R.string.edit_type_profile_bg
-                            SectionType.MiniprofileBackground -> R.string.edit_type_miniprofile_bg
-                            else -> error("Unsupported type for generic edit screen")
-                        }
-                    )
+                    text = stringResource(R.string.edit_type_theme)
                 )
             }, navigationIcon = {
                 IconButton(onClick = onBackClicked) {
@@ -118,19 +109,17 @@ internal fun ProfileEditSectionScreen(
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.padding(top = 4.dp)
                                     ) {
-                                        if (item.fromApplication != null) {
-                                            AsyncImage(
-                                                model = item.fromApplicationIcon,
-                                                contentDescription = null,
-                                                modifier = Modifier
-                                                    .clip(RoundedCornerShape(4.dp))
-                                                    .size(18.dp)
-                                            )
+                                        AsyncImage(
+                                            model = item.fromApplicationIcon,
+                                            contentDescription = null,
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(4.dp))
+                                                .size(18.dp)
+                                        )
 
-                                            Spacer(modifier = Modifier.width(8.dp))
-                                        }
+                                        Spacer(modifier = Modifier.width(8.dp))
 
-                                        Text(text = item.fromApplication ?: stringResource(id = R.string.edit_debut))
+                                        Text(text = item.fromApplication)
                                     }
                                 },
                                 leadingContent = {
@@ -155,11 +144,9 @@ internal fun ProfileEditSectionScreen(
                                         )
                                     )
                                 },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        viewModel.switchItemSelection(item.id)
-                                    },
+                                modifier = Modifier.fillMaxWidth().clickable {
+                                    viewModel.switchItemSelection(item.id)
+                                },
                                 colors = ListItemDefaults.colors(
                                     containerColor = Color.Transparent
                                 )

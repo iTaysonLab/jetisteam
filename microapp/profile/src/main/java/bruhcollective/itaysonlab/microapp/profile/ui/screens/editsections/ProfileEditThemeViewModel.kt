@@ -20,7 +20,7 @@ import steam.player.ECommunityItemClass
 import javax.inject.Inject
 
 @HiltViewModel
-internal class ProfileEditSectionViewModel @Inject constructor(
+internal class ProfileEditThemeViewModel @Inject constructor(
     private val getProfileEquips: GetProfileEquipsAndOwned,
     private val setProfileEquipment: SetProfileEquipment,
     private val cdnController: CdnController,
@@ -63,7 +63,7 @@ internal class ProfileEditSectionViewModel @Inject constructor(
             Item(
                 id = item.itemId,
                 name = item.name,
-                fromApplication = app.name?.ifEmpty { null },
+                fromApplication = app.name.orEmpty(),
                 fromApplicationIcon = cdnController.buildCommunityUrl("images/apps/${app.appid}/${app.assets?.community_icon}.jpg"),
                 itemPreview = item.imageLarge.orEmpty(),
                 proto = item
@@ -96,7 +96,7 @@ internal class ProfileEditSectionViewModel @Inject constructor(
     class Item(
         val id: Long,
         val name: String,
-        val fromApplication: String?,
+        val fromApplication: String,
         val fromApplicationIcon: String,
         val itemPreview: String,
         val proto: ProfileItem

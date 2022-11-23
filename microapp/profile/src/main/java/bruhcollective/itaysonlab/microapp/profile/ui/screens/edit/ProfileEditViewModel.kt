@@ -2,19 +2,22 @@ package bruhcollective.itaysonlab.microapp.profile.ui.screens.edit
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.rounded.CropFree
+import androidx.compose.material.icons.rounded.Photo
+import androidx.compose.material.icons.rounded.PictureInPicture
+import androidx.compose.material.icons.rounded.Wallpaper
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
 import bruhcollective.itaysonlab.jetisteam.usecases.profile.GetProfileEquips
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.profile.R
+import bruhcollective.itaysonlab.microapp.profile.core.ProfileEditEvent
 import bruhcollective.itaysonlab.microapp.profile.core.SectionType
-import com.squareup.wire.get
+import bruhcollective.itaysonlab.microapp.profile.core.enrichWithEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -31,41 +34,62 @@ internal class ProfileEditViewModel @Inject constructor(
     init { reload() }
 
     override suspend fun load() = getProfileEquips().also { equipment ->
+        setState(equipment)
+        bindUiBlocks()
+    }
+
+    private fun bindUiBlocks() {
+        data ?: return
+
         uiSections = buildList {
             add(Block(
                 title = R.string.edit_type_avatar,
-                text = equipment.equipment.animatedAvatar?.name,
+                text = data?.equipment?.animatedAvatar?.name?.ifEmpty { null },
                 icon = { Icons.Rounded.Photo },
                 type = SectionType.Avatar
             ))
 
             add(Block(
                 title = R.string.edit_type_avatar_frame,
-                text = equipment.equipment.avatarFrame?.name,
+                text = data?.equipment?.avatarFrame?.name?.ifEmpty { null },
                 icon = { Icons.Rounded.CropFree },
                 type = SectionType.AvatarFrame
             ))
 
             add(Block(
                 title = R.string.edit_type_profile_bg,
-                text = equipment.equipment.background?.name,
+                text = data?.equipment?.background?.name?.ifEmpty { null },
                 icon = { Icons.Rounded.Wallpaper },
                 type = SectionType.ProfileBackground
             ))
 
             add(Block(
                 title = R.string.edit_type_miniprofile_bg,
-                text = equipment.equipment.miniBackground?.name,
+                text = data?.equipment?.miniBackground?.name?.ifEmpty { null },
                 icon = { Icons.Rounded.PictureInPicture },
                 type = SectionType.MiniprofileBackground
             ))
 
-            add(Block(
+            /*add(Block(
                 title = R.string.edit_type_theme,
-                text = equipment.equipment.profileModifier?.name ?: equipment.currentTheme?.title,
+                text = data?.equipment?.profileModifier?.name?.ifEmpty { null } ?: data?.currentTheme?.title?.ifEmpty { null },
                 icon = { Icons.Rounded.Palette },
                 type = SectionType.ProfileTheme
-            ))
+            ))*/
+        }
+    }
+
+    fun consumeEvent(event: ProfileEditEvent) {
+        when (event) {
+            is ProfileEditEvent.ProfileItemChanged -> {
+                val currentEquip = data?.equipment ?: return
+
+                setState(data?.copy(
+                    equipment = currentEquip.enrichWithEvent(event)
+                ) ?: return)
+
+                bindUiBlocks()
+            }
         }
     }
 

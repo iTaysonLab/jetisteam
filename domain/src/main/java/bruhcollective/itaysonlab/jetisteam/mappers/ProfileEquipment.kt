@@ -2,12 +2,12 @@ package bruhcollective.itaysonlab.jetisteam.mappers
 
 import steam.player.CPlayer_GetProfileItemsEquipped_Response
 
-class ProfileEquipment(
-    val background: ProfileItem?,
-    val miniBackground: ProfileItem?,
-    val avatarFrame: ProfileItem?,
-    val animatedAvatar: ProfileItem?,
-    val profileModifier: ProfileItem?,
+data class ProfileEquipment(
+    val background: ProfileItem? = null,
+    val miniBackground: ProfileItem? = null,
+    val avatarFrame: ProfileItem? = null,
+    val animatedAvatar: ProfileItem? = null,
+    val profileModifier: ProfileItem? = null,
 ) {
     constructor(proto: CPlayer_GetProfileItemsEquipped_Response): this(
         background = proto.profile_background.toAppModel(),

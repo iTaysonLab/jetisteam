@@ -10,18 +10,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
 import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenError
 import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenLoading
 import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.InstallTypedResultHandler
 import bruhcollective.itaysonlab.microapp.profile.R
+import bruhcollective.itaysonlab.microapp.profile.core.ProfileEditEvent
 import bruhcollective.itaysonlab.microapp.profile.core.SectionType
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,16 +32,14 @@ internal fun ProfileEditScreen(
     viewModel: ProfileEditViewModel = hiltViewModel(),
     onBackClicked: () -> Unit,
     onSectionNavigate: (Long, SectionType) -> Unit,
-    reloadFlag: Boolean,
-    onReloadFlagTriggered: () -> Unit
+    backStackEntry: NavBackStackEntry,
+    onNavResultConsumed: (ProfileEditEvent) -> Unit
 ) {
     val tas = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    LaunchedEffect(reloadFlag) {
-        if (reloadFlag) {
-            viewModel.reload()
-            onReloadFlagTriggered()
-        }
+    InstallTypedResultHandler<ProfileEditEvent>(backStackEntry) { event ->
+        viewModel.consumeEvent(event)
+        onNavResultConsumed(event)
     }
 
     Scaffold(
@@ -79,8 +79,7 @@ internal fun ProfileEditScreen(
                                     Text(text = stringResource(block.title))
                                 }, supportingText = {
                                     Text(
-                                        text = block.text
-                                            ?: stringResource(id = R.string.edit_type_none)
+                                        text = block.text ?: stringResource(id = R.string.edit_default)
                                     )
                                 }, leadingContent = {
                                     Icon(imageVector = block.icon(), contentDescription = null)

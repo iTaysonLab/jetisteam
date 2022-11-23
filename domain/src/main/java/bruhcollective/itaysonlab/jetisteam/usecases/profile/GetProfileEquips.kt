@@ -20,7 +20,7 @@ class GetProfileEquips @Inject constructor(
         )
     }
 
-    class ProfileEquips(
+    data class ProfileEquips(
         val equipment: ProfileEquipment,
         val currentTheme: ProfileTheme?,
     )

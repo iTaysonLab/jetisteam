@@ -2,7 +2,6 @@ package bruhcollective.itaysonlab.microapp.gamepage.ui.bottomsheet
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Cancel
@@ -15,10 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -68,7 +64,7 @@ fun DeckReportBottomSheet(
                             Text(state.data.headerString, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
 
-                        Divider(color = MaterialTheme.colorScheme.outlineVariant)
+                        Divider(color = MaterialTheme.colorScheme.surfaceVariant)
                     }
 
                     itemsIndexed(state.data.items) { index, item ->
@@ -90,7 +86,7 @@ fun DeckReportBottomSheet(
                         }
 
                         if (index != state.data.items.lastIndex) {
-                            Divider(color = MaterialTheme.colorScheme.outlineVariant)
+                            Divider(color = MaterialTheme.colorScheme.surfaceVariant)
                         }
                     }
                 }

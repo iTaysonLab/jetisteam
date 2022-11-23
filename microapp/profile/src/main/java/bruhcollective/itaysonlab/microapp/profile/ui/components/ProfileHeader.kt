@@ -69,23 +69,36 @@ internal fun ProfileHeader(
         Column(Modifier.padding(bottom = 8.dp)) {
             Spacer(modifier = Modifier.height(150.dp))
 
-            Box(
-                Modifier
-                    .padding(start = 4.dp, bottom = 16.dp)
-                    .padding(horizontal = 16.dp)) {
+            if (avatarFrameUrl != null) {
+                Box(
+                    Modifier
+                        .padding(start = 20.dp)) {
+                    AsyncImage(
+                        model = avatarUrl,
+                        contentDescription = null,
+                        modifier = Modifier.size(72.dp)
+                    )
+
+                    AsyncImage(
+                        model = avatarFrameUrl,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(72.dp)
+                            .scale(1.22f)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+            } else {
                 AsyncImage(
                     model = avatarUrl,
                     contentDescription = null,
-                    modifier = Modifier.size(72.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .size(72.dp)
                 )
 
-                AsyncImage(
-                    model = avatarFrameUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(72.dp)
-                        .scale(1.22f)
-                )
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
             Text(
@@ -116,7 +129,9 @@ internal fun ProfileHeader(
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp),
-                    modifier = Modifier.fillMaxWidth().height(40.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp),
                 ) {
                     item {
                         Button(onClick = onEditClick, colors = ButtonDefaults.buttonColors(

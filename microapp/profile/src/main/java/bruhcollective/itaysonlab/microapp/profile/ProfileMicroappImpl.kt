@@ -1,16 +1,19 @@
 package bruhcollective.itaysonlab.microapp.profile
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.runtime.collectAsState
 import androidx.navigation.*
 import bruhcollective.itaysonlab.microapp.core.Destinations
 import bruhcollective.itaysonlab.microapp.core.find
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.setResultToPreviousEntry
 import bruhcollective.itaysonlab.microapp.gamepage.GamePageMicroapp
 import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
+import bruhcollective.itaysonlab.microapp.profile.core.ProfileEditEvent
+import bruhcollective.itaysonlab.microapp.profile.core.SectionType
 import bruhcollective.itaysonlab.microapp.profile.ui.ProfileScreen
 import bruhcollective.itaysonlab.microapp.profile.ui.screens.edit.ProfileEditScreen
 import bruhcollective.itaysonlab.microapp.profile.ui.screens.editsections.ProfileEditSectionScreen
+import bruhcollective.itaysonlab.microapp.profile.ui.screens.editsections.ProfileEditThemeScreen
 import bruhcollective.itaysonlab.microapp.profile.ui.screens.friends.FriendsScreen
 import com.google.accompanist.navigation.animation.composable
 import javax.inject.Inject
@@ -22,11 +25,9 @@ class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
         destinations: Destinations
     ) {
         composable(Routes.Profile.url, arguments = listOf(CommonArguments.SteamIdWithDefault)) {
-            val reloadSign = it.savedStateHandle.getStateFlow(CommonArguments.ForceReload.name, false).collectAsState()
-
             ProfileScreen(
                 onGameClick = { appId ->
-                    navController.navigateToGame(destinations, appId)
+                    navController.navigate(destinations.find<GamePageMicroapp>().gameDestination(appId))
                 }, onLibraryClick = { steamId ->
                     navController.navigate(destinations.find<LibraryMicroapp>().libraryOf(steamId))
                 }, onFriendsClick = { steamId ->
@@ -39,9 +40,7 @@ class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
                     } else {
                         navController.popBackStack()
                     }
-                }, reloadFlag = reloadSign.value, onReloadFlagTriggered = {
-                    it.savedStateHandle[CommonArguments.ForceReload.name] = false
-                }
+                }, backStackEntry = it
             )
         }
 
@@ -54,28 +53,23 @@ class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
         }
 
         composable(Routes.Edit.url, arguments = listOf(CommonArguments.SteamId)) {
-            val reloadSign = it.savedStateHandle.getStateFlow(CommonArguments.ForceReload.name, false).collectAsState()
-
             ProfileEditScreen(onBackClicked = navController::popBackStack, onSectionNavigate = { steamId, section ->
                 navController.navigate(editDestination(steamId, section))
-            }, reloadFlag = reloadSign.value, onReloadFlagTriggered = {
-                navController.previousBackStackEntry?.savedStateHandle?.set(CommonArguments.ForceReload.name, true)
-                it.savedStateHandle[CommonArguments.ForceReload.name] = false
+            }, backStackEntry = it, onNavResultConsumed = { event ->
+                navController.setResultToPreviousEntry(event, popBackStack = false)
             })
         }
 
         composable(Routes.EditSection.url, arguments = listOf(CommonArguments.SteamId, Arguments.SectionType)) {
-            ProfileEditSectionScreen(onBackClicked = navController::popBackStack, onChangesCommitted = {
-                navController.previousBackStackEntry?.savedStateHandle?.set(CommonArguments.ForceReload.name, true)
-                navController.popBackStack()
-            })
-        }
-    }
+            val onChangesCommitted = { event: ProfileEditEvent ->
+                navController.setResultToPreviousEntry(event, popBackStack = true)
+            }
 
-    private fun NavController.navigateToGame(destinations: Destinations, appId: Int) {
-        navigate(
-            destinations.find<GamePageMicroapp>()
-                .gameDestination(appId)
-        )
+            if (it.savedStateHandle.get<SectionType>(Arguments.SectionType.name) == SectionType.ProfileTheme) {
+                ProfileEditThemeScreen(onBackClicked = navController::popBackStack, onChangesCommitted = onChangesCommitted)
+            } else {
+                ProfileEditSectionScreen(onBackClicked = navController::popBackStack, onChangesCommitted = onChangesCommitted)
+            }
+        }
     }
 }

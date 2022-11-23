@@ -54,6 +54,8 @@ dependencies {
     implementation libs.bundles.accompanist
     debugImplementation libs.bundles.composeDebug
 
+    implementation libs.coilCompose
+
     implementation libs.hiltAndroid
     kapt libs.hiltCompiler
 }

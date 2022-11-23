@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.microapp.core.navigation
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.NavigationResult
 
 object CommonArguments {
     val SteamId = navArgument("steamId") {
@@ -13,7 +14,7 @@ object CommonArguments {
         defaultValue = 0L
     }
 
-    val ForceReload = navArgument("sys_forceReload") {
-        type = NavType.BoolType
+    val Result = navArgument("sys_result") {
+        type = NavType.ParcelableType(NavigationResult::class.java)
     }
 }

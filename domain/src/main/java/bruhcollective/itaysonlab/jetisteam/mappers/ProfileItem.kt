@@ -1,7 +1,10 @@
 package bruhcollective.itaysonlab.jetisteam.mappers
 
+import android.os.Parcelable
 import bruhcollective.itaysonlab.jetisteam.util.CdnUrlUtil
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 class ProfileItem(
     val imageSmall: String?,
     val imageLarge: String?,
@@ -17,7 +20,7 @@ class ProfileItem(
     val movieMp4Small: String?,
     val flags: Int,
     val itemId: Long
-) {
+): Parcelable {
     constructor(proto: steam.player.ProfileItem): this(
         imageSmall = CdnUrlUtil.buildPublicUrl(proto.image_small),
         imageLarge = CdnUrlUtil.buildPublicUrl(proto.image_large),

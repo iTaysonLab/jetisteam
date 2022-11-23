@@ -86,7 +86,7 @@ class GetProfileData @Inject constructor(
         )
     }
 
-    class ProfileData(
+    data class ProfileData(
         val steamID: SteamID,
         val playerProfile: Player,
         val summary: ProfileSummary?,

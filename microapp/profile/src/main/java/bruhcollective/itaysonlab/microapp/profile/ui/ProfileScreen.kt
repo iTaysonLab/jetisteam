@@ -11,14 +11,17 @@ import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import bruhcollective.itaysonlab.jetisteam.uikit.SteamColors
 import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.delegates.LocalShareDispatcher
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.InstallTypedResultHandler
+import bruhcollective.itaysonlab.microapp.profile.core.ProfileEditEvent
 import bruhcollective.itaysonlab.microapp.profile.ui.components.ProfileCardEntry
 import bruhcollective.itaysonlab.microapp.profile.ui.components.ProfileHeader
 
@@ -30,18 +33,15 @@ internal fun ProfileScreen(
     onFriendsClick: (Long) -> Unit,
     onEditClick: (Long) -> Unit,
     onNavigationClick: (Boolean) -> Unit,
-    reloadFlag: Boolean,
-    onReloadFlagTriggered: () -> Unit,
+    backStackEntry: NavBackStackEntry,
     viewModel: ProfileScreenViewModel = hiltViewModel()
 ) {
     val tab = rememberTopAppBarState()
     val tas = TopAppBarDefaults.pinnedScrollBehavior(state = tab)
+    val share = LocalShareDispatcher.current
 
-    LaunchedEffect(reloadFlag) {
-        if (reloadFlag) {
-            viewModel.reload()
-            onReloadFlagTriggered()
-        }
+    InstallTypedResultHandler<ProfileEditEvent>(backStackEntry) { event ->
+        viewModel.consumeEvent(event)
     }
 
     PageLayout(state = viewModel.state, onReload = viewModel::reload) { data ->
@@ -50,35 +50,51 @@ internal fun ProfileScreen(
         }
 
         CompositionLocalProvider(LocalSteamTheme provides theme) {
-            Scaffold(topBar = {
-                TopAppBar(title = {
+            Scaffold(
+                topBar = {
+                    TopAppBar(title = {
 
-                }, scrollBehavior = tas, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent,
-                    actionIconContentColor = Color.White,
-                ), actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Rounded.IosShare, contentDescription = null)
-                    }
-                }, navigationIcon = {
-                    IconButton(onClick = { onNavigationClick(viewModel.isRootScreen) }) {
-                        Icon(imageVector = if (viewModel.isRootScreen) {
-                            Icons.Rounded.Menu
-                        } else {
-                            Icons.Rounded.ArrowBack
-                        }, contentDescription = null)
-                    }
-                })
-            }, modifier = Modifier
-                .nestedScroll(tas.nestedScrollConnection)
-                .fillMaxSize()) {
-                LazyColumn(modifier = Modifier
-                    .background(theme.gradientBackground.copy(alpha = 1f))
-                    .fillMaxSize()) {
+                    }, scrollBehavior = tas, colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                        actionIconContentColor = Color.White,
+                        navigationIconContentColor = Color.White,
+                    ), actions = {
+                        IconButton(onClick = {
+                            share.share(
+                                url = data.playerProfile.profileurl,
+                                humanReadableTitle = data.playerProfile.personaname,
+                                pictureUrl = data.playerProfile.avatarfull
+                            )
+                        }) {
+                            Icon(
+                                imageVector = Icons.Rounded.IosShare,
+                                contentDescription = null
+                            )
+                        }
+                    }, navigationIcon = {
+                        IconButton(onClick = { onNavigationClick(viewModel.isRootScreen) }) {
+                            Icon(
+                                imageVector = if (viewModel.isRootScreen) {
+                                    Icons.Rounded.Menu
+                                } else {
+                                    Icons.Rounded.ArrowBack
+                                }, contentDescription = null
+                            )
+                        }
+                    })
+                }, modifier = Modifier
+                    .nestedScroll(tas.nestedScrollConnection)
+                    .fillMaxSize()
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .background(theme.gradientBackground.copy(alpha = 1f))
+                        .fillMaxSize()
+                ) {
                     item {
                         ProfileHeader(
                             backgroundUrl = data.equipment.background?.imageLarge,
-                            avatarUrl = data.playerProfile.avatarfull,
+                            avatarUrl = data.equipment.animatedAvatar?.imageLarge ?: data.playerProfile.avatarfull,
                             avatarFrameUrl = data.equipment.avatarFrame?.imageLarge,
                             profile = data.playerProfile,
                             summary = data.summary,

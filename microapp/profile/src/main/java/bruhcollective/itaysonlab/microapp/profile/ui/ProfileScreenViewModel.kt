@@ -6,6 +6,8 @@ import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
 import bruhcollective.itaysonlab.jetisteam.usecases.profile.GetProfileData
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
+import bruhcollective.itaysonlab.microapp.profile.core.ProfileEditEvent
+import bruhcollective.itaysonlab.microapp.profile.core.enrichWithEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import steam.player.CPlayer_GetAchievementsProgress_Response_AchievementProgress
 import steam.player.CPlayer_GetOwnedGames_Response_Game
@@ -45,6 +47,18 @@ internal class ProfileScreenViewModel @Inject constructor(
     fun game(id: Int) = data!!.ownedGames[id]!!
 
     fun gameSize() = data?.ownedGames?.size ?: 0
+
+    fun consumeEvent(event: ProfileEditEvent) {
+        when (event) {
+            is ProfileEditEvent.ProfileItemChanged -> {
+                setState(
+                    data!!.copy(
+                        equipment = data?.equipment?.enrichWithEvent(event)!!
+                    )
+                )
+            }
+        }
+    }
 }
 
 typealias Game = CPlayer_GetOwnedGames_Response_Game
