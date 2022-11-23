@@ -123,9 +123,9 @@ internal fun ProfileHeader(
                 color = Color.White.copy(alpha = 0.7f),
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-
             if (summary != null) {
+                Spacer(modifier = Modifier.height(12.dp))
+
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp),

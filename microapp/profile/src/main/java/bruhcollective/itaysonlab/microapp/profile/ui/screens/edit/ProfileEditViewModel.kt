@@ -2,10 +2,7 @@ package bruhcollective.itaysonlab.microapp.profile.ui.screens.edit
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CropFree
-import androidx.compose.material.icons.rounded.Photo
-import androidx.compose.material.icons.rounded.PictureInPicture
-import androidx.compose.material.icons.rounded.Wallpaper
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
