@@ -1,9 +1,7 @@
 package bruhcollective.itaysonlab.jetisteam.usecases
 
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
-import bruhcollective.itaysonlab.jetisteam.controllers.UserService
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
-import bruhcollective.itaysonlab.jetisteam.models.steamIdFromAccountId
 import bruhcollective.itaysonlab.jetisteam.repository.EconRepository
 import bruhcollective.itaysonlab.jetisteam.repository.FriendsRepository
 import bruhcollective.itaysonlab.jetisteam.repository.NotificationsRepository
@@ -30,10 +28,28 @@ class GetNotifications @Inject constructor(
         val apiNotifications = notificationsRepository.getNotifications()
 
         val apiNotificationList = apiNotifications.notifications
-            .groupBy { it.timestamp }
-            .values
-            .map { it.first() to (it.size - 1) }
-            .sortedByDescending { it.first.timestamp }
+            .partition { it.notification_type == SteamNotificationType.Item }
+            .let { itemsAndOthers ->
+                val indexOfFirstItemNotification =
+                    apiNotifications.notifications.sortedByDescending { it.timestamp ?: 0 }
+                        .indexOfFirst { it.notification_type == SteamNotificationType.Item }
+
+                val itemWithExtras = if (itemsAndOthers.first.isNotEmpty()) {
+                    itemsAndOthers.first.maxBy { it.timestamp ?: 0 } to (itemsAndOthers.first.size - 1)
+                } else {
+                    null
+                }
+
+                return@let itemsAndOthers.second
+                    .map { it to 0 }
+                    .toMutableList()
+                    .also {
+                        if (itemWithExtras != null) {
+                            it.add(indexOfFirstItemNotification, itemWithExtras)
+                        }
+                    }
+            }
+            .sortedByDescending { it.first.timestamp ?: 0 }
 
         val shouldRequestFriends =
             apiNotificationList.filter { it.first.notification_type == SteamNotificationType.FriendInvite }
@@ -44,7 +60,7 @@ class GetNotifications @Inject constructor(
             shouldRequestGames.map {
                 StoreItemID(appid = JSONObject(it.first.body_data.orEmpty()).getInt("appid"))
             }, StoreBrowseItemDataRequest(include_tag_count = 0, include_assets = true)
-        ).store_items else emptyList()).associateBy { it.appid }
+        ).store_items else emptyList()).filter { it.appid != null }.associateBy { it.appid }
 
         val friends =
             (if (shouldRequestFriends.isNotEmpty()) friendsRepository.getFriendsList().friendslist?.friends else emptyList())?.filter {
@@ -55,27 +71,31 @@ class GetNotifications @Inject constructor(
 
         NotificationsPage(
             confirmationsCount = apiNotifications.confirmation_count ?: 0,
-            notifications = apiNotificationList.mapNotNull { pair ->
+            notifications = apiNotificationList.map { pair ->
                 val notification = pair.first
                 val extra = pair.second
                 val haveExtra = extra > 0
 
                 when (notification.notification_type) {
                     SteamNotificationType.Wishlist -> {
-                        val game = games[JSONObject(notification.body_data.orEmpty()).getInt("appid")]!!
+                        val game =
+                            games[JSONObject(notification.body_data.orEmpty()).getInt("appid")]!!
 
                         Notification(
                             timestamp = notification.timestamp ?: 0,
                             title = if (haveExtra) "${game.name} + $extra" else game.name.orEmpty(),
                             description = "is on sale for ${game.best_purchase_option?.formatted_final_price.orEmpty()}",
                             icon = CdnUrlUtil.buildCommunityUrl("images/apps/${game.appid}/${game.assets?.community_icon}.jpg"),
-                            type = notification.notification_type!!
+                            type = notification.notification_type!!,
+                            unread = notification.read?.not() ?: false,
+                            destination = game.appid ?: 0
                         )
                     }
 
                     SteamNotificationType.FriendInvite -> {
                         val accountId =
-                            JSONObject(notification.body_data.orEmpty()).getInt("requestor_id").toLong()
+                            JSONObject(notification.body_data.orEmpty()).getInt("requestor_id")
+                                .toLong()
                         val miniProfile = miniprofileService.getMiniprofile(accountId)
                         val inFriends = friends.contains(accountId)
 
@@ -84,12 +104,14 @@ class GetNotifications @Inject constructor(
                             title = if (haveExtra) "${miniProfile.personaName} + $extra" else miniProfile.personaName,
                             description = if (inFriends) "You are now friends" else "Awaiting response",
                             icon = miniProfile.avatarUrl,
-                            type = notification.notification_type!!
+                            type = notification.notification_type!!,
+                            unread = notification.read?.not() ?: false,
+                            destination = accountId
                         )
                     }
 
-                    /*SteamNotificationType.Item -> {
-                        val itemId = JSONObject(notification.bodyData)
+                    SteamNotificationType.Item -> {
+                        val itemId = JSONObject(notification.body_data.orEmpty())
 
                         val item = econRepository.getInventoryItemsWithDescriptions(
                             steamid = steamSessionController.steamId().steamId,
@@ -97,24 +119,28 @@ class GetNotifications @Inject constructor(
                             contextid = itemId.getLong("context_id"),
                             getDescriptions = true,
                             assetids = listOf(itemId.getLong("asset_id"))
-                        ).descriptionsList.first()
+                        ).descriptions.first()
 
                         Notification(
-                            timestamp = notification.timestamp,
+                            timestamp = notification.timestamp ?: 0,
                             title = "New items",
-                            description = if (haveExtra) "${item.name} + $extra" else item.name,
-                            icon = CdnUrlUtil.buildEconomy(item.iconUrl),
-                            type = notification.notificationType
+                            description = if (haveExtra) "${item.name} + $extra" else item.name.orEmpty(),
+                            icon = CdnUrlUtil.buildEconomy(item.icon_url.orEmpty()),
+                            type = notification.notification_type!!,
+                            unread = notification.read?.not() ?: false,
+                            destination = steamSessionController.steamId().steamId
                         )
-                    }*/
+                    }
 
-                    else -> null /*Notification(
-                        timestamp = notification.timestamp,
+                    else -> Notification(
+                        timestamp = notification.timestamp ?: 0,
                         title = "Unknown notification",
-                        description = "Not yet implemented!",
+                        description = "Rich content not implemented",
                         icon = "",
-                        type = notification.notificationType
-                    )*/
+                        type = notification.notification_type!!,
+                        unread = notification.read?.not() ?: false,
+                        destination = ""
+                    )
                 }
             }
         )
@@ -130,6 +156,8 @@ class GetNotifications @Inject constructor(
         val icon: String,
         val title: String,
         val description: String,
-        val type: SteamNotificationType
+        val type: SteamNotificationType,
+        val unread: Boolean,
+        val destination: Any
     )
 }

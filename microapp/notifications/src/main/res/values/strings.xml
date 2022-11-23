@@ -2,4 +2,12 @@
 <resources>
     <string name="notifications">Notifications</string>
     <string name="notifications_title">Notifications</string>
+
+    <string name="notifications_type_gift">Gift</string>
+    <string name="notifications_type_comment">New Comment</string>
+    <string name="notifications_type_item">Item</string>
+    <string name="notifications_type_friend">Friend Request</string>
+    <string name="notifications_type_wishlist">Wishlist</string>
+    <string name="notifications_type_discount">Major Sale</string>
+    <string name="notifications_type_preload">Preload Available</string>
 </resources>
