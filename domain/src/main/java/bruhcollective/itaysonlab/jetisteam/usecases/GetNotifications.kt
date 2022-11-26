@@ -60,7 +60,7 @@ class GetNotifications @Inject constructor(
             shouldRequestGames.map {
                 StoreItemID(appid = JSONObject(it.first.body_data.orEmpty()).getInt("appid"))
             }, StoreBrowseItemDataRequest(include_tag_count = 0, include_assets = true)
-        ).store_items else emptyList()).filter { it.appid != null }.associateBy { it.appid }
+        ).store_items else emptyList()).filter { it.appid != null }.associateBy { it.appid!! }
 
         val friends =
             (if (shouldRequestFriends.isNotEmpty()) friendsRepository.getFriendsList().friendslist?.friends else emptyList())?.filter {
@@ -71,15 +71,16 @@ class GetNotifications @Inject constructor(
 
         NotificationsPage(
             confirmationsCount = apiNotifications.confirmation_count ?: 0,
-            notifications = apiNotificationList.map { pair ->
+            notifications = apiNotificationList.mapNotNull { pair ->
                 val notification = pair.first
                 val extra = pair.second
                 val haveExtra = extra > 0
 
                 when (notification.notification_type) {
                     SteamNotificationType.Wishlist -> {
-                        val game =
-                            games[JSONObject(notification.body_data.orEmpty()).getInt("appid")]!!
+                        val appId = JSONObject(notification.body_data.orEmpty()).getInt("appid")
+                        if (appId == 0) return@mapNotNull null
+                        val game = games[appId]!!
 
                         Notification(
                             timestamp = notification.timestamp ?: 0,
