@@ -49,6 +49,7 @@ class GetProfileData @Inject constructor(
             .map { it.slots }
             .flatten()
             .map { it.appId }
+            .filter { it > 0 } // some slots appids might be zero
 
         val recentGames = ownedGames
             .sortedByDescending { it.rtime_last_played }
