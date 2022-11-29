@@ -22,4 +22,5 @@ And finally - **this app is not affiated, related, made or allowed by Valve Corp
 
 ## Credits
 - [SteamDB](https://github.com/SteamDatabase/Protobufs) for protobufs (they are slightly modified to fix Java generating - recovering enums/setting package names/enabling generic services)
+- [Revadike](https://github.com/Revadike/InternalSteamWebAPI/) for the excellent Internal Steam WebAPI documentation
 - [MMKV](https://github.com/Tencent/MMKV) for saving account data
