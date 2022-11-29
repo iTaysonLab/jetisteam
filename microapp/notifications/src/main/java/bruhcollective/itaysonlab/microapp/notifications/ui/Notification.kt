@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -76,8 +77,8 @@ fun Notification(
                     Text(text = stringResource(id = typeHeader.second), fontSize = 13.sp)
                 }
 
-                Text(text = notification.title, color = MaterialTheme.colorScheme.onSurface)
-                Text(text = notification.description, fontSize = 13.sp)
+                Text(text = notification.title.get(LocalContext.current), color = MaterialTheme.colorScheme.onSurface)
+                Text(text = notification.description.get(LocalContext.current), fontSize = 13.sp)
             }
         }
     }

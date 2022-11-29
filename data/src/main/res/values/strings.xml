@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notifications_type_common">%s</string>
+    <string name="notifications_type_common_extra">%s + %s</string>
+
+    <string name="notifications_type_gift_title">You received a gift!</string>
+    <string name="notifications_type_gift_desc">from %s</string>
+    <string name="notifications_type_wishlist_desc">is on sale for %s</string>
+    <string name="notifications_type_friend_desc_awaiting">is awaiting response</string>
+    <string name="notifications_type_friend_desc_added">is your friend now</string>
+    <string name="notifications_type_item_title">New item</string>
+    <string name="notifications_type_item_title_multiple">New items</string>
+</resources>
