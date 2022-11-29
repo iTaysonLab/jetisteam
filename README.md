@@ -4,20 +4,21 @@ _an unofficial and experimental alternative Steam frontend for Android_
 ## Disclaimer
 
 This app is using WebUI RPC-like API - but Steam's API is not that complete at all: some features will be completely missing or be incomplete. Such as:
-- reviews (heavy relies on HTML parsing because only AJAX API has access to reviews, we can only show user's own reviews)
 - curators and publishers (no API at all)
 - UGC content (can't get user's screenshots/guides without HTML parsing, because native API is locked even if official application OAuth token is used)
 - home screen (no way to get it in one piece, maybe some kind of Steam Deck-styled store is possible with the current API)
 
-And finally - **this app is not affiated, related, made or allowed by Valve Corporation. Please do not write to them about bugs or incorrect behavior of this application**.
+However, some of this stuff could be achieved by using other sources of info - such as internal Web API or Steam3 WS API (messages are totally dependant on this).
+
+Finally - **this app is not affiliated, related, made or allowed by Valve Corporation. Please do not write to them about bugs, incorrect behavior of this application or bans (that should not happen of course).**.
 
 ## Features
 
 - Steam Guard code generator/remote auth confirmator (incomplete, see #4 for the mega-issue)
 - Profile screen with dynamic adaptation to your profile theme
-- Library (incomplete)
-- Game screen
-- Notifications (barebones)
+- Library
+- Store page (in development)
+- Notifications
 - Made with Jetpack Compose, Hilt, AndroidX and other fancy/modern stuff!
 
 ## Credits
