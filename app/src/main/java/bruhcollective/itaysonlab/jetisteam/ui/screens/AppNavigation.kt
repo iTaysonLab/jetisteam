@@ -100,9 +100,7 @@ fun AppNavigation(
                         .navigationBarsPadding(),
                 ) {
                     viewModel.bottomNavDestinations.forEach { dest ->
-                        val selected = navController.backQueue.any { entry ->
-                            entry.destination.route?.startsWith(dest.route) == true
-                        }
+                        val selected = navController.backQueue.getOrNull(1)?.destination?.route == dest.route
 
                         NavigationBarItem(
                             icon = {
