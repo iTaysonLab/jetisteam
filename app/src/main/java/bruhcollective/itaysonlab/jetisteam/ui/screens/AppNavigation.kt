@@ -86,6 +86,8 @@ fun AppNavigation(
     ) {
         Scaffold(
             bottomBar = {
+                val currentRootRoute = navController.backQueue.getOrNull(1)?.destination?.route
+
                 NavigationBar(
                     modifier = Modifier
                         .offset {
@@ -100,8 +102,8 @@ fun AppNavigation(
                         .navigationBarsPadding(),
                 ) {
                     viewModel.bottomNavDestinations.forEach { dest ->
-                        val selected = navController.backQueue.getOrNull(1)?.destination?.route == dest.route
-
+                        val selected = currentRootRoute == dest.route
+                        
                         NavigationBarItem(
                             icon = {
                                 Icon(
