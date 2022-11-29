@@ -1,7 +1,8 @@
 package bruhcollective.itaysonlab.microapp.profile
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.navigation.*
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import bruhcollective.itaysonlab.microapp.core.Destinations
 import bruhcollective.itaysonlab.microapp.core.find
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
@@ -11,15 +12,18 @@ import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
 import bruhcollective.itaysonlab.microapp.profile.core.ProfileEditEvent
 import bruhcollective.itaysonlab.microapp.profile.core.SectionType
 import bruhcollective.itaysonlab.microapp.profile.ui.ProfileScreen
+import bruhcollective.itaysonlab.microapp.profile.ui.bottomsheet.GlobalAppBottomSheet
 import bruhcollective.itaysonlab.microapp.profile.ui.screens.edit.ProfileEditScreen
 import bruhcollective.itaysonlab.microapp.profile.ui.screens.editsections.ProfileEditSectionScreen
 import bruhcollective.itaysonlab.microapp.profile.ui.screens.editsections.ProfileEditThemeScreen
 import bruhcollective.itaysonlab.microapp.profile.ui.screens.friends.FriendsScreen
 import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.bottomSheet
 import javax.inject.Inject
 
 class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
-    @OptIn(ExperimentalAnimationApi::class)
+    @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
     override fun NavGraphBuilder.buildGraph(
         navController: NavHostController,
         destinations: Destinations
@@ -36,7 +40,7 @@ class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
                     navController.navigate(editDestination(steamId))
                 }, onNavigationClick = { isRoot ->
                     if (isRoot) {
-
+                        navController.navigate(Routes.AppBottomSheet.url)
                     } else {
                         navController.popBackStack()
                     }
@@ -70,6 +74,10 @@ class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
             } else {
                 ProfileEditSectionScreen(onBackClicked = navController::popBackStack, onChangesCommitted = onChangesCommitted)
             }
+        }
+
+        bottomSheet(Routes.AppBottomSheet.url) {
+            GlobalAppBottomSheet(onBackClicked = navController::popBackStack)
         }
     }
 }

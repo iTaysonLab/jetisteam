@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="profile">Profile</string>
+
     <string name="showcase_achievements_rarest">Rarest Achievement Showcase</string>
     <string name="showcase_collector_game">Game Collector</string>
     <string name="showcase_items">Item Showcase</string>
@@ -54,24 +55,8 @@
     <string name="edit_theme_specials">Special Profiles</string>
     <string name="edit_theme_special_info">Applying a Special Profile will override your current profile items. You can change them later.</string>
 
-    <plurals name="minutes">
-        <item quantity="one">%d minute</item>
-        <item quantity="other">%d minutes</item>
-    </plurals>
-    <plurals name="hours">
-        <item quantity="one">%d hour</item>
-        <item quantity="other">%d hours</item>
-    </plurals>
-    <plurals name="days">
-        <item quantity="one">%d day</item>
-        <item quantity="other">%d days</item>
-    </plurals>
-    <plurals name="months">
-        <item quantity="one">%d month</item>
-        <item quantity="other">%d months</item>
-    </plurals>
-    <plurals name="years">
-        <item quantity="one">%d year</item>
-        <item quantity="other">%d years</item>
-    </plurals>
+    <string name="global_sheet_options">Preferences</string>
+    <string name="global_sheet_sign_out">Sign out</string>
+    <string name="global_sheet_about">Jetisteam %s (%s)</string>
+    <string name="global_sheet_about_sub">a bruhcollective project</string>
 </resources>
