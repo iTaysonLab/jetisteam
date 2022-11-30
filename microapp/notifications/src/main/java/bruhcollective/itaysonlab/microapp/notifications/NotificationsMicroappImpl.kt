@@ -21,7 +21,9 @@ class NotificationsMicroappImpl @Inject constructor() : NotificationsMicroapp() 
     ) {
         NotificationsScreen(onClick = { notification ->
             when (notification.type) {
-                SteamNotificationType.Wishlist -> navController.navigate(destinations.find<GamePageMicroapp>().gameDestination(notification.destination as Int))
+                SteamNotificationType.Wishlist -> if (notification.destination.toString().isNotEmpty()) {
+                    navController.navigate(destinations.find<GamePageMicroapp>().gameDestination(notification.destination as Int))
+                }
                 SteamNotificationType.FriendInvite -> navController.navigate(destinations.find<ProfileMicroapp>().profileDestination(notification.destination as Long))
                 else -> {}
             }

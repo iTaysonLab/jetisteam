@@ -101,7 +101,17 @@ class GetNotifications @Inject constructor(
                 when (notification.notification_type) {
                     SteamNotificationType.Wishlist -> {
                         val appId = JSONObject(notification.body_data.orEmpty()).getInt("appid")
-                        if (appId == 0) return@mapNotNull null
+                        if (appId == 0) {
+                            return@mapNotNull Notification(
+                                timestamp = notification.timestamp ?: 0,
+                                title = FormattedResourceString.ResourceId(R.string.notifications_type_wishlist_general_title),
+                                description = FormattedResourceString.ResourceId(R.string.notifications_type_wishlist_general_desc),
+                                icon = "", // TODO specify general wishlist on sale icon
+                                type = notification.notification_type!!,
+                                unread = notification.read?.not() ?: false,
+                                destination = "" // TODO navigate to wishlist
+                            )
+                        }
                         val game = games[appId]!!
 
                         Notification(
