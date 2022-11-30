@@ -103,7 +103,7 @@ fun AppNavigation(
                 ) {
                     viewModel.bottomNavDestinations.forEach { dest ->
                         val selected = currentRootRoute == dest.route
-                        
+
                         NavigationBarItem(
                             icon = {
                                 Icon(
