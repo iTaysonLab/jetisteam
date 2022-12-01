@@ -1,10 +1,8 @@
 package bruhcollective.itaysonlab.jetisteam.uikit.page
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -12,12 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.getSystemService
 import bruhcollective.itaysonlab.jetisteam.uikit.R
 
 @Composable
@@ -39,18 +35,24 @@ fun FullscreenError(
     Box(Modifier.fillMaxSize()) {
         Column(
             Modifier
-                .align(Alignment.Center)
+                .align(Alignment.Center),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
                 Icons.Rounded.Error, contentDescription = null, modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .size(56.dp)
-                    .padding(bottom = 12.dp)
             )
+
             Text(
                 stringResource(id = R.string.err_text),
-                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
+
+            TextButton(
+                onClick = { onReload() }) {
+                Text(stringResource(id = R.string.err_act_reload))
+            }
         }
 
         Row(
@@ -58,18 +60,13 @@ fun FullscreenError(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 16.dp)
         ) {
-            OutlinedButton(
+            TextButton(
                 onClick = {
                     clipboard.setText(AnnotatedString("Message: ${exception.message}\n\n" + exception.stackTraceToString()))
                 }) {
+                Icon(imageVector = Icons.Rounded.BugReport, contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(id = R.string.err_act_copy))
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            OutlinedButton(
-                onClick = { onReload() }) {
-                Text(stringResource(id = R.string.err_act_reload))
             }
         }
     }
