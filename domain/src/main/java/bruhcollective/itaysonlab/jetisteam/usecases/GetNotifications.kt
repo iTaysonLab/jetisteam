@@ -100,19 +100,31 @@ class GetNotifications @Inject constructor(
 
                 when (notification.notification_type) {
                     SteamNotificationType.Wishlist -> {
-                        val appId = JSONObject(notification.body_data.orEmpty()).getInt("appid")
-                        if (appId == 0) return@mapNotNull null
-                        val game = games[appId]!!
+                        val appId = JSONObject(notification.body_data.orEmpty()).optInt("appid")
 
-                        Notification(
-                            timestamp = notification.timestamp ?: 0,
-                            title = FormattedResourceString.FixedString(game.name.orEmpty()),
-                            description = FormattedResourceString.ResourceId(R.string.notifications_type_wishlist_desc, game.best_purchase_option?.formatted_final_price.orEmpty()),
-                            icon = CdnUrlUtil.buildCommunityUrl("images/apps/${game.appid}/${game.assets?.community_icon}.jpg"),
-                            type = notification.notification_type!!,
-                            unread = notification.read?.not() ?: false,
-                            destination = game.appid ?: 0
-                        )
+                        if (appId != 0) {
+                            val game = games[appId] ?: return@mapNotNull null
+
+                            Notification(
+                                timestamp = notification.timestamp ?: 0,
+                                title = FormattedResourceString.FixedString(game.name.orEmpty()),
+                                description = FormattedResourceString.ResourceId(R.string.notifications_type_wishlist_desc, game.best_purchase_option?.formatted_final_price.orEmpty()),
+                                icon = CdnUrlUtil.buildCommunityUrl("images/apps/${game.appid}/${game.assets?.community_icon}.jpg"),
+                                type = notification.notification_type!!,
+                                unread = notification.read?.not() ?: false,
+                                destination = game.appid ?: 0
+                            )
+                        } else {
+                            Notification(
+                                timestamp = notification.timestamp ?: 0,
+                                title = FormattedResourceString.ResourceId(R.string.notifications_type_wishlist_multiple_title),
+                                description = FormattedResourceString.ResourceId(R.string.notifications_type_wishlist_multiple_desc),
+                                icon = "",
+                                type = notification.notification_type!!,
+                                unread = notification.read?.not() ?: false,
+                                destination = "wishlist"
+                            )
+                        }
                     }
 
                     SteamNotificationType.FriendInvite -> {
