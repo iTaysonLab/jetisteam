@@ -6,31 +6,31 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GameService {
-    @GET("/api/libraryappdetails/")
+    @GET("api/libraryappdetails/")
     suspend fun getGameDetails(
         @Query("appid") appId: String
     ): GameDetails
 
-    @GET("/api/appdetails")
+    @GET("api/appdetails")
     suspend fun getGameDetails(
         @Query("appids") appId: String,
         @Query("l") language: String,
         @Query("cc") country: String,
     ): Map<String, GameFullDetails>
 
-    @GET("/api/appuserdetails")
+    @GET("api/appuserdetails")
     suspend fun getGameCompat(
         @Query("appids") appIds: String
     ): Map<String, GameCompatDetails>
 
-    @GET("/saleaction/ajaxgetdeckappcompatibilityreport")
+    @GET("saleaction/ajaxgetdeckappcompatibilityreport")
     suspend fun getDeckReport(
         @Query("nAppID") appId: String,
         @Query("l") language: String,
         @Query("cc") country: String,
     ): SteamDeckSupportReportWrap
 
-    @GET("/appreviews/{appId}")
+    @GET("appreviews/{appId}")
     suspend fun getReviews(
         @Path("appId") appId: String,
         @Query("l") language: String,

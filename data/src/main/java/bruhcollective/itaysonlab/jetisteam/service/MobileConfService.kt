@@ -7,7 +7,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface MobileConfService {
-    @GET("/getlist")
+    @GET("mobileconf/getlist")
     suspend fun getConfirmations(
         @Query("p") platform: String,
         @Query("a") steamId: Long,
@@ -17,7 +17,7 @@ interface MobileConfService {
         @Query("tag") tag: String = "list",
     ): MobileConfGetList
 
-    @POST("/ajaxop")
+    @POST("mobileconf/ajaxop")
     suspend fun runOperation(
         @Query("p") platform: String,
         @Query("a") steamId: Long,

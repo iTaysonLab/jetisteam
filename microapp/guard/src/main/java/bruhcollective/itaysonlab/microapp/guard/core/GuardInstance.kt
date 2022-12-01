@@ -44,6 +44,7 @@ class GuardInstance(
     val revocationCode get() = configuration.revocation_code
     val username get() = configuration.account_name
     val configurationEncoded get() = GuardData.ADAPTER.encode(configuration)
+    val steamId get() = SteamID(configuration.steam_id)
 
     private val secretKey = SecretKeySpec(configuration.shared_secret.toByteArray(), AlgorithmTotp)
     private val secretKeyIdentity = SecretKeySpec(configuration.identity_secret.toByteArray(), AlgorithmTotp)
@@ -70,17 +71,17 @@ class GuardInstance(
         }, progress, currentTime))
     }
 
-    fun generateCodeWithTime(): Pair<String, Long> {
-        return generateCode().let { it.code to it.generatedAt }
+    fun generateCodeWithTime(): StaticAuthCode {
+        return generateCode().let { StaticAuthCode(it.code to it.generatedAt) }
     }
 
-    fun digestSha256(msg: ByteArray): ByteArray {
+    private fun digestSha256(msg: ByteArray): ByteArray {
         val localKey = SecretKeySpec(configuration.shared_secret.toByteArray(), AlgorithmConfirmation)
         val localDigest = Mac.getInstance(AlgorithmConfirmation).also { it.init(localKey) }
         return localDigest.doFinal(msg)
     }
 
-    fun sgCreateSignature(version: Int, clientId: Long, steamId: SteamID): ByteString {
+    fun sgCreateSignature(version: Int, clientId: Long): ByteString {
         return ByteArrayOutputStream(2 + 8 + 8).apply {
             sink().buffer().use { sink ->
                 sink.writeShortLe(version)
@@ -98,19 +99,19 @@ class GuardInstance(
         }.toByteArray().let(this::digestSha256).toByteString()
     }
 
-    fun confirmationTicket(tag: String): Pair<String, Long> {
-        val currentTime = clock.millis()
+    suspend fun confirmationTicket(guardClockNormalizer: GuardClockNormalizer, tag: String): ConfirmationTicket {
+        val currentTime = guardClockNormalizer.normalize(clock.millis())
 
         val base64Ticket = ByteArrayOutputStream(min(tag.length, 32) + 8).apply {
             sink().buffer().use { sink ->
                 sink.writeLong(currentTime)
-                sink.write(tag.encodeToByteArray())
+                sink.writeUtf8(tag)
             }
         }.toByteArray().let { arr ->
             digestIdentity.doFinal(arr)
-        }.toByteString().base64Url()
+        }.toByteString().base64()
 
-        return base64Ticket to currentTime
+        return ConfirmationTicket(base64Ticket to currentTime)
     }
 
     @JvmInline
@@ -125,5 +126,18 @@ class GuardInstance(
         val progressRemaining: Float get() = packed.second
 
         val generatedAt: Long get() = packed.third
+    }
+
+    @JvmInline
+    value class ConfirmationTicket(private val packed: Pair<String, Long>) {
+        val b64EncodedSignature: String get() = packed.first
+        val generationTime: Long get() = packed.second
+    }
+
+    @JvmInline
+    value class StaticAuthCode(private val packed: Pair<String, Long>) {
+        val _proto get() = packed
+        val codeString: String get() = packed.first
+        val generationTime: Long get() = packed.second
     }
 }

@@ -23,6 +23,10 @@ abstract class GuardMicroapp: NestedMicroappEntry, BottomNavigationCapable {
         val SessionData = navArgument("sessionData") {
             type = NavType.StringType
         }
+
+        val ConfirmationData = navArgument("confirmationData") {
+            type = NavType.StringType
+        }
     }
 
     internal object Routes {
@@ -38,5 +42,7 @@ abstract class GuardMicroapp: NestedMicroappEntry, BottomNavigationCapable {
         val ConfirmSignIn = DestNode("guard/{${CommonArguments.SteamId.name}}/confirm/{${Arguments.ClientId.name}}")
         val Remove = DestNode("guard/{${CommonArguments.SteamId.name}}/remove")
         val ScanQrCode = DestNode("guard/{${CommonArguments.SteamId.name}}/qrscan")
+        val Confirmations = DestNode("guard/{${CommonArguments.SteamId.name}}/confirmations")
+        val ConfirmationDetail = DestNode("guard/{${CommonArguments.SteamId.name}}/confirmation/{${Arguments.ConfirmationData.name}}")
     }
 }

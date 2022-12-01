@@ -12,8 +12,6 @@ import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.GetFutureAuthSessi
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.UpdateSessionWithMobileAuth
 import bruhcollective.itaysonlab.jetisteam.util.Regexes
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
-import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
 import com.google.mlkit.vision.barcode.common.Barcode
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -116,7 +114,7 @@ class QrSignScreenViewModel @Inject constructor(
                 clientId = clientId,
                 steamId = steamId.steamId,
                 allow = allow,
-                signature = guardInstance.sgCreateSignature(version, clientId, steamId),
+                signature = guardInstance.sgCreateSignature(version, clientId),
                 persistence = qrSessionInfo?.requested_persistence
                     ?: ESessionPersistence.k_ESessionPersistence_Ephemeral
             )

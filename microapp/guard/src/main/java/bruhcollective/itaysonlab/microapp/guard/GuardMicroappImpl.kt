@@ -15,6 +15,7 @@ import bruhcollective.itaysonlab.microapp.guard.ui.GuardScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardConfirmSessionSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardMoreOptionsSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardRemoveSheet
+import bruhcollective.itaysonlab.microapp.guard.ui.confirmations.ConfirmationsScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.devices.GuardDevicesScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.devices.session.GuardSessionScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.qrsign.QrSignScreen
@@ -97,6 +98,12 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
             GuardSessionScreen(onBackClicked = navController::popBackStack)
         }
 
+        composable(Routes.Confirmations.url, arguments = listOf(CommonArguments.SteamId)) {
+            ConfirmationsScreen(onBackClicked = navController::popBackStack, onConfirmationClicked = { steamId, confirmation ->
+
+            })
+        }
+
         composable(Routes.ScanQrCode.url, arguments = listOf(CommonArguments.SteamId), enterTransition = {
             materialSharedAxisYIn(forward = true, slideDistance = 300)
         }, exitTransition = {
@@ -109,6 +116,18 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
             QrSignScreen(onBackClicked = navController::popBackStack)
         }
 
+        composable(Routes.ConfirmationDetail.url, arguments = listOf(CommonArguments.SteamId, Arguments.ConfirmationData), enterTransition = {
+            materialSharedAxisYIn(forward = true, slideDistance = 300)
+        }, exitTransition = {
+            materialSharedAxisYOut(forward = true, slideDistance = 300)
+        }, popEnterTransition = {
+            materialSharedAxisYIn(forward = false, slideDistance = 300)
+        }, popExitTransition = {
+            materialSharedAxisYOut(forward = false, slideDistance = 300)
+        }) {
+
+        }
+
         bottomSheet(Routes.MoreOptions.url, arguments = listOf(CommonArguments.SteamId)) {
             GuardMoreOptionsSheet(onDevicesClicked = { steamId ->
                 navController.popBackStack()
@@ -119,6 +138,9 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
             }, onRecoveryClicked = { steamId ->
                 navController.popBackStack()
                 navController.navigate(Routes.Recovery.withSteamId(steamId))
+            }, onConfirmationsClicked = { steamId ->
+                navController.popBackStack()
+                navController.navigate(Routes.Confirmations.withSteamId(steamId))
             })
         }
 

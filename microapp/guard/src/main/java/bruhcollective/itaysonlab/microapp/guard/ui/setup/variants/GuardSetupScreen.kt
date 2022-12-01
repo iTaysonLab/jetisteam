@@ -12,11 +12,8 @@ import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.proto.GuardData
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.FinalizeAddTfa
-import bruhcollective.itaysonlab.microapp.core.ext.getBase64
 import bruhcollective.itaysonlab.microapp.core.ext.getProto
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.core.ext.getString
-import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
@@ -24,7 +21,6 @@ import bruhcollective.itaysonlab.microapp.guard.ui.components.CodeRowState
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreenImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okio.ByteString.Companion.decodeBase64
 import steam.twofactor.CTwoFactor_AddAuthenticator_Response
 import javax.inject.Inject
 
@@ -96,7 +92,7 @@ internal class GuardSetupViewModel @Inject constructor(
 
     suspend fun continueWithCode(code: String): Boolean {
         return finalizeAddTfa(steamId, code) {
-            return@finalizeAddTfa localGenerator.generateCodeWithTime()
+            return@finalizeAddTfa localGenerator.generateCodeWithTime()._proto
         }.ifTrue {
             guardController.saveInstance(steamId, localGenerator)
         }

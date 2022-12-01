@@ -24,7 +24,6 @@ import bruhcollective.itaysonlab.jetisteam.uikit.components.*
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.GetFutureAuthSession
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.UpdateSessionWithMobileAuth
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
@@ -242,7 +241,7 @@ internal class GuardConfirmSessionViewModel @Inject constructor(
                 clientId = clientId,
                 steamId = steamId.steamId,
                 allow = allow,
-                signature = guardInstance.sgCreateSignature(version, clientId, steamId),
+                signature = guardInstance.sgCreateSignature(version, clientId),
                 persistence = if (rememberPassword) {
                     ESessionPersistence.k_ESessionPersistence_Persistent
                 } else {

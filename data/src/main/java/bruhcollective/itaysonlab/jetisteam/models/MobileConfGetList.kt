@@ -11,12 +11,13 @@ class MobileConfResult(
 @JsonClass(generateAdapter = true)
 class MobileConfGetList(
     val success: Boolean,
-    val conf: List<MobileConfTradeItem>
+    val conf: List<MobileConfirmationItem>?,
+    val message: String?,
+    val detail: String?
 )
 
-
 @JsonClass(generateAdapter = true)
-class MobileConfTradeItem(
+class MobileConfirmationItem(
     val type: Int,
     @Json(name = "type_name") val typeName: String,
     val id: String,

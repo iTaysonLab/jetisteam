@@ -70,4 +70,8 @@
     <string name="guard_revoke_alert_text">This will instantly remove access to your account from the selected device.</string>
     <string name="guard_revoke_alert_confirm">Confirm</string>
     <string name="guard_revoke_alert_dismiss">Dismiss</string>
+
+    <string name="guard_confirmations">Confirmations</string>
+    <string name="guard_confirmations_empty">No active confirmations</string>
+    <string name="guard_confirmations_empty_desc">Trades or Market Listing confirmations will be shown here</string>
 </resources>

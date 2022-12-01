@@ -3,9 +3,7 @@ package bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Devices
-import androidx.compose.material.icons.rounded.Key
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,8 +13,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetLayout
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
-import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -28,6 +24,7 @@ internal fun GuardMoreOptionsSheet(
     onDevicesClicked: (Long) -> Unit,
     onRemoveClicked: (Long) -> Unit,
     onRecoveryClicked: (Long) -> Unit,
+    onConfirmationsClicked: (Long) -> Unit,
 ) {
     BottomSheetLayout {
         LazyColumn {
@@ -38,6 +35,22 @@ internal fun GuardMoreOptionsSheet(
                     }, headlineText = {
                         Text(text = stringResource(id = R.string.guard_actions_devices))
                     }, modifier = Modifier.clickable(onClick = { onDevicesClicked(viewModel.steamId.steamId) }), colors = ListItemDefaults.colors(
+                        leadingIconColor = MaterialTheme.colorScheme.primary
+                    )
+                )
+            }
+
+            item {
+                Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+            }
+
+            item {
+                ListItem(
+                    leadingContent = {
+                        Icon(imageVector = Icons.Rounded.CheckCircle, contentDescription = null)
+                    }, headlineText = {
+                        Text(text = stringResource(id = R.string.guard_confirmations))
+                    }, modifier = Modifier.clickable(onClick = { onConfirmationsClicked(viewModel.steamId.steamId) }), colors = ListItemDefaults.colors(
                         leadingIconColor = MaterialTheme.colorScheme.primary
                     )
                 )
