@@ -50,7 +50,7 @@ internal fun ConfirmationsScreen(
     Scaffold(
         topBar = {
             LargeTopAppBar(title = {
-                Text(text = stringResource(id = R.string.guard_confirmation_detail))
+                Text(text = stringResource(id = R.string.guard_confirmations))
             }, navigationIcon = {
                 IconButton(onClick = onBackClicked) {
                     Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
