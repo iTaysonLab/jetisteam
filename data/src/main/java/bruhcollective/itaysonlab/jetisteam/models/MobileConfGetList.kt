@@ -9,7 +9,7 @@ class MobileConfResult(
 )
 
 @JsonClass(generateAdapter = true)
-class MobileConfGetList(
+data class MobileConfGetList(
     val success: Boolean,
     val conf: List<MobileConfirmationItem>?,
     val message: String?,

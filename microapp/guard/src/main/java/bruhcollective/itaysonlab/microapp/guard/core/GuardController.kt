@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class GuardController @Inject constructor(
     private val configService: ConfigService,
-    private val sysClock: DefaultClock
+    private val valveClock: ValveClock
 ) {
     private val lazyInstances = LongSparseArray<GuardInstance>()
 
@@ -19,8 +19,8 @@ class GuardController @Inject constructor(
             lazyInstances[steamId.steamId]!!
         } else if (configService.containsKey(key = key)) {
             GuardInstance(
-                clock = sysClock,
-                configuration = GuardData.ADAPTER.decode(configService.getBytes(key = key, default = EMPTY_BYTE_ARRAY))
+                configuration = GuardData.ADAPTER.decode(configService.getBytes(key = key, default = EMPTY_BYTE_ARRAY)),
+                valveClock = valveClock
             ).also { instance ->
                 lazyInstances.put(steamId.steamId, instance)
             }
@@ -31,8 +31,8 @@ class GuardController @Inject constructor(
 
     fun createInstance(steamId: SteamID, configuration: GuardData, save: Boolean = true): GuardInstance {
         return GuardInstance(
-            clock = sysClock,
-            configuration = configuration
+            configuration = configuration,
+            valveClock = valveClock
         ).also { instance ->
             if (save) {
                 saveInstance(steamId, instance)

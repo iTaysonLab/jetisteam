@@ -8,7 +8,7 @@ class FinalizeAddTfa @Inject constructor(
     private val tfaRepository: TwoFactorRepository
 ) {
     suspend operator fun invoke(
-        steamID: SteamID, smsCode: String, authCode: () -> Pair<String, Long>
+        steamID: SteamID, smsCode: String, authCode: suspend () -> Pair<String, Long>
     ): Boolean {
         val smsResponse = tfaRepository.finalizeWithSms(steamID = steamID, code = smsCode)
 

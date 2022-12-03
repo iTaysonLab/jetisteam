@@ -14,7 +14,6 @@ import okio.sink
 import okio.use
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
-import java.time.Clock
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
@@ -22,8 +21,8 @@ import kotlin.math.min
 import kotlin.time.Duration.Companion.seconds
 
 class GuardInstance(
-    private val clock: Clock,
-    private val configuration: GuardData
+    private val configuration: GuardData,
+    private val valveClock: ValveClock
 ) {
     companion object {
         private const val AlgorithmTotp = "HmacSHA1"
@@ -52,8 +51,8 @@ class GuardInstance(
     private val digest = Mac.getInstance(AlgorithmTotp).also { it.init(secretKey) }
     private val digestIdentity = Mac.getInstance(AlgorithmTotp).also { it.init(secretKeyIdentity) }
 
-    private fun generateCode(): CodeModel {
-        val currentTime = clock.millis()
+    private suspend fun generateCode(): CodeModel {
+        val currentTime = valveClock.currentTimeMs()
 
         val progress = ((Period - ((currentTime) % Period)) / Period.toFloat()).coerceIn(0f..1f)
         val localDigest = digest.doFinal(ByteBuffer.allocate(8).putLong(currentTime / Period).array())
@@ -71,7 +70,7 @@ class GuardInstance(
         }, progress, currentTime))
     }
 
-    fun generateCodeWithTime(): StaticAuthCode {
+    suspend fun generateCodeWithTime(): StaticAuthCode {
         return generateCode().let { StaticAuthCode(it.code to it.generatedAt) }
     }
 
@@ -99,8 +98,8 @@ class GuardInstance(
         }.toByteArray().let(this::digestSha256).toByteString()
     }
 
-    suspend fun confirmationTicket(guardClockNormalizer: GuardClockNormalizer, tag: String): ConfirmationTicket {
-        val currentTime = guardClockNormalizer.normalize(clock.millis())
+    suspend fun confirmationTicket(tag: String): ConfirmationTicket {
+        val currentTime = valveClock.currentTime()
 
         val base64Ticket = ByteArrayOutputStream(min(tag.length, 32) + 8).apply {
             sink().buffer().use { sink ->
