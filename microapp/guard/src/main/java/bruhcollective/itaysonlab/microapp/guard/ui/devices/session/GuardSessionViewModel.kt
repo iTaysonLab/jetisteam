@@ -13,9 +13,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.ext.ipString
 import bruhcollective.itaysonlab.jetisteam.usecases.auth.RevokeSession
-import bruhcollective.itaysonlab.microapp.core.ext.getBase64
+import bruhcollective.itaysonlab.microapp.core.ext.getProto
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
-import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.core.GuardController
@@ -34,16 +33,10 @@ internal class GuardSessionViewModel @Inject constructor(
     private val revokeSession: RevokeSession
 ) : ViewModel() {
     val steamId = savedStateHandle.getSteamId()
-
-    val sessionData =
-        CAuthentication_RefreshToken_Enumerate_Response.RefreshTokenDescription.ADAPTER.decode(
-            savedStateHandle.getBase64(GuardMicroapp.Arguments.SessionData.name)
-        )
-
+    val sessionData = savedStateHandle.getProto<CAuthentication_RefreshToken_Enumerate_Response.RefreshTokenDescription>(GuardMicroapp.Arguments.SessionData.name)
     val guardInstance = guardController.getInstance(steamId)!!
 
     val infoBlocks = buildListBlocks(context)
-
     var revokingSession by mutableStateOf(false)
 
     fun requestRevokeSession(onDone: () -> Unit) {

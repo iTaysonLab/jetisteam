@@ -11,10 +11,12 @@ import bruhcollective.itaysonlab.microapp.core.NavigationEntry
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
 import bruhcollective.itaysonlab.microapp.core.mapArgs
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.setResultToPreviousEntry
 import bruhcollective.itaysonlab.microapp.guard.ui.GuardScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardConfirmSessionSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardMoreOptionsSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardRemoveSheet
+import bruhcollective.itaysonlab.microapp.guard.ui.confirmation_detail.ConfirmationDetailScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.confirmations.ConfirmationsScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.devices.GuardDevicesScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.devices.session.GuardSessionScreen
@@ -98,12 +100,6 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
             GuardSessionScreen(onBackClicked = navController::popBackStack)
         }
 
-        composable(Routes.Confirmations.url, arguments = listOf(CommonArguments.SteamId)) {
-            ConfirmationsScreen(onBackClicked = navController::popBackStack, onConfirmationClicked = { steamId, confirmation ->
-
-            })
-        }
-
         composable(Routes.ScanQrCode.url, arguments = listOf(CommonArguments.SteamId), enterTransition = {
             materialSharedAxisYIn(forward = true, slideDistance = 300)
         }, exitTransition = {
@@ -116,16 +112,19 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
             QrSignScreen(onBackClicked = navController::popBackStack)
         }
 
-        composable(Routes.ConfirmationDetail.url, arguments = listOf(CommonArguments.SteamId, Arguments.ConfirmationData), enterTransition = {
-            materialSharedAxisYIn(forward = true, slideDistance = 300)
-        }, exitTransition = {
-            materialSharedAxisYOut(forward = true, slideDistance = 300)
-        }, popEnterTransition = {
-            materialSharedAxisYIn(forward = false, slideDistance = 300)
-        }, popExitTransition = {
-            materialSharedAxisYOut(forward = false, slideDistance = 300)
-        }) {
+        composable(Routes.Confirmations.url, arguments = listOf(CommonArguments.SteamId)) {
+            ConfirmationsScreen(onBackClicked = navController::popBackStack, onConfirmationClicked = { steamId, confirmation ->
+                navController.navigate(Routes.ConfirmationDetail.mapArgs(mapOf(
+                    CommonArguments.SteamId to steamId,
+                    Arguments.ConfirmationData to confirmation
+                )))
+            }, backStackEntry = it)
+        }
 
+        composable(Routes.ConfirmationDetail.url, arguments = listOf(CommonArguments.SteamId, Arguments.ConfirmationData)) {
+            ConfirmationDetailScreen(onBackClicked = navController::popBackStack, onFinish = { event ->
+                navController.setResultToPreviousEntry(event)
+            })
         }
 
         bottomSheet(Routes.MoreOptions.url, arguments = listOf(CommonArguments.SteamId)) {
