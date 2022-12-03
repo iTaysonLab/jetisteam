@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.microapp.profile.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +26,7 @@ import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.Ins
 import bruhcollective.itaysonlab.microapp.profile.core.ProfileEditEvent
 import bruhcollective.itaysonlab.microapp.profile.ui.components.ProfileCardEntry
 import bruhcollective.itaysonlab.microapp.profile.ui.components.ProfileHeader
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +39,9 @@ internal fun ProfileScreen(
     backStackEntry: NavBackStackEntry,
     viewModel: ProfileScreenViewModel = hiltViewModel()
 ) {
+    val systemUiController = rememberSystemUiController()
+    val isDarkTheme = isSystemInDarkTheme()
+
     val tab = rememberTopAppBarState()
     val tas = TopAppBarDefaults.pinnedScrollBehavior(state = tab)
     val share = LocalShareDispatcher.current
@@ -47,6 +53,14 @@ internal fun ProfileScreen(
     PageLayout(state = viewModel.state, onReload = viewModel::reload) { data ->
         val theme = remember(data.customization.profileTheme.themeId) {
             SteamColors.getColorTheme(data.customization.profileTheme.themeId)
+        }
+
+        DisposableEffect(systemUiController, isDarkTheme) {
+            systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = false)
+
+            onDispose {
+                systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = isDarkTheme.not())
+            }
         }
 
         CompositionLocalProvider(LocalSteamTheme provides theme) {
