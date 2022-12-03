@@ -57,6 +57,6 @@
 
     <string name="global_sheet_options">Preferences</string>
     <string name="global_sheet_sign_out">Sign out</string>
-    <string name="global_sheet_about">Jetisteam %s (%s)</string>
+    <string name="global_sheet_about">Jetisteam %s (%d)</string>
     <string name="global_sheet_about_sub">a bruhcollective project</string>
 </resources>

@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetHandle
+import bruhcollective.itaysonlab.microapp.core.LocalApplicationInfo
 import bruhcollective.itaysonlab.microapp.profile.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,7 +70,7 @@ fun GlobalAppBottomSheet(
                 .padding(vertical = 16.dp)
         ) {
             Text(
-                text = stringResource(id = R.string.global_sheet_about, "1.9", "1"),
+                text = stringResource(id = R.string.global_sheet_about, LocalApplicationInfo.current.versionNumber, LocalApplicationInfo.current.versionCode),
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
