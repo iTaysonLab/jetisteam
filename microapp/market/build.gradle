@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'bruhcollective.itaysonlab.microapp.home'
+    namespace 'bruhcollective.itaysonlab.microapp.market'
     compileSdk 33
 
     defaultConfig {
@@ -49,6 +49,7 @@ kapt {
 dependencies {
     implementation project(":microapp:core")
     implementation project(":microapp:gamepage")
+    implementation project(":microapp:profile")
 
     implementation project(":domain")
     implementation project(":data")
