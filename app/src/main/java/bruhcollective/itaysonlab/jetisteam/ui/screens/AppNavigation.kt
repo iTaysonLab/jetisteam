@@ -29,6 +29,7 @@ import bruhcollective.itaysonlab.microapp.core.*
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
 import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
+import bruhcollective.itaysonlab.microapp.home.HomeMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
 import bruhcollective.itaysonlab.microapp.profile.ProfileMicroapp
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -198,6 +199,7 @@ class AppNavigationViewModel @Inject constructor(
         .distinct()
 
     val bottomNavDestinations = listOf(
+        destinations.find<HomeMicroapp>(),
         destinations.find<NotificationsMicroapp>(),
         destinations.find<GuardMicroapp>(),
         destinations.find<ProfileMicroapp>(),
