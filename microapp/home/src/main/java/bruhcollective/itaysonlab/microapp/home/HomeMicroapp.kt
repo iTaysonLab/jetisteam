@@ -2,12 +2,13 @@ package bruhcollective.itaysonlab.microapp.home
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import bruhcollective.itaysonlab.microapp.core.BottomNavigationCapable
 import bruhcollective.itaysonlab.microapp.core.DestNode
 import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
 import bruhcollective.itaysonlab.microapp.core.mapArgs
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 
-abstract class HomeMicroapp : NestedMicroappEntry {
+abstract class HomeMicroapp : NestedMicroappEntry, BottomNavigationCapable {
     override val graphRoute = Routes.NavGraph
     override val startDestination = Routes.StoreHome.url
 
