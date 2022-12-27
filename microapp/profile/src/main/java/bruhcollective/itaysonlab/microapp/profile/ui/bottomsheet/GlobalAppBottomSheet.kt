@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -31,13 +30,7 @@ fun GlobalAppBottomSheet(
     val uriHandler = LocalUriHandler.current
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                Color.Black
-                    .copy(alpha = 0.5f)
-                    .compositeOver(MaterialTheme.colorScheme.background)
-            ),
+        modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background)
     ) {
         BottomSheetHandle(modifier = Modifier.align(Alignment.CenterHorizontally))
 
