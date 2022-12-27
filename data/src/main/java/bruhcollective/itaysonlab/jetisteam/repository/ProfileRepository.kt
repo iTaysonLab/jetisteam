@@ -73,12 +73,12 @@ class ProfileRepository @Inject constructor(
         )
     ).achievements
 
-    suspend fun getTopGameAchievements(steamid: Long, appids: List<Int>) = playerStub.GetTopAchievementsForGames(
+    suspend fun getTopGameAchievements(steamid: Long, appids: List<Int>, maxAchievements: Int = 8) = playerStub.GetTopAchievementsForGames(
         CPlayer_GetTopAchievementsForGames_Request(
             appids = appids,
             language = localeService.language,
             steamid = steamid,
-            max_achievements = 8
+            max_achievements = maxAchievements
         )
     ).games.filter { it.appid != null }.associateBy { it.appid ?: 0 }
 

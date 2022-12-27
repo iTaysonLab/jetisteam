@@ -24,4 +24,9 @@
     <string name="gamepage_reviews_header_diff">%s hrs on record (%s hrs on review time)</string>
     <string name="gamepage_reviews_author">Review by</string>
     <string name="gamepage_reviews_posted">Posted on %s</string>
+
+    <string name="gamepage_achievements">Achievements</string>
+    <string name="gamepage_achievements_percent">%s%% of players got this achievement</string>
+    <string name="gamepage_achievements_hidden">This achievement is hidden</string>
+    <string name="gamepage_achievements_hidden_desc">Tap to reveal</string>
 </resources>
