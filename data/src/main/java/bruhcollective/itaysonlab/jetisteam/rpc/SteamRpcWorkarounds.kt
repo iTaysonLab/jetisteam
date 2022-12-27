@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetisteam.rpc
 
 import android.util.Base64
+import bruhcollective.itaysonlab.jetisteam.controllers.SteamWebApiTokenController
 import com.squareup.wire.Message
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MultipartBody
@@ -46,11 +47,23 @@ object SteamRpcWorkarounds {
         "/Quest/ActivateProfileModifierItem"
     )
 
+    private val webApiTokenMap = mapOf(
+        "/SaleFeature/GetUserYearInReview" to SteamWebApiTokenController.TokenRealm.SteamReplay,
+        "/SaleFeature/GetUserYearAchievements" to SteamWebApiTokenController.TokenRealm.SteamReplay,
+        "/SaleFeature/GetFriendsSharedYearInReview" to SteamWebApiTokenController.TokenRealm.SteamReplay,
+    )
+
     /**
      * Steam enforces GET/POST requests for some of the RPC methods.
      * The best method without manual writing or using Google's Protobuf runtime is using predefined "allowlist"
      */
     fun shouldUsePostFor(path: String) = path in forcePostFor
+
+    /**
+     * Steam enforces some of the requests to use a special WebApi token, not a generic OAuth received by signing in
+     * They only (?) return that in web pages, embedded, so we use a regex parsing of a webpage to obtain such token
+     */
+    fun shouldUseWebApiController(path: String) = webApiTokenMap[path]
 
     /**
      * Steam uses RPC-over-HTTP based on their legacy Web API

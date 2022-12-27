@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetisteam.rpc
 
 import androidx.collection.LruCache
+import bruhcollective.itaysonlab.jetisteam.controllers.SteamWebApiTokenController
 import com.squareup.wire.Message
 import com.squareup.wire.ProtoAdapter
 import com.squareup.wire.WireRpc
@@ -14,7 +15,9 @@ import javax.inject.Singleton
 
 @Singleton
 class SteamRpcProcessor @Inject constructor(
-    @Named("steamOkhttp") private val okHttpClient: OkHttpClient
+    @Named("steamOkhttp") private val okHttpClient: OkHttpClient,
+    private val neutralOkHttpClient: OkHttpClient,
+    private val webApiTokenController: SteamWebApiTokenController
 ) {
     private val adapterCache = LruCache<String, ProtoAdapter<*>>(10)
 
@@ -30,10 +33,21 @@ class SteamRpcProcessor @Inject constructor(
         // 2. Process the input data for workaround apply
         val requestUrl = SteamRpcWorkarounds.formatUrl(decomposedPath)
         val shouldUsePost = SteamRpcWorkarounds.shouldUsePostFor(annotation.path)
+        val shouldUseWebapiToken = SteamRpcWorkarounds.shouldUseWebApiController(annotation.path)
         val requestCall = SteamRpcWorkarounds.createRequest(requestUrl, request, shouldUsePost)
 
-        // 3. Make the request and parse the response
-        return@withContext okHttpClient.newCall(requestCall).execute().use { response ->
+        // 3. Request a WebAPI token if this method is "special". If not, just call OkHttp as usual
+        return@withContext if (shouldUseWebapiToken != null) {
+            val webapiToken = webApiTokenController.requestWebApiTokenFor(realm = shouldUseWebapiToken)
+
+            val modifiedRequestCall = requestCall.newBuilder().apply {
+                url(requestCall.url.newBuilder().addQueryParameter("access_token", webapiToken).build())
+            }.build()
+
+            neutralOkHttpClient.newCall(modifiedRequestCall)
+        } else {
+            okHttpClient.newCall(requestCall)
+        }.execute().use { response ->
             responseAdapter.decode(response.body.source())!!
         }
     }

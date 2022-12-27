@@ -1,6 +1,9 @@
 package bruhcollective.itaysonlab.jetisteam.di
 
+import bruhcollective.itaysonlab.jetisteam.controllers.CacheService
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamAuthInterceptor
+import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
+import bruhcollective.itaysonlab.jetisteam.controllers.SteamWebApiTokenController
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
 import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcProcessor
 import com.squareup.moshi.Moshi
@@ -59,13 +62,24 @@ object NetworkModule {
     @Provides
     @Singleton
     @Named("neutralRpcClient")
-    fun provideNeturalRpcClient(
+    fun provideNeutralRpcClient(
         @Named("neutralRpcProcessor") processor: SteamRpcProcessor
     ) = SteamRpcClient(processor)
+
+    @Provides
+    @Singleton
+    @Named("neutralWebApiController")
+    fun provideNeutralWebApiController(
+        okHttpClient: OkHttpClient,
+        cacheService: CacheService,
+        steamSessionController: SteamSessionController
+    ) = SteamWebApiTokenController(cacheService, okHttpClient, steamSessionController)
+
     @Provides
     @Singleton
     @Named("neutralRpcProcessor")
-    fun provideNeturalRpcProcessor(
-        okHttpClient: OkHttpClient
-    ) = SteamRpcProcessor(okHttpClient)
+    fun provideNeutralRpcProcessor(
+        okHttpClient: OkHttpClient,
+        @Named("neutralWebApiController") controller: SteamWebApiTokenController
+    ) = SteamRpcProcessor(okHttpClient, okHttpClient, controller)
 }
