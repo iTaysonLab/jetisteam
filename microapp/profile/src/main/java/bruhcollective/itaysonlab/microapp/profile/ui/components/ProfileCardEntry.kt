@@ -26,7 +26,7 @@ import steam.player.EProfileCustomizationType
 internal fun ProfileCardEntry(
     entry: ProfileCustomizationEntry,
     getGameSize: () -> Int,
-    getGame: (Int) -> Game,
+    getGame: (Int) -> Game?,
     getGameWithAchievements: (Int) -> GameToAchievements,
     onGameClick: (Int) -> Unit
 ) {
@@ -68,7 +68,7 @@ internal fun ProfileCardEntry(
 
         when (entry.customizationType) {
             EProfileCustomizationType.k_EProfileCustomizationTypeFavoriteGame -> FavoriteGame(remember(entry) { entry.slots.first().appId }, getGameWithAchievements, onGameClick)
-            EProfileCustomizationType.k_EProfileCustomizationTypeGameCollector -> GameCollector(getGameSize, remember(entry) { entry.slots.map { slot -> getGame(slot.appId) } }, onGameClick)
+            EProfileCustomizationType.k_EProfileCustomizationTypeGameCollector -> GameCollector(getGameSize, remember(entry) { entry.slots.mapNotNull { slot -> getGame(slot.appId) } }, onGameClick)
             else -> Text("Unsupported!")
         }
     }

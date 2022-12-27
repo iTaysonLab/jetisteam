@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.microapp.profile.ui
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.rounded.Wallet
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -102,7 +104,12 @@ internal fun ProfileScreen(
                                 Text(text = data.summary?.walletBalance ?: "")
                             }
                         } else {
-                            Text(text = data.playerProfile.personaname)
+                            val textAlpha by animateFloatAsState(
+                                targetValue = if (tas.state.overlappedFraction > 0.01f) 1f else 0f,
+                                animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                            )
+
+                            Text(text = data.playerProfile.personaname, Modifier.alpha(textAlpha))
                         }
                     }, scrollBehavior = tas, colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent,

@@ -46,7 +46,6 @@ internal fun ProfileHeader(
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
     ) {
-
         AsyncImage(
             model = backgroundUrl,
             contentDescription = null,
@@ -66,7 +65,7 @@ internal fun ProfileHeader(
             contentScale = ContentScale.Crop
         )
 
-        Column(Modifier.padding(bottom = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(Modifier.padding(bottom = 8.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(modifier = Modifier.height(136.dp))
 
             if (avatarFrameUrl != null) {

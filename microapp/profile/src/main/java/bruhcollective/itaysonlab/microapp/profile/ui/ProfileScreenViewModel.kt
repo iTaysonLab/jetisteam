@@ -35,16 +35,20 @@ internal class ProfileScreenViewModel @Inject constructor(
     fun gameToAchievements(id: Int) = data!!.let { data ->
         val unknownApp = data.otherAppsInfo[id]
 
-        data.ownedGames.getOrDefault(id, CPlayer_GetOwnedGames_Response_Game(
-            name = unknownApp?.second.orEmpty()
-        )) to data.achievementsProgress.getOrDefault(id, CPlayer_GetAchievementsProgress_Response_AchievementProgress(
-            total = 0,
-            unlocked = 0,
-            percentage = 0f
-        ))
+        data.ownedGames.getOrElse(id) {
+            CPlayer_GetOwnedGames_Response_Game(
+                name = unknownApp?.second.orEmpty()
+            )
+        } to data.achievementsProgress.getOrElse(id) {
+            CPlayer_GetAchievementsProgress_Response_AchievementProgress(
+                total = 0,
+                unlocked = 0,
+                percentage = 0f
+            )
+        }
     }
 
-    fun game(id: Int) = data!!.ownedGames[id]!!
+    fun game(id: Int) = data!!.ownedGames[id]
 
     fun gameSize() = data?.ownedGames?.size ?: 0
 
