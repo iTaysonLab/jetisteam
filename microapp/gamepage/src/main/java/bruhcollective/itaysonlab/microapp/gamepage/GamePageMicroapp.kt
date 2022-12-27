@@ -14,6 +14,10 @@ abstract class GamePageMicroapp : NestedMicroappEntry {
         Arguments.GameId to gameId
     ))
 
+    fun achievementsDestination(gameId: Int) = Routes.GameAchievements.mapArgs(mapOf(
+        Arguments.GameId to gameId
+    ))
+
     internal object Arguments {
         val GameId = navArgument("gameId") {
             type = NavType.IntType
@@ -24,6 +28,7 @@ abstract class GamePageMicroapp : NestedMicroappEntry {
         const val NavGraph = "@gamepage"
 
         val Game = DestNode("game/{${Arguments.GameId.name}}")
+        val GameAchievements = DestNode("game/{${Arguments.GameId.name}}/achievements")
         val DeckReport = DestNode("game/{${Arguments.GameId.name}}/deckReport")
     }
 }

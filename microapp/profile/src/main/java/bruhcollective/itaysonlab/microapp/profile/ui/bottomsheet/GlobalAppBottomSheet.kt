@@ -4,10 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Code
-import androidx.compose.material.icons.rounded.Language
-import androidx.compose.material.icons.rounded.Logout
-import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +15,7 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetHandle
 import bruhcollective.itaysonlab.microapp.core.LocalApplicationInfo
 import bruhcollective.itaysonlab.microapp.profile.R
@@ -25,49 +23,99 @@ import bruhcollective.itaysonlab.microapp.profile.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GlobalAppBottomSheet(
-    onBackClicked: () -> Unit
+    viewModel: GlobalAppBottomSheetViewModel = hiltViewModel(),
+    onBackClicked: () -> Unit,
+    onEditProfileClicked: (Long) -> Unit,
+    onSteamWrappedClicked: (Long) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
 
-    Column(Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                Color.Black
+                    .copy(alpha = 0.5f)
+                    .compositeOver(MaterialTheme.colorScheme.background)
+            ),
+    ) {
         BottomSheetHandle(modifier = Modifier.align(Alignment.CenterHorizontally))
 
-        ListItem(
-            leadingContent = {
-                Icon(imageVector = Icons.Rounded.Settings, contentDescription = null)
-            }, headlineText = {
-                Text(text = stringResource(id = R.string.global_sheet_options))
-            }, modifier = Modifier
-                .alpha(0.7f)
-                .clickable(enabled = false, onClick = { }), colors = ListItemDefaults.colors(
-                leadingIconColor = MaterialTheme.colorScheme.primary
+        Card(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp))
+        ) {
+            ListItem(
+                leadingContent = {
+                    Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
+                }, headlineText = {
+                    Text(text = stringResource(id = R.string.edit_title))
+                }, modifier = Modifier.clickable(onClick = {
+                    onEditProfileClicked(viewModel.steamId.steamId)
+                }), colors = ListItemDefaults.colors(
+                    leadingIconColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color.Transparent,
+                )
             )
-        )
 
-        Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+            Divider(color = MaterialTheme.colorScheme.surfaceVariant)
 
-        ListItem(
-            leadingContent = {
-                Icon(imageVector = Icons.Rounded.Logout, contentDescription = null)
-            }, headlineText = {
-                Text(text = stringResource(id = R.string.global_sheet_sign_out))
-            }, modifier = Modifier
-                .alpha(0.7f)
-                .clickable(enabled = false, onClick = { }), colors = ListItemDefaults.colors(
-                leadingIconColor = MaterialTheme.colorScheme.primary
+            ListItem(
+                leadingContent = {
+                    Icon(imageVector = Icons.Rounded.CalendarMonth, contentDescription = null)
+                }, headlineText = {
+                    Text(text = "Steam Review")
+                }, modifier = Modifier.clickable(onClick = {
+                    onSteamWrappedClicked(viewModel.steamId.steamId)
+                }), colors = ListItemDefaults.colors(
+                    leadingIconColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color.Transparent,
+                )
             )
-        )
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        Card(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp))
+        ) {
+            ListItem(
+                leadingContent = {
+                    Icon(imageVector = Icons.Rounded.Settings, contentDescription = null)
+                }, headlineText = {
+                    Text(text = stringResource(id = R.string.global_sheet_options))
+                }, modifier = Modifier
+                    .alpha(0.7f)
+                    .clickable(enabled = false, onClick = { }), colors = ListItemDefaults.colors(
+                    leadingIconColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color.Transparent,
+                )
+            )
+
+            Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+
+            ListItem(
+                leadingContent = {
+                    Icon(imageVector = Icons.Rounded.Logout, contentDescription = null)
+                }, headlineText = {
+                    Text(text = stringResource(id = R.string.global_sheet_sign_out))
+                }, modifier = Modifier
+                    .alpha(0.7f)
+                    .clickable(enabled = false, onClick = { }), colors = ListItemDefaults.colors(
+                    leadingIconColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color.Transparent,
+                )
+            )
+        }
+
+        Spacer(Modifier.height(16.dp))
 
         Column(
             Modifier
                 .fillMaxWidth()
-                .background(
-                    Color.Black
-                        .copy(alpha = 0.5f)
-                        .compositeOver(MaterialTheme.colorScheme.background)
-                )
                 .navigationBarsPadding()
-                .padding(vertical = 16.dp)
+                .padding(bottom = 8.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.global_sheet_about, LocalApplicationInfo.current.versionNumber, LocalApplicationInfo.current.versionCode),

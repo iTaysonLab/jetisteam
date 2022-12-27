@@ -43,6 +43,7 @@ class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
         bottomSheet(Routes.GameDetail.url, arguments = listOf(CommonArguments.SteamId, Arguments.GameData)) {
             OwnedGameBottomSheet(onNavigateToAchievements = { steamId, appId ->
                 navController.popBackStack()
+                navController.navigate(destinations.find<GamePageMicroapp>().achievementsDestination(appId))
             }, onNavigateToGamePage = { appId ->
                 navController.popBackStack()
                 navController.navigate(destinations.find<GamePageMicroapp>().gameDestination(appId))

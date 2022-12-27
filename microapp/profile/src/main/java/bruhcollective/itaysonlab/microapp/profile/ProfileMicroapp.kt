@@ -56,6 +56,6 @@ abstract class ProfileMicroapp: NestedMicroappEntry, BottomNavigationCapable {
         val Edit = DestNode("profile/{${CommonArguments.SteamId.name}}/edit")
         val EditSection = DestNode("profile/{${CommonArguments.SteamId.name}}/edit/{${Arguments.SectionType.name}}")
 
-        val AppBottomSheet = DestNode("config/profileSheet")
+        val AppBottomSheet = DestNode("config/profileSheet/{${CommonArguments.SteamId.name}}")
     }
 }

@@ -1,22 +1,29 @@
 package bruhcollective.itaysonlab.microapp.profile.ui
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.IosShare
 import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material.icons.rounded.Wallet
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import bruhcollective.itaysonlab.jetisteam.uikit.SteamColors
@@ -34,16 +41,14 @@ internal fun ProfileScreen(
     onGameClick: (Int) -> Unit,
     onLibraryClick: (Long) -> Unit,
     onFriendsClick: (Long) -> Unit,
-    onEditClick: (Long) -> Unit,
-    onNavigationClick: (Boolean) -> Unit,
+    onNavigationClick: (Boolean, Long) -> Unit,
     backStackEntry: NavBackStackEntry,
     viewModel: ProfileScreenViewModel = hiltViewModel()
 ) {
     val systemUiController = rememberSystemUiController()
     val isDarkTheme = isSystemInDarkTheme()
 
-    val tab = rememberTopAppBarState()
-    val tas = TopAppBarDefaults.pinnedScrollBehavior(state = tab)
+    val tas = TopAppBarDefaults.pinnedScrollBehavior()
     val share = LocalShareDispatcher.current
 
     InstallTypedResultHandler<ProfileEditEvent>(backStackEntry) { event ->
@@ -66,10 +71,42 @@ internal fun ProfileScreen(
         CompositionLocalProvider(LocalSteamTheme provides theme) {
             Scaffold(
                 topBar = {
-                    TopAppBar(title = {
+                    CenterAlignedTopAppBar(title = {
+                        if (viewModel.isRootScreen) {
+                            val cardBackground by animateColorAsState(
+                                targetValue = lerp(
+                                    theme.btnBackground.copy(alpha = 0.5f),
+                                    MaterialTheme.colorScheme.surfaceVariant,
+                                    if (tas.state.overlappedFraction > 0.01f) 1f else 0f
+                                ),
 
+                                animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                            )
+
+                            val cardContent by animateColorAsState(
+                                targetValue = lerp(
+                                    Color.White,
+                                    MaterialTheme.colorScheme.onSurface,
+                                    if (tas.state.overlappedFraction > 0.01f) 1f else 0f
+                                ),
+
+                                animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                            )
+
+                            Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
+                                containerColor = cardBackground,
+                                contentColor = cardContent
+                            ), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
+                                Icon(imageVector = Icons.Rounded.Wallet, contentDescription = null)
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(text = data.summary?.walletBalance ?: "")
+                            }
+                        } else {
+                            Text(text = data.playerProfile.personaname)
+                        }
                     }, scrollBehavior = tas, colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent,
+                        scrolledContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
                         actionIconContentColor = Color.White,
                         navigationIconContentColor = Color.White,
                     ), actions = {
@@ -86,7 +123,7 @@ internal fun ProfileScreen(
                             )
                         }
                     }, navigationIcon = {
-                        IconButton(onClick = { onNavigationClick(viewModel.isRootScreen) }) {
+                        IconButton(onClick = { onNavigationClick(viewModel.isRootScreen, viewModel.steamId.steamId) }) {
                             Icon(
                                 imageVector = if (viewModel.isRootScreen) {
                                     Icons.Rounded.Menu
@@ -99,7 +136,7 @@ internal fun ProfileScreen(
                 }, modifier = Modifier
                     .nestedScroll(tas.nestedScrollConnection)
                     .fillMaxSize()
-            ) {
+            ) { innerPadding ->
                 LazyColumn(
                     modifier = Modifier
                         .background(theme.gradientBackground.copy(alpha = 1f))
@@ -113,8 +150,7 @@ internal fun ProfileScreen(
                             profile = data.playerProfile,
                             summary = data.summary,
                             onLibraryClick = { onLibraryClick(viewModel.steamId.steamId) },
-                            onFriendsClick = { onFriendsClick(viewModel.steamId.steamId) },
-                            onEditClick = { onEditClick(viewModel.steamId.steamId) }
+                            onFriendsClick = { onFriendsClick(viewModel.steamId.steamId) }
                         )
                     }
 

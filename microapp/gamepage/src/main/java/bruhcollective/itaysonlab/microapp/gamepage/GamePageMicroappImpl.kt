@@ -4,9 +4,9 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import bruhcollective.itaysonlab.microapp.core.Destinations
-import bruhcollective.itaysonlab.microapp.core.map
 import bruhcollective.itaysonlab.microapp.core.mapArgs
 import bruhcollective.itaysonlab.microapp.gamepage.ui.GamePageScreen
+import bruhcollective.itaysonlab.microapp.gamepage.ui.achievements.GameAchievementsScreen
 import bruhcollective.itaysonlab.microapp.gamepage.ui.bottomsheet.DeckReportBottomSheet
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -25,6 +25,10 @@ class GamePageMicroappImpl @Inject constructor() : GamePageMicroapp() {
                     Arguments.GameId to appId
                 )))
             })
+        }
+
+        composable(Routes.GameAchievements.url, arguments = listOf(Arguments.GameId)) {
+            GameAchievementsScreen(onBackClick = navController::popBackStack)
         }
 
         bottomSheet(Routes.DeckReport.url, arguments = listOf(Arguments.GameId)) {

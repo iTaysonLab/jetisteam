@@ -289,7 +289,7 @@ message CPlayer_GetFriendsGameplayInfo_Response_OwnGameplayInfo {
 
 message CPlayer_GetGameAchievements_Request {
 	optional uint32 appid = 1;
-	optional string language = 2 [(description) = "Lowercase, language shortnames"];
+	optional string language = 2;
 }
 
 message CPlayer_GetGameAchievements_Response {

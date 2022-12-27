@@ -66,6 +66,22 @@ class ProfileRepository @Inject constructor(
         )
     }
 
+    suspend fun getGameAchievements(appid: Int) = playerStub.GetGameAchievements(
+        CPlayer_GetGameAchievements_Request(
+            appid = appid,
+            language = localeService.language,
+        )
+    ).achievements
+
+    suspend fun getTopGameAchievements(steamid: Long, appids: List<Int>) = playerStub.GetTopAchievementsForGames(
+        CPlayer_GetTopAchievementsForGames_Request(
+            appids = appids,
+            language = localeService.language,
+            steamid = steamid,
+            max_achievements = 8
+        )
+    ).games.filter { it.appid != null }.associateBy { it.appid ?: 0 }
+
     suspend fun getEquippedProfileItem(steamid: Long, clazz: ECommunityItemClass) = when (clazz) {
         ECommunityItemClass.k_ECommunityItemClass_ProfileBackground -> {
             playerStub.GetProfileBackground(CPlayer_GetProfileBackground_Request(steamid, localeService.language)).profile_background

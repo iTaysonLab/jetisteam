@@ -7,6 +7,7 @@ import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -36,8 +37,7 @@ internal fun ProfileHeader(
     summary: ProfileSummary?,
     profile: Player,
     onLibraryClick: () -> Unit,
-    onFriendsClick: () -> Unit,
-    onEditClick: () -> Unit,
+    onFriendsClick: () -> Unit
 ) {
     val theme = LocalSteamTheme.current
 
@@ -66,13 +66,11 @@ internal fun ProfileHeader(
             contentScale = ContentScale.Crop
         )
 
-        Column(Modifier.padding(bottom = 8.dp)) {
-            Spacer(modifier = Modifier.height(150.dp))
+        Column(Modifier.padding(bottom = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Spacer(modifier = Modifier.height(136.dp))
 
             if (avatarFrameUrl != null) {
-                Box(
-                    Modifier
-                        .padding(start = 20.dp)) {
+                Box {
                     AsyncImage(
                         model = avatarUrl,
                         contentDescription = null,
@@ -127,21 +125,10 @@ internal fun ProfileHeader(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
                     contentPadding = PaddingValues(horizontal = 16.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp),
+                    modifier = Modifier.fillMaxWidth().height(40.dp),
                 ) {
-                    item {
-                        Button(onClick = onEditClick, colors = ButtonDefaults.buttonColors(
-                            containerColor = theme.btnBackground,
-                            contentColor = Color.White
-                        )) {
-                            Text(text = "Edit profile")
-                        }
-                    }
-
                     item {
                         Button(onClick = onFriendsClick, colors = ButtonDefaults.buttonColors(
                             containerColor = theme.btnBackground.copy(alpha = 0.5f),
@@ -161,17 +148,6 @@ internal fun ProfileHeader(
                             Icon(imageVector = Icons.Rounded.Gamepad, contentDescription = null)
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(text = "${summary.ownedGames} games")
-                        }
-                    }
-
-                    item {
-                        Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(
-                            containerColor = theme.btnBackground.copy(alpha = 0.5f),
-                            contentColor = Color.White
-                        ), contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
-                            Icon(imageVector = Icons.Rounded.Wallet, contentDescription = null)
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(text = summary.walletBalance)
                         }
                     }
                 }
