@@ -2,8 +2,12 @@ package bruhcollective.itaysonlab.jetisteam.usecases.specials
 
 import bruhcollective.itaysonlab.jetisteam.controllers.CdnController
 import bruhcollective.itaysonlab.jetisteam.controllers.UserService
+import bruhcollective.itaysonlab.jetisteam.mappers.ProfileCustomization
+import bruhcollective.itaysonlab.jetisteam.mappers.ProfileEquipment
+import bruhcollective.itaysonlab.jetisteam.models.Player
 import bruhcollective.itaysonlab.jetisteam.models.SteamID
 import bruhcollective.itaysonlab.jetisteam.repository.GameRepository
+import bruhcollective.itaysonlab.jetisteam.repository.ProfileRepository
 import bruhcollective.itaysonlab.jetisteam.repository.SaleFeatureRepository
 import bruhcollective.itaysonlab.jetisteam.repository.StoreRepository
 import steam.common.StoreItem
@@ -15,7 +19,8 @@ class GetSteamReplay @Inject constructor(
     private val storeRepository: StoreRepository,
     private val cdnController: CdnController,
     private val userService: UserService,
-    private val saleFeatureRepository: SaleFeatureRepository
+    private val saleFeatureRepository: SaleFeatureRepository,
+    private val profileRepository: ProfileRepository
 ) {
     suspend operator fun invoke(steamId: SteamID): SteamReplay {
         val yir = saleFeatureRepository.getYearInReview(steamId).stats!!
@@ -39,12 +44,18 @@ class GetSteamReplay @Inject constructor(
 
         return SteamReplay(
             yearInReview = yir,
-            storeItems = emptyMap()
+            storeItems = emptyMap(),
+            profile = userService.resolveUsers(listOf(steamId.steamId)).values.first(),
+            profileEquipment = ProfileEquipment(profileRepository.getProfileItems(steamId.steamId)),
+            customization = ProfileCustomization(profileRepository.getProfileCustomization(steamId.steamId)),
         )
     }
 
     class SteamReplay(
         val yearInReview: CUserYearInReviewStats,
-        val storeItems: Map<Int, StoreItem>
+        val storeItems: Map<Int, StoreItem>,
+        val profile: Player,
+        val profileEquipment: ProfileEquipment,
+        val customization: ProfileCustomization,
     )
 }

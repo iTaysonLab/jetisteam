@@ -57,7 +57,7 @@ fun GlobalAppBottomSheet(
                 leadingContent = {
                     Icon(imageVector = Icons.Rounded.CalendarMonth, contentDescription = null)
                 }, headlineText = {
-                    Text(text = "Steam Review")
+                    Text(text = "Steam Replay")
                 }, modifier = Modifier.clickable(onClick = {
                     onSteamWrappedClicked(viewModel.steamId.steamId)
                 }), colors = ListItemDefaults.colors(

@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.microapp.profile.ui
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -28,6 +27,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
+import bruhcollective.itaysonlab.jetisteam.uikit.LocalSteamTheme
 import bruhcollective.itaysonlab.jetisteam.uikit.SteamColors
 import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
 import bruhcollective.itaysonlab.microapp.core.navigation.extensions.delegates.LocalShareDispatcher

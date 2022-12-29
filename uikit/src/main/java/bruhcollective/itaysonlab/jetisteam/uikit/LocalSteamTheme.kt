@@ -1,6 +1,5 @@
-package bruhcollective.itaysonlab.microapp.profile.ui
+package bruhcollective.itaysonlab.jetisteam.uikit
 
 import androidx.compose.runtime.staticCompositionLocalOf
-import bruhcollective.itaysonlab.jetisteam.uikit.SteamColors
 
 val LocalSteamTheme = staticCompositionLocalOf { SteamColors.default() }

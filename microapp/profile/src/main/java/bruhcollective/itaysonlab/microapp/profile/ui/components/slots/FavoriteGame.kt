@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetisteam.util.CdnUrlUtil
 import bruhcollective.itaysonlab.microapp.profile.ui.GameToAchievements
-import bruhcollective.itaysonlab.microapp.profile.ui.LocalSteamTheme
+import bruhcollective.itaysonlab.jetisteam.uikit.LocalSteamTheme
 import coil.compose.AsyncImage
 
 @Composable

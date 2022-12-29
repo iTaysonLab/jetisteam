@@ -25,7 +25,7 @@ import bruhcollective.itaysonlab.jetisteam.models.Player
 import bruhcollective.itaysonlab.microapp.profile.R
 import bruhcollective.itaysonlab.microapp.profile.ext.toLastSeenDate
 import bruhcollective.itaysonlab.microapp.profile.ext.toStringRes
-import bruhcollective.itaysonlab.microapp.profile.ui.LocalSteamTheme
+import bruhcollective.itaysonlab.jetisteam.uikit.LocalSteamTheme
 import coil.compose.AsyncImage
 
 @OptIn(ExperimentalComposeUiApi::class)

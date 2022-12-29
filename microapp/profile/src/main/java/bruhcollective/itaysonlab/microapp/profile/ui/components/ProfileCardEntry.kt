@@ -17,7 +17,7 @@ import bruhcollective.itaysonlab.jetisteam.mappers.ProfileCustomizationEntry
 import bruhcollective.itaysonlab.microapp.profile.R
 import bruhcollective.itaysonlab.microapp.profile.ui.Game
 import bruhcollective.itaysonlab.microapp.profile.ui.GameToAchievements
-import bruhcollective.itaysonlab.microapp.profile.ui.LocalSteamTheme
+import bruhcollective.itaysonlab.jetisteam.uikit.LocalSteamTheme
 import bruhcollective.itaysonlab.microapp.profile.ui.components.slots.FavoriteGame
 import bruhcollective.itaysonlab.microapp.profile.ui.components.slots.GameCollector
 import steam.player.EProfileCustomizationType
