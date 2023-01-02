@@ -10,7 +10,8 @@ class SetRemoteMachineDownloadState @Inject constructor(
         CurrentPause,
         CurrentResume,
         QueueToTop,
-        Uninstall
+        Uninstall,
+        Install
     }
 
     suspend operator fun invoke(
@@ -22,6 +23,7 @@ class SetRemoteMachineDownloadState @Inject constructor(
             Command.CurrentPause, Command.CurrentResume -> commRepository.toggleActiveDownload(machineId, command == Command.CurrentResume)
             Command.QueueToTop -> commRepository.setClientAppUpdateState(machineId, appId, 1)
             Command.Uninstall -> commRepository.uninstall(machineId, appId)
+            Command.Install -> commRepository.addToInstallQueue(machineId, appId)
         }
     }
 }

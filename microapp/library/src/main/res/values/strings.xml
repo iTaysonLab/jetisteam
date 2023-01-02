@@ -5,7 +5,7 @@
     <string name="library_sheet_achv">Achievements</string>
     <string name="library_sheet_achv_none">Not available</string>
     <string name="library_sheet_store">Open Store Page</string>
-    <string name="library_sheet_remote">Manage remote installation</string>
+    <string name="library_sheet_remote">Install on remote PC</string>
 
     <string name="library_remote_subtitle">%s, %s space left</string>
     <string name="library_remote_tab_queue">Queue</string>
@@ -40,4 +40,13 @@
     <string name="library_remote_uninstall_text">Are you sure you want to uninstall %s?\n\nYou can always reinstall the app later.</string>
     <string name="library_remote_uninstall_action">Confirm</string>
     <string name="library_remote_uninstall_cancel">Cancel</string>
+
+    <string name="library_remote_pick">Pick a device</string>
+    <string name="library_remote_pick_empty">No online remote PCs are available right now.</string>
+    <string name="library_remote_pick_install">Pick a device to install</string>
+    <string name="library_remote_pick_status_os">Unsupported OS</string>
+    <string name="library_remote_pick_status_installed">Installed</string>
+    <string name="library_remote_pick_status_space">Not enough space (required: %s, left: %s)</string>
+    <string name="library_remote_pick_status_progress">Already in install queue</string>
+    <string name="library_remote_pick_status_ready">%s required (left: %s)</string>
 </resources>

@@ -17,10 +17,12 @@ class GetRemoteMachineInstalledList @Inject constructor(
     class RemoteMachineSummary(
         val installed: List<CClientComm_GetClientAppList_Response_AppData>,
         val notInstalled: List<CClientComm_GetClientAppList_Response_AppData>,
+        val inQueue: List<CClientComm_GetClientAppList_Response_AppData>
     ) {
         constructor(proto: CClientComm_GetClientAppList_Response): this(
             installed = proto.apps.filter { it.installed == true && it.bytes_downloaded == it.bytes_to_download && it.bytes_staged == it.bytes_to_stage },
-            notInstalled = proto.apps.filter { it.installed == false }
+            notInstalled = proto.apps.filter { it.installed == false },
+            inQueue = proto.apps.filter { it.changing == true }
         )
     }
 }

@@ -26,8 +26,16 @@ abstract class LibraryMicroapp: NestedMicroappEntry, BottomNavigationCapable {
             type = NavType.LongType
         }
 
+        val MachineList = navArgument("machinesList") {
+            type = NavType.StringType
+        }
+
         val GameData = navArgument("gameData") {
             type = NavType.StringType
+        }
+
+        val ApplicationId = navArgument("appId") {
+            type = NavType.IntType
         }
     }
 
@@ -37,5 +45,7 @@ abstract class LibraryMicroapp: NestedMicroappEntry, BottomNavigationCapable {
         val Library = DestNode("library/{${CommonArguments.SteamId.name}}")
         val GameDetail = DestNode("library/{${CommonArguments.SteamId.name}}/games/{${Arguments.GameData.name}}")
         val RemoteMachineInfo = DestNode("library/{${CommonArguments.SteamId.name}}/machines/{${Arguments.MachineId.name}}")
+        val PickRemoteMachine = DestNode("library/{${CommonArguments.SteamId.name}}/machines/list/{${Arguments.MachineList.name}}")
+        val InstallGame = DestNode("library/{${CommonArguments.SteamId.name}}/games/{${Arguments.ApplicationId.name}}/install")
     }
 }

@@ -33,13 +33,14 @@ import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.core.ext.asBase64
 import bruhcollective.itaysonlab.microapp.library.R
 import coil.compose.AsyncImage
+import steam.clientcomm.CClientComm_GetAllClientLogonInfo_Response_Session
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun LibraryScreen(
     onGameClick: (Long, String) -> Unit,
     onBackClick: () -> Unit,
-    onRemoteClick: (Long, Long) -> Unit,
+    onRemoteClick: (Long, List<CClientComm_GetAllClientLogonInfo_Response_Session>) -> Unit,
     viewModel: LibraryScreenViewModel = hiltViewModel()
 ) {
     var sortByMenuOpened by remember { mutableStateOf(false) }
@@ -174,8 +175,7 @@ internal fun LibraryScreen(
                                 .clickable {
                                     onRemoteClick(
                                         viewModel.longSteamId,
-                                        viewModel.library.machines.first().client_instanceid
-                                            ?: return@clickable
+                                        viewModel.library.machines
                                     )
                                 }
                         )
