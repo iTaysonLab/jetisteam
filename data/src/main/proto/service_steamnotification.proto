@@ -13,6 +13,7 @@ enum SteamNotificationType {
   MajorSale = 6;
   PreloadAvailable = 7;
   Wishlist = 8;
+  Promotion = 10; // not sure if that's true (Steam Replay notification falls under that category)
 }
 
 message CSteamNotification_GetPreferences_Request {

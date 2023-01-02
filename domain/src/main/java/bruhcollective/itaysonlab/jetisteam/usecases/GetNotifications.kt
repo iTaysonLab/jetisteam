@@ -178,12 +178,26 @@ class GetNotifications @Inject constructor(
                         )
                     }
 
+                    SteamNotificationType.Promotion -> {
+                        val promoObject = JSONObject(notification.body_data.orEmpty())
+
+                        Notification(
+                            timestamp = notification.timestamp ?: 0,
+                            title = FormattedResourceString.FixedString(promoObject.optString("title").orEmpty()),
+                            description = FormattedResourceString.FixedString(promoObject.optString("body").orEmpty()),
+                            icon = promoObject.optString("image").orEmpty(),
+                            type = notification.notification_type!!,
+                            unread = notification.read?.not() ?: false,
+                            destination = promoObject.optString("link").orEmpty()
+                        )
+                    }
+
                     else -> Notification(
                         timestamp = notification.timestamp ?: 0,
                         title = FormattedResourceString.FixedString("Unknown notification"),
                         description = FormattedResourceString.FixedString("Rich content not implemented"),
                         icon = "",
-                        type = notification.notification_type!!,
+                        type = notification.notification_type ?: SteamNotificationType.Item,
                         unread = notification.read?.not() ?: false,
                         destination = ""
                     ).also { println(notification.body_data.orEmpty()) }

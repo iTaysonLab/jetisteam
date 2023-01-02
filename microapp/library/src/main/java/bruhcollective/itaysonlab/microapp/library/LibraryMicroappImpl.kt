@@ -37,7 +37,9 @@ class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
         }
 
         composable(Routes.RemoteMachineInfo.url, arguments = listOf(CommonArguments.SteamId, Arguments.MachineId)) {
-            RemoteMachineScreen(onBackClick = navController::popBackStack)
+            RemoteMachineScreen(onBackClick = navController::popBackStack, onVisitStoreClicked = { appId ->
+                navController.navigate(destinations.find<GamePageMicroapp>().gameDestination(appId))
+            })
         }
 
         bottomSheet(Routes.GameDetail.url, arguments = listOf(CommonArguments.SteamId, Arguments.GameData)) {

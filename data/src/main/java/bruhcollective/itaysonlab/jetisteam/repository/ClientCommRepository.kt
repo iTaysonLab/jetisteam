@@ -34,6 +34,14 @@ class ClientCommRepository @Inject constructor(
         )
     )
 
+    suspend fun setClientAppUpdateState(clientId: Long, appId: Int, action: Int) = stub.SetClientAppUpdateState(
+        CClientComm_SetClientAppUpdateState_Request(
+            appid = appId,
+            client_instanceid = clientId,
+            action = action
+        )
+    )
+
     suspend fun uninstall(clientId: Long, appId: Int) = stub.UninstallClientApp(
         CClientComm_UninstallClientApp_Request(
             appid = appId,

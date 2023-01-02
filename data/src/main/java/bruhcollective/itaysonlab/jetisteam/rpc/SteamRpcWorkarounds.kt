@@ -44,7 +44,12 @@ object SteamRpcWorkarounds {
         "/TwoFactor/RemoveAuthenticatorViaChallengeContinue",
         "/TwoFactor/RemoveAuthenticator",
         // Quest
-        "/Quest/ActivateProfileModifierItem"
+        "/Quest/ActivateProfileModifierItem",
+        // ClientComm
+        "/ClientComm/EnableOrDisableDownloads",
+        "/ClientComm/InstallClientApp",
+        "/ClientComm/UninstallClientApp",
+        "/ClientComm/SetClientAppUpdateState",
     )
 
     private val webApiTokenMap = mapOf(

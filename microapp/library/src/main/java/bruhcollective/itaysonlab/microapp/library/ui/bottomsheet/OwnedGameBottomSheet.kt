@@ -187,7 +187,6 @@ fun OwnedGameBottomSheet(
                                 }
                                 .fillMaxWidth()
                         )
-
                     }
                 }
             }
@@ -216,7 +215,7 @@ fun OwnedGameBottomSheet(
 
             ListItem(
                 leadingContent = {
-                    Icon(imageVector = Icons.Rounded.Store, contentDescription = null)
+                    Icon(imageVector = Icons.Rounded.ShoppingCart, contentDescription = null)
                 },
                 headlineText = {
                     Text(text = stringResource(id = R.string.library_sheet_store))

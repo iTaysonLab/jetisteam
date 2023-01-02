@@ -23,7 +23,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -255,7 +254,7 @@ internal fun LibraryScreen(
 }
 
 @Composable
-private fun LibraryItem(
+internal fun LibraryItem(
     image: String,
     modifier: Modifier,
 ) {
@@ -264,6 +263,7 @@ private fun LibraryItem(
         contentDescription = null,
         modifier = modifier,
         contentScale = ContentScale.FillBounds,
-        placeholder = ColorPainter(MaterialTheme.colorScheme.surface)
+        placeholder = ColorPainter(MaterialTheme.colorScheme.surface),
+        error = ColorPainter(MaterialTheme.colorScheme.surface),
     )
 }

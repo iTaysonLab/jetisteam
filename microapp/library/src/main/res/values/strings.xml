@@ -7,7 +7,7 @@
     <string name="library_sheet_store">Open Store Page</string>
     <string name="library_sheet_remote">Manage remote installation</string>
 
-    <string name="library_remote_subtitle">running on %s</string>
+    <string name="library_remote_subtitle">%s, %s space left</string>
     <string name="library_remote_tab_queue">Queue</string>
     <string name="library_remote_tab_installed">Installed</string>
 
@@ -19,6 +19,8 @@
 
     <string name="library_remote_library_search_empty">No search results</string>
     <string name="library_remote_library_search_empty_text">Check spelling of your query and try again</string>
+    <string name="library_remote_library_queue_empty">Queue is empty</string>
+    <string name="library_remote_library_queue_empty_text">Try downloading some games or apps to see them in this list.</string>
 
     <string name="library_remote_free_space">Free space</string>
 
@@ -28,4 +30,14 @@
     <string name="library_sort_name">Name</string>
     <string name="library_sort_time">Playtime</string>
     <string name="library_sort_date">Recently played</string>
+
+    <string name="library_remote_category_next">Up Next</string>
+    <string name="library_remote_category_done">Completed</string>
+    <string name="library_remote_progress_right">/ %s</string>
+    <string name="library_remote_progress_right_eta">/ %s (%s)</string>
+
+    <string name="library_remote_uninstall">Uninstall</string>
+    <string name="library_remote_uninstall_text">Are you sure you want to uninstall %s?\n\nYou can always reinstall the app later.</string>
+    <string name="library_remote_uninstall_action">Confirm</string>
+    <string name="library_remote_uninstall_cancel">Cancel</string>
 </resources>
