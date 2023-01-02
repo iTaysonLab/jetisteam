@@ -7,6 +7,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -64,7 +65,8 @@ internal fun QueuePage(
     } else {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(vertical = 16.dp)
+            contentPadding = PaddingValues(vertical = 16.dp),
+            modifier = Modifier.fillMaxSize()
         ) {
             if (queueState.activeDownload != null) {
                 item {
@@ -88,28 +90,32 @@ internal fun QueuePage(
                 }
             }
 
-            stickyHeader {
-                StickyHeader(
-                    type = R.string.library_remote_category_next,
-                    counter = queueState.queueWaiting.size
-                )
+            if (queueState.queueWaiting.isNotEmpty()) {
+                stickyHeader {
+                    StickyHeader(
+                        type = R.string.library_remote_category_next,
+                        counter = queueState.queueWaiting.size
+                    )
+                }
+
+                items(queueState.queueWaiting) { app ->
+                    QueueGameCard(app, onDownloadClicked = {
+                        onClick(app.appid ?: 0, SetRemoteMachineDownloadState.Command.QueueToTop)
+                    }, operatingAppId = currentlyOperatingWith)
+                }
             }
 
-            items(queueState.queueWaiting) { app ->
-                QueueGameCard(app, onDownloadClicked = {
-                    onClick(app.appid ?: 0, SetRemoteMachineDownloadState.Command.QueueToTop)
-                }, operatingAppId = currentlyOperatingWith)
-            }
+            if (queueState.queueCompleted.isNotEmpty()) {
+                stickyHeader {
+                    StickyHeader(
+                        type = R.string.library_remote_category_done,
+                        counter = queueState.queueCompleted.size
+                    )
+                }
 
-            stickyHeader {
-                StickyHeader(
-                    type = R.string.library_remote_category_done,
-                    counter = queueState.queueCompleted.size
-                )
-            }
-
-            items(queueState.queueCompleted) { app ->
-                QueueGameCard(app, operatingAppId = currentlyOperatingWith)
+                items(queueState.queueCompleted) { app ->
+                    QueueGameCard(app, operatingAppId = currentlyOperatingWith)
+                }
             }
         }
     }
@@ -233,10 +239,8 @@ private fun QueueGameCard(
                         Box(
                             Modifier
                                 .clip(MaterialTheme.shapes.medium)
-                                .clickable(
-                                    enabled = operatingAppId == 0,
-                                    onClick = onDownloadClicked
-                                )
+                                .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), MaterialTheme.shapes.medium)
+                                .clickable(enabled = operatingAppId == 0, onClick = onDownloadClicked)
                                 .size(48.dp)
                                 .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
                             contentAlignment = Alignment.Center

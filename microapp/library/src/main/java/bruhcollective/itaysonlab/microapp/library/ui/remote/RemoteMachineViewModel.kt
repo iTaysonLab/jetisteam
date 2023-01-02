@@ -31,6 +31,7 @@ class RemoteMachineViewModel @Inject constructor(
     private val steamId = savedState.getSteamId()
     private val machineId = savedState.get<Long>(LibraryMicroapp.Arguments.MachineId.name)!!
     private var currentJob: Job? = null
+    private var queueEntries = -1
 
     var currentJobId by mutableStateOf(0)
         private set
@@ -46,6 +47,14 @@ class RemoteMachineViewModel @Inject constructor(
                 }.getOrNull()
 
                 if (data != null) {
+                    val entryCount = (if (data.activeDownload != null) 1 else 0) + data.queueWaiting.size + data.queueCompleted.size
+
+                    if (queueEntries != -1 && queueEntries != entryCount) {
+                        setState(load()) // something is installed
+                    }
+
+                    queueEntries = entryCount
+
                     emit(data)
                     delay(1500L)
                 } else {
@@ -72,8 +81,16 @@ class RemoteMachineViewModel @Inject constructor(
         }
     }
 
-    fun uninstallGame(appId: Int) {
-        
+    fun uninstallGame(appId: Int, after: () -> Unit) {
+        if (currentJob != null) return
+        currentJob = viewModelScope.launch {
+            isUninstalling = true
+            setRemoteMachineDownloadState(machineId, appId, SetRemoteMachineDownloadState.Command.Uninstall)
+            setState(load())
+            isUninstalling = false
+            after()
+            currentJob = null
+        }
     }
 
     override suspend fun load(): GetRemoteMachineInstalledList.RemoteMachineSummary {

@@ -24,7 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
-import bruhcollective.itaysonlab.jetisteam.uikit.components.StateButton
+import bruhcollective.itaysonlab.jetisteam.uikit.components.StateTextButton
 import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenLoading
 import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
@@ -48,12 +48,16 @@ fun RemoteMachineScreen(
     val cScope = rememberCoroutineScope()
 
     var uninstallAlert by remember {
-        mutableStateOf<Triple<Int, String, Int>?>(null)
+        mutableStateOf<Pair<Int, String>?>(null)
     }
 
     if (uninstallAlert != null) {
         AlertDialog(
-            onDismissRequest = { uninstallAlert = null },
+            onDismissRequest = {
+                if (viewModel.isUninstalling.not()) {
+                    uninstallAlert = null
+                }
+            },
             icon = {
                 Icon(Icons.Rounded.Delete, contentDescription = null)
             }, title = {
@@ -61,7 +65,9 @@ fun RemoteMachineScreen(
             }, text = {
                 Text(text = stringResource(id = R.string.library_remote_uninstall_text, uninstallAlert?.second.orEmpty()))
             }, confirmButton = {
-                StateButton(onClick = { viewModel.uninstallGame(uninstallAlert?.first ?: 0) }, inLoadingState = viewModel.isUninstalling) {
+                StateTextButton(onClick = { viewModel.uninstallGame(uninstallAlert?.first ?: 0) {
+                    uninstallAlert = null
+                }}, inLoadingState = viewModel.isUninstalling) {
                     Text(text = stringResource(id = R.string.library_remote_uninstall_action))
                 }
             }, dismissButton = {
@@ -150,7 +156,7 @@ fun RemoteMachineScreen(
                                     if (action == 0) {
                                         onVisitStoreClicked(appId)
                                     } else if (action == 1) {
-
+                                        uninstallAlert = appId to appName
                                     }
                                 }
                             }
