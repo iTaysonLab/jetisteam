@@ -38,6 +38,7 @@ fun Notification(
             SteamNotificationType.MajorSale -> Icons.Rounded.Discount to R.string.notifications_type_discount
             SteamNotificationType.PreloadAvailable -> Icons.Rounded.Download to R.string.notifications_type_preload
             SteamNotificationType.Wishlist -> Icons.Rounded.Checklist to R.string.notifications_type_wishlist
+            SteamNotificationType.Promotion -> Icons.Rounded.Article to R.string.notifications_type_promo
         }
     }
 
@@ -107,7 +108,7 @@ fun Notification(
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
-                Text(text = notification.description.get(LocalContext.current), fontSize = 13.sp)
+                Text(text = notification.description.get(LocalContext.current), fontSize = 13.sp, lineHeight = 18.sp)
             }
         }
     }
