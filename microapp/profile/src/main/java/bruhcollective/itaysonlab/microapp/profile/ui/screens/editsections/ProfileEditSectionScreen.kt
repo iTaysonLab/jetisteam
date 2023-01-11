@@ -78,7 +78,7 @@ internal fun ProfileEditSectionScreen(
                 animationSpec = spring(stiffness = 1000f)
             )
 
-            FloatingActionButton(onClick = { viewModel.commitChanges(onChangesCommitted) }, modifier = Modifier.offset(y = fabDiff)) {
+            FloatingActionButton(onClick = { viewModel.commitChanges(onChangesCommitted) }, modifier = Modifier.offset(y = fabDiff), containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary) {
                 AnimatedContent(targetState = viewModel.isCommittingChanges, transitionSpec = {
                     materialSharedAxisY(forward = true, slideDistance = slideDistance).using(
                         SizeTransform(clip = false)
