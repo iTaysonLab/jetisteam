@@ -59,6 +59,7 @@ dependencies {
 
     implementation libs.mmkv
     implementation libs.okhttp
+    implementation libs.bundles.ksteam
 
     implementation libs.bundles.retrofit
 

@@ -51,7 +51,6 @@ dependencies {
     implementation project(":microapp:core")
     implementation project(":microapp:gamepage")
     implementation project(":microapp:library")
-    implementation project(":microapp:steam_wrapped")
 
     implementation project(":domain")
     implementation project(":data")

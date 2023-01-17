@@ -1,9 +1,6 @@
 package bruhcollective.itaysonlab.jetisteam.ui.screens
 
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,18 +16,20 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
+import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
+import bruhcollective.itaysonlab.jetisteam.ui.SteamConnectionRow
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
 import bruhcollective.itaysonlab.microapp.core.*
+import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
 import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
-import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
-import bruhcollective.itaysonlab.microapp.profile.ProfileMicroapp
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -59,7 +58,7 @@ fun AppNavigation(
         if (navController.currentDestination?.route != "coreLoading") return@LaunchedEffect
 
         val startRoute = if (viewModel.signedIn()) {
-            viewModel.destinations.find<GuardMicroapp>()
+            viewModel.destinations.find<AuthMicroapp>() // Guard
         } else {
             viewModel.destinations.find<AuthMicroapp>()
         }.graphRoute
@@ -78,6 +77,8 @@ fun AppNavigation(
     val navOffsetReverse by animateDpAsState(if (!shouldHideNavigationBar) 80.dp + navBarHeightDp else 0.dp)
     val slideDistance = rememberSlideDistance()
 
+    val connectionState = viewModel.connectingState.collectAsStateWithLifecycle()
+
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
         sheetShape = MaterialTheme.shapes.extraLarge.copy(bottomStart = CornerSize(0.dp), bottomEnd = CornerSize(0.dp)),
@@ -85,6 +86,9 @@ fun AppNavigation(
         sheetBackgroundColor = MaterialTheme.colorScheme.surface
     ) {
         Scaffold(
+            topBar = {
+                SteamConnectionRow(connectionState.value)
+            },
             bottomBar = {
                 val currentRootRoute = navController.backQueue.getOrNull(1)?.destination?.route
 
@@ -127,13 +131,15 @@ fun AppNavigation(
                         )
                     }
                 }
-            }
+            }, contentWindowInsets = EmptyWindowInsets
         ) { padding ->
             AnimatedNavHost(
                 navController = navController,
                 startDestination = "coreLoading",
                 route = ROOT_NAV_GRAPH_ID,
-                modifier = Modifier.padding(bottom = navOffsetReverse),
+                modifier = Modifier
+                    .padding(bottom = navOffsetReverse)
+                    .padding(top = padding.calculateTopPadding()),
                 enterTransition = {
                     if (initialState.destination.route == "coreLoading") {
                         EnterTransition.None
@@ -190,6 +196,7 @@ fun AppNavigation(
 class AppNavigationViewModel @Inject constructor(
     private val steamSessionController: SteamSessionController,
     val destinations: Destinations,
+    private val hostSteamClient: HostSteamClient
 ) : ViewModel() {
     val fullscreenDestinations = destinations.values
         .filterIsInstance<HasFullscreenRoutes>()
@@ -197,12 +204,14 @@ class AppNavigationViewModel @Inject constructor(
         .flatten()
         .distinct()
 
-    val bottomNavDestinations = listOf(
-        /*destinations.find<HomeMicroapp>(),*/
+    val bottomNavDestinations = listOf<BottomNavigationCapable>(
+        //destinations.find<HomeMicroapp>(),
         destinations.find<NotificationsMicroapp>(),
-        destinations.find<GuardMicroapp>(),
-        destinations.find<ProfileMicroapp>(),
+        //destinations.find<GuardMicroapp>(),
+        //destinations.find<ProfileMicroapp>(),
     ).map(BottomNavigationCapable::bottomNavigationEntry)
+
+    val connectingState = hostSteamClient.client.connectionStatus
 
     fun signedIn() = steamSessionController.signedIn()
     fun mySteamId() = steamSessionController.steamId()

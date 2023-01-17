@@ -74,26 +74,30 @@ dependencies {
 
     implementation project(":domain")
     implementation project(":data")
+    implementation project(":uikit")
 
     implementation project(":microapp:core")
     implementation project(":microapp:auth")
-    implementation project(":microapp:home")
-    implementation project(":microapp:profile")
     implementation project(":microapp:notifications")
+    
+    /*implementation project(":microapp:home")
+    implementation project(":microapp:profile")
+
     implementation project(":microapp:news")
     implementation project(":microapp:debug")
     implementation project(":microapp:gamepage")
     implementation project(":microapp:guard")
     implementation project(":microapp:library")
-    implementation project(":microapp:market")
+    implementation project(":microapp:market")*/
 
-    implementation 'com.github.penfeizhou.android.animation:apng:2.23.0'
+    implementation 'com.github.penfeizhou.android.animation:apng:2.24.0'
 
     implementation libs.androidCoreSplashscreen
 
     implementation libs.bundles.androidx
     implementation libs.bundles.compose
     implementation libs.bundles.accompanist
+    implementation libs.bundles.ksteam
 
     implementation libs.coilCompose
     implementation libs.coilGif

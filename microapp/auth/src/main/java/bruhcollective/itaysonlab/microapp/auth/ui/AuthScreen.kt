@@ -1,14 +1,10 @@
 package bruhcollective.itaysonlab.microapp.auth.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Email
-import androidx.compose.material.icons.rounded.Password
-import androidx.compose.material.icons.rounded.Visibility
-import androidx.compose.material.icons.rounded.VisibilityOff
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,23 +20,21 @@ import androidx.compose.ui.platform.LocalAutofill
 import androidx.compose.ui.platform.LocalAutofillTree
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import bruhcollective.itaysonlab.jetisteam.uikit.components.StateButton
+import bruhcollective.itaysonlab.jetisteam.uikit.components.StateTextButton
 import bruhcollective.itaysonlab.microapp.auth.R
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 internal fun AuthScreen(
     viewModel: AuthScreenViewModel = hiltViewModel(),
-    onProceedToNextStep: (Boolean) -> Unit,
-    onOpenDisclaimer: () -> Unit
+    onProceedToNextStep: () -> Unit,
+    onBackClicked: () -> Unit
 ) {
     val autofill = LocalAutofill.current
     val focusManager = LocalFocusManager.current
@@ -59,29 +53,55 @@ internal fun AuthScreen(
         )
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-            .imePadding()
-            .padding(horizontal = 24.dp),
-        contentAlignment = Alignment.Center
-    ) {
+    Scaffold(
+        topBar = {
+            LargeTopAppBar(title = {
+                Text(text = stringResource(id = R.string.new_onboarding_sign))
+            }, navigationIcon = {
+                IconButton(onClick = onBackClicked) {
+                    Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
+                }
+            })
+        }, bottomBar = {
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .navigationBarsPadding()) {
+                StateTextButton(
+                    onClick = authFunc,
+                    inLoadingState = viewModel.isAuthInProgress,
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                ) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.login_next))
+                        Icon(imageVector = Icons.Rounded.ChevronRight, contentDescription = null)
+                    }
+                }
+            }
+        }
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .padding(innerPadding)
         ) {
-            Text(
-                text = stringResource(R.string.auth_title),
-                fontWeight = FontWeight.SemiBold,
-                style = MaterialTheme.typography.headlineLarge
-            )
+            Card(colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                contentColor = MaterialTheme.colorScheme.onErrorContainer,
+            )) {
+                Column(
+                    Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Icon(imageVector = Icons.Rounded.Warning, contentDescription = null)
+                    Text(text = stringResource(id = R.string.disclaimers), style = MaterialTheme.typography.headlineSmall)
+                    Text(text = stringResource(id = R.string.auth_disclaimer_text), style = MaterialTheme.typography.bodySmall)
+                }
+            }
 
-            Text(
-                text = stringResource(R.string.auth_subtitle),
-                fontSize = 14.sp
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             Autofill(
                 autofillTypes = listOf(AutofillType.EmailAddress, AutofillType.Username),
@@ -117,7 +137,7 @@ internal fun AuthScreen(
                                 }
                             }
                         }
-                        .focusProperties { next = passwordFocusRequester },
+                        .focusProperties { next = passwordFocusRequester }, shape = MaterialTheme.shapes.medium
                 )
             }
 
@@ -178,33 +198,8 @@ internal fun AuthScreen(
                                     stringResource(R.string.show_password)
                                 )
                         }
-                    }
+                    }, shape = MaterialTheme.shapes.medium
                 )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Box(
-                Modifier
-                    .fillMaxWidth()
-            ) {
-                OutlinedButton(
-                    shape = RoundedCornerShape(8.dp),
-                    onClick = onOpenDisclaimer,
-                    modifier = Modifier.align(Alignment.CenterStart),
-                    colors = ButtonDefaults.outlinedButtonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant, contentColor = MaterialTheme.colorScheme.onSurface,)
-                ) {
-                    Text(stringResource(R.string.disclaimers))
-                }
-
-                StateButton(
-                    shape = RoundedCornerShape(8.dp),
-                    onClick = authFunc,
-                    inLoadingState = viewModel.isAuthInProgress,
-                    modifier = Modifier.align(Alignment.CenterEnd)
-                ) {
-                    Text(stringResource(R.string.login))
-                }
             }
         }
     }

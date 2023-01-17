@@ -6,12 +6,13 @@
     <string name="email">Username</string>
     <string name="password">Password</string>
     <string name="login">Log in</string>
-    <string name="disclaimers">Disclaimers</string>
+    <string name="login_next">Next</string>
+    <string name="disclaimers">Disclaimer</string>
 
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
 
-    <string name="auth_disclaimer">Disclaimers</string>
+    <string name="auth_disclaimer">Disclaimer</string>
     <string name="auth_disclaimer_text">
         Jetisteam is an unofficial application which is not connected in any ways to Valve.\n\nBy entering your account details and pressing \"Log in\", you confirm that the account you\'re using is yours.\n\nPlease note that usage of this application may lead to a ban - the application developers are not responsible for that.
     </string>
@@ -19,7 +20,14 @@
 
     <string name="auth_tfa_title">2FA</string>
     <string name="auth_tfa_guard_desc">To sign in, enter your Steam Guard code.</string>
+    <string name="auth_tfa_email_code_desc">To sign in, enter a code from the email.</string>
+    <string name="auth_tfa_email_confirm_desc">To sign in, click a link from the email.</string>
     <string name="auth_tfa_hint">Code</string>
 
     <string name="auth_tfa_remote">You can also open the Steam Mobile app and approve this login request.</string>
+
+    <string name="new_onboarding_title">WELCOME TO JETISTEAM</string>
+    <string name="new_onboarding_desc">A new, unofficial look at mobile Steam.</string>
+    <string name="new_onboarding_sign">Sign in</string>
+    <string name="new_onboarding_qrcode">Show QR code</string>
 </resources>

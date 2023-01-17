@@ -5,15 +5,18 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        mavenLocal()
         google()
         mavenCentral()
     }
 }
 
 rootProject.name = "Jetisteam"
+
 include ':app'
 include ':data'
 include ':domain'
@@ -30,4 +33,3 @@ include ':microapp:guard'
 include ':microapp:library'
 include ':microapp:config'
 include ':microapp:market'
-include ':microapp:steam_wrapped'

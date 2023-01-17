@@ -3,9 +3,9 @@ package bruhcollective.itaysonlab.jetisteam.controllers
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
+import bruhcollective.itaysonlab.ksteam.models.enums.EOSType
 import dagger.hilt.android.qualifiers.ApplicationContext
-import steam.auth.EOSType
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 
 class UuidController @Inject constructor(

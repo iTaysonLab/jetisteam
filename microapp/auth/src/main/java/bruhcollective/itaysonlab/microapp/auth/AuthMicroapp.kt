@@ -1,7 +1,5 @@
 package bruhcollective.itaysonlab.microapp.auth
 
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import bruhcollective.itaysonlab.microapp.core.DestNode
 import bruhcollective.itaysonlab.microapp.core.HasFullscreenRoutes
 import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
@@ -12,21 +10,23 @@ abstract class AuthMicroapp : NestedMicroappEntry, HasFullscreenRoutes {
 
     override val fullscreenRoutes = listOf(
         Routes.MainScreen.url,
-        Routes.AuthDisclaimer.url,
+        Routes.SignInScreen.url,
+        Routes.QrCodeScreen.url,
         Routes.TfaScreen.url
     )
 
     internal object Arguments {
-        val MobileAuthEnabled = navArgument("hasRemoteConfirmation") {
-            type = NavType.BoolType
-        }
+
     }
 
     internal object Routes {
         const val NavGraph = "@auth"
 
-        val MainScreen = DestNode("auth")
-        val TfaScreen = DestNode("auth/tfa/{${Arguments.MobileAuthEnabled.name}}")
-        val AuthDisclaimer = DestNode("dialogs/authDisclaimer")
+        val MainScreen = DestNode("auth/onboarding")
+
+        val SignInScreen = DestNode("auth/username")
+        val QrCodeScreen = DestNode("auth/qrcode")
+
+        val TfaScreen = DestNode("auth/tfa/")
     }
 }

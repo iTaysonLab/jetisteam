@@ -3,56 +3,38 @@ package bruhcollective.itaysonlab.microapp.auth.ui
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import bruhcollective.itaysonlab.jetisteam.usecases.auth.EnterCode
-import bruhcollective.itaysonlab.jetisteam.usecases.auth.PollAuthSession
-import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
+import bruhcollective.itaysonlab.jetisteam.HostSteamClient
+import bruhcollective.itaysonlab.ksteam.handlers.Account
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TfaScreenViewModel @Inject constructor(
-    private val enterCode: EnterCode,
-    private val pollAuthSession: PollAuthSession,
-    savedState: SavedStateHandle,
+    hostSteamClient: HostSteamClient,
 ): ViewModel(), CoroutineScope by MainScope() {
-    var isPollingActive = savedState.get<String>(AuthMicroapp.Arguments.MobileAuthEnabled.name).toBoolean()
-    private set
+    private val accountHandler = hostSteamClient.client.getHandler<Account>()
+    val authFlow get() = accountHandler.clientAuthState
 
     var isAuthInProgress by mutableStateOf(false)
     var isCodeError by mutableStateOf(false)
-
-    var authFlow = flow {
-        coroutineScope {
-            while (isPollingActive) {
-                pollAuthSession().also { success ->
-                    if (success) isPollingActive = false
-                    emit(success)
-                }
-
-                delay(5000L)
-            }
-        }
-    }
 
     fun enterCode(code: String, onSuccess: () -> Unit) {
         isCodeError = false
 
         if (code.isEmpty()) {
             isCodeError = true
+            return
         }
-
-        if (isCodeError) return
 
         viewModelScope.launch {
             isAuthInProgress = true
 
-            if (enterCode(code)) {
-                isPollingActive = false
+            if (accountHandler.updateCurrentSessionWithCode(code)) {
                 onSuccess()
             } else {
                 isCodeError = true
@@ -63,6 +45,6 @@ class TfaScreenViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        isPollingActive = false
+        accountHandler.cancelPolling()
     }
 }

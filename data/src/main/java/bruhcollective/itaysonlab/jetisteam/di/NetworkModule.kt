@@ -1,11 +1,5 @@
 package bruhcollective.itaysonlab.jetisteam.di
 
-import bruhcollective.itaysonlab.jetisteam.controllers.CacheService
-import bruhcollective.itaysonlab.jetisteam.controllers.SteamAuthInterceptor
-import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
-import bruhcollective.itaysonlab.jetisteam.controllers.SteamWebApiTokenController
-import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcClient
-import bruhcollective.itaysonlab.jetisteam.rpc.SteamRpcProcessor
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -30,16 +24,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @Named("steamOkhttp")
-    fun provideSteamOkhttp(
-        steamAuthInterceptor: SteamAuthInterceptor
-    ) = OkHttpClient.Builder().addInterceptor(steamAuthInterceptor).build()
-
-    @Provides
-    @Singleton
     @Named("steamCommunityRetrofit")
     fun provideSteamCommunityRetrofit(
-        @Named("steamOkhttp") okHttpClient: OkHttpClient,
+        okHttpClient: OkHttpClient,
         moshi: Moshi
     ) = Retrofit.Builder()
         .client(okHttpClient)
@@ -58,28 +45,4 @@ object NetworkModule {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .baseUrl("https://store.steampowered.com/")
         .build()
-
-    @Provides
-    @Singleton
-    @Named("neutralRpcClient")
-    fun provideNeutralRpcClient(
-        @Named("neutralRpcProcessor") processor: SteamRpcProcessor
-    ) = SteamRpcClient(processor)
-
-    @Provides
-    @Singleton
-    @Named("neutralWebApiController")
-    fun provideNeutralWebApiController(
-        okHttpClient: OkHttpClient,
-        cacheService: CacheService,
-        steamSessionController: SteamSessionController
-    ) = SteamWebApiTokenController(cacheService, okHttpClient, steamSessionController)
-
-    @Provides
-    @Singleton
-    @Named("neutralRpcProcessor")
-    fun provideNeutralRpcProcessor(
-        okHttpClient: OkHttpClient,
-        @Named("neutralWebApiController") controller: SteamWebApiTokenController
-    ) = SteamRpcProcessor(okHttpClient, okHttpClient, controller)
 }

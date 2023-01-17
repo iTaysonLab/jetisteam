@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.jetisteam.controllers
 
-import bruhcollective.itaysonlab.jetisteam.models.SteamID
-import bruhcollective.itaysonlab.jetisteam.repository.UserAccountRepository
+import bruhcollective.itaysonlab.jetisteam.HostSteamClient
+import bruhcollective.itaysonlab.ksteam.handlers.Persona
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import kotlinx.coroutines.Dispatchers
@@ -15,16 +15,13 @@ import kotlin.time.Duration.Companion.days
 
 @Singleton
 class LocaleService @Inject constructor(
-    private val userAccountRepository: UserAccountRepository,
+    private val hostSteamClient: HostSteamClient,
     private val cacheService: CacheService,
-    private val steamSessionController: SteamSessionController,
     private val moshi: Moshi,
     private val okHttpClient: OkHttpClient
 ) {
     private companion object {
         const val DEFAULT_LANGUAGE = "english"
-        const val DEFAULT_COUNTRY_CODE = "US"
-
         val LANG_REGEX = """\('(.+?)'\)""".toRegex()
     }
 
@@ -32,20 +29,8 @@ class LocaleService @Inject constructor(
     val language = DEFAULT_LANGUAGE
     var languageDynamic: Map<String, String> = emptyMap()
 
-    suspend fun myCountry(force: Boolean = false) = countryFor(steamId = steamSessionController.steamId(), force = force)
-
-    suspend fun countryFor(steamId: SteamID, force: Boolean = false): String {
-        return cacheService.primitiveEntry(
-            key = keyCountry(steamId),
-            force = force,
-            networkFunc = {
-                userAccountRepository.getUserCountry(steamId.steamId)
-            },
-            defaultFunc = { DEFAULT_COUNTRY_CODE },
-            cacheFunc = { internalKey ->
-                get(ConfigService.Instance.Cache).getString(internalKey, DEFAULT_COUNTRY_CODE) ?: DEFAULT_COUNTRY_CODE
-            }
-        )
+    fun myCountry(): String {
+        return hostSteamClient.client.getHandler<Persona>().currentPersona.value.country
     }
 
     @OptIn(ExperimentalStdlibApi::class)
@@ -81,6 +66,5 @@ class LocaleService @Inject constructor(
         return localeMap()[id.removePrefix("#")] ?: id
     }
 
-    private fun keyCountry(steamId: SteamID) = "steam.account.${steamId.steamId}.country"
     private fun keyLanguage() = "steam.locale.${language}"
 }
