@@ -78,15 +78,16 @@ dependencies {
 
     implementation project(":microapp:core")
     implementation project(":microapp:auth")
+
     implementation project(":microapp:notifications")
-    
+    implementation project(":microapp:debug")
+    implementation project(":microapp:guard_ks")
+
     /*implementation project(":microapp:home")
     implementation project(":microapp:profile")
 
     implementation project(":microapp:news")
-    implementation project(":microapp:debug")
     implementation project(":microapp:gamepage")
-    implementation project(":microapp:guard")
     implementation project(":microapp:library")
     implementation project(":microapp:market")*/
 

@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
+import bruhcollective.itaysonlab.jetisteam.controllers.JsLegacyController
 import bruhcollective.itaysonlab.jetisteam.repository.TwoFactorRepository
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.GetQueueOfSessions
 import bruhcollective.itaysonlab.jetisteam.usecases.twofactor.InitializeAddTfa
@@ -19,13 +19,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class GuardViewModel @Inject constructor(
-    private val steamSessionController: SteamSessionController,
+    private val jsLegacyController: JsLegacyController,
     private val guardController: GuardController,
     private val initializeAddTfa: InitializeAddTfa,
     private val getQueueOfSessions: GetQueueOfSessions
 ): ViewModel() {
     val state by lazy {
-        when (val instance = guardController.getInstance(steamSessionController.steamId())) {
+        when (val instance = guardController.getInstance(jsLegacyController.steamId())) {
             null -> GuardState.Setup
             else -> GuardState.Available(instance = instance)
         }
@@ -37,7 +37,7 @@ internal class GuardViewModel @Inject constructor(
     var isTryingToAddAuth by mutableStateOf(false)
         private set
 
-    val steamId get() = steamSessionController.steamId().steamId
+    val steamId get() = jsLegacyController.steamId().steamId
 
     private var isPollingActive = state is GuardState.Available
 
@@ -53,7 +53,7 @@ internal class GuardViewModel @Inject constructor(
     suspend fun addAuthenticator() {
         isTryingToAddAuth = true
 
-        addState = when (val result = initializeAddTfa(steamSessionController.steamId())) {
+        addState = when (val result = initializeAddTfa(jsLegacyController.steamId())) {
             is TwoFactorRepository.AddAuthenticatorResponse.WaitingForPhoneConfirmation -> AddGuardState.AwaitForSms(result.wrapped)
             TwoFactorRepository.AddAuthenticatorResponse.AlreadyExists -> AddGuardState.RequestToMove
         }

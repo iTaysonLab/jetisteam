@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="guard">Guard</string>
+    <string name="guard_sessions">Sessions</string>
+
+    <string name="guard_title">Protect your account</string>
+    <string name="guard_desc">Sign in by scanning a QR code and easily approve logins.</string>
+
+    <string name="guard_setup">Add authenticator</string>
+    <string name="guard_setup_move_text">Move authenticator</string>
+
+    <string name="guard_setup_move">Move authenticator?</string>
+    <string name="guard_setup_move_desc">This account already has an authenticator enabled on another device.</string>
+    <string name="guard_setup_move_allow">Move</string>
+    <string name="guard_setup_move_cancel">Cancel</string>
+
+    <string name="guard_setup_next">Next</string>
+    <string name="guard_setup_cancel">Cancel</string>
+
+    <string name="guard_setup_enter_code">Enter the code we sent to your phone</string>
+    <string name="guard_setup_enter_code_resend">Resend</string>
+    <string name="guard_setup_enter_code_action">Verify code</string>
+    <string name="guard_setup_enter_code_with_hint">Enter the code we sent to %s</string>
+
+    <string name="guard_recovery">Recovery Code</string>
+    <string name="guard_recovery_hint">Do not share this code with anyone.</string>
+    <string name="guard_recovery_desc">This code allows you to sign in and recover access to your account even if you have deleted this app without transferring the authenticator or losing the device.</string>
+    <string name="guard_recovery_action">Done</string>
+
+    <string name="guard_actions_remove">Remove Authenticator</string>
+    <string name="guard_actions_devices">Authorized Devices</string>
+    <string name="guard_actions_codes">Backup Codes</string>
+    <string name="guard_actions_qr">Sign in with QR</string>
+    <string name="guard_actions_copy">Copy</string>
+    <string name="guard_actions_copy_snack">Code copied to clipboard</string>
+
+    <string name="guard_sessions_last_seen">last seen on %s</string>
+
+    <string name="guard_as">as</string>
+    <string name="guard_for">for</string>
+
+    <string name="guard_confirm_sheet_header">Confirm sign in</string>
+    <string name="guard_confirm_sheet_location">Location</string>
+    <string name="guard_confirm_sheet_ip">IP</string>
+    <string name="guard_confirm_sheet_remember">Remember password</string>
+    <string name="guard_confirm_sheet_remember_subtitle">on this device</string>
+    <string name="guard_confirm_sheet_action_approve">Approve</string>
+    <string name="guard_confirm_sheet_action_deny">Deny</string>
+
+    <string name="guard_remove_sheet_header">Remove authenticator?</string>
+    <string name="guard_remove_sheet_text">This will make your account less secure.</string>
+    <string name="guard_remove_sheet_warn">Trades and Market Listings will be held for up to 15 days if you disable Steam Guard.</string>
+    <string name="guard_remove_sheet_action_remove">Remove</string>
+    <string name="guard_remove_sheet_action_cancel">Cancel</string>
+
+    <string name="guard_session_info">Session information</string>
+    <string name="guard_session_info_signed">Authorized by</string>
+    <string name="guard_session_info_ip">IP</string>
+    <string name="guard_session_info_desc">Description</string>
+    <string name="guard_session_info_first">Signed on</string>
+    <string name="guard_session_info_loc">Location</string>
+    <string name="guard_session_info_action_revoke">Revoke</string>
+    <string name="guard_session_info_action_support">Support</string>
+
+    <string name="guard_qr_dialog_title">Sign in?</string>
+    <string name="guard_qr_dialog_action">Approve</string>
+    <string name="guard_qr_dialog_close">Deny</string>
+
+    <string name="guard_camera_permission_title">Allow access to camera</string>
+    <string name="guard_camera_permission_text">To scan QR codes, Jetisteam requires you to grant the "Camera" permission.</string>
+    <string name="guard_camera_permission_allow">Allow</string>
+    <string name="guard_camera_permission_dismiss">Dismiss</string>
+
+    <string name="guard_revoke_alert_title">Revoke this session?</string>
+    <string name="guard_revoke_alert_text">This will instantly remove access to your account from the selected device.</string>
+    <string name="guard_revoke_alert_confirm">Confirm</string>
+    <string name="guard_revoke_alert_dismiss">Dismiss</string>
+
+    <string name="guard_confirmations">Confirmations</string>
+    <string name="guard_confirmations_empty">No active confirmations</string>
+    <string name="guard_confirmations_empty_desc">Trades or Market Listing confirmations will be shown here</string>
+    <string name="guard_confirmation_detail">Confirmation info</string>
+</resources>

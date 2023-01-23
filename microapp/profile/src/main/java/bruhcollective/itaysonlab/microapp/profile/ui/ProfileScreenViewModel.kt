@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.microapp.profile.ui
 
 import androidx.lifecycle.SavedStateHandle
-import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
+import bruhcollective.itaysonlab.jetisteam.controllers.JsLegacyController
 import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
 import bruhcollective.itaysonlab.jetisteam.usecases.profile.GetProfileData
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
@@ -17,13 +17,13 @@ import javax.inject.Inject
 internal class ProfileScreenViewModel @Inject constructor(
     private val getProfileData: GetProfileData,
     savedState: SavedStateHandle,
-    steamSessionController: SteamSessionController
+    jsLegacyController: JsLegacyController
 ): PageViewModel<GetProfileData.ProfileData>() {
     val savedStateId = savedState.get<Long>(CommonArguments.SteamId.name)
     val isRootScreen = savedStateId == 0L
 
     val steamId = if (isRootScreen) {
-        steamSessionController.steamId()
+        jsLegacyController.steamId()
     } else {
         savedState.getSteamId()
     }

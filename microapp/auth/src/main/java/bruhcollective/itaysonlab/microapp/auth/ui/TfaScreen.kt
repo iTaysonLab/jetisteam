@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.StateTextButton
-import bruhcollective.itaysonlab.ksteam.models.AuthorizationState
+import bruhcollective.itaysonlab.ksteam.models.account.AuthorizationState
 import bruhcollective.itaysonlab.microapp.auth.R
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 

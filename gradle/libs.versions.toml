@@ -9,7 +9,7 @@ retrofit = "2.9.0"
 richText = "0.15.0"
 wire = "4.4.3"
 camerax = "1.3.0-alpha02"
-ksteam = "r6"
+ksteam = "r15"
 
 [plugins]
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

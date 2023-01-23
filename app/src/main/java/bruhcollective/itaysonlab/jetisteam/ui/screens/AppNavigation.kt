@@ -22,13 +22,14 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import bruhcollective.itaysonlab.jetisteam.HostSteamClient
-import bruhcollective.itaysonlab.jetisteam.controllers.SteamSessionController
 import bruhcollective.itaysonlab.jetisteam.ui.SteamConnectionRow
+import bruhcollective.itaysonlab.ksteam.handlers.account
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
 import bruhcollective.itaysonlab.microapp.core.*
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
 import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
+import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -56,14 +57,7 @@ fun AppNavigation(
 
     LaunchedEffect(Unit) {
         if (navController.currentDestination?.route != "coreLoading") return@LaunchedEffect
-
-        val startRoute = if (viewModel.signedIn()) {
-            viewModel.destinations.find<AuthMicroapp>() // Guard
-        } else {
-            viewModel.destinations.find<AuthMicroapp>()
-        }.graphRoute
-
-        navController.navigateRoot(startRoute)
+        navController.navigateRoot(viewModel.awaitSignInAndReturnDestination())
     }
 
     val shouldHideNavigationBar = remember(navBackStackEntry) {
@@ -166,10 +160,11 @@ fun AppNavigation(
                 }
             ) {
                 composable("coreLoading") {
+                    Box(modifier = Modifier.fillMaxSize())
                     // FullscreenLoading()
                 }
 
-                viewModel.destinations.forEach { (key, value) ->
+                viewModel.destinations.forEach { (_, value) ->
                     when (value) {
                         is ComposableMicroappEntry -> with(value) {
                             composable(
@@ -194,27 +189,32 @@ fun AppNavigation(
 @HiltViewModel
 @JvmSuppressWildcards
 class AppNavigationViewModel @Inject constructor(
-    private val steamSessionController: SteamSessionController,
     val destinations: Destinations,
     private val hostSteamClient: HostSteamClient
 ) : ViewModel() {
-    val fullscreenDestinations = destinations.values
+    val fullscreenDestinations = (destinations.values
         .filterIsInstance<HasFullscreenRoutes>()
         .map { it.fullscreenRoutes }
-        .flatten()
-        .distinct()
+        .flatten() + "coreLoading").distinct()
 
     val bottomNavDestinations = listOf<BottomNavigationCapable>(
         //destinations.find<HomeMicroapp>(),
         destinations.find<NotificationsMicroapp>(),
-        //destinations.find<GuardMicroapp>(),
+        destinations.find<GuardMicroapp>(),
         //destinations.find<ProfileMicroapp>(),
     ).map(BottomNavigationCapable::bottomNavigationEntry)
 
     val connectingState = hostSteamClient.client.connectionStatus
 
-    fun signedIn() = steamSessionController.signedIn()
-    fun mySteamId() = steamSessionController.steamId()
+    suspend fun awaitSignInAndReturnDestination(): String {
+        return if (hostSteamClient.client.account.hasSavedDataForAtLeastOneAccount()) {
+            // Then we should wait until it signs in
+            hostSteamClient.client.account.awaitSignIn()
+            destinations.find<GuardMicroapp>().graphRoute
+        } else {
+            destinations.find<AuthMicroapp>().graphRoute
+        }
+    }
 
     @OptIn(ExperimentalAnimationApi::class)
     fun <T> buildAnimation(scope: AnimatedContentScope<NavBackStackEntry>, builder: (forwardDirection: Boolean) -> T): T {

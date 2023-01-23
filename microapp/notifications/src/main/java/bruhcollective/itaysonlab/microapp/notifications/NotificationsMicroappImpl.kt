@@ -6,11 +6,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import bruhcollective.itaysonlab.microapp.core.Destinations
-import bruhcollective.itaysonlab.microapp.core.find
-import bruhcollective.itaysonlab.microapp.gamepage.GamePageMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.ui.NotificationsScreen
-import bruhcollective.itaysonlab.microapp.profile.ProfileMicroapp
-import steam.steamnotification.SteamNotificationType
 import javax.inject.Inject
 
 class NotificationsMicroappImpl @Inject constructor() : NotificationsMicroapp() {
@@ -23,12 +19,12 @@ class NotificationsMicroappImpl @Inject constructor() : NotificationsMicroapp() 
         val urlHandler = LocalUriHandler.current
 
         NotificationsScreen(onClick = { notification ->
-            when (notification.type) {
+            /*when (notification.type) {
                 SteamNotificationType.Wishlist -> navController.navigate(destinations.find<GamePageMicroapp>().gameDestination(notification.destination as Int))
                 SteamNotificationType.FriendInvite -> navController.navigate(destinations.find<ProfileMicroapp>().profileDestination(notification.destination as Long))
                 SteamNotificationType.Promotion -> urlHandler.openUri(notification.destination as String)
                 else -> {}
-            }
+            }*/
         })
     }
 }

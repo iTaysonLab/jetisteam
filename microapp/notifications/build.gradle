@@ -55,6 +55,7 @@ dependencies {
     implementation project(":data")
     implementation project(":uikit")
 
+    implementation libs.bundles.ksteam
     implementation libs.bundles.compose
     implementation libs.bundles.accompanist
     debugImplementation libs.bundles.composeDebug

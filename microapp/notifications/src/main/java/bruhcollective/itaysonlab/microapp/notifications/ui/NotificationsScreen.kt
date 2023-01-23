@@ -18,9 +18,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
-import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
-import bruhcollective.itaysonlab.jetisteam.usecases.GetNotifications
+import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenLoading
+import bruhcollective.itaysonlab.ksteam.models.notifications.Notification
+import bruhcollective.itaysonlab.ksteam.models.notifications.NotificationFeed
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.notifications.R
 
@@ -28,7 +30,7 @@ import bruhcollective.itaysonlab.microapp.notifications.R
 @Composable
 internal fun NotificationsScreen(
     viewModel: NotificationsScreenViewModel = hiltViewModel(),
-    onClick: (GetNotifications.Notification) -> Unit
+    onClick: (Notification) -> Unit
 ) {
     val tas = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val swipeRefreshState =
@@ -53,14 +55,20 @@ internal fun NotificationsScreen(
                 .pullRefresh(swipeRefreshState)
                 .padding(innerPadding)
         ) {
-            PageLayout(state = viewModel.state, onReload = viewModel::reload) { page ->
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(16.dp)
-                ) {
-                    items(page.notifications) { notification ->
-                        Notification(notification) { onClick(notification) }
+            when (val feed = viewModel.feed.collectAsStateWithLifecycle().value) {
+                is NotificationFeed.Loaded -> {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(16.dp)
+                    ) {
+                        items(feed.notifications) { notification ->
+                            NotificationRenderer(notification) { onClick(notification) }
+                        }
                     }
+                }
+
+                else -> {
+                    FullscreenLoading()
                 }
             }
 

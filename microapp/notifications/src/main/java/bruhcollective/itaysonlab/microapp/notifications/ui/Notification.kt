@@ -13,37 +13,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import bruhcollective.itaysonlab.jetisteam.usecases.GetNotifications
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.util.DateUtil
+import bruhcollective.itaysonlab.ksteam.models.notifications.Notification
+import bruhcollective.itaysonlab.ksteam.models.persona.Persona
 import bruhcollective.itaysonlab.microapp.notifications.R
 import coil.compose.AsyncImage
-import steam.steamnotification.SteamNotificationType
 
 @Composable
-fun Notification(
-    notification: GetNotifications.Notification,
+internal fun NotificationRenderer(
+    notification: Notification,
+    onClick: () -> Unit,
+) {
+    when (notification) {
+        is Notification.FriendRequest -> FriendRequestNotification(notification = notification, onClick = onClick)
+        is Notification.Gift -> GiftNotification(notification = notification, onClick = onClick)
+        is Notification.Item -> ItemNotification(notification = notification, onClick = onClick)
+        is Notification.Promotion -> PromoNotification(notification = notification, onClick = onClick)
+        is Notification.WishlistSale -> WishlistSaleNotification(notification = notification, onClick = onClick)
+        else -> {}
+    }
+}
+
+@Composable
+internal fun Notification(
+    timestamp: Int,
+    imageUrl: String,
+    iconVector: ImageVector,
+    iconType: String,
+    title: String,
+    description: String,
     onClick: () -> Unit
 ) {
-    val typeHeader = remember(notification.type) {
-        when (notification.type) {
-            SteamNotificationType.Gift -> Icons.Rounded.CardGiftcard to R.string.notifications_type_gift
-            SteamNotificationType.Comment -> Icons.Rounded.Comment to R.string.notifications_type_comment
-            SteamNotificationType.Item -> Icons.Rounded.Inventory to R.string.notifications_type_item
-            SteamNotificationType.FriendInvite -> Icons.Rounded.PersonAdd to R.string.notifications_type_friend
-            SteamNotificationType.MajorSale -> Icons.Rounded.Discount to R.string.notifications_type_discount
-            SteamNotificationType.PreloadAvailable -> Icons.Rounded.Download to R.string.notifications_type_preload
-            SteamNotificationType.Wishlist -> Icons.Rounded.Checklist to R.string.notifications_type_wishlist
-            SteamNotificationType.Promotion -> Icons.Rounded.Article to R.string.notifications_type_promo
-        }
-    }
-
-    val formattedDate = remember(notification.timestamp) {
-        DateUtil.formatDateTimeToLocale(notification.timestamp * 1000L)
+    val formattedDate = remember(timestamp) {
+        DateUtil.formatDateTimeToLocale(timestamp * 1000L)
     }
 
     Card(
@@ -61,15 +69,16 @@ fun Notification(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            if (notification.icon.isNotEmpty()) {
+            if (imageUrl.isNotEmpty()) {
                 AsyncImage(
-                    model = notification.icon,
+                    model = imageUrl,
                     contentDescription = null,
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.small)
                         .size(64.dp),
                     contentScale = ContentScale.Crop,
-                    placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp))
+                    placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp)),
+                    error = ColorPainter(MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp)),
                 )
             } else {
                 Box(
@@ -92,24 +101,113 @@ fun Notification(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = typeHeader.first,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp)
-                    )
-
-                    Text(text = stringResource(id = typeHeader.second), fontSize = 13.sp)
-
+                    Icon(imageVector = iconVector, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Text(text = iconType, fontSize = 13.sp)
                     Text(text = formattedDate, modifier = Modifier.alpha(0.7f), fontSize = 13.sp)
                 }
 
                 Text(
-                    text = notification.title.get(LocalContext.current),
+                    text = title,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
-                Text(text = notification.description.get(LocalContext.current), fontSize = 13.sp, lineHeight = 18.sp)
+                Text(text = description, fontSize = 13.sp, lineHeight = 18.sp)
             }
         }
     }
+}
+
+// Types
+
+@Composable
+private fun FriendRequestNotification(
+    notification: Notification.FriendRequest,
+    onClick: () -> Unit
+) {
+    val persona = notification.requestor.collectAsStateWithLifecycle(initialValue = Persona.Unknown).value
+
+    Notification(
+        timestamp = notification.timestamp,
+        imageUrl = persona.avatar.medium,
+        iconVector = Icons.Rounded.PersonAdd,
+        iconType = stringResource(id = R.string.notifications_type_friend),
+        title = persona.name,
+        description = stringResource(id = R.string.notifications_type_friend_desc_awaiting),
+        onClick = onClick
+    )
+}
+
+@Composable
+private fun GiftNotification(
+    notification: Notification.Gift,
+    onClick: () -> Unit
+) {
+    val persona = notification.gifter.collectAsStateWithLifecycle(initialValue = Persona.Unknown).value
+
+    Notification(
+        timestamp = notification.timestamp,
+        imageUrl = persona.avatar.medium,
+        iconVector = Icons.Rounded.CardGiftcard,
+        iconType = stringResource(id = R.string.notifications_type_gift),
+        title = persona.name,
+        description = stringResource(id = R.string.notifications_type_gift_desc),
+        onClick = onClick
+    )
+}
+
+@Composable
+private fun ItemNotification(
+    notification: Notification.Item,
+    onClick: () -> Unit
+) {
+    // TODO
+    Notification(
+        timestamp = notification.timestamp,
+        imageUrl = "",
+        iconVector = Icons.Rounded.Inventory,
+        iconType = stringResource(id = R.string.notifications_type_item),
+        title = stringResource(id = R.string.notifications_type_item_title),
+        description = "Unknown",
+        onClick = onClick
+    )
+}
+
+@Composable
+private fun PromoNotification(
+    notification: Notification.Promotion,
+    onClick: () -> Unit
+) {
+    Notification(
+        timestamp = notification.timestamp,
+        imageUrl = notification.iconUrl,
+        iconVector = Icons.Rounded.Article,
+        iconType = stringResource(id = R.string.notifications_type_promo),
+        title = notification.title,
+        description = notification.description,
+        onClick = onClick
+    )
+}
+
+@Composable
+private fun WishlistSaleNotification(
+    notification: Notification.WishlistSale,
+    onClick: () -> Unit
+) {
+    Notification(
+        timestamp = notification.timestamp,
+        imageUrl = "", // TODO
+        iconVector = Icons.Rounded.Checklist,
+        iconType = stringResource(id = R.string.notifications_type_wishlist),
+        title = if (notification.isMultipleItemsOnSale) {
+            stringResource(id = R.string.notifications_type_wishlist_multiple_title)
+        } else {
+            notification.app?.name.orEmpty()
+        },
+        description = if (notification.isMultipleItemsOnSale) {
+            stringResource(id = R.string.notifications_type_wishlist_multiple_desc)
+        } else {
+            stringResource(id = R.string.notifications_type_wishlist_desc, "TODO")
+        },
+        onClick = onClick
+    )
 }

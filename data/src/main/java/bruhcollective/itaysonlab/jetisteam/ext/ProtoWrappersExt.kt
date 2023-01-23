@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.jetisteam.ext
 
-import steam.messages.base.CMsgIPAddress
+import steam.webui.common.CMsgIPAddress
 
 val CMsgIPAddress.ipString: String get() {
     return buildString {
