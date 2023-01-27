@@ -20,7 +20,7 @@
     <string name="guard_setup_enter_code">Enter the code we sent to your phone</string>
     <string name="guard_setup_enter_code_resend">Resend</string>
     <string name="guard_setup_enter_code_action">Verify code</string>
-    <string name="guard_setup_enter_code_with_hint">Enter the code we sent to %s</string>
+    <string name="guard_setup_enter_code_with_hint">Enter the code we sent to the number ending with %s</string>
 
     <string name="guard_recovery">Recovery Code</string>
     <string name="guard_recovery_hint">Do not share this code with anyone.</string>
@@ -52,6 +52,7 @@
     <string name="guard_remove_sheet_warn">Trades and Market Listings will be held for up to 15 days if you disable Steam Guard.</string>
     <string name="guard_remove_sheet_action_remove">Remove</string>
     <string name="guard_remove_sheet_action_cancel">Cancel</string>
+    <string name="guard_remove_sheet_action_close">OK</string>
 
     <string name="guard_session_info">Session information</string>
     <string name="guard_session_info_signed">Authorized by</string>

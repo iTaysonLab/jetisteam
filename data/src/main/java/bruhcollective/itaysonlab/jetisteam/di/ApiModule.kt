@@ -3,7 +3,6 @@ package bruhcollective.itaysonlab.jetisteam.di
 import bruhcollective.itaysonlab.jetisteam.service.ApiService
 import bruhcollective.itaysonlab.jetisteam.service.GameService
 import bruhcollective.itaysonlab.jetisteam.service.MiniprofileService
-import bruhcollective.itaysonlab.jetisteam.service.MobileConfService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,8 +26,4 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideGameService(@Named("steamPoweredRetrofit") retrofit: Retrofit) = retrofit.create<GameService>()
-
-    @Provides
-    @Singleton
-    fun provideMobileConfService(@Named("steamCommunityRetrofit") retrofit: Retrofit) = retrofit.create<MobileConfService>()
 }

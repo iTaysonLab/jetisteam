@@ -1,12 +1,27 @@
 package bruhcollective.itaysonlab.microapp.guard.ui
 
 import android.os.Build
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Tab
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,21 +36,25 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.IndicatorBehindScrollableTabRow
-import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
 import bruhcollective.itaysonlab.jetisteam.uikit.components.tabIndicatorOffset
 import bruhcollective.itaysonlab.ksteam.guard.models.CodeModel
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
-import bruhcollective.itaysonlab.microapp.guard.ui.variants.GuardMainScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.variants.NoGuardScreen
+import bruhcollective.itaysonlab.microapp.guard.ui.variants.pages.GuardCodeAndConfirmationsPage
+import bruhcollective.itaysonlab.microapp.guard.ui.variants.pages.GuardSessionsPage
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun GuardScreen(
     viewModel: GuardViewModel = hiltViewModel(),
     onAddClicked: (Long) -> Unit,
+    onDeleteClicked: (Long) -> Unit,
+    onQrClicked: (Long) -> Unit,
+    onRecoveryClicked: (Long) -> Unit,
+    onConfirmationClicked: (Long, String) -> Unit
 ) {
     val clipboard = LocalClipboardManager.current
     val context = LocalContext.current
@@ -43,62 +62,71 @@ internal fun GuardScreen(
     val scope = rememberCoroutineScope()
     val snackState = remember { SnackbarHostState() }
 
-    Scaffold(topBar = {
-        if (viewModel.state is GuardViewModel.GuardState.Available) {
-            IndicatorBehindScrollableTabRow(
-                selectedTabIndex = 0,
-                containerColor = Color.Transparent,
-                indicator = { tabPositions ->
-                    Box(
-                        Modifier
-                            .padding(vertical = 12.dp)
-                            .tabIndicatorOffset(tabPositions[0])
-                            .fillMaxHeight()
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.onSurface)
-                    )
-                },
-                edgePadding = 16.dp,
-                modifier = Modifier.statusBarsPadding(),
-                tabAlignment = Alignment.Center
-            ) {
-                Tab(
-                    selected = true,
-                    onClick = { /*TODO*/ },
-                    selectedContentColor = MaterialTheme.colorScheme.inverseOnSurface,
-                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.guard).uppercase(Locale.getDefault()),
-                        modifier = Modifier.padding(vertical = 20.dp, horizontal = 12.dp),
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 15.sp
-                    )
-                }
+    when (val state = viewModel.state) {
+        is GuardViewModel.GuardState.Available -> {
+            val pagerState = rememberPagerState()
 
-                Tab(
-                    selected = false,
-                    onClick = { /*TODO*/ },
-                    selectedContentColor = MaterialTheme.colorScheme.inverseOnSurface,
-                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            Scaffold(topBar = {
+                IndicatorBehindScrollableTabRow(
+                    selectedTabIndex = pagerState.currentPage,
+                    containerColor = Color.Transparent,
+                    indicator = { tabPositions ->
+                        Box(
+                            Modifier
+                                .padding(vertical = 12.dp)
+                                .tabIndicatorOffset(tabPositions[pagerState.currentPage])
+                                .fillMaxHeight()
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.onSurface)
+                        )
+                    },
+                    edgePadding = 16.dp,
+                    modifier = Modifier.statusBarsPadding(),
+                    tabAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.guard_sessions).uppercase(Locale.getDefault()),
-                        modifier = Modifier.padding(vertical = 20.dp, horizontal = 12.dp),
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 15.sp
-                    )
+                    Tab(
+                        selected = pagerState.currentPage == 0,
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(0)
+                            }
+                        },
+                        selectedContentColor = MaterialTheme.colorScheme.inverseOnSurface,
+                        unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.guard).uppercase(Locale.getDefault()),
+                            modifier = Modifier.padding(vertical = 20.dp, horizontal = 12.dp),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 15.sp
+                        )
+                    }
+
+                    Tab(
+                        selected = pagerState.currentPage == 1,
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(1)
+                            }
+                        },
+                        selectedContentColor = MaterialTheme.colorScheme.inverseOnSurface,
+                        unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.guard_sessions).uppercase(Locale.getDefault()),
+                            modifier = Modifier.padding(vertical = 20.dp, horizontal = 12.dp),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 15.sp
+                        )
+                    }
                 }
-            }
-        }
-    }, contentWindowInsets = EmptyWindowInsets, snackbarHost = {
-        SnackbarHost(hostState = snackState) {
-            Snackbar(snackbarData = it)
-        }
-    }) { innerPadding ->
-        when (val state = viewModel.state) {
-            is GuardViewModel.GuardState.Available -> {
-                val codeState = state.instance.code.collectAsStateWithLifecycle(initialValue = CodeModel.DefaultInstance)
+            }, contentWindowInsets = EmptyWindowInsets, snackbarHost = {
+                SnackbarHost(hostState = snackState) {
+                    Snackbar(snackbarData = it)
+                }
+            }) { innerPadding ->
+                val codeState =
+                    state.instance.code.collectAsStateWithLifecycle(initialValue = CodeModel.DefaultInstance)
 
                 /*val confirmState = viewModel.confirmationFlow.collectAsStateWithLifecycle(initialValue = 0L)
 
@@ -108,39 +136,44 @@ internal fun GuardScreen(
                     }
                 }*/
 
-                RoundedPage(
-                    Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)) {
-                    GuardMainScreen(
-                        modifier = Modifier.fillMaxSize(),
-                        code = codeState.value,
-                        accountName = state.instance.username,
-                        onMoreSettingsClicked = {
-
-                        }, onSignWithQrClicked = {
-
-                        }, onCopyClicked = {
-                            scope.launch {
-                                clipboard.setText(AnnotatedString(codeState.value.code))
-
-                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                                    snackState.showSnackbar(message = context.getString(R.string.guard_actions_copy_snack))
-                                }
-                            }
-                        }
-                    )
-                }
-            }
-
-            GuardViewModel.GuardState.Setup -> {
-                NoGuardScreen(
-                    onAddClicked = { onAddClicked(viewModel.steamId) },
+                HorizontalPager(
+                    pageCount = 2,
+                    state = pagerState,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
-                )
+                ) { pos ->
+                    if (pos == 0) {
+                        GuardCodeAndConfirmationsPage(
+                            modifier = Modifier.fillMaxSize(),
+                            code = codeState.value,
+                            confirmationState = viewModel.confirmations,
+                            onSignWithQrClicked = { onQrClicked(viewModel.steamId) },
+                            onDeleteClicked = { onDeleteClicked(viewModel.steamId) },
+                            onRecoveryClicked = { onRecoveryClicked(viewModel.steamId) },
+                            onCopyClicked = {
+                                scope.launch {
+                                    clipboard.setText(AnnotatedString(codeState.value.code))
+
+                                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                                        snackState.showSnackbar(message = context.getString(R.string.guard_actions_copy_snack))
+                                    }
+                                }
+                            }, onConfirmationClicked = { confirmation ->
+                                onConfirmationClicked(viewModel.steamId, viewModel.wrapConfirmation(confirmation))
+                            })
+                    } else if (pos == 1) {
+                        GuardSessionsPage(modifier = Modifier.fillMaxSize(), sessions = viewModel.sessions)
+                    }
+                }
             }
+        }
+
+        GuardViewModel.GuardState.Setup -> {
+            NoGuardScreen(
+                onAddClicked = { onAddClicked(viewModel.steamId) },
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }

@@ -3,7 +3,6 @@ package bruhcollective.itaysonlab.microapp.guard.core
 import bruhcollective.itaysonlab.jetisteam.controllers.UuidController
 import bruhcollective.itaysonlab.jetisteam.models.MobileConfGetList
 import bruhcollective.itaysonlab.jetisteam.models.MobileConfirmationItem
-import bruhcollective.itaysonlab.jetisteam.service.MobileConfService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.URLEncoder

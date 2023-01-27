@@ -35,13 +35,12 @@ abstract class GuardMicroapp: NestedMicroappEntry, BottomNavigationCapable {
         val MainScreen = DestNode("guard")
         val Setup = DestNode("guard/{${CommonArguments.SteamId.name}}/setup")
         val Recovery = DestNode("guard/{${CommonArguments.SteamId.name}}/recovery")
-        val Sessions = DestNode("guard/{${CommonArguments.SteamId.name}}/sessions")
+
         val SessionInfo = DestNode("guard/{${CommonArguments.SteamId.name}}/sessions/{${Arguments.SessionData.name}}")
-        val MoreOptions = DestNode("guard/{${CommonArguments.SteamId.name}}/more")
+
         val ConfirmSignIn = DestNode("guard/{${CommonArguments.SteamId.name}}/confirm/{${Arguments.ClientId.name}}")
         val Remove = DestNode("guard/{${CommonArguments.SteamId.name}}/remove")
         val ScanQrCode = DestNode("guard/{${CommonArguments.SteamId.name}}/qrscan")
-        val Confirmations = DestNode("guard/{${CommonArguments.SteamId.name}}/confirmations")
         val ConfirmationDetail = DestNode("guard/{${CommonArguments.SteamId.name}}/confirmation/{${Arguments.ConfirmationData.name}}")
     }
 }

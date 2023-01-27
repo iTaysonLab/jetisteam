@@ -65,6 +65,10 @@ fun SteamConnectionRow (
                             ProgressRow(title = "Logging in...")
                         }
 
+                        CMClientState.Reconnecting -> {
+                            ProgressRow(title = "Reconnecting...")
+                        }
+
                         CMClientState.Connected -> {
                             Icon(imageVector = Icons.Rounded.Check, modifier = Modifier.size(16.dp), contentDescription = null)
                             Spacer(modifier = Modifier.width(12.dp))

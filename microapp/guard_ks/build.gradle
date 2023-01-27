@@ -4,7 +4,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
-    alias(libs.plugins.moshix)
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 android {
@@ -31,21 +31,25 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.0-alpha02'
+        kotlinCompilerExtensionVersion '1.4.0'
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
 }
 
 kapt {
     correctErrorTypes = true
+}
+
+kotlin {
+    jvmToolchain(11)
 }
 
 dependencies {
@@ -54,6 +58,7 @@ dependencies {
     implementation project(':domain')
     implementation project(':uikit')
 
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0-RC"
     implementation 'com.google.mlkit:barcode-scanning:17.0.3'
 
     implementation libs.kotlinDatetime
