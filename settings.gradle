@@ -12,6 +12,7 @@ dependencyResolutionManagement {
         mavenLocal()
         google()
         mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 }
 
@@ -30,7 +31,9 @@ include ':microapp:news'
 include ':microapp:debug'
 include ':microapp:gamepage'
 include ':microapp:guard'
-include ':microapp:guard_ks'
 include ':microapp:library'
 include ':microapp:config'
 include ':microapp:market'
+
+include ':microapp:guard_ks'
+include ':microapp:library_ks'

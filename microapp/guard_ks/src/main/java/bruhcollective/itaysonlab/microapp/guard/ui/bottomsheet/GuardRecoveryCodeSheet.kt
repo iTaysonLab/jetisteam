@@ -83,7 +83,7 @@ internal fun GuardRecoveryCodeSheet(
                 )
             }
         }
-        
+
         Text(
             text = stringResource(id = R.string.guard_recovery_desc),
             textAlign = TextAlign.Center,

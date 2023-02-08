@@ -84,8 +84,8 @@ dependencies {
     implementation project(":microapp:auth")
 
     implementation project(":microapp:notifications")
-    implementation project(":microapp:debug")
     implementation project(":microapp:guard_ks")
+    implementation project(":microapp:library_ks")
 
     /*implementation project(":microapp:home")
     implementation project(":microapp:profile")

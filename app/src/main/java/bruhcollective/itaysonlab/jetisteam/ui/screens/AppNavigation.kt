@@ -24,12 +24,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.jetisteam.ui.SteamConnectionRow
 import bruhcollective.itaysonlab.ksteam.handlers.account
+import bruhcollective.itaysonlab.ksteam.network.CMClientState
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
 import bruhcollective.itaysonlab.microapp.core.*
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
 import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
+import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -111,6 +113,7 @@ fun AppNavigation(
                             },
                             label = { Text(stringResource(dest.name)) },
                             selected = selected,
+                            enabled = dest.route == "@guard" || connectionState.value == CMClientState.Connected,
                             onClick = {
                                 if (selected) return@NavigationBarItem
                                 navController.navigate(dest.route) {
@@ -201,15 +204,16 @@ class AppNavigationViewModel @Inject constructor(
         //destinations.find<HomeMicroapp>(),
         destinations.find<NotificationsMicroapp>(),
         destinations.find<GuardMicroapp>(),
+        destinations.find<LibraryMicroapp>(),
         //destinations.find<ProfileMicroapp>(),
     ).map(BottomNavigationCapable::bottomNavigationEntry)
 
     val connectingState = hostSteamClient.client.connectionStatus
 
-    suspend fun awaitSignInAndReturnDestination(): String {
-        return if (hostSteamClient.client.account.hasSavedDataForAtLeastOneAccount()) {
+    fun awaitSignInAndReturnDestination(): String {
+         return if (hostSteamClient.client.account.hasSavedDataForAtLeastOneAccount()) {
             // Then we should wait until it signs in
-            hostSteamClient.client.account.awaitSignIn()
+            // hostSteamClient.client.account.awaitSignIn()
             destinations.find<GuardMicroapp>().graphRoute
         } else {
             destinations.find<AuthMicroapp>().graphRoute

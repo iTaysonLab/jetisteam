@@ -1,14 +1,12 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id "dagger.hilt.android.plugin"
+    id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
-    alias(libs.plugins.wire)
-    alias(libs.plugins.moshix)
 }
 
 android {
-    namespace 'bruhcollective.itaysonlab.jetisteam.data'
+    namespace 'bruhcollective.itaysonlab.microapp.library'
     compileSdk 33
 
     defaultConfig {
@@ -26,9 +24,17 @@ android {
         }
     }
 
+    buildFeatures {
+        compose true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.0'
     }
 
     kotlinOptions {
@@ -36,20 +42,8 @@ android {
     }
 }
 
-wire {
-    kotlin {
-        rpcCallStyle = "suspending"
-        rpcRole = "server"
-        nameSuffix = ""
-    }
-}
-
 kapt {
     correctErrorTypes = true
-}
-
-moshi {
-    enableSealed.set(true)
 }
 
 kotlin {
@@ -57,21 +51,23 @@ kotlin {
 }
 
 dependencies {
-    api libs.wireRuntime
+    implementation project(':microapp:core')
+    // implementation project(':microapp:gamepage')
+
+    implementation project(':data')
+    implementation project(':domain')
+    implementation project(':uikit')
 
     implementation libs.kotlinDatetime
 
-    implementation libs.mmkv
-    implementation libs.okhttp
     implementation libs.bundles.ksteam
+    implementation libs.bundles.compose
+    implementation libs.bundles.accompanist
+    debugImplementation libs.bundles.composeDebug
 
-    implementation("app.cash.sqldelight:android-driver:2.0.0-SNAPSHOT")
-
-    implementation libs.bundles.retrofit
+    implementation libs.coilCompose
 
     implementation libs.hiltAndroid
+    implementation libs.hiltNavigation
     kapt libs.hiltCompiler
-
-    testImplementation libs.junit
-    androidTestImplementation libs.androidTest
 }

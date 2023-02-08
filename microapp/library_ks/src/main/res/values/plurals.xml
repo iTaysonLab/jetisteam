@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="library_remote_pcs">
+        <item quantity="one">%d Steam client is available</item>
+        <item quantity="other">%d Steam clients are available</item>
+    </plurals>
+</resources>
