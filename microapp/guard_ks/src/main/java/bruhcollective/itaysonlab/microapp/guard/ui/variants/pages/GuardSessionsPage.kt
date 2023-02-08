@@ -63,12 +63,12 @@ private fun SessionItem(
             Text(text = stringResource(id = R.string.guard_sessions_last_seen, visuals.relativeLastSeen), maxLines = 1)
         }, colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
-        ), modifier = Modifier.clickable {
-            // onSessionClicked(viewModel.steamId.steamId, session)
-        }.clip(when {
+        ), modifier = Modifier.clip(when {
             top -> MaterialTheme.shapes.large.copy(bottomStart = CornerSize(0.dp), bottomEnd = CornerSize(0.dp))
             bottom -> MaterialTheme.shapes.large.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
             else -> RectangleShape
-        })
+        }).clickable {
+            // onSessionClicked(viewModel.steamId.steamId, session)
+        }
     )
 }
