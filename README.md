@@ -1,6 +1,11 @@
 # Jetisteam
 _an unofficial and experimental alternative Steam frontend for Android_
 
+## Construction Notice
+
+This branch (ksteam) is the result of Jetisteam being rebuilt in [kSteam](https://github.com/iTaysonLab/kSteam) - a custom Steam Network wrapper built specially for this app.
+If you want a more complete experience for now, please refer to the "main" branch (however, it won't be updated).
+
 ## Disclaimer
 
 This app is using WebUI RPC-like API - but Steam's API is not that complete at all: some features will be completely missing or be incomplete. Such as:
