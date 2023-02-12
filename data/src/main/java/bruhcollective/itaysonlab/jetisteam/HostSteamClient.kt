@@ -9,11 +9,13 @@ import bruhcollective.itaysonlab.ksteam.SteamClientConfiguration
 import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import bruhcollective.itaysonlab.ksteam.models.enums.EGamingDeviceType
+import bruhcollective.itaysonlab.ksteam.network.CMClientState
 import bruhcollective.itaysonlab.ksteam.persist.Database
 import bruhcollective.itaysonlab.ksteam.platform.DeviceInformation
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import steam.webui.authentication.EAuthTokenPlatformType
 import java.io.File
@@ -37,6 +39,10 @@ class HostSteamClient @Inject constructor(
             ), rootFolder = File(context.filesDir, "ksteam"), sqlDriver = AndroidSqliteDriver(Database.Schema, context, "kSteamAndroid.db")
         )
     )
+
+    val isConnectedToSteam = client.connectionStatus.map { state ->
+        state == CMClientState.Connected
+    }
 
     init {
         launch {

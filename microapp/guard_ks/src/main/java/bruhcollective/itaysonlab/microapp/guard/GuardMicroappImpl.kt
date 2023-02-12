@@ -57,7 +57,7 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
                     CommonArguments.SteamId to steamId,
                     Arguments.ClientId to clientId,
                 )))
-            })
+            }, backStack = it)
         }
 
         composable(Routes.Setup.url, arguments = listOf(CommonArguments.SteamId)) {

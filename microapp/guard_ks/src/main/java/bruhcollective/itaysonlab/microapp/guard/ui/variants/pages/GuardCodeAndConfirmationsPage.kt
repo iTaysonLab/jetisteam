@@ -4,7 +4,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -45,6 +47,7 @@ import soup.compose.material.motion.animation.rememberSlideDistance
 internal fun GuardCodeAndConfirmationsPage(
     modifier: Modifier,
     code: CodeModel,
+    connectedToSteam: Boolean,
     confirmationState: ConfirmationListState,
     onSignWithQrClicked: () -> Unit,
     onRecoveryClicked: () -> Unit,
@@ -52,7 +55,12 @@ internal fun GuardCodeAndConfirmationsPage(
     onCopyClicked: () -> Unit,
     onConfirmationClicked: (MobileConfirmationItem) -> Unit
 ) {
-    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
+    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA, onPermissionResult = { granted ->
+        if (granted) {
+            onSignWithQrClicked()
+        }
+    })
+
     var showPermissionAlert by remember { mutableStateOf(false) }
 
     if (showPermissionAlert) {
@@ -77,7 +85,12 @@ internal fun GuardCodeAndConfirmationsPage(
     }
 
     Scaffold(modifier, floatingActionButton = {
-        FloatingActionButton(onClick = onSignWithQrClicked) {
+        val fabDiff by animateDpAsState(
+            targetValue = if (connectedToSteam) 0.dp else 96.dp,
+            animationSpec = spring(stiffness = 1000f)
+        )
+
+        FloatingActionButton(onClick = onSignWithQrClicked, modifier = Modifier.offset(y = fabDiff)) {
             Icon(imageVector = Icons.Rounded.QrCodeScanner, contentDescription = null)
         }
     }, contentWindowInsets = EmptyWindowInsets) {
@@ -87,7 +100,7 @@ internal fun GuardCodeAndConfirmationsPage(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 onCopyClicked = onCopyClicked,
-                code = code, onDeleteClicked = onDeleteClicked, onRecoveryClicked = onRecoveryClicked
+                code = code, onDeleteClicked = onDeleteClicked, onRecoveryClicked = onRecoveryClicked, connectedToSteam = connectedToSteam
             )
             
             Spacer(modifier = Modifier.height(16.dp))
@@ -164,6 +177,7 @@ private fun FullscreenPlaceholder(
 private fun CodeBox(
     modifier: Modifier,
     code: CodeModel,
+    connectedToSteam: Boolean,
     onCopyClicked: () -> Unit,
     onRecoveryClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
@@ -227,7 +241,7 @@ private fun CodeBox(
                             isMenuShown = true
                         }, colors = IconButtonDefaults.iconButtonColors(
                             contentColor = MaterialTheme.colorScheme.primary
-                        ), modifier = Modifier.align(Alignment.CenterStart)) {
+                        ), modifier = Modifier.align(Alignment.CenterStart), enabled = connectedToSteam) {
                             Icon(imageVector = Icons.Rounded.Settings, contentDescription = null)
                         }
 

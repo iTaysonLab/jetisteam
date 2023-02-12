@@ -36,15 +36,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
 import bruhcollective.itaysonlab.jetisteam.uikit.components.IndicatorBehindScrollableTabRow
 import bruhcollective.itaysonlab.jetisteam.uikit.components.tabIndicatorOffset
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.CodeModel
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.InstallTypedResultHandler
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.ui.variants.NoGuardScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.variants.pages.GuardCodeAndConfirmationsPage
 import bruhcollective.itaysonlab.microapp.guard.ui.variants.pages.GuardSessionsPage
+import bruhcollective.itaysonlab.microapp.guard.utils.ConfirmedNewSession
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -52,6 +56,7 @@ import java.util.Locale
 @Composable
 internal fun GuardScreen(
     viewModel: GuardViewModel = hiltViewModel(),
+    backStack: NavBackStackEntry,
     onAddClicked: (Long) -> Unit,
     onDeleteClicked: (Long) -> Unit,
     onQrClicked: (Long) -> Unit,
@@ -60,6 +65,8 @@ internal fun GuardScreen(
     onSessionClicked: (Long, ActiveSession) -> Unit,
     onSessionArrived: (Long, Long) -> Unit,
 ) {
+    val isConnectedToSteam = viewModel.connectedToSteam.collectAsStateWithLifecycle(initialValue = false)
+
     val clipboard = LocalClipboardManager.current
     val context = LocalContext.current
 
@@ -75,6 +82,11 @@ internal fun GuardScreen(
 
             val awaitingSession =
                 viewModel.awaitingSessionPoll.collectAsStateWithLifecycle(initialValue = null)
+            
+            InstallTypedResultHandler<ConfirmedNewSession>(backStack) { sessionEvent ->
+                delay(1000L)
+                viewModel.reloadSessions()
+            }
 
             LaunchedEffect(awaitingSession.value) {
                 awaitingSession.value?.let { id ->
@@ -154,6 +166,7 @@ internal fun GuardScreen(
                         GuardCodeAndConfirmationsPage(
                             modifier = Modifier.fillMaxSize(),
                             code = codeState.value,
+                            connectedToSteam = isConnectedToSteam.value,
                             confirmationState = viewModel.confirmations,
                             onSignWithQrClicked = { onQrClicked(viewModel.steamId) },
                             onDeleteClicked = { onDeleteClicked(viewModel.steamId) },
@@ -181,7 +194,8 @@ internal fun GuardScreen(
         GuardViewModel.GuardState.Setup -> {
             NoGuardScreen(
                 onAddClicked = { onAddClicked(viewModel.steamId) },
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                connectedToSteam = isConnectedToSteam.value
             )
         }
     }

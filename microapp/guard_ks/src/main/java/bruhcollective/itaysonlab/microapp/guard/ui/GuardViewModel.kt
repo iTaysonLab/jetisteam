@@ -40,6 +40,7 @@ internal class GuardViewModel @Inject constructor(
         }
     }
 
+    val connectedToSteam get() = hostSteamClient.isConnectedToSteam
     val steamId get() = hostSteamClient.client.currentSessionSteamId.longId
 
     var awaitingSessionPoll = hostSteamClient.client.guardManagement.createSessionWatcher()
@@ -56,6 +57,12 @@ internal class GuardViewModel @Inject constructor(
 
     fun wrapConfirmation(confirmation: MobileConfirmationItem): String {
         return json.encodeToString(confirmation).encodeUtf8().base64Url()
+    }
+
+    suspend fun reloadSessions() {
+        (state as? GuardState.Available)?.let {
+            sessions = hostSteamClient.client.guardManagement.getActiveSessions()
+        }
     }
 
     sealed class GuardState {
