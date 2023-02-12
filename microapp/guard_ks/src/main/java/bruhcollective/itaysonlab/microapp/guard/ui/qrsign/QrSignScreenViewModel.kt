@@ -109,6 +109,8 @@ class QrSignScreenViewModel @Inject constructor(
         currentOperation = if (allow) CurrentOperation.Approve else CurrentOperation.Deny
 
         finishJob = viewModelScope.launch {
+            val qrId = qrSessionInfo!!.id
+
             steamClient.client.guardManagement.confirmNewSession(
                 session = qrSessionInfo!!,
                 approve = allow,
@@ -127,7 +129,7 @@ class QrSignScreenViewModel @Inject constructor(
 
             if (invokeOnDone != null) {
                 withContext(Dispatchers.Main) {
-                    invokeOnDone(ConfirmedNewSession(id = qrSessionInfo!!.id, allowed = allow))
+                    invokeOnDone(ConfirmedNewSession(id = qrId, allowed = allow))
                 }
             }
 

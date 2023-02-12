@@ -61,6 +61,7 @@ internal class GuardViewModel @Inject constructor(
 
     suspend fun reloadSessions() {
         (state as? GuardState.Available)?.let {
+            sessions = null
             sessions = hostSteamClient.client.guardManagement.getActiveSessions()
         }
     }
