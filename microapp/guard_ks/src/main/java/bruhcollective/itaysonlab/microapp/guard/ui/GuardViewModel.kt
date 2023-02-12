@@ -42,16 +42,7 @@ internal class GuardViewModel @Inject constructor(
 
     val steamId get() = hostSteamClient.client.currentSessionSteamId.longId
 
-    private var isPollingActive = state is GuardState.Available
-
-    /*var confirmationFlow = flow {
-        coroutineScope {
-            while (isPollingActive) {
-                emit(getQueueOfSessions())
-                delay(5000L)
-            }
-        }
-    }*/
+    var awaitingSessionPoll = hostSteamClient.client.guardManagement.createSessionWatcher()
 
     init {
         viewModelScope.launch {

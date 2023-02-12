@@ -14,6 +14,8 @@ import bruhcollective.itaysonlab.ksteam.guard.models.AwaitingSession
 import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.handlers.guardManagement
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.NavigationResult
+import bruhcollective.itaysonlab.microapp.guard.utils.ConfirmedNewSession
 import com.google.mlkit.vision.barcode.common.Barcode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -102,7 +104,7 @@ class QrSignScreenViewModel @Inject constructor(
         qrSessionInfo = steamClient.client.guardManagement.getActiveSessionInfo(qrData!!.sessionId)
     }
 
-    fun updateCurrentSignIn(allow: Boolean, invokeOnDone: (() -> Unit)?) {
+    fun updateCurrentSignIn(allow: Boolean, invokeOnDone: ((NavigationResult) -> Unit)?) {
         isProcessingLogin = LoginProcessState.Processing
         currentOperation = if (allow) CurrentOperation.Approve else CurrentOperation.Deny
 
@@ -125,7 +127,7 @@ class QrSignScreenViewModel @Inject constructor(
 
             if (invokeOnDone != null) {
                 withContext(Dispatchers.Main) {
-                    invokeOnDone()
+                    invokeOnDone(ConfirmedNewSession(id = qrSessionInfo!!.id, allowed = allow))
                 }
             }
 

@@ -18,6 +18,7 @@ import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardRecoveryCode
 import bruhcollective.itaysonlab.microapp.guard.ui.bottomsheet.GuardRemoveSheet
 import bruhcollective.itaysonlab.microapp.guard.ui.confirmation_detail.ConfirmationDetailScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.qrsign.QrSignScreen
+import bruhcollective.itaysonlab.microapp.guard.ui.session_detail.GuardSessionScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreen
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -46,6 +47,16 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
                     CommonArguments.SteamId to steamId,
                     Arguments.ConfirmationData to data
                 )))
+            }, onSessionClicked = { steamId, session ->
+                navController.navigate(Routes.SessionInfo.mapArgs(mapOf(
+                    CommonArguments.SteamId to steamId,
+                    Arguments.SessionData to session.protoBytes().base64Url()
+                )))
+            }, onSessionArrived = { steamId, clientId ->
+                navController.navigate(Routes.ConfirmSignIn.mapArgs(mapOf(
+                    CommonArguments.SteamId to steamId,
+                    Arguments.ClientId to clientId,
+                )))
             })
         }
 
@@ -61,6 +72,10 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
             })
         }
 
+        composable(Routes.SessionInfo.url, arguments = listOf(CommonArguments.SteamId, Arguments.SessionData)) {
+            GuardSessionScreen(onBackClicked = navController::popBackStack)
+        }
+
         composable(Routes.ScanQrCode.url, arguments = listOf(CommonArguments.SteamId), enterTransition = {
             materialSharedAxisYIn(forward = true, slideDistance = 300)
         }, exitTransition = {
@@ -70,14 +85,18 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
         }, popExitTransition = {
             materialSharedAxisYOut(forward = false, slideDistance = 300)
         }) {
-            QrSignScreen(onBackClicked = navController::popBackStack)
+            QrSignScreen(onBackClicked = navController::popBackStack, onFinish = { event ->
+                navController.setResultToPreviousEntry(event)
+            })
         }
 
         bottomSheet(Routes.ConfirmSignIn.url, arguments = listOf(
             CommonArguments.SteamId,
             Arguments.ClientId
         )) {
-            GuardConfirmSessionSheet(onFinish = navController::popBackStack)
+            GuardConfirmSessionSheet(onFinish = { event ->
+                navController.setResultToPreviousEntry(event)
+            })
         }
 
         bottomSheet(Routes.Recovery.url, arguments = listOf(

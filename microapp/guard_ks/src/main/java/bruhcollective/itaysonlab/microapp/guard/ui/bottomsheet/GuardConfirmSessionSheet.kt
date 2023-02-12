@@ -26,8 +26,10 @@ import bruhcollective.itaysonlab.ksteam.guard.models.AwaitingSession
 import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.handlers.guardManagement
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.NavigationResult
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.R
+import bruhcollective.itaysonlab.microapp.guard.utils.ConfirmedNewSession
 import bruhcollective.itaysonlab.microapp.guard.utils.SessionFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -37,7 +39,7 @@ import javax.inject.Inject
 @Composable
 internal fun GuardConfirmSessionSheet(
     viewModel: GuardConfirmSessionViewModel = hiltViewModel(),
-    onFinish: () -> Unit
+    onFinish: (NavigationResult) -> Unit
 ) {
     BottomSheetLayout(title = {
         stringResource(id = R.string.guard_confirm_sheet_header)
@@ -224,7 +226,7 @@ internal class GuardConfirmSessionViewModel @Inject constructor(
         })
     }
 
-    fun dispatchOperation(allow: Boolean, onFinish: () -> Unit) {
+    fun dispatchOperation(allow: Boolean, onFinish: (NavigationResult) -> Unit) {
         if (isApproving || isDenying) return
 
         setDynState(allow, true)
@@ -237,7 +239,7 @@ internal class GuardConfirmSessionViewModel @Inject constructor(
             )
 
             setDynState(allow, false)
-            onFinish()
+            onFinish(ConfirmedNewSession(id = (state as State.Ready).session.id, allowed = allow))
         }
     }
 

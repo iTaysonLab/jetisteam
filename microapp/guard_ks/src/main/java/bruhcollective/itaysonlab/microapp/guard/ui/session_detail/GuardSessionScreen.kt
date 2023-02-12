@@ -1,4 +1,4 @@
-package bruhcollective.itaysonlab.microapp.guard.ui.devices.session
+package bruhcollective.itaysonlab.microapp.guard.ui.session_detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,12 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
-import bruhcollective.itaysonlab.jetisteam.uikit.components.StateButton
 import bruhcollective.itaysonlab.jetisteam.uikit.components.StateTextButton
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.utils.SessionFormatter
-import steam.auth.CAuthentication_RefreshToken_Enumerate_Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -194,7 +192,7 @@ private fun SessionActionStrip(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.height(IntrinsicSize.Min)
         ) {
-            SessionActionStripButton(
+            /*SessionActionStripButton(
                 modifier = Modifier
                     .weight(1f)
                     .clickable(onClick = onRevokeRequest),
@@ -207,7 +205,7 @@ private fun SessionActionStrip(
                     .fillMaxHeight()
                     .width(2.dp)
                     .background(color = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
-            )
+            )*/
 
             SessionActionStripButton(
                 modifier = Modifier

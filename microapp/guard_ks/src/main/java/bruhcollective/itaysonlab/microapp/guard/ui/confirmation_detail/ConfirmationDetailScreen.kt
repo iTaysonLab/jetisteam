@@ -16,6 +16,7 @@ import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
 import bruhcollective.itaysonlab.jetisteam.uikit.components.StateButton
 import bruhcollective.itaysonlab.jetisteam.uikit.components.StateTonalButton
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.NavigationResult
 import bruhcollective.itaysonlab.microapp.guard.R
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
@@ -25,7 +26,7 @@ import com.google.accompanist.web.rememberWebViewState
 internal fun ConfirmationDetailScreen(
     viewModel: ConfirmationDetailViewModel = hiltViewModel(),
     onBackClicked: () -> Unit,
-    onFinish: (ConfirmationDetailViewModel.ConfirmationDetailResult) -> Unit
+    onFinish: (NavigationResult) -> Unit
 ) {
     val tas = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val webViewState = rememberWebViewState(url = viewModel.webViewUrl)

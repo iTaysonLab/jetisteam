@@ -25,14 +25,18 @@ import bruhcollective.itaysonlab.microapp.guard.utils.SessionFormatter
 @Composable
 internal fun GuardSessionsPage(
     modifier: Modifier,
-    sessions: List<ActiveSession>?
+    sessions: List<ActiveSession>?,
+    onSessionClicked: (ActiveSession) -> Unit
 ) {
 
     RoundedPage(modifier) {
         if (sessions != null) {
             LazyColumn(contentPadding = PaddingValues(16.dp)) {
                 itemsIndexed(sessions) { index, session ->
-                    SessionItem(session, top = index == 0, bottom = index == sessions.lastIndex)
+                    SessionItem(session, top = index == 0, bottom = index == sessions.lastIndex, onClick = {
+                        onSessionClicked(session)
+                    })
+
                     Divider(color = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
                 }
             }
@@ -47,7 +51,8 @@ internal fun GuardSessionsPage(
 private fun SessionItem(
     session: ActiveSession,
     top: Boolean,
-    bottom: Boolean
+    bottom: Boolean,
+    onClick: () -> Unit
 ) {
     val ctx = LocalContext.current
     val visuals = remember(session) { SessionFormatter.formatSessionDescByTime(ctx, session) }
@@ -67,8 +72,6 @@ private fun SessionItem(
             top -> MaterialTheme.shapes.large.copy(bottomStart = CornerSize(0.dp), bottomEnd = CornerSize(0.dp))
             bottom -> MaterialTheme.shapes.large.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
             else -> RectangleShape
-        }).clickable {
-            // onSessionClicked(viewModel.steamId.steamId, session)
-        }
+        }).clickable(onClick = onClick)
     )
 }

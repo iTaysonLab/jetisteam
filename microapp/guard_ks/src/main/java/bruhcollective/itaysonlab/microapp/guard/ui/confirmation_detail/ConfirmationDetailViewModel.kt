@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.microapp.guard.ui.confirmation_detail
 
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,9 +15,9 @@ import bruhcollective.itaysonlab.microapp.core.ext.getBase64
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.NavigationResult
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
+import bruhcollective.itaysonlab.microapp.guard.utils.ConfirmationDetailResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -50,7 +49,7 @@ internal class ConfirmationDetailViewModel @Inject constructor(
         }
     }
 
-    fun submitAction(confirm: Boolean, onFinish: (ConfirmationDetailResult) -> Unit) {
+    fun submitAction(confirm: Boolean, onFinish: (NavigationResult) -> Unit) {
         viewModelScope.launch {
             if (operationStatus != Operation.Idle) return@launch
 
@@ -75,10 +74,4 @@ internal class ConfirmationDetailViewModel @Inject constructor(
         object Confirming: Operation()
         object Revoking: Operation()
     }
-
-    @Stable
-    @Parcelize
-    class ConfirmationDetailResult(
-        val id: String
-    ): NavigationResult
 }

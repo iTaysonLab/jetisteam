@@ -21,6 +21,7 @@ import bruhcollective.itaysonlab.jetisteam.uikit.components.StateButton
 import bruhcollective.itaysonlab.jetisteam.uikit.components.StateTonalButton
 import bruhcollective.itaysonlab.ksteam.guard.models.AwaitingSession
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.NavigationResult
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.ui.qrsign.camerakit.CameraView
 import soup.compose.material.motion.animation.materialSharedAxisY
@@ -30,6 +31,7 @@ import soup.compose.material.motion.animation.rememberSlideDistance
 @Composable
 fun QrSignScreen(
     onBackClicked: () -> Unit,
+    onFinish: (NavigationResult) -> Unit,
     viewModel: QrSignScreenViewModel = hiltViewModel()
 ) {
     Scaffold(
@@ -57,7 +59,7 @@ fun QrSignScreen(
             ) {
                 QrSignDialog(
                     onApprove = {
-                        viewModel.updateCurrentSignIn(true, onBackClicked)
+                        viewModel.updateCurrentSignIn(true, onFinish)
                     },
                     onDeny = {
                         viewModel.updateCurrentSignIn(false, null)

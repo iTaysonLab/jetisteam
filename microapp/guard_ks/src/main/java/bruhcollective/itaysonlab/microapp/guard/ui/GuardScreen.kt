@@ -20,6 +20,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -37,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.IndicatorBehindScrollableTabRow
 import bruhcollective.itaysonlab.jetisteam.uikit.components.tabIndicatorOffset
+import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.CodeModel
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
@@ -54,7 +56,9 @@ internal fun GuardScreen(
     onDeleteClicked: (Long) -> Unit,
     onQrClicked: (Long) -> Unit,
     onRecoveryClicked: (Long) -> Unit,
-    onConfirmationClicked: (Long, String) -> Unit
+    onConfirmationClicked: (Long, String) -> Unit,
+    onSessionClicked: (Long, ActiveSession) -> Unit,
+    onSessionArrived: (Long, Long) -> Unit,
 ) {
     val clipboard = LocalClipboardManager.current
     val context = LocalContext.current
@@ -65,6 +69,20 @@ internal fun GuardScreen(
     when (val state = viewModel.state) {
         is GuardViewModel.GuardState.Available -> {
             val pagerState = rememberPagerState()
+
+            val codeState =
+                state.instance.code.collectAsStateWithLifecycle(initialValue = CodeModel.DefaultInstance)
+
+            val awaitingSession =
+                viewModel.awaitingSessionPoll.collectAsStateWithLifecycle(initialValue = null)
+
+            LaunchedEffect(awaitingSession.value) {
+                awaitingSession.value?.let { id ->
+                    if (id != 0L) {
+                        onSessionArrived(viewModel.steamId, id)
+                    }
+                }
+            }
 
             Scaffold(topBar = {
                 IndicatorBehindScrollableTabRow(
@@ -125,17 +143,6 @@ internal fun GuardScreen(
                     Snackbar(snackbarData = it)
                 }
             }) { innerPadding ->
-                val codeState =
-                    state.instance.code.collectAsStateWithLifecycle(initialValue = CodeModel.DefaultInstance)
-
-                /*val confirmState = viewModel.confirmationFlow.collectAsStateWithLifecycle(initialValue = 0L)
-
-                LaunchedEffect(confirmState.value) {
-                    if (confirmState.value != 0L) {
-                        onSessionArrived(viewModel.steamId, confirmState.value)
-                    }
-                }*/
-
                 HorizontalPager(
                     pageCount = 2,
                     state = pagerState,
@@ -163,7 +170,9 @@ internal fun GuardScreen(
                                 onConfirmationClicked(viewModel.steamId, viewModel.wrapConfirmation(confirmation))
                             })
                     } else if (pos == 1) {
-                        GuardSessionsPage(modifier = Modifier.fillMaxSize(), sessions = viewModel.sessions)
+                        GuardSessionsPage(modifier = Modifier.fillMaxSize(), sessions = viewModel.sessions, onSessionClicked = { session ->
+                            onSessionClicked(viewModel.steamId, session)
+                        })
                     }
                 }
             }
