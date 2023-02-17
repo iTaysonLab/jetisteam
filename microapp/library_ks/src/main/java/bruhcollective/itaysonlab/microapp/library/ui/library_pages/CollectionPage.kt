@@ -1,11 +1,9 @@
 package bruhcollective.itaysonlab.microapp.library.ui.library_pages
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
@@ -29,6 +27,7 @@ import bruhcollective.itaysonlab.ksteam.handlers.library
 import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
 import coil.compose.AsyncImage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 @Composable
@@ -36,7 +35,7 @@ internal fun CollectionPage(
     collection: LibraryCollection,
     viewModel: CollectionPageViewModel = hiltViewModel()
 ) {
-    val data = viewModel.getData(collection.id).collectAsStateWithLifecycle(initialValue = emptyList())
+    val data = viewModel.getData(collection.id).collectAsStateWithLifecycle(initialValue = emptyList(), context = Dispatchers.IO)
 
     RoundedPage(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
@@ -47,11 +46,10 @@ internal fun CollectionPage(
             modifier = Modifier.fillMaxSize()
         ) {
             itemsIndexed(data.value) { index, game ->
-                LibraryItem(remember(game.imageCapsuleFileName) {
-                    CdnUrlUtil.buildAppUrl(game.id.toInt(), "library_600x900.jpg")
+                LibraryItem(remember(game.appId) {
+                    CdnUrlUtil.buildAppUrl(game.appId, "library_600x900.jpg")
                 }, modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
+                    .aspectRatio(2f / 3f)
                     .let {
                         when (index) {
                             0 -> it.clip(
@@ -72,9 +70,6 @@ internal fun CollectionPage(
 
                             else -> it
                         }
-                    }
-                    .clickable {
-
                     })
             }
         }

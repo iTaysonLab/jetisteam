@@ -49,7 +49,7 @@ internal fun Homescreen(
 
     LazyColumn(Modifier.fillMaxSize()) {
         items(shelves.value) { shelf ->
-            Shelf(shelf)
+            Shelf(shelf, viewModel)
         }
     }
 }
@@ -64,9 +64,11 @@ internal class HomescreenViewModel @Inject constructor(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun Shelf(
-    shelf: LibraryShelf
+    shelf: LibraryShelf,
+    viewModel: HomescreenViewModel
 ) {
     Column(Modifier.fillMaxWidth()) {
+        Text(text = shelf.toString())
 
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(text = shelf.id, style = MaterialTheme.typography.headlineSmall)

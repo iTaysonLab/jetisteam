@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.jetisteam
 
 import android.content.Context
-import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import bruhcollective.itaysonlab.jetisteam.controllers.JsLegacyController
 import bruhcollective.itaysonlab.jetisteam.controllers.UuidController
 import bruhcollective.itaysonlab.ksteam.SteamClient
@@ -10,7 +9,6 @@ import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import bruhcollective.itaysonlab.ksteam.models.enums.EGamingDeviceType
 import bruhcollective.itaysonlab.ksteam.network.CMClientState
-import bruhcollective.itaysonlab.ksteam.persist.Database
 import bruhcollective.itaysonlab.ksteam.platform.DeviceInformation
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +34,7 @@ class HostSteamClient @Inject constructor(
                 platformType = EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient,
                 deviceName = uuidController.deviceName,
                 uuid = uuidController.uuid
-            ), rootFolder = File(context.filesDir, "ksteam"), sqlDriver = AndroidSqliteDriver(Database.Schema, context, "kSteamAndroid.db")
+            ), rootFolder = File(context.filesDir, "ksteam")
         )
     )
 

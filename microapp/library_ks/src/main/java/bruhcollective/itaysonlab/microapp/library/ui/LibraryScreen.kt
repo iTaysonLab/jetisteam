@@ -57,7 +57,6 @@ internal fun LibraryScreen(
     val scope = rememberCoroutineScope()
     val snackState = remember { SnackbarHostState() }
     val pagerState = rememberPagerState()
-    val data = remember { mutableListOf("", "", "", "", "", "", "", "", "", "", "", "") }
 
     Scaffold(topBar = {
         IndicatorBehindScrollableTabRow(
@@ -122,7 +121,7 @@ internal fun LibraryScreen(
         HorizontalPager(
             pageCount = collections.value.size + 1, state = pagerState, modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(innerPadding), beyondBoundsPageCount = 1
         ) { page ->
             if (page == 0) {
                 Homescreen()
