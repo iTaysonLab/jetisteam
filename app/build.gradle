@@ -44,7 +44,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.0'
+        kotlinCompilerExtensionVersion '1.4.2'
     }
 
     packagingOptions {
@@ -52,8 +52,6 @@ android {
             excludes += "/META-INF/*.kotlin_module"
             excludes += "/META-INF/*.version"
             excludes += "/META-INF/**"
-            excludes += "/kotlin/**"
-            excludes += "/kotlinx/**"
             excludes += "**/*.properties"
             excludes += "DebugProbesKt.bin"
             excludes += "kotlin-tooling-metadata.json"
