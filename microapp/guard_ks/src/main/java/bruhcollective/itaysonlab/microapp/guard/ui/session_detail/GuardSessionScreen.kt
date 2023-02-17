@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -34,7 +33,6 @@ internal fun GuardSessionScreen(
     onBackClicked: () -> Unit,
 ) {
     val ctx = LocalContext.current
-    val tas = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     var requestSessionRevoke by remember { mutableStateOf(false) }
 
@@ -74,20 +72,17 @@ internal fun GuardSessionScreen(
 
     Scaffold(
         topBar = {
-            LargeTopAppBar(title = {
+            CenterAlignedTopAppBar(title = {
                 Text(text = stringResource(id = R.string.guard_session_info))
             }, navigationIcon = {
                 IconButton(onClick = onBackClicked) {
                     Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
                 }
-            }, scrollBehavior = tas, colors = TopAppBarDefaults.largeTopAppBarColors(
+            }, colors = TopAppBarDefaults.largeTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surface,
                 scrolledContainerColor = MaterialTheme.colorScheme.surface,
-            )
-            )
-        }, contentWindowInsets = EmptyWindowInsets, modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(tas.nestedScrollConnection)
+            ))
+        }, contentWindowInsets = EmptyWindowInsets, modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         RoundedPage(
             modifier = Modifier
