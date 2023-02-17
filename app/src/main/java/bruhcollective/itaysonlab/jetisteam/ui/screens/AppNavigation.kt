@@ -1,7 +1,10 @@
 package bruhcollective.itaysonlab.jetisteam.ui.screens
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
@@ -9,9 +12,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -75,6 +81,12 @@ fun AppNavigation(
 
     val connectionState = viewModel.connectingState.collectAsStateWithLifecycle()
 
+    var connectionRowVisible by remember { mutableStateOf(true) }
+    val connectionRowPadding by animateDpAsState(targetValue = if (connectionRowVisible) 56.dp else 0.dp, animationSpec = spring(
+        stiffness = Spring.StiffnessMediumLow,
+        visibilityThreshold = Dp.VisibilityThreshold
+    ))
+
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,
         sheetShape = MaterialTheme.shapes.extraLarge.copy(bottomStart = CornerSize(0.dp), bottomEnd = CornerSize(0.dp)),
@@ -83,7 +95,9 @@ fun AppNavigation(
     ) {
         Scaffold(
             topBar = {
-                SteamConnectionRow(connectionState.value)
+                SteamConnectionRow(connectionState.value, onVisibilityChanged = {
+                    connectionRowVisible = it
+                })
             },
             bottomBar = {
                 val currentRootRoute = navController.backQueue.getOrNull(1)?.destination?.route
@@ -104,6 +118,21 @@ fun AppNavigation(
                     viewModel.bottomNavDestinations.forEach { dest ->
                         val selected = currentRootRoute == dest.route
 
+                        val onClick = remember(selected, navController, dest) {
+                            {
+                                if (!selected) {
+                                    navController.navigate(dest.route) {
+                                        popUpTo(ROOT_NAV_GRAPH_ID) {
+                                            saveState = true
+                                        }
+
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }
+                            }
+                        }
+
                         NavigationBarItem(
                             icon = {
                                 Icon(
@@ -114,17 +143,7 @@ fun AppNavigation(
                             label = { Text(stringResource(dest.name)) },
                             selected = selected,
                             enabled = dest.route == "@guard" || connectionState.value == CMClientState.Connected,
-                            onClick = {
-                                if (selected) return@NavigationBarItem
-                                navController.navigate(dest.route) {
-                                    popUpTo(ROOT_NAV_GRAPH_ID) {
-                                        saveState = true
-                                    }
-
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            }
+                            onClick = onClick
                         )
                     }
                 }
@@ -135,8 +154,7 @@ fun AppNavigation(
                 startDestination = "coreLoading",
                 route = ROOT_NAV_GRAPH_ID,
                 modifier = Modifier
-                    .padding(bottom = navOffsetReverse)
-                    .padding(top = padding.calculateTopPadding()),
+                    .padding(top = connectionRowPadding, bottom = navOffsetReverse),
                 enterTransition = {
                     if (initialState.destination.route == "coreLoading") {
                         EnterTransition.None
@@ -164,7 +182,6 @@ fun AppNavigation(
             ) {
                 composable("coreLoading") {
                     Box(modifier = Modifier.fillMaxSize())
-                    // FullscreenLoading()
                 }
 
                 viewModel.destinations.forEach { (_, value) ->

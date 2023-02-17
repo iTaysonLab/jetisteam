@@ -22,17 +22,20 @@ import soup.compose.material.motion.animation.rememberSlideDistance
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SteamConnectionRow (
-    connectionState: CMClientState
+    connectionState: CMClientState,
+    onVisibilityChanged: (Boolean) -> Unit,
 ) {
     val sd = rememberSlideDistance()
     var isVisible by remember { mutableStateOf(true) }
 
     LaunchedEffect(connectionState) {
         isVisible = true
+        onVisibilityChanged(true)
 
         if (connectionState == CMClientState.Connected) {
             delay(1000L)
             isVisible = false
+            onVisibilityChanged(false)
         }
     }
 
@@ -44,14 +47,14 @@ fun SteamConnectionRow (
     ) {
         Box(modifier = Modifier
             .background(MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp))
-            .padding(16.dp)
+            .height(108.dp)
             .fillMaxWidth()
             .statusBarsPadding()) {
 
             AnimatedContent(targetState = connectionState, transitionSpec = {
                 materialSharedAxisY(true, slideDistance = sd).using(SizeTransform(clip = false))
             }, modifier = Modifier.fillMaxWidth()) {
-                Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxSize()) {
                     when (it) {
                         CMClientState.Idle -> {
                             ProgressRow(title = "Preparing...")
