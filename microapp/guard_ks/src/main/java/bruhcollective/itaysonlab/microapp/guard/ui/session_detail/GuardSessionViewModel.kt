@@ -6,8 +6,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.LocationOn
 import androidx.compose.material.icons.rounded.Router
-import androidx.compose.material.icons.rounded.TextFormat
-import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,6 +24,17 @@ import bruhcollective.itaysonlab.microapp.guard.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import solaricons.bold.SolarIconsBold
+import solaricons.bold.solariconsbold.MapLocation
+import solaricons.bold.solariconsbold.NetworkItProgramming
+import solaricons.bold.solariconsbold.Security
+import solaricons.bold.solariconsbold.TextFormatting
+import solaricons.bold.solariconsbold.Time
+import solaricons.bold.solariconsbold.textformatting.Text
+import solaricons.bold.solariconsbold.time.Stopwatch
+import solaricons.bold.solariconsbold.maplocation.Map
+import solaricons.bold.solariconsbold.networkitprogramming.`Wi-fiRouter`
+import solaricons.bold.solariconsbold.security.Key
 import steam.webui.authentication.EAuthSessionGuardType
 import javax.inject.Inject
 
@@ -55,7 +64,7 @@ internal class GuardSessionViewModel @Inject constructor(
         add(
             ListItem(
                 Triple(
-                    { Icons.Rounded.TextFormat },
+                    { SolarIconsBold.TextFormatting.Text },
                     R.string.guard_session_info_desc,
                     sessionData.deviceName.ifEmpty { "Unknown" }
                 )
@@ -65,7 +74,7 @@ internal class GuardSessionViewModel @Inject constructor(
         add(
             ListItem(
                 Triple(
-                    { Icons.Rounded.Timer },
+                    { SolarIconsBold.Time.Stopwatch },
                     R.string.guard_session_info_first,
                     DateUtils.getRelativeTimeSpanString(
                         ctx,
@@ -79,7 +88,7 @@ internal class GuardSessionViewModel @Inject constructor(
             add(
                 ListItem(
                     Triple(
-                        { Icons.Rounded.LocationOn },
+                        { SolarIconsBold.MapLocation.Map },
                         R.string.guard_session_info_loc,
                         "${sessionData.lastSeen?.city}, ${sessionData.lastSeen?.state}, ${sessionData.lastSeen?.country}"
                     )
@@ -90,7 +99,7 @@ internal class GuardSessionViewModel @Inject constructor(
         add(
             ListItem(
                 Triple(
-                    { Icons.Rounded.Key },
+                    { SolarIconsBold.Security.Key },
                     R.string.guard_session_info_signed,
                     when (sessionData.confirmedWith) {
                         EAuthSessionGuardType.k_EAuthSessionGuardType_None -> "None"
@@ -109,7 +118,7 @@ internal class GuardSessionViewModel @Inject constructor(
             add(
                 ListItem(
                     Triple(
-                        { Icons.Rounded.Router },
+                        { SolarIconsBold.NetworkItProgramming.`Wi-fiRouter` },
                         R.string.guard_session_info_ip,
                         sessionData.lastSeen?.ip?.ipString ?: "Unknown"
                     )

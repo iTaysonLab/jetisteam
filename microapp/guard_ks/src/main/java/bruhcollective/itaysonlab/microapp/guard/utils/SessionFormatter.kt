@@ -10,8 +10,9 @@ import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.AwaitingSession
 import solaricons.bold.SolarIconsBold
 import solaricons.bold.solariconsbold.ElectronicDevices
+import solaricons.bold.solariconsbold.MapLocation
 import solaricons.bold.solariconsbold.electronicdevices.Laptop
-import solaricons.bold.solariconsbold.electronicdevices.Monitor
+import solaricons.bold.solariconsbold.maplocation.Global
 import solaricons.bold.solariconsbold.electronicdevices.Smartphone
 import steam.webui.authentication.EAuthTokenPlatformType
 
@@ -19,7 +20,7 @@ object SessionFormatter {
     fun formatSessionDescByTime(ctx: Context, desc: ActiveSession): SessionVisuals {
         return SessionVisuals((when (desc.platformType) {
             EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient -> "Steam Client" to { SolarIconsBold.ElectronicDevices.Laptop }
-            EAuthTokenPlatformType.k_EAuthTokenPlatformType_WebBrowser -> "Web Browser" to { SolarIconsBold.ElectronicDevices.Monitor }
+            EAuthTokenPlatformType.k_EAuthTokenPlatformType_WebBrowser -> "Web Browser" to { SolarIconsBold.MapLocation.Global }
             EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp -> "Mobile App" to { SolarIconsBold.ElectronicDevices.Smartphone }
             else -> ("Unknown" to { Icons.Rounded.DeviceUnknown }).also { Log.d("Unknown", desc.toString()) }
         }) to DateUtils.getRelativeTimeSpanString(ctx,
@@ -30,7 +31,7 @@ object SessionFormatter {
     fun formatAuthSession(desc: AwaitingSession): SessionVisuals {
         return SessionVisuals((when (desc.platformType) {
             EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient -> "Steam Client" to { SolarIconsBold.ElectronicDevices.Laptop }
-            EAuthTokenPlatformType.k_EAuthTokenPlatformType_WebBrowser -> "Web Browser" to { SolarIconsBold.ElectronicDevices.Monitor }
+            EAuthTokenPlatformType.k_EAuthTokenPlatformType_WebBrowser -> "Web Browser" to { SolarIconsBold.MapLocation.Global }
             EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp -> "Mobile App" to { SolarIconsBold.ElectronicDevices.Smartphone }
             else -> ("Unknown" to { Icons.Rounded.DeviceUnknown }).also { Log.d("Unknown", desc.toString()) }
         }) to "")
