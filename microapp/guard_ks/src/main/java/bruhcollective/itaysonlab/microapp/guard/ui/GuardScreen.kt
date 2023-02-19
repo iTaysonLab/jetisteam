@@ -49,6 +49,7 @@ import bruhcollective.itaysonlab.microapp.guard.ui.variants.pages.GuardCodeAndCo
 import bruhcollective.itaysonlab.microapp.guard.ui.variants.pages.GuardSessionsPage
 import bruhcollective.itaysonlab.microapp.guard.utils.ConfirmationDetailResult
 import bruhcollective.itaysonlab.microapp.guard.utils.ConfirmedNewSession
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -79,10 +80,10 @@ internal fun GuardScreen(
             val pagerState = rememberPagerState()
 
             val codeState =
-                state.instance.code.collectAsStateWithLifecycle(initialValue = CodeModel.DefaultInstance)
+                state.instance.code.collectAsStateWithLifecycle(initialValue = CodeModel.DefaultInstance, context = Dispatchers.IO)
 
             val awaitingSession =
-                viewModel.awaitingSessionPoll.collectAsStateWithLifecycle(initialValue = null)
+                viewModel.awaitingSessionPoll.collectAsStateWithLifecycle(initialValue = null, context = Dispatchers.IO)
 
             InstallResultHandler(backStack) { sessionEvent ->
                 if (sessionEvent is ConfirmedNewSession) {
