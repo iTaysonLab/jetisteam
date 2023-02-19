@@ -66,6 +66,13 @@ internal class GuardViewModel @Inject constructor(
         }
     }
 
+    suspend fun reloadConfirmations() {
+        (state as? GuardState.Available)?.let {
+            confirmations = ConfirmationListState.Loading
+            confirmations = hostSteamClient.client.guardConfirmation.getConfirmations(it.instance)
+        }
+    }
+
     sealed class GuardState {
         class Available(val instance: GuardInstance): GuardState()
         object Setup: GuardState()

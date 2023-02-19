@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Badge
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,13 +32,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.ksteam.handlers.library
-import bruhcollective.itaysonlab.ksteam.models.library.LibraryShelf
+import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
+import bruhcollective.itaysonlab.microapp.library.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -48,8 +51,56 @@ internal fun Homescreen(
     val shelves = viewModel.homeScreenShelves.collectAsStateWithLifecycle()
 
     LazyColumn(Modifier.fillMaxSize()) {
-        items(shelves.value) { shelf ->
-            Shelf(shelf, viewModel)
+        items(shelves.value, key = { it.id }) { shelf ->
+            when (shelf.linkedCollection) {
+                "all-collections" -> {
+                    ExampleCollectionsShelf()
+                }
+
+                "favorite" -> {
+                    Card(Modifier.fillMaxWidth()) {
+                        Text(text = "Favorite", Modifier.padding(16.dp))
+                    }
+                }
+
+                "recent-games" -> {
+                    Card(Modifier.fillMaxWidth()) {
+                        Text(text = "Recent Games", Modifier.padding(16.dp))
+                    }
+                }
+
+                "play-next" -> {
+                    ExamplePlayNextShelf()
+                }
+
+                "type-games" -> {
+                    Card(Modifier.fillMaxWidth()) {
+                        Text(text = "All Games", Modifier.padding(16.dp))
+                    }
+                }
+
+                else -> {
+                    val collection =
+                        viewModel.getCollection(shelf.linkedCollection).collectAsStateWithLifecycle(
+                            initialValue = LibraryCollection(
+                                "",
+                                "",
+                                emptyList(),
+                                emptyList(),
+                                null,
+                                0,
+                                0L
+                            )
+                        )
+
+                    val collectionValue = collection.value
+
+                    SimpleShelf(
+                        linkedCollection = shelf.linkedCollection,
+                        collectionName = collectionValue.name
+                    )
+                }
+            }
         }
     }
 }
@@ -57,26 +108,25 @@ internal fun Homescreen(
 @HiltViewModel
 internal class HomescreenViewModel @Inject constructor(
     private val steamClient: HostSteamClient
-): ViewModel() {
+) : ViewModel() {
+    fun getCollection(id: String) = steamClient.client.library.getCollection(id)
     val homeScreenShelves get() = steamClient.client.library.shelves
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun Shelf(
-    shelf: LibraryShelf,
-    viewModel: HomescreenViewModel
+internal fun SimpleShelf(
+    linkedCollection: String,
+    collectionName: String
 ) {
     Column(Modifier.fillMaxWidth()) {
-        Text(text = shelf.toString())
-
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(text = shelf.id, style = MaterialTheme.typography.headlineSmall)
+            Text(text = collectionName, style = MaterialTheme.typography.headlineSmall)
 
             Spacer(modifier = Modifier.width(8.dp))
 
             Badge {
-                Text(text = shelf.linkedCollection)
+                Text(text = linkedCollection)
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -108,16 +158,19 @@ internal fun Shelf(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ExamplePlayNextShelf() {
     Column(Modifier.fillMaxWidth()) {
 
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Column {
-                Text(text = "Play Next", style = MaterialTheme.typography.headlineSmall)
                 Text(
-                    text = "Players like you love these unplayed games in your library",
+                    text = stringResource(id = R.string.library_shelf_play_next),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+
+                Text(
+                    text = stringResource(id = R.string.library_shelf_play_next_summary),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -137,10 +190,7 @@ internal fun ExamplePlayNextShelf() {
             items(6) {
                 LibraryItem(
                     "",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp)
-                        .width(240.dp),
+                    modifier = Modifier.width(276.dp).height(129.dp),
                     placeholderColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
                 )
             }
@@ -158,7 +208,7 @@ internal fun ExampleCollectionsShelf() {
     Column(Modifier.fillMaxWidth()) {
 
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Collections View", style = MaterialTheme.typography.headlineSmall)
+            Text(text = stringResource(id = R.string.library_shelf_all_collections), style = MaterialTheme.typography.headlineSmall)
 
             Spacer(modifier = Modifier.width(8.dp))
 

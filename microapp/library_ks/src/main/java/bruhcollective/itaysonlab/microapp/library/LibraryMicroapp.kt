@@ -1,7 +1,5 @@
 package bruhcollective.itaysonlab.microapp.library
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.GridView
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import bruhcollective.itaysonlab.microapp.core.BottomNavigationCapable
@@ -9,6 +7,12 @@ import bruhcollective.itaysonlab.microapp.core.DestNode
 import bruhcollective.itaysonlab.microapp.core.NavigationEntry
 import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
+import solaricons.bold.SolarIconsBold
+import solaricons.bold.solariconsbold.VideoAudioSound
+import solaricons.bold.solariconsbold.videoaudiosound.Library
+import solaricons.bold_duotone.SolarIconsBoldDuotone
+import solaricons.bold_duotone.solariconsboldduotone.VideoAudioSound
+import solaricons.bold_duotone.solariconsboldduotone.videoaudiosound.Library
 
 abstract class LibraryMicroapp: NestedMicroappEntry, BottomNavigationCapable {
     override val graphRoute = Routes.NavGraph
@@ -17,7 +21,8 @@ abstract class LibraryMicroapp: NestedMicroappEntry, BottomNavigationCapable {
     override val bottomNavigationEntry = NavigationEntry(
         route = Routes.NavGraph,
         name = R.string.library,
-        icon = { Icons.Rounded.GridView }
+        icon = { SolarIconsBoldDuotone.VideoAudioSound.Library },
+        iconSelected = { SolarIconsBold.VideoAudioSound.Library },
     )
 
     /*fun libraryOf(steamId: Long) = Routes.Library.mapArgs(mapOf(

@@ -2,6 +2,15 @@
 <resources>
     <string name="library">Library</string>
 
+    <string name="library_shelf_all_collections">All Collections</string>
+    <string name="library_shelf_favorite">Favorite</string>
+    <string name="library_shelf_play_next">Play Next</string>
+    <string name="library_shelf_play_next_summary">Players like you love these unplayed games in your library</string>
+    <string name="library_shelf_all_games">All Games</string>
+    <string name="library_shelf_recent">Recent Games</string>
+    <string name="library_shelf_add">Add Shelf</string>
+    <string name="library_shelf_edit">Edit Shelf</string>
+
     <string name="library_sheet_achv">Achievements</string>
     <string name="library_sheet_achv_none">Not available</string>
     <string name="library_sheet_store">Open Store Page</string>

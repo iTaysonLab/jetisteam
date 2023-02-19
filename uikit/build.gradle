@@ -41,6 +41,9 @@ android {
 }
 
 dependencies {
+    // We need to expose these icons to every uikit consumer
+    api files("libs/icons-solar-bold-release.aar", "libs/icons-solar-bold-duotone-release.aar")
+
     implementation libs.coilCompose
 
     implementation libs.bundles.compose

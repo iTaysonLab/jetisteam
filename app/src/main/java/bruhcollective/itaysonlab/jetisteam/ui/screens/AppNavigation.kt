@@ -82,7 +82,8 @@ fun AppNavigation(
     val connectionState = viewModel.connectingState.collectAsStateWithLifecycle()
 
     var connectionRowVisible by remember { mutableStateOf(true) }
-    val connectionRowPadding by animateDpAsState(targetValue = if (connectionRowVisible) 56.dp else 0.dp, animationSpec = spring(
+
+    val connectionRowPaddingCompensation by animateDpAsState(targetValue = if (connectionRowVisible) WindowInsets.statusBars.asPaddingValues().calculateTopPadding() else 0.dp, animationSpec = spring(
         stiffness = Spring.StiffnessMediumLow,
         visibilityThreshold = Dp.VisibilityThreshold
     ))
@@ -136,7 +137,11 @@ fun AppNavigation(
                         NavigationBarItem(
                             icon = {
                                 Icon(
-                                    dest.icon(),
+                                    if (selected) {
+                                        dest.iconSelected()
+                                    } else {
+                                        dest.icon()
+                                    },
                                     contentDescription = stringResource(dest.name)
                                 )
                             },
@@ -154,7 +159,13 @@ fun AppNavigation(
                 startDestination = "coreLoading",
                 route = ROOT_NAV_GRAPH_ID,
                 modifier = Modifier
-                    .padding(top = connectionRowPadding, bottom = navOffsetReverse),
+                    .padding(top = (padding.calculateTopPadding() - connectionRowPaddingCompensation).let {
+                        if (it.value < 0f) {
+                            0.dp
+                        } else {
+                            it
+                        }
+                    }, bottom = navOffsetReverse),
                 enterTransition = {
                     if (initialState.destination.route == "coreLoading") {
                         EnterTransition.None

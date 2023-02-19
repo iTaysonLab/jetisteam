@@ -4,21 +4,23 @@ import android.content.Context
 import android.text.format.DateUtils
 import android.util.Log
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Computer
 import androidx.compose.material.icons.rounded.DeviceUnknown
-import androidx.compose.material.icons.rounded.Language
-import androidx.compose.material.icons.rounded.Smartphone
 import androidx.compose.ui.graphics.vector.ImageVector
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.AwaitingSession
+import solaricons.bold.SolarIconsBold
+import solaricons.bold.solariconsbold.ElectronicDevices
+import solaricons.bold.solariconsbold.electronicdevices.Laptop
+import solaricons.bold.solariconsbold.electronicdevices.Monitor
+import solaricons.bold.solariconsbold.electronicdevices.Smartphone
 import steam.webui.authentication.EAuthTokenPlatformType
 
 object SessionFormatter {
     fun formatSessionDescByTime(ctx: Context, desc: ActiveSession): SessionVisuals {
         return SessionVisuals((when (desc.platformType) {
-            EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient -> "Steam Client" to { Icons.Rounded.Computer }
-            EAuthTokenPlatformType.k_EAuthTokenPlatformType_WebBrowser -> "Web Browser" to { Icons.Rounded.Language }
-            EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp -> "Mobile App" to { Icons.Rounded.Smartphone }
+            EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient -> "Steam Client" to { SolarIconsBold.ElectronicDevices.Laptop }
+            EAuthTokenPlatformType.k_EAuthTokenPlatformType_WebBrowser -> "Web Browser" to { SolarIconsBold.ElectronicDevices.Monitor }
+            EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp -> "Mobile App" to { SolarIconsBold.ElectronicDevices.Smartphone }
             else -> ("Unknown" to { Icons.Rounded.DeviceUnknown }).also { Log.d("Unknown", desc.toString()) }
         }) to DateUtils.getRelativeTimeSpanString(ctx,
             (desc.lastSeen?.time ?: desc.timeUpdated).toLong().times(1000L)
@@ -27,9 +29,9 @@ object SessionFormatter {
 
     fun formatAuthSession(desc: AwaitingSession): SessionVisuals {
         return SessionVisuals((when (desc.platformType) {
-            EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient -> "Steam Client" to { Icons.Rounded.Computer }
-            EAuthTokenPlatformType.k_EAuthTokenPlatformType_WebBrowser -> "Web Browser" to { Icons.Rounded.Language }
-            EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp -> "Mobile App" to { Icons.Rounded.Smartphone }
+            EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient -> "Steam Client" to { SolarIconsBold.ElectronicDevices.Laptop }
+            EAuthTokenPlatformType.k_EAuthTokenPlatformType_WebBrowser -> "Web Browser" to { SolarIconsBold.ElectronicDevices.Monitor }
+            EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp -> "Mobile App" to { SolarIconsBold.ElectronicDevices.Smartphone }
             else -> ("Unknown" to { Icons.Rounded.DeviceUnknown }).also { Log.d("Unknown", desc.toString()) }
         }) to "")
     }

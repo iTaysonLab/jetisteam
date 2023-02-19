@@ -42,11 +42,12 @@ import bruhcollective.itaysonlab.jetisteam.uikit.components.tabIndicatorOffset
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.CodeModel
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
-import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.InstallTypedResultHandler
+import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.InstallResultHandler
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.ui.variants.NoGuardScreen
 import bruhcollective.itaysonlab.microapp.guard.ui.variants.pages.GuardCodeAndConfirmationsPage
 import bruhcollective.itaysonlab.microapp.guard.ui.variants.pages.GuardSessionsPage
+import bruhcollective.itaysonlab.microapp.guard.utils.ConfirmationDetailResult
 import bruhcollective.itaysonlab.microapp.guard.utils.ConfirmedNewSession
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -82,10 +83,15 @@ internal fun GuardScreen(
 
             val awaitingSession =
                 viewModel.awaitingSessionPoll.collectAsStateWithLifecycle(initialValue = null)
-            
-            InstallTypedResultHandler<ConfirmedNewSession>(backStack) { sessionEvent ->
-                delay(1000L)
-                viewModel.reloadSessions()
+
+            InstallResultHandler(backStack) { sessionEvent ->
+                if (sessionEvent is ConfirmedNewSession) {
+                    delay(1000L)
+                    viewModel.reloadSessions()
+                } else if (sessionEvent is ConfirmationDetailResult) {
+                    delay(1000L)
+                    viewModel.reloadConfirmations()
+                }
             }
 
             LaunchedEffect(awaitingSession.value) {

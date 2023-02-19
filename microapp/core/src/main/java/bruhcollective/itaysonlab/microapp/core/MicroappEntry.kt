@@ -74,5 +74,6 @@ inline fun <reified T : MicroappEntry> Destinations.findOrNull(): T? = this[T::c
 class NavigationEntry(
     val route: String,
     @StringRes val name: Int,
-    val icon: () -> ImageVector
+    val icon: () -> ImageVector,
+    val iconSelected: () -> ImageVector = icon,
 )

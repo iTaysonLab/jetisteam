@@ -2,6 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="11">
+      <module name="Jetisteam.icons.solar-icons-bold" target="17" />
+      <module name="Jetisteam.icons.solar-icons-bold-duotone" target="17" />
       <module name="Jetisteam.microapp.guard" target="17" />
     </bytecodeTargetLevel>
   </component>

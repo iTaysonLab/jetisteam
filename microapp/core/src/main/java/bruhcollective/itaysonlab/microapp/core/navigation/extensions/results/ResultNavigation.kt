@@ -34,8 +34,6 @@ fun InstallResultHandler(backStack: NavBackStackEntry, block: suspend CoroutineS
 @Composable
 inline fun <reified T: NavigationResult> InstallTypedResultHandler(backStack: NavBackStackEntry, crossinline block: suspend CoroutineScope.(T) -> Unit) {
     InstallResultHandler(backStack) { result ->
-        block(
-            (result as? T) ?: error("Expected ${T::class.java.simpleName}, got ${result.javaClass.simpleName}")
-        )
+        block((result as? T) ?: return@InstallResultHandler)
     }
 }
