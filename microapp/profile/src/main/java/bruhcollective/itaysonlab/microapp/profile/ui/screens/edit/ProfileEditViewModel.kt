@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.microapp.profile.ui.screens.edit
 
-import androidx.annotation.StringRes
+/*import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.getValue
@@ -96,4 +96,4 @@ internal class ProfileEditViewModel @Inject constructor(
         val icon: () -> ImageVector,
         val type: SectionType
     )
-}
+}*/

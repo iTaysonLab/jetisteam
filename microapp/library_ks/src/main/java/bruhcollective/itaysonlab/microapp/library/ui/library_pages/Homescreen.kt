@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.microapp.library.ui.library_pages
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,6 +61,7 @@ import javax.inject.Inject
 
 @Composable
 internal fun Homescreen(
+    onClick: (Int) -> Unit,
     viewModel: HomescreenViewModel = hiltViewModel()
 ) {
     val shelves = viewModel.homeScreenShelves.collectAsStateWithLifecycle(context = Dispatchers.IO)
@@ -77,7 +79,8 @@ internal fun Homescreen(
 
                     SimpleShelf(
                         collectionName = stringResource(id = R.string.library_shelf_favorite),
-                        collectionGames = collectionGames.value
+                        collectionGames = collectionGames.value,
+                        onClick = onClick
                     )
                 }
 
@@ -87,12 +90,13 @@ internal fun Homescreen(
 
                     SimpleShelf(
                         collectionName = stringResource(id = R.string.library_shelf_recent),
-                        collectionGames = collectionGames.value
+                        collectionGames = collectionGames.value,
+                        onClick = onClick
                     )
                 }
 
                 "play-next" -> {
-                    PlayNextShelf(viewModel.nextPlayGames)
+                    PlayNextShelf(viewModel.nextPlayGames, onClick = onClick)
                 }
 
                 "type-games" -> {
@@ -120,7 +124,8 @@ internal fun Homescreen(
 
                     SimpleShelf(
                         collectionName = collection.value.name,
-                        collectionGames = collectionGames.value
+                        collectionGames = collectionGames.value,
+                        onClick = onClick
                     )
                 }
             }
@@ -153,7 +158,8 @@ internal class HomescreenViewModel @Inject constructor(
 @Composable
 internal fun SimpleShelf(
     collectionName: String,
-    collectionGames: List<AppInfo>
+    collectionGames: List<AppInfo>,
+    onClick: (Int) -> Unit
 ) {
     Column(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -183,7 +189,9 @@ internal fun SimpleShelf(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(225.dp)
-                            .width(150.dp),
+                            .width(150.dp).clickable {
+                                onClick(app.appId)
+                            },
                         placeholderColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
                     )
                 }
@@ -210,7 +218,8 @@ internal fun SimpleShelf(
 
 @Composable
 internal fun PlayNextShelf(
-    games: List<AppInfo>
+    games: List<AppInfo>,
+    onClick: (Int) -> Unit
 ) {
     Column(Modifier.fillMaxWidth()) {
 
@@ -233,12 +242,14 @@ internal fun PlayNextShelf(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(games) { game ->
+            items(games) { app ->
                 LibraryItem(
-                    game.header.url,
+                    app.header.url,
                     modifier = Modifier
                         .width(276.dp)
-                        .height(129.dp),
+                        .height(129.dp).clickable {
+                            onClick(app.appId)
+                        },
                     placeholderColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
                 )
             }

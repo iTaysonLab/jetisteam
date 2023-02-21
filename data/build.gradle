@@ -65,8 +65,6 @@ dependencies {
     implementation libs.okhttp
     implementation libs.bundles.ksteam
 
-    implementation("app.cash.sqldelight:android-driver:2.0.0-SNAPSHOT")
-
     implementation libs.bundles.retrofit
 
     implementation libs.hiltAndroid

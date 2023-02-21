@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.microapp.profile.ui.screens.friends
 
-import androidx.compose.foundation.border
+/*import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CardDefaults
@@ -78,4 +78,4 @@ internal fun FriendListItem(
             }
         }
     }
-}
+}*/

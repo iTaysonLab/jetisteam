@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.microapp.profile.ui.screens.friends
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+/*import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -103,4 +103,4 @@ internal fun FriendsScreen(
             }
         }
     }
-}
+}*/

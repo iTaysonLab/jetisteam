@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.microapp.profile.ui.screens.friends
 
-import androidx.lifecycle.viewModelScope
+/*import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.mappers.FriendProfile
 import bruhcollective.itaysonlab.jetisteam.mappers.FriendStatus
 import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
@@ -46,4 +46,4 @@ internal class FriendsScreenViewModel @Inject constructor(
             _swipeRefreshLoading.value = false
         }
     }
-}
+}*/

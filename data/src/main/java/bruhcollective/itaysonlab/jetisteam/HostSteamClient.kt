@@ -42,6 +42,8 @@ class HostSteamClient @Inject constructor(
         state == CMClientState.Connected
     }
 
+    val currentSteamId get() = client.currentSessionSteamId
+
     init {
         launch {
             client.start()

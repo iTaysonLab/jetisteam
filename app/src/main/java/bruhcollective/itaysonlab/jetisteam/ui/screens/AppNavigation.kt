@@ -39,6 +39,7 @@ import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
+import bruhcollective.itaysonlab.microapp.profile.ProfileMicroapp
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -233,7 +234,7 @@ class AppNavigationViewModel @Inject constructor(
         destinations.find<NotificationsMicroapp>(),
         destinations.find<GuardMicroapp>(),
         destinations.find<LibraryMicroapp>(),
-        //destinations.find<ProfileMicroapp>(),
+        destinations.find<ProfileMicroapp>(),
     ).map(BottomNavigationCapable::bottomNavigationEntry)
 
     val connectingState = hostSteamClient.client.connectionStatus

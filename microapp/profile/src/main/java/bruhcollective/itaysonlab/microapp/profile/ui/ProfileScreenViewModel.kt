@@ -1,69 +1,66 @@
 package bruhcollective.itaysonlab.microapp.profile.ui
 
 import androidx.lifecycle.SavedStateHandle
-import bruhcollective.itaysonlab.jetisteam.controllers.JsLegacyController
+import androidx.lifecycle.viewModelScope
+import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
-import bruhcollective.itaysonlab.jetisteam.usecases.profile.GetProfileData
+import bruhcollective.itaysonlab.ksteam.handlers.persona
+import bruhcollective.itaysonlab.ksteam.handlers.profile
+import bruhcollective.itaysonlab.ksteam.handlers.store
+import bruhcollective.itaysonlab.ksteam.models.AppId
+import bruhcollective.itaysonlab.ksteam.models.library.OwnedGame
+import bruhcollective.itaysonlab.ksteam.models.persona.Persona
+import bruhcollective.itaysonlab.ksteam.models.persona.ProfileCustomization
+import bruhcollective.itaysonlab.ksteam.models.persona.ProfileEquipment
+import bruhcollective.itaysonlab.ksteam.models.persona.SummaryPersona
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
-import bruhcollective.itaysonlab.microapp.profile.core.ProfileEditEvent
-import bruhcollective.itaysonlab.microapp.profile.core.enrichWithEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import steam.player.CPlayer_GetAchievementsProgress_Response_AchievementProgress
-import steam.player.CPlayer_GetOwnedGames_Response_Game
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.withContext
+import steam.webui.player.CPlayer_GetAchievementsProgress_Response_AchievementProgress
 import javax.inject.Inject
 
 @HiltViewModel
 internal class ProfileScreenViewModel @Inject constructor(
-    private val getProfileData: GetProfileData,
+    private val steamClient: HostSteamClient,
     savedState: SavedStateHandle,
-    jsLegacyController: JsLegacyController
-): PageViewModel<GetProfileData.ProfileData>() {
+): PageViewModel<ProfileScreenViewModel.ReadyState>() {
     val savedStateId = savedState.get<Long>(CommonArguments.SteamId.name)
     val isRootScreen = savedStateId == 0L
 
     val steamId = if (isRootScreen) {
-        jsLegacyController.steamId()
+        steamClient.currentSteamId
     } else {
         savedState.getSteamId()
     }
 
-    init { reload() }
-
-    override suspend fun load() = getProfileData(steamId)
-
-    fun gameToAchievements(id: Int) = data!!.let { data ->
-        val unknownApp = data.otherAppsInfo[id]
-
-        data.ownedGames.getOrElse(id) {
-            CPlayer_GetOwnedGames_Response_Game(
-                name = unknownApp?.second.orEmpty()
-            )
-        } to data.achievementsProgress.getOrElse(id) {
-            CPlayer_GetAchievementsProgress_Response_AchievementProgress(
-                total = 0,
-                unlocked = 0,
-                percentage = 0f
-            )
-        }
+    init {
+        reload()
     }
 
-    fun game(id: Int) = data!!.ownedGames[id]
-
-    fun gameSize() = data?.ownedGames?.size ?: 0
-
-    fun consumeEvent(event: ProfileEditEvent) {
-        when (event) {
-            is ProfileEditEvent.ProfileItemChanged -> {
-                setState(
-                    data!!.copy(
-                        equipment = data?.equipment?.enrichWithEvent(event)!!
-                    )
-                )
-            }
-        }
+    override suspend fun load(): ReadyState = withContext(Dispatchers.IO) {
+        ReadyState(
+            personaSummaryState = steamClient.client.profile.getProfile(steamId).stateIn(viewModelScope),
+            personaState = steamClient.client.persona.persona(steamId).stateIn(viewModelScope),
+            customization = steamClient.client.profile.getCustomization(steamId),
+            equipment = steamClient.client.profile.getEquipment(steamId)
+        )
     }
+
+    suspend fun getAppSummary(appId: AppId) = steamClient.client.store.getAppSummaries(listOf(appId))[appId]
+    suspend fun getLocalizationForRichPresence(appId: AppId) = steamClient.client.store.getRichPresenceLocalization(appId)
+
+    data class ReadyState(
+        val personaSummaryState: StateFlow<SummaryPersona>,
+        // We use this to provide the most accurate data for friends,
+        val personaState: StateFlow<Persona>,
+        val customization: ProfileCustomization,
+        val equipment: ProfileEquipment
+    )
 }
 
-typealias Game = CPlayer_GetOwnedGames_Response_Game
-typealias GameToAchievements = Pair<CPlayer_GetOwnedGames_Response_Game, CPlayer_GetAchievementsProgress_Response_AchievementProgress>
+typealias Game = OwnedGame
+typealias GameToAchievements = Pair<OwnedGame, CPlayer_GetAchievementsProgress_Response_AchievementProgress>

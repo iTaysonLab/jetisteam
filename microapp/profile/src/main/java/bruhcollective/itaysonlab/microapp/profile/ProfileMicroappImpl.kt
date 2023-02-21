@@ -4,24 +4,11 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import bruhcollective.itaysonlab.microapp.core.Destinations
-import bruhcollective.itaysonlab.microapp.core.find
 import bruhcollective.itaysonlab.microapp.core.mapArgs
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
-import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.setResultToPreviousEntry
-import bruhcollective.itaysonlab.microapp.gamepage.GamePageMicroapp
-import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
-import bruhcollective.itaysonlab.microapp.profile.core.ProfileEditEvent
-import bruhcollective.itaysonlab.microapp.profile.core.SectionType
 import bruhcollective.itaysonlab.microapp.profile.ui.ProfileScreen
-import bruhcollective.itaysonlab.microapp.profile.ui.bottomsheet.GlobalAppBottomSheet
-import bruhcollective.itaysonlab.microapp.profile.ui.screens.edit.ProfileEditScreen
-import bruhcollective.itaysonlab.microapp.profile.ui.screens.editsections.ProfileEditSectionScreen
-import bruhcollective.itaysonlab.microapp.profile.ui.screens.editsections.ProfileEditThemeScreen
-import bruhcollective.itaysonlab.microapp.profile.ui.screens.friends.FriendsScreen
-import bruhcollective.itaysonlab.microapp.steam_wrapped.SteamWrappedMicroapp
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
-import com.google.accompanist.navigation.material.bottomSheet
 import javax.inject.Inject
 
 class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
@@ -33,9 +20,9 @@ class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
         composable(Routes.Profile.url, arguments = listOf(CommonArguments.SteamIdWithDefault)) {
             ProfileScreen(
                 onGameClick = { appId ->
-                    navController.navigate(destinations.find<GamePageMicroapp>().gameDestination(appId))
+                    // navController.navigate(destinations.find<GamePageMicroapp>().gameDestination(appId))
                 }, onLibraryClick = { steamId ->
-                    navController.navigate(destinations.find<LibraryMicroapp>().libraryOf(steamId))
+                    // navController.navigate(destinations.find<LibraryMicroapp>().libraryOf(steamId))
                 }, onFriendsClick = { steamId ->
                     navController.navigate(friendsDestination(steamId))
                 }, onNavigationClick = { isRoot, steamId ->
@@ -50,7 +37,7 @@ class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
             )
         }
 
-        composable(Routes.Friends.url, arguments = listOf(CommonArguments.SteamId)) {
+        /*composable(Routes.Friends.url, arguments = listOf(CommonArguments.SteamId)) {
             FriendsScreen(
                 onFriendClick = { steamId ->
                     navController.navigate(profileDestination(steamId))
@@ -78,14 +65,14 @@ class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
             }
         }
 
-        bottomSheet(Routes.AppBottomSheet.url, arguments = listOf(CommonArguments.SteamId)) {
+        bottomSheet(Routes.AppBottomSheet.url) {
             GlobalAppBottomSheet(onBackClicked = navController::popBackStack, onEditProfileClicked = { steamId ->
                 navController.popBackStack()
                 navController.navigate(editDestination(steamId))
             }, onSteamWrappedClicked = { steamId ->
                 navController.popBackStack()
-                navController.navigate(destinations.find<SteamWrappedMicroapp>().entryDestination(steamId))
+                // navController.navigate(destinations.find<SteamWrappedMicroapp>().entryDestination(steamId))
             })
-        }
+        }*/
     }
 }

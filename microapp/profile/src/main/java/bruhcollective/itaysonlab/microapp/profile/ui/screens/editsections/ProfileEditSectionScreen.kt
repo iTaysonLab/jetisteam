@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.microapp.profile.ui.screens.editsections
 
-import androidx.compose.animation.AnimatedContent
+/*import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.animateDpAsState
@@ -172,4 +172,4 @@ internal fun ProfileEditSectionScreen(
             }
         }
     }
-}
+}*/

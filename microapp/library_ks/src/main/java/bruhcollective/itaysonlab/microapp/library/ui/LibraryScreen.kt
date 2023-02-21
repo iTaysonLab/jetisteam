@@ -47,8 +47,7 @@ import java.util.Locale
 )
 @Composable
 internal fun LibraryScreen(
-    onGameClick: (Long, String) -> Unit,
-    onBackClick: () -> Unit,
+    onGameClick: (Int) -> Unit,
     // onRemoteClick: (Long, List<CClientComm_GetAllClientLogonInfo_Response_Session>) -> Unit,
     viewModel: LibraryScreenViewModel = hiltViewModel()
 ) {
@@ -124,9 +123,9 @@ internal fun LibraryScreen(
                 .padding(innerPadding), beyondBoundsPageCount = 1
         ) { page ->
             if (page == 0) {
-                Homescreen()
+                Homescreen(onClick = onGameClick)
             } else {
-                CollectionPage(collection = collections.value[page - 1])
+                CollectionPage(collection = collections.value[page - 1], onClick = onGameClick)
             }
         }
     }

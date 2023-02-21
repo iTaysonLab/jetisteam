@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.microapp.profile.core
 
-import bruhcollective.itaysonlab.jetisteam.mappers.ProfileEquipment
+/*import bruhcollective.itaysonlab.jetisteam.mappers.ProfileEquipment
 import bruhcollective.itaysonlab.jetisteam.mappers.ProfileItem
 import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.NavigationResult
 import kotlinx.parcelize.Parcelize
@@ -20,4 +20,4 @@ internal fun ProfileEquipment.enrichWithEvent(event: ProfileEditEvent.ProfileIte
         avatarFrame = if (event.type == SectionType.AvatarFrame) event.item else avatarFrame,
         animatedAvatar = if (event.type == SectionType.Avatar) event.item else animatedAvatar,
     )
-}
+}*/

@@ -25,10 +25,6 @@ abstract class LibraryMicroapp: NestedMicroappEntry, BottomNavigationCapable {
         iconSelected = { SolarIconsBold.VideoAudioSound.Library },
     )
 
-    /*fun libraryOf(steamId: Long) = Routes.Library.mapArgs(mapOf(
-        CommonArguments.SteamId to steamId
-    ))*/
-
     internal object Arguments {
         val MachineId = navArgument("machineId") {
             type = NavType.LongType
@@ -50,9 +46,9 @@ abstract class LibraryMicroapp: NestedMicroappEntry, BottomNavigationCapable {
     internal object Routes {
         const val NavGraph = "@library"
 
-        val MyLibrary = DestNode("library/me")
+        val MyLibrary = DestNode("library/")
+        val GameDetail = DestNode("library/games/{${Arguments.GameData.name}}")
 
-        val GameDetail = DestNode("library/{${CommonArguments.SteamId.name}}/games/{${Arguments.GameData.name}}")
         val RemoteMachineInfo = DestNode("library/{${CommonArguments.SteamId.name}}/machines/{${Arguments.MachineId.name}}")
         val PickRemoteMachine = DestNode("library/{${CommonArguments.SteamId.name}}/machines/list/{${Arguments.MachineList.name}}")
         val InstallGame = DestNode("library/{${CommonArguments.SteamId.name}}/games/{${Arguments.ApplicationId.name}}/install")

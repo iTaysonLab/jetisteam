@@ -44,7 +44,7 @@ fun GlobalAppBottomSheet(
                 }, headlineText = {
                     Text(text = stringResource(id = R.string.edit_title))
                 }, modifier = Modifier.clickable(onClick = {
-                    onEditProfileClicked(viewModel.steamId.steamId)
+                    onEditProfileClicked(viewModel.steamId.longId)
                 }), colors = ListItemDefaults.colors(
                     leadingIconColor = MaterialTheme.colorScheme.primary,
                     containerColor = Color.Transparent,
@@ -59,7 +59,7 @@ fun GlobalAppBottomSheet(
                 }, headlineText = {
                     Text(text = "Steam Replay")
                 }, modifier = Modifier.clickable(onClick = {
-                    onSteamWrappedClicked(viewModel.steamId.steamId)
+                    onSteamWrappedClicked(viewModel.steamId.longId)
                 }), colors = ListItemDefaults.colors(
                     leadingIconColor = MaterialTheme.colorScheme.primary,
                     containerColor = Color.Transparent,

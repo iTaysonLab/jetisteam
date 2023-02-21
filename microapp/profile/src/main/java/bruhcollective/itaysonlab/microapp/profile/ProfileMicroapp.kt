@@ -1,12 +1,17 @@
 package bruhcollective.itaysonlab.microapp.profile
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Person
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
-import bruhcollective.itaysonlab.microapp.core.*
+import bruhcollective.itaysonlab.microapp.core.BottomNavigationCapable
+import bruhcollective.itaysonlab.microapp.core.DestNode
+import bruhcollective.itaysonlab.microapp.core.NavigationEntry
+import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
+import bruhcollective.itaysonlab.microapp.core.mapArgs
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
-import bruhcollective.itaysonlab.microapp.profile.core.SectionType
+import solaricons.bold.SolarIconsBold
+import solaricons.bold.solariconsbold.Users
+import solaricons.bold.solariconsbold.users.User
+import solaricons.bold_duotone.SolarIconsBoldDuotone
+import solaricons.bold_duotone.solariconsboldduotone.Users
+import solaricons.bold_duotone.solariconsboldduotone.users.User
 
 abstract class ProfileMicroapp: NestedMicroappEntry, BottomNavigationCapable {
     override val graphRoute = Routes.NavGraph
@@ -15,7 +20,8 @@ abstract class ProfileMicroapp: NestedMicroappEntry, BottomNavigationCapable {
     override val bottomNavigationEntry = NavigationEntry(
         route = Routes.NavGraph,
         name = R.string.profile,
-        icon = { Icons.Rounded.Person }
+        icon = { SolarIconsBoldDuotone.Users.User },
+        iconSelected = { SolarIconsBold.Users.User },
     )
 
     fun myProfileDestination() = profileDestination(0L)
@@ -30,7 +36,7 @@ abstract class ProfileMicroapp: NestedMicroappEntry, BottomNavigationCapable {
             CommonArguments.SteamId to steamId
         ))
 
-    internal fun editDestination(steamId: Long) =
+    /*internal fun editDestination(steamId: Long) =
         Routes.Edit.mapArgs(mapOf(
             CommonArguments.SteamId to steamId
         ))
@@ -45,7 +51,7 @@ abstract class ProfileMicroapp: NestedMicroappEntry, BottomNavigationCapable {
         val SectionType = navArgument("sectionType") {
             type = NavType.EnumType<SectionType>(SectionType::class.java)
         }
-    }
+    }*/
 
     object Routes {
         const val NavGraph = "@profile"
@@ -54,8 +60,8 @@ abstract class ProfileMicroapp: NestedMicroappEntry, BottomNavigationCapable {
         val Friends = DestNode("profile/{${CommonArguments.SteamId.name}}/friends")
 
         val Edit = DestNode("profile/{${CommonArguments.SteamId.name}}/edit")
-        val EditSection = DestNode("profile/{${CommonArguments.SteamId.name}}/edit/{${Arguments.SectionType.name}}")
+        // val EditSection = DestNode("profile/{${CommonArguments.SteamId.name}}/edit/{${Arguments.SectionType.name}}")
 
-        val AppBottomSheet = DestNode("config/profileSheet/{${CommonArguments.SteamId.name}}")
+        val AppBottomSheet = DestNode("config/profileSheet/")
     }
 }

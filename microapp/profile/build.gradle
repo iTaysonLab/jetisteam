@@ -3,7 +3,6 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
-    id 'kotlin-parcelize'
 }
 
 android {
@@ -25,21 +24,21 @@ android {
         }
     }
 
+    buildFeatures {
+        compose true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = '11'
-    }
-
-    buildFeatures {
-        compose true
-    }
-
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.2'
+    }
+
+    kotlinOptions {
+        jvmTarget = '11'
     }
 }
 
@@ -47,20 +46,25 @@ kapt {
     correctErrorTypes = true
 }
 
+kotlin {
+    jvmToolchain(11)
+}
+
 dependencies {
-    implementation project(":microapp:core")
-    implementation project(":microapp:gamepage")
-    implementation project(":microapp:library")
+    implementation project(':microapp:core')
+    // implementation project(':microapp:gamepage')
 
-    implementation project(":domain")
-    implementation project(":data")
-    implementation project(":uikit")
+    implementation project(':data')
+    implementation project(':domain')
+    implementation project(':uikit')
 
+    implementation libs.bundles.ksteam
     implementation libs.bundles.compose
     implementation libs.bundles.accompanist
     debugImplementation libs.bundles.composeDebug
 
     implementation libs.coilCompose
+    implementation libs.kotlinDatetime
 
     implementation libs.hiltAndroid
     implementation libs.hiltNavigation

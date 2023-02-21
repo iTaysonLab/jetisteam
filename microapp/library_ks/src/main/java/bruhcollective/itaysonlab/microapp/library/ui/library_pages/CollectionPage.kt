@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.microapp.library.ui.library_pages
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
@@ -32,6 +33,7 @@ import javax.inject.Inject
 
 @Composable
 internal fun CollectionPage(
+    onClick: (Int) -> Unit,
     collection: LibraryCollection,
     viewModel: CollectionPageViewModel = hiltViewModel()
 ) {
@@ -70,7 +72,7 @@ internal fun CollectionPage(
 
                             else -> it
                         }
-                    })
+                    }.clickable { onClick(game.appId) })
             }
         }
     }

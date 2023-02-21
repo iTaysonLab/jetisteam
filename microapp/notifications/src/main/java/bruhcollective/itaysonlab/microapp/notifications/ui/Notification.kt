@@ -2,10 +2,26 @@ package bruhcollective.itaysonlab.microapp.notifications.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.rounded.Article
+import androidx.compose.material.icons.rounded.CardGiftcard
+import androidx.compose.material.icons.rounded.Checklist
+import androidx.compose.material.icons.rounded.Inventory
+import androidx.compose.material.icons.rounded.Notifications
+import androidx.compose.material.icons.rounded.PersonAdd
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -201,7 +217,7 @@ private fun WishlistSaleNotification(
         title = if (notification.isMultipleItemsOnSale) {
             stringResource(id = R.string.notifications_type_wishlist_multiple_title)
         } else {
-            notification.app?.name.orEmpty()
+            notification.appSummary?.name.orEmpty()
         },
         description = if (notification.isMultipleItemsOnSale) {
             stringResource(id = R.string.notifications_type_wishlist_multiple_desc)

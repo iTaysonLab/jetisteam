@@ -4,7 +4,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import bruhcollective.itaysonlab.microapp.core.Destinations
-import bruhcollective.itaysonlab.microapp.core.mapArgs
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 import bruhcollective.itaysonlab.microapp.library.ui.LibraryScreen
 import com.google.accompanist.navigation.animation.composable
@@ -19,12 +18,12 @@ class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
         destinations: Destinations
     ) {
         composable(Routes.MyLibrary.url, arguments = listOf(CommonArguments.SteamIdWithDefault)) {
-            LibraryScreen(onGameClick = { steamId, gameInfo ->
-                navController.navigate(Routes.GameDetail.mapArgs(mapOf(
+            LibraryScreen(onGameClick = { gameId ->
+                /*navController.navigate(Routes.GameDetail.mapArgs(mapOf(
                     CommonArguments.SteamId to steamId,
                     Arguments.GameData to gameInfo
-                )))
-            }, onBackClick = navController::popBackStack, /*onRemoteClick = { steamId, sessions ->
+                )))*/
+            }, /*onRemoteClick = { steamId, sessions ->
                 if (sessions.size > 1) {
                     navController.navigate(Routes.PickRemoteMachine.mapArgs(mapOf(
                         CommonArguments.SteamId to steamId,

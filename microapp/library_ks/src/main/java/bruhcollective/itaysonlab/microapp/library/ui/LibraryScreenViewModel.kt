@@ -10,6 +10,8 @@ import javax.inject.Inject
 internal class LibraryScreenViewModel @Inject constructor(
     private val steamClient: HostSteamClient
 ) : ViewModel() {
+    val steamId = steamClient.client.currentSessionSteamId
+
     val allCollections get() = steamClient.client.library.userCollections
     fun collectionFlow(forId: String) = steamClient.client.library.getAppsInCollection(forId)
 }

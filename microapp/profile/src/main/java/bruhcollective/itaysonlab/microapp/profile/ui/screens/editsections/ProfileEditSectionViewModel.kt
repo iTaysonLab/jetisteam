@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.microapp.profile.ui.screens.editsections
 
-import androidx.compose.runtime.getValue
+/*import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
@@ -101,4 +101,4 @@ internal class ProfileEditSectionViewModel @Inject constructor(
         val itemPreview: String,
         val proto: ProfileItem
     )
-}
+}*/
