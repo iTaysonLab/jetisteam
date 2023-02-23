@@ -25,9 +25,6 @@ import bruhcollective.itaysonlab.jetisteam.uikit.components.StateTextButton
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.utils.SessionFormatter
-import solaricons.bold.SolarIconsBold
-import solaricons.bold.solariconsbold.EssentionalUi
-import solaricons.bold.solariconsbold.essentionalui.Help
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -212,7 +209,7 @@ private fun SessionActionStrip(
                         // TODO: maybe add some sort of WebView
                         uriHandler.openUri("https://help.steampowered.com/")
                     },
-                icon = SolarIconsBold.EssentionalUi.Help,
+                icon = Icons.Rounded.Help,
                 text = stringResource(id = R.string.guard_session_info_action_support)
             )
         }

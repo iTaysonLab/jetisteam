@@ -12,6 +12,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.ContentCopy
+import androidx.compose.material.icons.rounded.DeleteForever
+import androidx.compose.material.icons.rounded.Help
+import androidx.compose.material.icons.rounded.PhotoCamera
+import androidx.compose.material.icons.rounded.QrCodeScanner
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -37,19 +45,6 @@ import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import solaricons.bold.SolarIconsBold
-import solaricons.bold.solariconsbold.EssentionalUi
-import solaricons.bold.solariconsbold.Notifications
-import solaricons.bold.solariconsbold.Security
-import solaricons.bold.solariconsbold.SettingsFineTuning
-import solaricons.bold.solariconsbold.VideoAudioSound
-import solaricons.bold.solariconsbold.essentionalui.CloseCircle
-import solaricons.bold.solariconsbold.essentionalui.Copy
-import solaricons.bold.solariconsbold.essentionalui.Help
-import solaricons.bold.solariconsbold.notifications.NotificationLinesRemove
-import solaricons.bold.solariconsbold.security.QrCode
-import solaricons.bold.solariconsbold.settingsfinetuning.Settings
-import solaricons.bold.solariconsbold.videoaudiosound.Camera
 import soup.compose.material.motion.animation.materialSharedAxisY
 import soup.compose.material.motion.animation.rememberSlideDistance
 
@@ -77,7 +72,7 @@ internal fun GuardCodeAndConfirmationsPage(
 
     if (showPermissionAlert) {
         AlertDialog(onDismissRequest = { showPermissionAlert = false }, icon = {
-            Icon(imageVector = SolarIconsBold.VideoAudioSound.Camera, contentDescription = null)
+            Icon(imageVector = Icons.Rounded.PhotoCamera, contentDescription = null)
         }, title = {
             Text(stringResource(id = R.string.guard_camera_permission_title))
         }, text = {
@@ -109,7 +104,7 @@ internal fun GuardCodeAndConfirmationsPage(
                 showPermissionAlert = true
             }
         }, modifier = Modifier.offset(y = fabDiff)) {
-            Icon(imageVector = SolarIconsBold.Security.QrCode, contentDescription = null)
+            Icon(imageVector = Icons.Rounded.QrCodeScanner, contentDescription = null)
         }
     }, contentWindowInsets = EmptyWindowInsets) {
         Column(modifier) {
@@ -230,7 +225,7 @@ private fun CodeBox(
                     }, colors = IconButtonDefaults.iconButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     ), modifier = Modifier) {
-                        Icon(imageVector = SolarIconsBold.EssentionalUi.CloseCircle, contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.Close, contentDescription = null)
                     }
 
                     Spacer(Modifier.weight(1f))
@@ -238,7 +233,7 @@ private fun CodeBox(
                     IconButton(onClick = onRecoveryClicked, colors = IconButtonDefaults.iconButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     ), modifier = Modifier) {
-                        Icon(imageVector = SolarIconsBold.EssentionalUi.Help, contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.Help, contentDescription = null)
                     }
 
                     Spacer(Modifier.weight(1f))
@@ -246,7 +241,7 @@ private fun CodeBox(
                     IconButton(onClick = onDeleteClicked, colors = IconButtonDefaults.iconButtonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     ), modifier = Modifier) {
-                        Icon(imageVector = SolarIconsBold.Notifications.NotificationLinesRemove, contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.DeleteForever, contentDescription = null)
                     }
                 }
             } else {
@@ -260,7 +255,7 @@ private fun CodeBox(
                         }, colors = IconButtonDefaults.iconButtonColors(
                             contentColor = MaterialTheme.colorScheme.primary
                         ), modifier = Modifier.align(Alignment.CenterStart), enabled = connectedToSteam) {
-                            Icon(imageVector = SolarIconsBold.SettingsFineTuning.Settings, contentDescription = null)
+                            Icon(imageVector = Icons.Rounded.Settings, contentDescription = null)
                         }
 
                         AnimatedContent(targetState = code.code, transitionSpec = {
@@ -289,7 +284,7 @@ private fun CodeBox(
                         IconButton(onCopyClicked, colors = IconButtonDefaults.iconButtonColors(
                             contentColor = MaterialTheme.colorScheme.primary
                         ), modifier = Modifier.align(Alignment.CenterEnd)) {
-                            Icon(imageVector = SolarIconsBold.EssentionalUi.Copy, contentDescription = null)
+                            Icon(imageVector = Icons.Rounded.ContentCopy, contentDescription = null)
                         }
                     }
 

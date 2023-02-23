@@ -1,17 +1,14 @@
 package bruhcollective.itaysonlab.microapp.profile
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.twotone.Person
 import bruhcollective.itaysonlab.microapp.core.BottomNavigationCapable
 import bruhcollective.itaysonlab.microapp.core.DestNode
 import bruhcollective.itaysonlab.microapp.core.NavigationEntry
 import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
 import bruhcollective.itaysonlab.microapp.core.mapArgs
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
-import solaricons.bold.SolarIconsBold
-import solaricons.bold.solariconsbold.Users
-import solaricons.bold.solariconsbold.users.User
-import solaricons.bold_duotone.SolarIconsBoldDuotone
-import solaricons.bold_duotone.solariconsboldduotone.Users
-import solaricons.bold_duotone.solariconsboldduotone.users.User
 
 abstract class ProfileMicroapp: NestedMicroappEntry, BottomNavigationCapable {
     override val graphRoute = Routes.NavGraph
@@ -20,8 +17,8 @@ abstract class ProfileMicroapp: NestedMicroappEntry, BottomNavigationCapable {
     override val bottomNavigationEntry = NavigationEntry(
         route = Routes.NavGraph,
         name = R.string.profile,
-        icon = { SolarIconsBoldDuotone.Users.User },
-        iconSelected = { SolarIconsBold.Users.User },
+        icon = { Icons.TwoTone.Person },
+        iconSelected = { Icons.Filled.Person },
     )
 
     fun myProfileDestination() = profileDestination(0L)

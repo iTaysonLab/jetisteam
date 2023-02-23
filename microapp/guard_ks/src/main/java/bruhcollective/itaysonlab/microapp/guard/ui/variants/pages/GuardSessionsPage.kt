@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -22,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
 import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenLoading
+import bruhcollective.itaysonlab.jetisteam.uikit.partialShapes
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.utils.SessionFormatter
@@ -71,8 +71,8 @@ private fun SessionItem(
         }, colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(16.dp)
         ), modifier = Modifier.clip(when {
-            top -> MaterialTheme.shapes.large.copy(bottomStart = CornerSize(0.dp), bottomEnd = CornerSize(0.dp))
-            bottom -> MaterialTheme.shapes.large.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
+            top -> MaterialTheme.partialShapes.largeTopShape
+            bottom -> MaterialTheme.partialShapes.largeBottomShape
             else -> RectangleShape
         }).clickable(onClick = onClick)
     )

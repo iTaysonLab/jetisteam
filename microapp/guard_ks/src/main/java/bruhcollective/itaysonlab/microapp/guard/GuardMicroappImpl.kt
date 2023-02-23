@@ -1,6 +1,9 @@
 package bruhcollective.itaysonlab.microapp.guard
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.twotone.Security
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import bruhcollective.itaysonlab.microapp.core.DestNode
@@ -21,12 +24,6 @@ import bruhcollective.itaysonlab.microapp.guard.ui.setup.GuardSetupScreen
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.bottomSheet
-import solaricons.bold.SolarIconsBold
-import solaricons.bold.solariconsbold.Security
-import solaricons.bold.solariconsbold.security.Shield
-import solaricons.bold_duotone.SolarIconsBoldDuotone
-import solaricons.bold_duotone.solariconsboldduotone.Security
-import solaricons.bold_duotone.solariconsboldduotone.security.Shield
 import soup.compose.material.motion.animation.materialSharedAxisYIn
 import soup.compose.material.motion.animation.materialSharedAxisYOut
 import javax.inject.Inject
@@ -130,7 +127,7 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
     override val bottomNavigationEntry = NavigationEntry(
         route = Routes.NavGraph,
         name = R.string.guard,
-        icon = { SolarIconsBoldDuotone.Security.Shield },
-        iconSelected = { SolarIconsBold.Security.Shield },
+        icon = { Icons.TwoTone.Security },
+        iconSelected = { Icons.Filled.Security },
     )
 }

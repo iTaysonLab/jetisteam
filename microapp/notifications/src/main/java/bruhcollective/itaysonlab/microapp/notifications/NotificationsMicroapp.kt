@@ -1,14 +1,11 @@
 package bruhcollective.itaysonlab.microapp.notifications
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.twotone.Notifications
 import bruhcollective.itaysonlab.microapp.core.BottomNavigationCapable
 import bruhcollective.itaysonlab.microapp.core.ComposableMicroappEntry
 import bruhcollective.itaysonlab.microapp.core.NavigationEntry
-import solaricons.bold.SolarIconsBold
-import solaricons.bold.solariconsbold.Notifications
-import solaricons.bold.solariconsbold.notifications.Bell
-import solaricons.bold_duotone.SolarIconsBoldDuotone
-import solaricons.bold_duotone.solariconsboldduotone.Notifications
-import solaricons.bold_duotone.solariconsboldduotone.notifications.Bell
 
 abstract class NotificationsMicroapp: ComposableMicroappEntry, BottomNavigationCapable {
     override val microappRoute = Routes.MainScreen
@@ -16,8 +13,8 @@ abstract class NotificationsMicroapp: ComposableMicroappEntry, BottomNavigationC
     override val bottomNavigationEntry = NavigationEntry(
         route = Routes.MainScreen,
         name = R.string.notifications,
-        icon = { SolarIconsBoldDuotone.Notifications.Bell },
-        iconSelected = { SolarIconsBold.Notifications.Bell },
+        icon = { Icons.TwoTone.Notifications },
+        iconSelected = { Icons.Filled.Notifications },
     )
 
     internal object Routes {

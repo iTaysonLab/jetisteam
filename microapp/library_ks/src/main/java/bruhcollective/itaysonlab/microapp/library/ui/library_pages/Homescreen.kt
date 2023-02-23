@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Badge
 import androidx.compose.material3.Card
@@ -54,9 +55,6 @@ import bruhcollective.itaysonlab.microapp.library.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import solaricons.bold.SolarIconsBold
-import solaricons.bold.solariconsbold.Arrows
-import solaricons.bold.solariconsbold.arrows.RoundAltArrowRight
 import javax.inject.Inject
 
 @Composable
@@ -174,7 +172,7 @@ internal fun SimpleShelf(
             Spacer(modifier = Modifier.weight(1f))
 
             IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = SolarIconsBold.Arrows.RoundAltArrowRight, contentDescription = null)
+                Icon(imageVector = Icons.Rounded.ChevronRight, contentDescription = null)
             }
         }
 
