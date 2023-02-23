@@ -8,13 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
+import bruhcollective.itaysonlab.jetisteam.uikit.partialShapes
 import bruhcollective.itaysonlab.jetisteam.util.CdnUrlUtil
 import bruhcollective.itaysonlab.ksteam.handlers.library
 import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
@@ -52,27 +53,14 @@ internal fun CollectionPage(
                     CdnUrlUtil.buildAppUrl(game.appId, "library_600x900.jpg")
                 }, modifier = Modifier
                     .aspectRatio(2f / 3f)
-                    .let {
+                    .clip(
                         when (index) {
-                            0 -> it.clip(
-                                MaterialTheme.shapes.large.copy(
-                                    topEnd = CornerSize(0.dp),
-                                    bottomStart = CornerSize(0.dp),
-                                    bottomEnd = CornerSize(0.dp)
-                                )
-                            )
-
-                            2 -> it.clip(
-                                MaterialTheme.shapes.large.copy(
-                                    topStart = CornerSize(0.dp),
-                                    bottomStart = CornerSize(0.dp),
-                                    bottomEnd = CornerSize(0.dp)
-                                )
-                            )
-
-                            else -> it
+                            0 -> MaterialTheme.partialShapes.largeTopLeftShape
+                            2 -> MaterialTheme.partialShapes.largeTopRightShape
+                            else -> RectangleShape
                         }
-                    }.clickable { onClick(game.appId) })
+                    )
+                    .clickable { onClick(game.appId) })
             }
         }
     }
