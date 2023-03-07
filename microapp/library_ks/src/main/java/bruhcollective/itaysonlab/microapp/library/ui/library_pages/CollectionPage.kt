@@ -24,8 +24,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
 import bruhcollective.itaysonlab.jetisteam.uikit.partialShapes
-import bruhcollective.itaysonlab.jetisteam.util.CdnUrlUtil
 import bruhcollective.itaysonlab.ksteam.handlers.library
+import bruhcollective.itaysonlab.ksteam.models.apps.libraryEntry
 import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
 import coil.compose.AsyncImage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,8 +49,8 @@ internal fun CollectionPage(
             modifier = Modifier.fillMaxSize()
         ) {
             itemsIndexed(data.value) { index, game ->
-                LibraryItem(remember(game.appId) {
-                    CdnUrlUtil.buildAppUrl(game.appId, "library_600x900.jpg")
+                LibraryItem(remember(game.id) {
+                    game.libraryEntry.url
                 }, modifier = Modifier
                     .aspectRatio(2f / 3f)
                     .clip(
@@ -60,7 +60,7 @@ internal fun CollectionPage(
                             else -> RectangleShape
                         }
                     )
-                    .clickable { onClick(game.appId) })
+                    .clickable { onClick(game.id.id) })
             }
         }
     }

@@ -6,7 +6,7 @@ import bruhcollective.itaysonlab.jetisteam.uikit.vm.PageViewModel
 @Composable
 fun <T> PageLayout(
     state: PageViewModel.State<T>,
-    onReload: () -> Unit,
+    onReload: () -> Unit = {},
     successContent: @Composable (data: T) -> Unit
 ) {
     when (state) {

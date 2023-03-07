@@ -4,25 +4,24 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import bruhcollective.itaysonlab.microapp.core.Destinations
+import bruhcollective.itaysonlab.microapp.core.mapArgs
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 import bruhcollective.itaysonlab.microapp.library.ui.LibraryScreen
+import bruhcollective.itaysonlab.microapp.library.ui.game_page.LibraryGamepageScreen
 import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
-import com.google.accompanist.navigation.material.bottomSheet
 import javax.inject.Inject
 
 class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
-    @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
+    @OptIn(ExperimentalAnimationApi::class)
     override fun NavGraphBuilder.buildGraph(
         navController: NavHostController,
         destinations: Destinations
     ) {
         composable(Routes.MyLibrary.url, arguments = listOf(CommonArguments.SteamIdWithDefault)) {
-            LibraryScreen(onGameClick = { gameId ->
-                /*navController.navigate(Routes.GameDetail.mapArgs(mapOf(
-                    CommonArguments.SteamId to steamId,
-                    Arguments.GameData to gameInfo
-                )))*/
+            LibraryScreen(onGameClick = { appId ->
+                navController.navigate(Routes.GameDetail.mapArgs(mapOf(
+                    Arguments.ApplicationId to appId
+                )))
             }, /*onRemoteClick = { steamId, sessions ->
                 if (sessions.size > 1) {
                     navController.navigate(Routes.PickRemoteMachine.mapArgs(mapOf(
@@ -44,8 +43,8 @@ class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
             })
         }*/
 
-        bottomSheet(Routes.GameDetail.url, arguments = listOf(CommonArguments.SteamId, Arguments.GameData)) {
-
+        composable(Routes.GameDetail.url, arguments = listOf(Arguments.ApplicationId)) {
+            LibraryGamepageScreen()
         }
 
         /*bottomSheet(Routes.PickRemoteMachine.url, arguments = listOf(CommonArguments.SteamId, Arguments.MachineList)) {

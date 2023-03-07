@@ -4,11 +4,12 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import bruhcollective.itaysonlab.microapp.core.Destinations
-import bruhcollective.itaysonlab.microapp.core.mapArgs
 import bruhcollective.itaysonlab.microapp.core.navigation.CommonArguments
 import bruhcollective.itaysonlab.microapp.profile.ui.ProfileScreen
+import bruhcollective.itaysonlab.microapp.profile.ui.bottomsheet.GlobalAppBottomSheet
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.bottomSheet
 import javax.inject.Inject
 
 class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
@@ -21,19 +22,15 @@ class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
             ProfileScreen(
                 onGameClick = { appId ->
                     // navController.navigate(destinations.find<GamePageMicroapp>().gameDestination(appId))
-                }, onLibraryClick = { steamId ->
-                    // navController.navigate(destinations.find<LibraryMicroapp>().libraryOf(steamId))
                 }, onFriendsClick = { steamId ->
                     navController.navigate(friendsDestination(steamId))
                 }, onNavigationClick = { isRoot, steamId ->
                     if (isRoot) {
-                        navController.navigate(Routes.AppBottomSheet.mapArgs(mapOf(
-                            CommonArguments.SteamId to steamId
-                        )))
+                        navController.navigate(Routes.AppBottomSheet.url)
                     } else {
                         navController.popBackStack()
                     }
-                }, backStackEntry = it
+                }
             )
         }
 
@@ -63,16 +60,16 @@ class ProfileMicroappImpl @Inject constructor() : ProfileMicroapp() {
             } else {
                 ProfileEditSectionScreen(onBackClicked = navController::popBackStack, onChangesCommitted = onChangesCommitted)
             }
-        }
+        }*/
 
         bottomSheet(Routes.AppBottomSheet.url) {
             GlobalAppBottomSheet(onBackClicked = navController::popBackStack, onEditProfileClicked = { steamId ->
                 navController.popBackStack()
-                navController.navigate(editDestination(steamId))
+                // navController.navigate(editDestination(steamId))
             }, onSteamWrappedClicked = { steamId ->
                 navController.popBackStack()
                 // navController.navigate(destinations.find<SteamWrappedMicroapp>().entryDestination(steamId))
             })
-        }*/
+        }
     }
 }

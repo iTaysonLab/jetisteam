@@ -74,19 +74,16 @@ class ConfigService @Inject constructor(
         operator fun setValue(thisRef: Any?, property: KProperty<*>, value: Long) { put(instance, key, value) }
     }
 
-    inner class ProtoCfg <T: Message<T, *>> (private val instance: Instance = Instance.Main, private val key: String, type: Class<T>) {
+    inner class ProtoCfg <T: Message<T, *>> (private val instance: Instance = Instance.Main, private val key: String, private val adapter: ProtoAdapter<T>) {
         // protobuf parsing isn't cheap, so we cache it
         private var _value: T? = null
-
-        @Suppress("UNCHECKED_CAST")
-        private val _parserField = type.getDeclaredField("ADAPTER").get(null) as ProtoAdapter<T>
 
         operator fun getValue(thisRef: Any?, property: KProperty<*>): T? {
             if (_value == null) {
                 if (containsKey(instance, key)) {
                     val bytes = getBytes(instance, key, EMPTY_BYTE_ARRAY)
                     if (bytes.isEmpty()) return null
-                    _value = _parserField.decode(bytes)
+                    _value = adapter.decode(bytes)
                 } else {
                     return null
                 }
@@ -106,5 +103,5 @@ class ConfigService @Inject constructor(
         }
     }
 
-    inline fun <reified T: Message<T, *>> protoCfg(instance: Instance = Instance.Main, key: String) = ProtoCfg(instance, key, T::class.java)
+    fun <T: Message<T, *>> protoCfg(instance: Instance = Instance.Main, key: String, adapter: ProtoAdapter<T>) = ProtoCfg(instance, key, adapter)
 }

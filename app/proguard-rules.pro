@@ -48,3 +48,9 @@
 }
 
 -dontwarn kotlin.**
+
+-keep class org.h2.Driver { *; }
+-keep class org.h2.engine.Engine { *; }
+-keep class org.h2.store.fs.** { *; }
+-dontwarn org.h2.**
+-dontnote org.h2.**

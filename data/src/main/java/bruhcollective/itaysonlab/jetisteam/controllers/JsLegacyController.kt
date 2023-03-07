@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class JsLegacyController @Inject constructor(
     private val cfgService: ConfigService,
 ) {
-    var authSession by cfgService.protoCfg<SessionData>(key = "steam.session")
+    var authSession by cfgService.protoCfg(key = "steam.session", adapter = SessionData.ADAPTER)
         private set
 
     fun getGuard(): GuardConfiguration? {

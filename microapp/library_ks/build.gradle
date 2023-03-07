@@ -29,6 +29,7 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
@@ -53,6 +54,8 @@ kotlin {
 dependencies {
     implementation project(':microapp:core')
     // implementation project(':microapp:gamepage')
+
+    implementation "me.onebone:toolbar-compose:2.3.5"
 
     implementation project(':data')
     implementation project(':domain')

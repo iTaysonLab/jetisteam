@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetisteam.uikit
 
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 
 object SteamColors {
@@ -237,9 +238,10 @@ object SteamColors {
         ),
     )
 
-    fun getColorTheme(id: String) = registeredThemes[id] ?: default()
+    fun getColorTheme(id: String?) = id?.let { registeredThemes[it] } ?: default()
     fun default() = registeredThemes["Default"]!!
 
+    @Stable
     class ColorTheme(
         val gradientBackground: Color,
         val colorShowcaseHeader: Color,

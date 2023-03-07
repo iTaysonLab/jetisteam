@@ -12,9 +12,16 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.jetisteam.uikit.LocalSteamTheme
+import bruhcollective.itaysonlab.ksteam.models.enums.EFriendRelationship
+import bruhcollective.itaysonlab.ksteam.models.enums.EPersonaState
+import bruhcollective.itaysonlab.ksteam.models.persona.Persona
+import bruhcollective.itaysonlab.microapp.profile.R
+import bruhcollective.itaysonlab.microapp.profile.ext.toLastSeenDate
+import bruhcollective.itaysonlab.microapp.profile.ext.toStringRes
 import coil.compose.AsyncImage
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -24,6 +31,9 @@ internal fun ProfileHeader(
     avatarUrl: String?,
     avatarFrameUrl: String?,
     profileName: String,
+    lastSeen: Persona.LastSeen,
+    relationship: EFriendRelationship,
+    personaState: EPersonaState,
     onLibraryClick: () -> Unit,
     onFriendsClick: () -> Unit
 ) {
@@ -93,16 +103,15 @@ internal fun ProfileHeader(
                 color = Color.White,
             )
 
-            /*Text(
-                text = when {
-                    profile.gameid != null -> "Playing ${profile.gameextrainfo.orEmpty()}"
-                    friendStatus is FriendStatus.Offline -> stringResource(id = R.string.friends_offline_last_seen, friendStatus.lastLogoff.toLastSeenDate())
-                    else -> stringResource(id = friendStatus.toStringRes())
+            Text(
+                text = when (personaState) {
+                    EPersonaState.Offline -> stringResource(id = R.string.friends_offline_last_seen, lastSeen.lastLogOff.toLastSeenDate())
+                    else -> stringResource(id = personaState.toStringRes())
                 },
                 fontSize = 16.sp,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 color = Color.White.copy(alpha = 0.7f),
-            )*/
+            )
 
             /*if (summary != null) {
                 Spacer(modifier = Modifier.height(12.dp))

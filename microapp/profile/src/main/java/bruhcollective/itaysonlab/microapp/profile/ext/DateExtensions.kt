@@ -12,8 +12,8 @@ import kotlinx.datetime.periodUntil
 
 @ExperimentalComposeUiApi
 @Composable
-fun Long.toLastSeenDate(): String {
-    val diff = Instant.fromEpochSeconds(this).periodUntil(
+fun Int.toLastSeenDate(): String {
+    val diff = Instant.fromEpochSeconds(toLong()).periodUntil(
         other = Clock.System.now(),
         timeZone = TimeZone.currentSystemDefault()
     )

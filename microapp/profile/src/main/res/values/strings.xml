@@ -2,6 +2,9 @@
 <resources>
     <string name="profile">Profile</string>
 
+    <string name="widget_now_playing">Now Playing</string>
+    <string name="widget_now_playing_group_size">Playing with %s players</string>
+
     <string name="showcase_achievements_rarest">Rarest Achievement Showcase</string>
     <string name="showcase_collector_game">Game Collector</string>
     <string name="showcase_items">Item Showcase</string>

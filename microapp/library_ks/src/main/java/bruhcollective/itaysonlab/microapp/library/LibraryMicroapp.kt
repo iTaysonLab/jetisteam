@@ -44,7 +44,7 @@ abstract class LibraryMicroapp: NestedMicroappEntry, BottomNavigationCapable {
         const val NavGraph = "@library"
 
         val MyLibrary = DestNode("library/")
-        val GameDetail = DestNode("library/games/{${Arguments.GameData.name}}")
+        val GameDetail = DestNode("library/games/{${Arguments.ApplicationId.name}}")
 
         val RemoteMachineInfo = DestNode("library/{${CommonArguments.SteamId.name}}/machines/{${Arguments.MachineId.name}}")
         val PickRemoteMachine = DestNode("library/{${CommonArguments.SteamId.name}}/machines/list/{${Arguments.MachineList.name}}")

@@ -31,7 +31,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.transform.BlurTransformation
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OwnedGameBottomSheet(
     viewModel: OwnedGameBottomSheetViewModel = hiltViewModel(),

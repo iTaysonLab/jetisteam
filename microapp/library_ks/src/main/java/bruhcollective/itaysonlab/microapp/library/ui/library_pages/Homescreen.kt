@@ -47,10 +47,11 @@ import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.ksteam.handlers.library
 import bruhcollective.itaysonlab.ksteam.handlers.pics
 import bruhcollective.itaysonlab.ksteam.models.AppId
+import bruhcollective.itaysonlab.ksteam.models.apps.AppSummary
+import bruhcollective.itaysonlab.ksteam.models.apps.libraryEntry
 import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
 import bruhcollective.itaysonlab.ksteam.models.pics.AppInfo
 import bruhcollective.itaysonlab.ksteam.models.pics.header
-import bruhcollective.itaysonlab.ksteam.models.pics.libraryEntry
 import bruhcollective.itaysonlab.microapp.library.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -156,7 +157,7 @@ internal class HomescreenViewModel @Inject constructor(
 @Composable
 internal fun SimpleShelf(
     collectionName: String,
-    collectionGames: List<AppInfo>,
+    collectionGames: List<AppSummary>,
     onClick: (Int) -> Unit
 ) {
     Column(Modifier.fillMaxWidth()) {
@@ -188,7 +189,7 @@ internal fun SimpleShelf(
                             .fillMaxWidth()
                             .height(225.dp)
                             .width(150.dp).clickable {
-                                onClick(app.appId)
+                                onClick(app.id.id)
                             },
                         placeholderColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
                     )
