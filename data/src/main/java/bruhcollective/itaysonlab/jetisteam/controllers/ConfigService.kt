@@ -34,6 +34,10 @@ class ConfigService @Inject constructor(
         return instances[instance] ?: error("Instance $instance is not available!")
     }
 
+    fun getAsMmkv(instance: Instance = Instance.Main): MMKV {
+        return instances[instance] ?: error("Instance $instance is not available!")
+    }
+
     fun getBytes(instance: Instance = Instance.Main, key: String, default: ByteArray) = instances[instance]?.getBytes(key, default) ?: default
     fun containsKey(instance: Instance = Instance.Main, key: String) = instances[instance]?.containsKey(key) ?: false
     fun deleteKey(instance: Instance = Instance.Main, key: String) = instances[instance]?.removeValueForKey(key)

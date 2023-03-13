@@ -22,7 +22,9 @@ class JetisteamApplication : Application(), ImageLoaderFactory {
             override var verbosity: LoggingVerbosity = LoggingVerbosity.Verbose
 
             override fun printDebug(tag: String, message: String) {
-                Log.d(tag, message)
+                if (BuildConfig.DEBUG) {
+                    Log.d(tag, message)
+                }
             }
 
             override fun printError(tag: String, message: String) {
@@ -30,7 +32,9 @@ class JetisteamApplication : Application(), ImageLoaderFactory {
             }
 
             override fun printVerbose(tag: String, message: String) {
-                Log.v(tag, message)
+                if (BuildConfig.DEBUG) {
+                    Log.v(tag, message)
+                }
             }
 
             override fun printWarning(tag: String, message: String) {

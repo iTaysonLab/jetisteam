@@ -24,7 +24,8 @@ import javax.inject.Singleton
 class HostSteamClient @Inject constructor(
     @ApplicationContext context: Context,
     uuidController: UuidController,
-    private val jsLegacyController: JsLegacyController
+    mmkvKvDatabase: MmkvKvDatabase,
+    private val jsLegacyController: JsLegacyController,
 ): CoroutineScope by MainScope() {
     val client = SteamClient(
         config = SteamClientConfiguration(
@@ -34,7 +35,7 @@ class HostSteamClient @Inject constructor(
                 platformType = EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient,
                 deviceName = uuidController.deviceName,
                 uuid = uuidController.uuid
-            ), rootFolder = File(context.filesDir, "ksteam")
+            ), rootFolder = File(context.filesDir, "ksteam"), keyValueDatabase = mmkvKvDatabase
         )
     )
 

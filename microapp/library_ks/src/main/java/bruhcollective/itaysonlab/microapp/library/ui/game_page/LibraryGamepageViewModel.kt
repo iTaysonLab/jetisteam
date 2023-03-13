@@ -21,5 +21,5 @@ class LibraryGamepageViewModel @Inject constructor(
         reload()
     }
 
-    override suspend fun load() = hostSteamClient.client.pics.getAppInfo(appId)
+    override suspend fun load() = hostSteamClient.client.pics.getAppInfo(appId) ?: error("App $appId was not found in VDF cache, but got a reference to it.")
 }
