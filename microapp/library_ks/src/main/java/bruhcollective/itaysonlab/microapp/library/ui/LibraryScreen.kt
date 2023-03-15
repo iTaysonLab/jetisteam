@@ -123,7 +123,11 @@ internal fun LibraryScreen(
                 .padding(innerPadding), beyondBoundsPageCount = 1
         ) { page ->
             if (page == 0) {
-                Homescreen(onClick = onGameClick)
+                Homescreen(collections = collections.value, onClick = onGameClick, onCollectionClicked = { id ->
+                    scope.launch {
+                        pagerState.animateScrollToPage(collections.value.indexOfFirst { it.id == id } + 1)
+                    }
+                })
             } else {
                 CollectionPage(collection = collections.value[page - 1], onClick = onGameClick)
             }

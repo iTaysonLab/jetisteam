@@ -3,9 +3,11 @@ package bruhcollective.itaysonlab.jetisteam
 import android.content.Context
 import bruhcollective.itaysonlab.jetisteam.controllers.JsLegacyController
 import bruhcollective.itaysonlab.jetisteam.controllers.UuidController
-import bruhcollective.itaysonlab.ksteam.SteamClient
-import bruhcollective.itaysonlab.ksteam.SteamClientConfiguration
+import bruhcollective.itaysonlab.ksteam.Core
+import bruhcollective.itaysonlab.ksteam.Guard
+import bruhcollective.itaysonlab.ksteam.Pics
 import bruhcollective.itaysonlab.ksteam.handlers.guard
+import bruhcollective.itaysonlab.ksteam.kSteam
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import bruhcollective.itaysonlab.ksteam.models.enums.EGamingDeviceType
 import bruhcollective.itaysonlab.ksteam.network.CMClientState
@@ -27,17 +29,26 @@ class HostSteamClient @Inject constructor(
     mmkvKvDatabase: MmkvKvDatabase,
     private val jsLegacyController: JsLegacyController,
 ): CoroutineScope by MainScope() {
-    val client = SteamClient(
-        config = SteamClientConfiguration(
-            deviceInfo = DeviceInformation(
-                osType = uuidController.osType,
-                gamingDeviceType = EGamingDeviceType.k_EGamingDeviceType_Phone,
-                platformType = EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient,
-                deviceName = uuidController.deviceName,
-                uuid = uuidController.uuid
-            ), rootFolder = File(context.filesDir, "ksteam"), keyValueDatabase = mmkvKvDatabase
+    val client = kSteam {
+        deviceInfo = DeviceInformation(
+            osType = uuidController.osType,
+            gamingDeviceType = EGamingDeviceType.k_EGamingDeviceType_Phone,
+            platformType = EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient,
+            deviceName = uuidController.deviceName
         )
-    )
+
+        rootFolder = File(context.filesDir, "ksteam")
+
+        install(Core)
+
+        install(Pics) {
+            database = mmkvKvDatabase
+        }
+
+        install(Guard) {
+            uuid = uuidController.uuid
+        }
+    }
 
     val isConnectedToSteam = client.connectionStatus.map { state ->
         state == CMClientState.Connected

@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -46,6 +47,7 @@ import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.ksteam.handlers.library
 import bruhcollective.itaysonlab.ksteam.handlers.pics
+import bruhcollective.itaysonlab.ksteam.handlers.player
 import bruhcollective.itaysonlab.ksteam.models.AppId
 import bruhcollective.itaysonlab.ksteam.models.apps.AppSummary
 import bruhcollective.itaysonlab.ksteam.models.apps.libraryEntry
@@ -61,6 +63,8 @@ import javax.inject.Inject
 @Composable
 internal fun Homescreen(
     onClick: (Int) -> Unit,
+    onCollectionClicked: (String) -> Unit,
+    collections: List<LibraryCollection>,
     viewModel: HomescreenViewModel = hiltViewModel()
 ) {
     val shelves = viewModel.homeScreenShelves.collectAsStateWithLifecycle(context = Dispatchers.IO)
@@ -69,7 +73,7 @@ internal fun Homescreen(
         items(shelves.value, key = { it.id }) { shelf ->
             when (shelf.linkedCollection) {
                 "all-collections" -> {
-                    ExampleCollectionsShelf()
+                    CollectionsShelf(collections, onCollectionClicked)
                 }
 
                 "favorite" -> {
@@ -145,7 +149,7 @@ internal class HomescreenViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getPlayNextQueue() = steamClient.client.pics.getAppIdsAsInfos(steamClient.client.library.getPlayNextQueue().map(::AppId))
+    private suspend fun getPlayNextQueue() = steamClient.client.pics.getAppIdsAsInfos(steamClient.client.player.getPlayNextQueue().map(::AppId))
     fun getCollection(id: String) = steamClient.client.library.getCollection(id)
     fun getCollectionApps(id: String) = steamClient.client.library.getAppsInCollection(id)
     fun getFavoriteApps() = steamClient.client.library.getFavoriteApps()
@@ -188,7 +192,8 @@ internal fun SimpleShelf(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(225.dp)
-                            .width(150.dp).clickable {
+                            .width(150.dp)
+                            .clickable {
                                 onClick(app.id.id)
                             },
                         placeholderColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
@@ -246,7 +251,8 @@ internal fun PlayNextShelf(
                     app.header.url,
                     modifier = Modifier
                         .width(276.dp)
-                        .height(129.dp).clickable {
+                        .height(129.dp)
+                        .clickable {
                             onClick(app.appId)
                         },
                     placeholderColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
@@ -262,7 +268,10 @@ internal fun PlayNextShelf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ExampleCollectionsShelf() {
+internal fun CollectionsShelf(
+    collections: List<LibraryCollection>,
+    onCollectionClicked: (String) -> Unit
+) {
     Column(Modifier.fillMaxWidth()) {
 
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -288,13 +297,14 @@ internal fun ExampleCollectionsShelf() {
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(6) {
+            items(collections) { collection ->
                 Box(
-                    Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
-                        .size(140.dp)
-                )
+                    Modifier.clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)).size(140.dp).clickable {
+                        onCollectionClicked(collection.id)
+                    }
+                ) {
+                    Text(text = collection.name, modifier = Modifier.align(Alignment.Center).padding(8.dp), textAlign = TextAlign.Center)
+                }
             }
         }
 

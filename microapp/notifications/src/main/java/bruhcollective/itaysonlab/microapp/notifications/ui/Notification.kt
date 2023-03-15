@@ -52,7 +52,12 @@ internal fun NotificationRenderer(
         is Notification.Item -> ItemNotification(notification = notification, onClick = onClick)
         is Notification.Promotion -> PromoNotification(notification = notification, onClick = onClick)
         is Notification.WishlistSale -> WishlistSaleNotification(notification = notification, onClick = onClick)
-        else -> {}
+        is Notification.Unknown -> {
+            Text("Unknown notification: ${notification.rawJsonData}")
+        }
+        else -> {
+            Text("Unknown notification: $notification")
+        }
     }
 }
 
