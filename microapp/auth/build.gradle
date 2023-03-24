@@ -56,7 +56,9 @@ dependencies {
     //implementation project(":microapp:home")
     //implementation project(":microapp:profile")
 
-    implementation project(":domain")
+    implementation("io.github.g0dkar:qrcode-kotlin-android:3.3.0")
+
+    implementation project(":data")
     implementation project(":data")
     implementation project(":uikit")
 
