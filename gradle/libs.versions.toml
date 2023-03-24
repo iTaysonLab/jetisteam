@@ -1,14 +1,14 @@
 [versions]
-compose = "1.4.0-beta01"
-compose_m3 = "1.1.0-alpha06"
+compose = "1.4.0"
+compose_m3 = "1.1.0-beta01"
 compose_compiler = "1.4.2"
 compose_motion = "0.11.0-alpha"
-accompanist = "0.29.1-alpha"
+accompanist = "0.29.2-rc"
 hilt = "2.44.2"
 retrofit = "2.9.0"
 richText = "0.15.0"
-wire = "4.4.3"
-camerax = "1.3.0-alpha03"
+wire = "4.5.2"
+camerax = "1.3.0-alpha05"
 ksteam = "r25"
 
 [plugins]
@@ -20,8 +20,8 @@ wire = { id = "com.squareup.wire", version.ref = "wire" }
 androidCoreKtx = "androidx.core:core-ktx:1.9.0"
 androidCoreSplashscreen = "androidx.core:core-splashscreen:1.0.0"
 androidPalette = "androidx.palette:palette-ktx:1.0.0"
-androidLifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-beta01"
-androidLifecycleCompose = "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-beta01"
+androidLifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+androidLifecycleCompose = "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
 androidCustomView = "androidx.customview:customview:1.2.0-alpha02"
 androidCustomViewPoolingContainer = "androidx.customview:customview-poolingcontainer:1.0.0"
 
@@ -37,7 +37,7 @@ composeUiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", v
 composeUiUtil = { module = "androidx.compose.ui:ui-util", version.ref = "compose" }
 composeTestManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 composeUiTest = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
-composeNavigation = "androidx.navigation:navigation-compose:2.5.3"
+composeNavigation = "androidx.navigation:navigation-compose:2.6.0-alpha08"
 composeActivity = "androidx.activity:activity-compose:1.7.0-alpha02"
 composeAppWidgets = "androidx.glance:glance-appwidget:1.0.0-alpha05"
 

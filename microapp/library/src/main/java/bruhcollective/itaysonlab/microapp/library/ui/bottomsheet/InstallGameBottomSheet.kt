@@ -148,10 +148,10 @@ internal fun InstallGameBottomSheet(
                                                             target.status == GetRemoteInstallTargets.InstallTargetStatus.Installed
 
                                                 ListItem(
-                                                    headlineText = {
+                                                    headlineContent = {
                                                         Text(text = target.machineName)
                                                     },
-                                                    supportingText = {
+                                                    supportingContent = {
                                                         val ctx = LocalContext.current
 
                                                         val formattedFreeSpace =

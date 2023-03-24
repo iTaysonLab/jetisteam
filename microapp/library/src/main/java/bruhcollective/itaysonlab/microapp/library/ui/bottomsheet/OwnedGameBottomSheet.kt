@@ -157,9 +157,9 @@ fun OwnedGameBottomSheet(
                                     imageVector = Icons.Rounded.MilitaryTech,
                                     contentDescription = null
                                 )
-                            }, headlineText = {
+                            }, headlineContent = {
                                 Text(text = stringResource(id = R.string.library_sheet_achv))
-                            }, supportingText = {
+                            }, supportingContent = {
                                 Text(text = if (state.available) {
                                     state.formattedString
                                 } else {
@@ -196,7 +196,7 @@ fun OwnedGameBottomSheet(
                 leadingContent = {
                     Icon(imageVector = Icons.Rounded.Download, contentDescription = null)
                 },
-                headlineText = {
+                headlineContent = {
                     Text(text = stringResource(id = R.string.library_sheet_remote))
                 },
                 modifier = Modifier.clickable(onClick = {
@@ -216,7 +216,7 @@ fun OwnedGameBottomSheet(
                 leadingContent = {
                     Icon(imageVector = Icons.Rounded.ShoppingCart, contentDescription = null)
                 },
-                headlineText = {
+                headlineContent = {
                     Text(text = stringResource(id = R.string.library_sheet_store))
                 },
                 modifier = Modifier.clickable(onClick = { onNavigateToGamePage(viewModel.appId) }),

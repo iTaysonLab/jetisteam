@@ -71,7 +71,7 @@ internal fun GuardConfirmSessionSheet(
                                     contentDescription = null
                                 )
                             },
-                            headlineText = {
+                            headlineContent = {
                                 Text(text = visuals.fallbackName)
                             },
                             modifier = Modifier.clickable(onClick = { }),
@@ -79,7 +79,7 @@ internal fun GuardConfirmSessionSheet(
                                 leadingIconColor = MaterialTheme.colorScheme.primary,
                                 containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
                             ),
-                            supportingText = {
+                            supportingContent = {
                                 Text(text = remember(state.session) {
                                     state.session.deviceName.ifEmpty { "Unknown name" }
                                 })
@@ -95,7 +95,7 @@ internal fun GuardConfirmSessionSheet(
                                     contentDescription = null
                                 )
                             },
-                            headlineText = {
+                            headlineContent = {
                                 Text(text = stringResource(id = R.string.guard_confirm_sheet_location))
                             },
                             modifier = Modifier.clickable(onClick = { }),
@@ -103,7 +103,7 @@ internal fun GuardConfirmSessionSheet(
                                 leadingIconColor = MaterialTheme.colorScheme.primary,
                                 containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
                             ),
-                            supportingText = {
+                            supportingContent = {
                                 Text(text = remember(state) {
                                     "${state.session.city}, ${state.session.state}, ${state.session.country}"
                                 })
@@ -116,7 +116,7 @@ internal fun GuardConfirmSessionSheet(
                             leadingContent = {
                                 Icon(imageVector = Icons.Rounded.Router, contentDescription = null)
                             },
-                            headlineText = {
+                            headlineContent = {
                                 Text(text = stringResource(id = R.string.guard_confirm_sheet_ip))
                             },
                             modifier = Modifier.clickable(onClick = { }),
@@ -124,7 +124,7 @@ internal fun GuardConfirmSessionSheet(
                                 leadingIconColor = MaterialTheme.colorScheme.primary,
                                 containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
                             ),
-                            supportingText = {
+                            supportingContent = {
                                 Text(text = state.session.ip)
                             }
                         )
@@ -135,7 +135,7 @@ internal fun GuardConfirmSessionSheet(
                             leadingContent = {
                                 Icon(imageVector = Icons.Rounded.Save, contentDescription = null)
                             },
-                            headlineText = {
+                            headlineContent = {
                                 Text(text = stringResource(id = R.string.guard_confirm_sheet_remember))
                             },
                             modifier = Modifier.clickable(onClick = {
@@ -145,7 +145,7 @@ internal fun GuardConfirmSessionSheet(
                                 leadingIconColor = MaterialTheme.colorScheme.primary,
                                 containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
                             ),
-                            supportingText = {
+                            supportingContent = {
                                 Text(text = stringResource(id = R.string.guard_confirm_sheet_remember_subtitle))
                             },
                             trailingContent = {

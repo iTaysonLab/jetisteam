@@ -75,9 +75,9 @@ internal fun ProfileEditScreen(
                     LazyColumn {
                         items(viewModel.uiSections) { block ->
                             ListItem(
-                                headlineText = {
+                                headlineContent = {
                                     Text(text = stringResource(block.title))
-                                }, supportingText = {
+                                }, supportingContent = {
                                     Text(
                                         text = block.text ?: stringResource(id = R.string.edit_default)
                                     )

@@ -148,7 +148,7 @@ internal fun LibraryScreen(
                             .padding(horizontal = 16.dp), shape = MaterialTheme.shapes.medium
                     ) {
                         ListItem(
-                            headlineText = {
+                            headlineContent = {
                                 Text(
                                     text = pluralStringResource(
                                         id = R.plurals.library_remote_pcs,
@@ -161,7 +161,7 @@ internal fun LibraryScreen(
                                     imageVector = Icons.Rounded.SettingsRemote,
                                     contentDescription = null
                                 )
-                            }, supportingText = {
+                            }, supportingContent = {
                                 Text(remember(viewModel.library.machines) {
                                     viewModel.library.machines.joinToString { it.machine_name.orEmpty() }
                                 })

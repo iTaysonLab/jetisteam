@@ -125,9 +125,9 @@ private fun QrSignDialog(
 
                 Card {
                     ListItem(
-                        headlineText = {
+                        headlineContent = {
                             Text(stringResource(id = R.string.guard_session_info_ip))
-                        }, supportingText = {
+                        }, supportingContent = {
                             Text(dataInContainer.ip.ifEmpty { "Unknown" })
                         }, modifier = Modifier.fillMaxWidth(), colors = ListItemDefaults.colors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer
@@ -139,9 +139,9 @@ private fun QrSignDialog(
                     Divider(color = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
 
                     ListItem(
-                        headlineText = {
+                        headlineContent = {
                             Text(stringResource(id = R.string.guard_session_info_loc))
-                        }, supportingText = {
+                        }, supportingContent = {
                             Text("${dataInContainer.city}, ${dataInContainer.state}, ${dataInContainer.country}")
                         }, modifier = Modifier.fillMaxWidth(), colors = ListItemDefaults.colors(
                             containerColor = MaterialTheme.colorScheme.primaryContainer

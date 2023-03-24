@@ -101,10 +101,10 @@ internal fun ProfileEditThemeScreen(
                     LazyColumn {
                         items(viewModel.availableItems) { item ->
                             ListItem(
-                                headlineText = {
+                                headlineContent = {
                                     Text(text = item.name)
                                 },
-                                supportingText = {
+                                supportingContent = {
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.padding(top = 4.dp)

@@ -133,10 +133,10 @@ private fun ActivityCardNewAchievements(
     ) {
         entry.achievements.forEach { achievement ->
             ListItem(
-                headlineText = {
+                headlineContent = {
                     Text(achievement.displayName)
                 },
-                supportingText = {
+                supportingContent = {
                     Text(achievement.displayDescription)
                 },
                 colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)),

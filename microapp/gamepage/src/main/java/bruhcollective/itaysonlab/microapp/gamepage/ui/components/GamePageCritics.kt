@@ -43,14 +43,14 @@ internal fun GamePageCritics(
             .fillMaxWidth()
     ) {
         ListItem(
-            supportingText = {
+            supportingContent = {
                 Text(text = when (deckReport.category) {
                     SteamDeckSupport.Unknown -> stringResource(id = R.string.gamepage_deckcompat_type_unknown)
                     SteamDeckSupport.Unsupported -> stringResource(id = R.string.gamepage_deckcompat_type_unsupported)
                     SteamDeckSupport.Playable -> stringResource(id = R.string.gamepage_deckcompat_type_playable)
                     SteamDeckSupport.Verified -> stringResource(id = R.string.gamepage_deckcompat_type_verified)
                 }, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }, headlineText = {
+            }, headlineContent = {
                 Text(
                     text = stringResource(id = R.string.gamepage_deckcompat_title),
                     color = MaterialTheme.colorScheme.onSurface,
@@ -80,12 +80,12 @@ internal fun GamePageCritics(
             )
 
             ListItem(
-                supportingText = {
+                supportingContent = {
                     Text(
                         text = metaCritic.score.toString(),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                }, headlineText = {
+                }, headlineContent = {
                     Text(
                         text = stringResource(id = R.string.gamepage_metacritic),
                         color = MaterialTheme.colorScheme.onSurface,

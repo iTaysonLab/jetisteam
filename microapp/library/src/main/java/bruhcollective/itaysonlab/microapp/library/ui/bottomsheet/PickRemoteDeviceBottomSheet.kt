@@ -43,9 +43,9 @@ internal fun PickRemoteDeviceBottomSheet(
         ) {
             viewModel.machines.forEachIndexed { index, machine ->
                 ListItem(
-                    headlineText = {
+                    headlineContent = {
                         Text(text = machine.machine_name.orEmpty())
-                    }, supportingText = {
+                    }, supportingContent = {
                         Text(text = machine.os_name.orEmpty())
                     }, modifier = Modifier.clickable(onClick = {
                         onMachinePicked(viewModel.steamId.steamId, machine.client_instanceid ?: return@clickable)

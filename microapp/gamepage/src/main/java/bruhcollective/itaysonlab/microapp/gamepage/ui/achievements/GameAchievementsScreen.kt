@@ -118,9 +118,9 @@ private fun AchievementCard(
     ) {
         Box {
             ListItem(
-                headlineText = {
+                headlineContent = {
                     Text(name)
-                }, supportingText = {
+                }, supportingContent = {
                     Column {
                         Text(desc)
                         Text(
@@ -157,9 +157,9 @@ private fun AchievementCard(
             )
 
             ListItem(
-                headlineText = {
+                headlineContent = {
                     Text(stringResource(id = R.string.gamepage_achievements_hidden))
-                }, supportingText = {
+                }, supportingContent = {
                     Text(stringResource(id = R.string.gamepage_achievements_hidden_desc))
                 }, colors = ListItemDefaults.colors(
                     containerColor = Color.Transparent

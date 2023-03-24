@@ -122,11 +122,11 @@ internal fun GuardSessionScreen(
 
                 items(viewModel.infoBlocks) { info ->
                     ListItem(
-                        headlineText = {
+                        headlineContent = {
                             Text(text = stringResource(id = info.titleRes), maxLines = 1)
                         }, leadingContent = {
                             Icon(imageVector = info.icon(), contentDescription = null)
-                        }, supportingText = {
+                        }, supportingContent = {
                             Text(text = info.text)
                         }, colors = ListItemDefaults.colors(
                             containerColor = Color.Transparent

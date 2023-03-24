@@ -60,13 +60,13 @@ private fun SessionItem(
     val visuals = remember(session) { SessionFormatter.formatSessionDescByTime(ctx, session) }
 
     ListItem(
-        headlineText = {
+        headlineContent = {
             Text(text = remember(session) {
                 session.deviceName.ifEmpty { visuals.fallbackName }
             }, maxLines = 1)
         }, leadingContent = {
             Icon(imageVector = visuals.icon(), contentDescription = null)
-        }, supportingText = {
+        }, supportingContent = {
             Text(text = stringResource(id = R.string.guard_sessions_last_seen, visuals.relativeLastSeen), maxLines = 1)
         }, colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(16.dp)

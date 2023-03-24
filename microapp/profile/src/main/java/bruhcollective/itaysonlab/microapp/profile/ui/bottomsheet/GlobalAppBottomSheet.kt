@@ -41,7 +41,7 @@ fun GlobalAppBottomSheet(
             ListItem(
                 leadingContent = {
                     Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
-                }, headlineText = {
+                }, headlineContent = {
                     Text(text = stringResource(id = R.string.edit_title))
                 }, modifier = Modifier.clickable(onClick = {
                     onEditProfileClicked(viewModel.steamId.longId)
@@ -56,7 +56,7 @@ fun GlobalAppBottomSheet(
             ListItem(
                 leadingContent = {
                     Icon(imageVector = Icons.Rounded.CalendarMonth, contentDescription = null)
-                }, headlineText = {
+                }, headlineContent = {
                     Text(text = "Steam Replay")
                 }, modifier = Modifier.clickable(onClick = {
                     onSteamWrappedClicked(viewModel.steamId.longId)
@@ -76,7 +76,7 @@ fun GlobalAppBottomSheet(
             ListItem(
                 leadingContent = {
                     Icon(imageVector = Icons.Rounded.Settings, contentDescription = null)
-                }, headlineText = {
+                }, headlineContent = {
                     Text(text = stringResource(id = R.string.global_sheet_options))
                 }, modifier = Modifier
                     .alpha(0.7f)
@@ -91,7 +91,7 @@ fun GlobalAppBottomSheet(
             ListItem(
                 leadingContent = {
                     Icon(imageVector = Icons.Rounded.Logout, contentDescription = null)
-                }, headlineText = {
+                }, headlineContent = {
                     Text(text = stringResource(id = R.string.global_sheet_sign_out))
                 }, modifier = Modifier
                     .alpha(0.7f)

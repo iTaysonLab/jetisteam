@@ -202,9 +202,9 @@ private fun QueueGameCard(
             )
 
             ListItem(
-                headlineText = {
+                headlineContent = {
                     Text(text = app.app.orEmpty())
-                }, supportingText = {
+                }, supportingContent = {
                     if (isDownloaded) {
                         Text(text = formattedBytesDownloaded)
                     } else {
