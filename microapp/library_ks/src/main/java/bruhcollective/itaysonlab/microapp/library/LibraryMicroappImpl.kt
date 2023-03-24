@@ -18,7 +18,7 @@ class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
         destinations: Destinations
     ) {
         composable(Routes.MyLibrary.url, arguments = listOf(CommonArguments.SteamIdWithDefault)) {
-            LibraryScreen(onGameClick = { appId ->
+            LibraryScreen(onApplicationClick = { appId ->
                 navController.navigate(Routes.GameDetail.mapArgs(mapOf(
                     Arguments.ApplicationId to appId
                 )))

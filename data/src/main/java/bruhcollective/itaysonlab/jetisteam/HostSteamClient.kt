@@ -3,9 +3,12 @@ package bruhcollective.itaysonlab.jetisteam
 import android.content.Context
 import bruhcollective.itaysonlab.jetisteam.controllers.JsLegacyController
 import bruhcollective.itaysonlab.jetisteam.controllers.UuidController
+import bruhcollective.itaysonlab.jetisteam.data.BuildConfig
+import bruhcollective.itaysonlab.jetisteam.util.KsteamAndroidLoggingTransport
 import bruhcollective.itaysonlab.ksteam.Core
 import bruhcollective.itaysonlab.ksteam.Guard
 import bruhcollective.itaysonlab.ksteam.Pics
+import bruhcollective.itaysonlab.ksteam.debug.KSteamLoggingVerbosity
 import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.kSteam
 import bruhcollective.itaysonlab.ksteam.models.SteamId
@@ -38,6 +41,14 @@ class HostSteamClient @Inject constructor(
         )
 
         rootFolder = File(context.filesDir, "ksteam")
+
+        loggingTransport = KsteamAndroidLoggingTransport
+
+        loggingVerbosity = if (BuildConfig.DEBUG) {
+            KSteamLoggingVerbosity.Verbose
+        } else {
+            KSteamLoggingVerbosity.Warning
+        }
 
         install(Core)
 

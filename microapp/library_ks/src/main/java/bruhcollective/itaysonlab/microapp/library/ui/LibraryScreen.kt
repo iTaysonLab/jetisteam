@@ -5,14 +5,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,12 +25,14 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,27 +40,44 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.IndicatorBehindScrollableTabRow
 import bruhcollective.itaysonlab.jetisteam.uikit.components.tabIndicatorOffset
+import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
+import bruhcollective.itaysonlab.microapp.library.R
 import bruhcollective.itaysonlab.microapp.library.ui.library_pages.CollectionPage
-import bruhcollective.itaysonlab.microapp.library.ui.library_pages.Homescreen
+import bruhcollective.itaysonlab.microapp.library.ui.library_pages.CollectionsShelf
+import bruhcollective.itaysonlab.microapp.library.ui.library_pages.PlayNextShelf
+import bruhcollective.itaysonlab.microapp.library.ui.library_pages.SimpleShelf
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
 
 @OptIn(
-    ExperimentalMaterial3Api::class,
     ExperimentalFoundationApi::class
 )
 @Composable
 internal fun LibraryScreen(
-    onGameClick: (Int) -> Unit,
+    onApplicationClick: (Int) -> Unit,
     // onRemoteClick: (Long, List<CClientComm_GetAllClientLogonInfo_Response_Session>) -> Unit,
     viewModel: LibraryScreenViewModel = hiltViewModel()
 ) {
-    val collections = viewModel.allCollections.collectAsStateWithLifecycle()
+    val sortedCollections by viewModel.sortedUserCollections.collectAsStateWithLifecycle(context = Dispatchers.IO)
+    val favorites by viewModel.favorites.collectAsStateWithLifecycle(context = Dispatchers.IO)
+    val recentApps by viewModel.recents.collectAsStateWithLifecycle(context = Dispatchers.IO)
 
     val scope = rememberCoroutineScope()
     val snackState = remember { SnackbarHostState() }
     val pagerState = rememberPagerState()
+
+    val onCollectionClick: (String) -> Unit = { id ->
+        scope.launch {
+            val targetPage = withContext(Dispatchers.Default) {
+                sortedCollections.indexOfFirst { it.id == id } + 1
+            }
+
+            pagerState.animateScrollToPage(targetPage)
+        }
+    }
 
     Scaffold(topBar = {
         IndicatorBehindScrollableTabRow(
@@ -92,7 +114,7 @@ internal fun LibraryScreen(
                 )
             }
 
-            collections.value.forEachIndexed { index, collection ->
+            sortedCollections.forEachIndexed { index, collection ->
                 Tab(
                     selected = pagerState.currentPage == index + 1,
                     onClick = {
@@ -118,18 +140,68 @@ internal fun LibraryScreen(
         }
     }, modifier = Modifier.fillMaxSize()) { innerPadding ->
         HorizontalPager(
-            pageCount = collections.value.size + 1, state = pagerState, modifier = Modifier
+            pageCount = sortedCollections.size + 1, state = pagerState, modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding), beyondBoundsPageCount = 1
         ) { page ->
             if (page == 0) {
-                Homescreen(collections = collections.value, onClick = onGameClick, onCollectionClicked = { id ->
-                    scope.launch {
-                        pagerState.animateScrollToPage(collections.value.indexOfFirst { it.id == id } + 1)
+                LazyColumn(Modifier.fillMaxSize()) {
+                    items(viewModel.homeScreenShelves, key = { it.id }) { shelf ->
+                        when (shelf.linkedCollection) {
+                            "all-collections" -> {
+                                CollectionsShelf(sortedCollections, onCollectionClick)
+                            }
+
+                            "favorite" -> {
+                                SimpleShelf(
+                                    collectionName = stringResource(id = R.string.library_shelf_favorite),
+                                    collectionGames = favorites,
+                                    onClick = onApplicationClick
+                                )
+                            }
+
+                            "recent-games" -> {
+                                SimpleShelf(
+                                    collectionName = stringResource(id = R.string.library_shelf_recent),
+                                    collectionGames = recentApps,
+                                    onClick = onApplicationClick
+                                )
+                            }
+
+                            "play-next" -> {
+                                PlayNextShelf(viewModel.nextPlayGames, onClick = onApplicationClick)
+                            }
+
+                            "type-games" -> {
+                                Card(Modifier.fillMaxWidth()) {
+                                    Text(text = "All Games", Modifier.padding(16.dp))
+                                }
+                            }
+
+                            else -> {
+                                val collection by viewModel.getCollection(shelf.linkedCollection).collectAsStateWithLifecycle(initialValue = LibraryCollection.Placeholder, context = Dispatchers.IO)
+                                val collectionGames by viewModel.getCollectionApps(shelf.linkedCollection).collectAsStateWithLifecycle(initialValue = emptyList(), context = Dispatchers.IO)
+
+                                SimpleShelf(
+                                    collectionName = collection.name,
+                                    collectionGames = collectionGames,
+                                    onClick = onApplicationClick
+                                )
+                            }
+                        }
                     }
-                })
+                }
             } else {
-                CollectionPage(collection = collections.value[page - 1], onClick = onGameClick)
+                val summaries by viewModel.getCollectionApps(sortedCollections[page - 1].id)
+                    .collectAsStateWithLifecycle(
+                        initialValue = emptyList(),
+                        context = Dispatchers.IO
+                    )
+
+                CollectionPage(
+                    summaries = summaries,
+                    onClick = onApplicationClick
+                )
             }
         }
     }

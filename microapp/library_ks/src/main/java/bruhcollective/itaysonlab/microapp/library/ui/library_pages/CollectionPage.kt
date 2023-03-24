@@ -18,28 +18,17 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
 import bruhcollective.itaysonlab.jetisteam.uikit.partialShapes
-import bruhcollective.itaysonlab.ksteam.handlers.library
+import bruhcollective.itaysonlab.ksteam.models.apps.AppSummary
 import bruhcollective.itaysonlab.ksteam.models.apps.libraryEntry
-import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
 import coil.compose.AsyncImage
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
 
 @Composable
 internal fun CollectionPage(
     onClick: (Int) -> Unit,
-    collection: LibraryCollection,
-    viewModel: CollectionPageViewModel = hiltViewModel()
+    summaries: List<AppSummary>,
 ) {
-    val data = viewModel.getData(collection.id).collectAsStateWithLifecycle(initialValue = emptyList(), context = Dispatchers.IO)
-
     RoundedPage(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
@@ -48,7 +37,7 @@ internal fun CollectionPage(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            itemsIndexed(data.value) { index, game ->
+            itemsIndexed(summaries) { index, game ->
                 LibraryItem(remember(game.id) {
                     game.libraryEntry.url
                 }, modifier = Modifier
@@ -64,13 +53,6 @@ internal fun CollectionPage(
             }
         }
     }
-}
-
-@HiltViewModel
-internal class CollectionPageViewModel @Inject constructor(
-    private val steamClient: HostSteamClient
-): ViewModel() {
-    fun getData(id: String) = steamClient.client.library.getAppsInCollection(id)
 }
 
 @Composable
