@@ -23,12 +23,22 @@ import soup.compose.material.motion.animation.rememberSlideDistance
 @Composable
 fun SteamConnectionRow (
     connectionState: CMClientState,
+    overrideVisibility: SteamConnectionRowVisibility = SteamConnectionRowVisibility.Default,
     onVisibilityChanged: (Boolean) -> Unit,
 ) {
     val sd = rememberSlideDistance()
     var isVisible by remember { mutableStateOf(true) }
 
-    LaunchedEffect(connectionState) {
+    LaunchedEffect(connectionState, overrideVisibility) {
+        if (overrideVisibility != SteamConnectionRowVisibility.Default) {
+            (overrideVisibility == SteamConnectionRowVisibility.AlwaysShow).let {
+                isVisible = it
+                onVisibilityChanged(it)
+            }
+
+            return@LaunchedEffect
+        }
+
         isVisible = true
         onVisibilityChanged(true)
 
@@ -91,4 +101,8 @@ private fun ProgressRow(title: String) {
     ResizableCircularIndicator(indicatorSize = 16.dp, strokeWidth = 2.dp)
     Spacer(modifier = Modifier.width(12.dp))
     Text(text = title)
+}
+
+enum class SteamConnectionRowVisibility {
+    Default, AlwaysShow, AlwaysHide
 }

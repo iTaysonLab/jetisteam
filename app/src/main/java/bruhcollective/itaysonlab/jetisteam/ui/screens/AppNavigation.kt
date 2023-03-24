@@ -29,6 +29,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.jetisteam.ui.SteamConnectionRow
+import bruhcollective.itaysonlab.jetisteam.ui.SteamConnectionRowVisibility
 import bruhcollective.itaysonlab.ksteam.handlers.account
 import bruhcollective.itaysonlab.ksteam.network.CMClientState
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
@@ -63,6 +64,8 @@ fun AppNavigation(
     val navController = rememberAnimatedNavController(bottomSheetNavigator)
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val navBackStack by navController.currentBackStack.collectAsStateWithLifecycle()
+    val navCurrentRootNode = navBackStack.getOrNull(1)?.destination
 
     LaunchedEffect(Unit) {
         if (navController.currentDestination?.route != "coreLoading") return@LaunchedEffect
@@ -99,11 +102,13 @@ fun AppNavigation(
             topBar = {
                 SteamConnectionRow(connectionState.value, onVisibilityChanged = {
                     connectionRowVisible = it
+                }, overrideVisibility = if (navCurrentRootNode?.route == "@auth") {
+                    SteamConnectionRowVisibility.AlwaysHide
+                } else {
+                    SteamConnectionRowVisibility.Default
                 })
             },
             bottomBar = {
-                val currentRootRoute = navController.backQueue.getOrNull(1)?.destination?.route
-
                 NavigationBar(
                     modifier = Modifier
                         .offset {
@@ -118,7 +123,7 @@ fun AppNavigation(
                         .navigationBarsPadding(),
                 ) {
                     viewModel.bottomNavDestinations.forEach { dest ->
-                        val selected = currentRootRoute == dest.route
+                        val selected = navCurrentRootNode?.route == dest.route
 
                         val onClick = remember(selected, navController, dest) {
                             {
