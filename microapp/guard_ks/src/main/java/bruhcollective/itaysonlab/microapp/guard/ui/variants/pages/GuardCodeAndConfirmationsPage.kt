@@ -210,7 +210,7 @@ private fun CodeBox(
     Card(
         colors = CardDefaults.cardColors(
             containerColor = background
-        ), modifier = modifier
+        ), modifier = modifier, shape = MaterialTheme.shapes.medium
     ) {
         AnimatedContent(targetState = isMenuShown, transitionSpec = {
             materialSharedAxisY(forward = targetState, slideDistance = slideDistance).using(SizeTransform(clip = false))
