@@ -46,20 +46,20 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.2'
     }
+}
 
-    packagingOptions {
-        resources {
-            excludes += "/META-INF/*.kotlin_module"
-            excludes += "/META-INF/*.version"
-            excludes += "/META-INF/**"
-            excludes += "**/*.properties"
-            excludes += "DebugProbesKt.bin"
-            excludes += "kotlin-tooling-metadata.json"
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            excludes += "log4j2.xml"
-            excludes += "**.proto"
-            excludes += "mozilla/public-suffix-list.txt"
-        }
+androidComponents {
+    onVariants(selector().withBuildType("release")) {
+        packaging.resources.excludes.add("META-INF/*.version")
+        packaging.resources.excludes.add("META-INF/*.kotlin_module")
+        packaging.resources.excludes.add("META-INF/**")
+        packaging.resources.excludes.add("META-INF/{AL2.0,LGPL2.1}")
+        packaging.resources.excludes.add("**/*.properties")
+        packaging.resources.excludes.add("DebugProbesKt.bin")
+        packaging.resources.excludes.add("kotlin-tooling-metadata.json")
+        packaging.resources.excludes.add("log4j2.xml")
+        packaging.resources.excludes.add("**.proto")
+        packaging.resources.excludes.add("mozilla/public-suffix-list.txt")
     }
 }
 
@@ -72,7 +72,7 @@ kotlin {
 }
 
 dependencies {
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.0"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.2"
 
     implementation project(":domain")
     implementation project(":data")
