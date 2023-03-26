@@ -41,6 +41,7 @@ android {
 }
 
 dependencies {
+    implementation libs.kotlinImmutableCollections 
     implementation libs.coilCompose
 
     implementation libs.bundles.compose

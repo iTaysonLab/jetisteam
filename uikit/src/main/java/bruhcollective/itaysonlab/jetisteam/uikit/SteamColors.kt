@@ -1,10 +1,11 @@
 package bruhcollective.itaysonlab.jetisteam.uikit
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import kotlinx.collections.immutable.persistentMapOf
 
 object SteamColors {
-    private val registeredThemes = mapOf(
+    private val registeredThemes = persistentMapOf(
         "Default" to ColorTheme(
             gradientBackground = Color(red = 34, green = 35, blue = 48, alpha = alpha(0.93f)),
             colorShowcaseHeader = Color(red = 43, green = 45, blue = 68, alpha = alpha(0.93f)),
@@ -241,7 +242,7 @@ object SteamColors {
     fun getColorTheme(id: String?) = id?.let { registeredThemes[it] } ?: default()
     fun default() = registeredThemes["Default"]!!
 
-    @Stable
+    @Immutable
     class ColorTheme(
         val gradientBackground: Color,
         val colorShowcaseHeader: Color,
