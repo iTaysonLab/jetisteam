@@ -58,4 +58,11 @@
     <string name="library_remote_pick_status_space">Not enough space (required: %s, left: %s)</string>
     <string name="library_remote_pick_status_progress">Already in install queue</string>
     <string name="library_remote_pick_status_ready">%s required (left: %s)</string>
+
+    <string name="library_pics_wait_title">Updating metadata…</string>
+    <string name="library_pics_wait_text">Jetisteam is now processing your owned games metadata to display your library.\n\nThis can take from a few seconds up to several minutes, depending on your library size. Please wait and don\'t exit the application during this process.</string>
+    <string name="library_pics_wait_task_preparing">Preparing…</string>
+    <string name="library_pics_wait_task_packages">Processing packages…</string>
+    <string name="library_pics_wait_task_apps">Processing apps…</string>
+    <string name="library_pics_wait_task_ready">Ready!</string>
 </resources>
