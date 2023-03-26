@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,9 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.IndicatorBehindScrollableTabRow
 import bruhcollective.itaysonlab.jetisteam.uikit.components.tabIndicatorOffset
-import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
-import bruhcollective.itaysonlab.microapp.library.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -55,8 +52,6 @@ internal fun LibraryMainContainer(
     viewModel: LibraryMainContainerViewModel = hiltViewModel()
 ) {
     val sortedCollections by viewModel.sortedUserCollections.collectAsStateWithLifecycle(context = Dispatchers.IO)
-    val favorites by viewModel.favorites.collectAsStateWithLifecycle(context = Dispatchers.IO)
-    val recentApps by viewModel.recents.collectAsStateWithLifecycle(context = Dispatchers.IO)
 
     val scope = rememberCoroutineScope()
     val snackState = remember { SnackbarHostState() }
@@ -133,9 +128,11 @@ internal fun LibraryMainContainer(
         }
     }, modifier = Modifier.fillMaxSize()) { innerPadding ->
         HorizontalPager(
-            pageCount = sortedCollections.size + 1, state = pagerState, modifier = Modifier
+            pageCount = sortedCollections.size + 1, state = pagerState,
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding), beyondBoundsPageCount = 1
+                .padding(innerPadding),
+            beyondBoundsPageCount = 1
         ) { page ->
             if (page == 0) {
                 LazyColumn(Modifier.fillMaxSize()) {
@@ -147,16 +144,16 @@ internal fun LibraryMainContainer(
 
                             "favorite" -> {
                                 SimpleShelf(
-                                    collectionName = stringResource(id = R.string.library_shelf_favorite),
-                                    collectionGames = favorites,
+                                    collectionDelegate = { viewModel.getCollection(shelf.linkedCollection) },
+                                    collectionGamesDelegate = { viewModel.favorites },
                                     onClick = onApplicationClick
                                 )
                             }
 
                             "recent-games" -> {
                                 SimpleShelf(
-                                    collectionName = stringResource(id = R.string.library_shelf_recent),
-                                    collectionGames = recentApps,
+                                    collectionDelegate = { viewModel.getCollection(shelf.linkedCollection) },
+                                    collectionGamesDelegate = { viewModel.recentPlayed },
                                     onClick = onApplicationClick
                                 )
                             }
@@ -172,12 +169,13 @@ internal fun LibraryMainContainer(
                             }
 
                             else -> {
-                                val collection by viewModel.getCollection(shelf.linkedCollection).collectAsStateWithLifecycle(initialValue = LibraryCollection.Placeholder, context = Dispatchers.IO)
-                                val collectionGames by viewModel.getCollectionApps(shelf.linkedCollection).collectAsStateWithLifecycle(initialValue = emptyList(), context = Dispatchers.IO)
-
                                 SimpleShelf(
-                                    collectionName = collection.name,
-                                    collectionGames = collectionGames,
+                                    collectionDelegate = {
+                                        viewModel.getCollection(shelf.linkedCollection)
+                                    },
+                                    collectionGamesDelegate = {
+                                        viewModel.getCollectionApps(shelf.linkedCollection)
+                                    },
                                     onClick = onApplicationClick
                                 )
                             }
@@ -185,14 +183,8 @@ internal fun LibraryMainContainer(
                     }
                 }
             } else {
-                val summaries by viewModel.getCollectionApps(sortedCollections[page - 1].id)
-                    .collectAsStateWithLifecycle(
-                        initialValue = emptyList(),
-                        context = Dispatchers.IO
-                    )
-
                 CollectionPage(
-                    summaries = summaries,
+                    summariesDelegate = { viewModel.getCollectionApps(sortedCollections[page - 1].id) },
                     onClick = onApplicationClick
                 )
             }

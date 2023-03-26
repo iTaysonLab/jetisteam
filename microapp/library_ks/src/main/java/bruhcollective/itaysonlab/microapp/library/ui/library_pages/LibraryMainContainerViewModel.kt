@@ -9,9 +9,15 @@ import bruhcollective.itaysonlab.ksteam.handlers.Library
 import bruhcollective.itaysonlab.ksteam.handlers.Pics
 import bruhcollective.itaysonlab.ksteam.handlers.Player
 import bruhcollective.itaysonlab.ksteam.models.AppId
+import bruhcollective.itaysonlab.ksteam.models.apps.AppSummary
 import bruhcollective.itaysonlab.ksteam.models.pics.AppInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
@@ -27,25 +33,25 @@ internal class LibraryMainContainerViewModel @Inject constructor(
     val sortedUserCollections = steamLibrary.userCollections.map { collections ->
         collections.values.sortedWith { o1, o2 ->
             o1.name.compareTo(o2.name, ignoreCase = true)
-        }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+        }.toImmutableList()
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, persistentListOf())
 
     val homeScreenShelves get() = steamLibrary.shelves.value
 
-    val favorites = steamLibrary.getFavoriteApps().stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
-    val recents = steamLibrary.getRecentApps().stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val favorites: StateFlow<ImmutableList<AppSummary>> = steamLibrary.getFavoriteApps().map(List<AppSummary>::toImmutableList).stateIn(viewModelScope, SharingStarted.Eagerly, persistentListOf())
+    val recentPlayed: StateFlow<ImmutableList<AppSummary>> = steamLibrary.getRecentApps().map(List<AppSummary>::toImmutableList).stateIn(viewModelScope, SharingStarted.Eagerly, persistentListOf())
 
-    var nextPlayGames by mutableStateOf<List<AppInfo>>(emptyList())
+    var nextPlayGames by mutableStateOf<ImmutableList<AppInfo>>(persistentListOf())
         private set
 
     init {
         viewModelScope.launch {
             nextPlayGames = steamPics.getAppIdsAsInfos(steamPlayer.getPlayNextQueue().map(
                 ::AppId
-            ))
+            )).toImmutableList()
         }
     }
 
     fun getCollection(id: String) = steamLibrary.userCollections.mapNotNull { it[id] }
-    fun getCollectionApps(id: String) = steamLibrary.getAppsInCollection(id)
+    fun getCollectionApps(id: String): Flow<ImmutableList<AppSummary>> = steamLibrary.getAppsInCollection(id).map(List<AppSummary>::toImmutableList)
 }

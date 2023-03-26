@@ -52,6 +52,8 @@ kotlin {
 }
 
 dependencies {
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.2"
+
     implementation project(':microapp:core')
     // implementation project(':microapp:gamepage')
 
@@ -62,6 +64,7 @@ dependencies {
     implementation project(':uikit')
 
     implementation libs.kotlinDatetime
+    implementation libs.kotlinImmutableCollections
 
     implementation libs.bundles.ksteam
     implementation libs.bundles.compose

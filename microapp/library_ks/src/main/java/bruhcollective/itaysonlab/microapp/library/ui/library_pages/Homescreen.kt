@@ -28,29 +28,38 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.ksteam.models.apps.AppSummary
 import bruhcollective.itaysonlab.ksteam.models.apps.libraryEntry
 import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
 import bruhcollective.itaysonlab.ksteam.models.pics.AppInfo
 import bruhcollective.itaysonlab.ksteam.models.pics.header
 import bruhcollective.itaysonlab.microapp.library.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SimpleShelf(
-    collectionName: String,
-    collectionGames: List<AppSummary>,
+    collectionDelegate: () -> Flow<LibraryCollection>,
+    collectionGamesDelegate: () -> Flow<ImmutableList<AppSummary>>,
     onClick: (Int) -> Unit
 ) {
+    val collection by collectionDelegate().collectAsStateWithLifecycle(initialValue = LibraryCollection.Placeholder, context = Dispatchers.IO)
+    val collectionGames by collectionGamesDelegate().collectAsStateWithLifecycle(initialValue = persistentListOf(), context = Dispatchers.IO)
+
     Column(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(text = collectionName, style = MaterialTheme.typography.headlineSmall)
+            Text(text = collection.name, style = MaterialTheme.typography.headlineSmall)
 
             Spacer(modifier = Modifier.width(8.dp))
 
@@ -106,11 +115,10 @@ internal fun SimpleShelf(
 
 @Composable
 internal fun PlayNextShelf(
-    games: List<AppInfo>,
+    games: ImmutableList<AppInfo>,
     onClick: (Int) -> Unit
 ) {
     Column(Modifier.fillMaxWidth()) {
-
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Column {
                 Text(
@@ -128,9 +136,10 @@ internal fun PlayNextShelf(
 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            modifier = Modifier
         ) {
-            items(games) { app ->
+            items(games, key = { it.appId }, contentType = { 0 }) { app ->
                 LibraryItem(
                     app.header.url,
                     modifier = Modifier
@@ -153,7 +162,7 @@ internal fun PlayNextShelf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CollectionsShelf(
-    collections: List<LibraryCollection>,
+    collections: ImmutableList<LibraryCollection>,
     onCollectionClicked: (String) -> Unit
 ) {
     Column(Modifier.fillMaxWidth()) {
