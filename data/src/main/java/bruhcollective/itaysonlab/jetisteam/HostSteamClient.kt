@@ -9,9 +9,7 @@ import bruhcollective.itaysonlab.ksteam.Core
 import bruhcollective.itaysonlab.ksteam.Guard
 import bruhcollective.itaysonlab.ksteam.Pics
 import bruhcollective.itaysonlab.ksteam.debug.KSteamLoggingVerbosity
-import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.kSteam
-import bruhcollective.itaysonlab.ksteam.models.SteamId
 import bruhcollective.itaysonlab.ksteam.models.enums.EGamingDeviceType
 import bruhcollective.itaysonlab.ksteam.network.CMClientState
 import bruhcollective.itaysonlab.ksteam.platform.DeviceInformation
@@ -20,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import okio.Path.Companion.toOkioPath
 import steam.webui.authentication.EAuthTokenPlatformType
 import java.io.File
 import javax.inject.Inject
@@ -40,12 +39,12 @@ class HostSteamClient @Inject constructor(
             deviceName = uuidController.deviceName
         )
 
-        rootFolder = File(context.filesDir, "ksteam")
+        rootFolder = File(context.filesDir, "ksteam").toOkioPath()
 
         loggingTransport = KsteamAndroidLoggingTransport
 
         loggingVerbosity = if (BuildConfig.DEBUG) {
-            KSteamLoggingVerbosity.Verbose
+            KSteamLoggingVerbosity.Debug
         } else {
             KSteamLoggingVerbosity.Warning
         }
@@ -72,9 +71,9 @@ class HostSteamClient @Inject constructor(
             client.start()
 
             // Migrate info
-            jsLegacyController.getGuard()?.let { newGuard ->
-                client.guard.tryAddConfig(SteamId(newGuard.steam_id.toULong()), newGuard)
-            }
+            //jsLegacyController.getGuard()?.let { newGuard ->
+            //    client.guard.tryAddConfig(SteamId(newGuard.steam_id.toULong()), newGuard)
+            //}
 
             //if (jsLegacyController.authSession != null) {
             //    jsLegacyController.clearAuth()

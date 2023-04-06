@@ -18,7 +18,7 @@ import androidx.lifecycle.viewModelScope
 import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.handlers.guardManagement
-import bruhcollective.itaysonlab.ksteam.platform.ipString
+import bruhcollective.itaysonlab.ksteam.util.ipString
 import bruhcollective.itaysonlab.microapp.core.ext.getProto
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp

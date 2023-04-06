@@ -1,15 +1,15 @@
 [versions]
 compose = "1.4.0"
 compose_m3 = "1.1.0-beta01"
-compose_compiler = "1.4.2"
+compose_compiler = "1.4.4"
 compose_motion = "0.11.0-alpha"
-accompanist = "0.29.2-rc"
+accompanist = "0.30.0"
 hilt = "2.44.2"
 retrofit = "2.9.0"
 richText = "0.15.0"
-wire = "4.5.2"
+wire = "4.5.3"
 camerax = "1.3.0-alpha05"
-ksteam = "r25"
+ksteam = "r26"
 
 [plugins]
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
@@ -46,7 +46,6 @@ accompanistNavigation = { module = "com.google.accompanist:accompanist-navigatio
 accompanistNavigationAnimation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
 accompanistSystemUi = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanistPermissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
-accompanistPager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 accompanistPagerIndicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanistWeb = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
 
@@ -55,7 +54,7 @@ composeMotionNavigation = { module = "io.github.fornewid:material-motion-compose
 
 coilCompose = "io.coil-kt:coil-compose:2.2.2"
 coilGif = "io.coil-kt:coil-gif:2.2.2"
-mmkv = "com.tencent:mmkv:1.2.14"
+mmkv = "com.tencent:mmkv:1.2.15"
 
 hiltNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0"
 hiltAndroid = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
@@ -80,23 +79,24 @@ cameraxMlkit = { module = "androidx.camera:camera-mlkit-vision", version.ref = "
 cameraxView = { module = "androidx.camera:camera-view", version.ref = "camerax" }
 
 junit = "junit:junit:4.13.2"
-androidTest = "androidx.test.ext:junit:1.1.3"
-androidEspresso = "androidx.test.espresso:espresso-core:3.4.0"
+androidTest = "androidx.test.ext:junit:1.1.5"
+androidEspresso = "androidx.test.espresso:espresso-core:3.5.1"
 
-ksteamCore = { module = "bruhcollective.itaysonlab.ksteam:core", version.ref = "ksteam" }
-ksteamProto = { module = "bruhcollective.itaysonlab.ksteam:proto-common", version.ref = "ksteam" }
-ksteamExtCore = { module = "bruhcollective.itaysonlab.ksteam:extension-core", version.ref = "ksteam" }
-ksteamExtGuard = { module = "bruhcollective.itaysonlab.ksteam:extension-guard", version.ref = "ksteam" }
-ksteamExtPics = { module = "bruhcollective.itaysonlab.ksteam:extension-pics", version.ref = "ksteam" }
+ksteamCore = { module = "bruhcollective.itaysonlab.ksteam:core-jvm", version.ref = "ksteam" }
+ksteamVdf = { module = "bruhcollective.itaysonlab:kotlinx-vdf-jvm", version.ref = "ksteam" }
+ksteamProto = { module = "bruhcollective.itaysonlab.ksteam:proto-common-jvm", version.ref = "ksteam" }
+ksteamExtCore = { module = "bruhcollective.itaysonlab.ksteam:extension-core-jvm", version.ref = "ksteam" }
+ksteamExtGuard = { module = "bruhcollective.itaysonlab.ksteam:extension-guard-jvm", version.ref = "ksteam" }
+ksteamExtPics = { module = "bruhcollective.itaysonlab.ksteam:extension-pics-jvm", version.ref = "ksteam" }
 
 [bundles]
 androidx = ["androidCoreKtx", "androidPalette", "androidLifecycleKtx", "androidCustomView", "androidCustomViewPoolingContainer"]
 compose = ["androidLifecycleCompose", "composeMaterial", "composeMaterialIcons", "composeMaterial3", "composeUi", "composeUiUtil", "composeNavigation", "composeActivity", "composeMotionCore", "composeMotionNavigation"]
 composeDebug = ["composeUiTooling", "composeUiToolingPreview", "composeTestManifest"]
 hilt = ["hiltNavigation", "hiltAndroid", "hiltCompiler"]
-accompanist = ["accompanistNavigation", "accompanistSystemUi", "accompanistPager", "accompanistPagerIndicators", "accompanistNavigationAnimation", "accompanistPermissions", "accompanistWeb"]
+accompanist = ["accompanistNavigation", "accompanistSystemUi", "accompanistPagerIndicators", "accompanistNavigationAnimation", "accompanistPermissions", "accompanistWeb"]
 retrofit = ["retrofit", "retrofitMoshi"]
 richText = ["richTextMaterial3", "richTextMarkdown"]
 camerax = ["cameraxCore", "camerax2", "cameraxLifecycle", "cameraxMlkit", "cameraxView"]
 androidTest = ["androidTest", "androidEspresso", "composeTestManifest", "composeUiTest"]
-ksteam = ["ksteamCore", "ksteamProto", "ksteamExtCore", "ksteamExtGuard", "ksteamExtPics"]
+ksteam = ["ksteamCore", "ksteamProto", "ksteamExtCore", "ksteamExtGuard", "ksteamExtPics", "ksteamVdf"]

@@ -44,11 +44,17 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.2'
+        kotlinCompilerExtensionVersion '1.4.4'
     }
 }
 
 androidComponents {
+    onVariants(selector()) {
+        packaging.resources.excludes.add("commonMain/**")
+        packaging.resources.excludes.add("META-INF/**/previous-compilation-data.bin")
+        packaging.resources.excludes.add("META-INF/*.json")
+    }
+
     onVariants(selector().withBuildType("release")) {
         packaging.resources.excludes.add("META-INF/*.version")
         packaging.resources.excludes.add("META-INF/*.kotlin_module")
