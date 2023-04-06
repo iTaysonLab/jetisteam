@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.microapp.auth.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.rounded.Speed
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +36,7 @@ fun OnboardingScreen(
                     text = stringResource(id = R.string.new_onboarding_title),
                     style = MaterialTheme.typography.labelMedium
                 )
+
                 Text(
                     text = stringResource(id = R.string.new_onboarding_desc),
                     style = MaterialTheme.typography.headlineMedium,
@@ -111,38 +114,46 @@ fun OnboardingScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OnboardingCard(
     icon: @Composable () -> Unit,
     title: String,
     text: String
 ) {
-    Card(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Surface(
-                tonalElevation = 16.dp,
-                shape = MaterialTheme.shapes.medium,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f).compositeOver(MaterialTheme.colorScheme.surfaceVariant),
-                contentColor = MaterialTheme.colorScheme.primary,
-            ) {
-                Box(Modifier.padding(16.dp)) {
-                    icon()
-                }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(16.dp)
+    ) {
+        Surface(
+            tonalElevation = 16.dp,
+            shape = MaterialTheme.shapes.medium,
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
+                .compositeOver(MaterialTheme.colorScheme.surfaceVariant),
+            contentColor = MaterialTheme.colorScheme.primary,
+        ) {
+            Box(Modifier.padding(12.dp)) {
+                icon()
             }
-
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = text,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Spacer(modifier = Modifier.height(2.dp))
+
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
