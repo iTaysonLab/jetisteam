@@ -76,10 +76,14 @@ internal fun SimpleShelf(
 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
+            contentPadding = PaddingValues(horizontal = 16.dp),
         ) {
             if (collectionGames.isNotEmpty()) {
-                items(collectionGames) { app ->
+                items(collectionGames, key = {
+                    it.id.id
+                }, contentType = {
+                    0
+                }) { app ->
                     LibraryItem(
                         app.libraryEntry.url,
                         modifier = Modifier

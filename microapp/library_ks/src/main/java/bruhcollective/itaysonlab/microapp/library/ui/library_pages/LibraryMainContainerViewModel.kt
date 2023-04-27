@@ -10,6 +10,7 @@ import bruhcollective.itaysonlab.ksteam.handlers.Pics
 import bruhcollective.itaysonlab.ksteam.handlers.Player
 import bruhcollective.itaysonlab.ksteam.models.AppId
 import bruhcollective.itaysonlab.ksteam.models.apps.AppSummary
+import bruhcollective.itaysonlab.ksteam.models.library.OwnedGame
 import bruhcollective.itaysonlab.ksteam.models.pics.AppInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -54,4 +55,5 @@ internal class LibraryMainContainerViewModel @Inject constructor(
 
     fun getCollection(id: String) = steamLibrary.userCollections.mapNotNull { it[id] }
     fun getCollectionApps(id: String): Flow<ImmutableList<AppSummary>> = steamLibrary.getAppsInCollection(id).map(List<AppSummary>::toImmutableList)
+    fun getCollectionOwnedApps(id: String): Flow<ImmutableList<OwnedGame>> = steamLibrary.getOwnedAppsInCollection(id).map(List<OwnedGame>::toImmutableList)
 }

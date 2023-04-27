@@ -184,7 +184,7 @@ internal fun LibraryMainContainer(
                 }
             } else {
                 CollectionPage(
-                    summariesDelegate = { viewModel.getCollectionApps(sortedCollections[page - 1].id) },
+                    summariesDelegate = { viewModel.getCollectionOwnedApps(sortedCollections[page - 1].id) },
                     onClick = onApplicationClick
                 )
             }

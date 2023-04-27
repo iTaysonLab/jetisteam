@@ -22,20 +22,25 @@ import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
 import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenLoading
 import bruhcollective.itaysonlab.jetisteam.uikit.partialShapes
-import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.microapp.guard.R
+import bruhcollective.itaysonlab.microapp.guard.ui.GuardViewModel
 import bruhcollective.itaysonlab.microapp.guard.utils.SessionFormatter
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun GuardSessionsPage(
     modifier: Modifier,
-    sessions: List<ActiveSession>?,
-    onSessionClicked: (ActiveSession) -> Unit
+    sessions: ImmutableList<GuardViewModel.ActiveSessionWrapper>?,
+    onSessionClicked: (GuardViewModel.ActiveSessionWrapper) -> Unit
 ) {
     RoundedPage(modifier) {
         if (sessions != null) {
-            LazyColumn(contentPadding = PaddingValues(16.dp)) {
-                itemsIndexed(sessions) { index, session ->
+            LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier) {
+                itemsIndexed(sessions, key = { _, session ->
+                    session.session.id
+                }, contentType = { _, _ ->
+                    0
+                }) { index, session ->
                     SessionItem(session, top = index == 0, bottom = index == sessions.lastIndex, onClick = {
                         onSessionClicked(session)
                     })
@@ -51,18 +56,18 @@ internal fun GuardSessionsPage(
 
 @Composable
 private fun SessionItem(
-    session: ActiveSession,
+    session: GuardViewModel.ActiveSessionWrapper,
     top: Boolean,
     bottom: Boolean,
     onClick: () -> Unit
 ) {
     val ctx = LocalContext.current
-    val visuals = remember(session) { SessionFormatter.formatSessionDescByTime(ctx, session) }
+    val visuals = remember(session) { SessionFormatter.formatSessionDescByTime(ctx, session.session) }
 
     ListItem(
         headlineContent = {
             Text(text = remember(session) {
-                session.deviceName.ifEmpty { visuals.fallbackName }
+                session.session.deviceName.ifEmpty { visuals.fallbackName }
             }, maxLines = 1)
         }, leadingContent = {
             Icon(imageVector = visuals.icon(), contentDescription = null)

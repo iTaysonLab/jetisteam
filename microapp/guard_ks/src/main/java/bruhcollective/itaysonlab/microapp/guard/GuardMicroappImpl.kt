@@ -51,7 +51,7 @@ class GuardMicroappImpl @Inject constructor(): GuardMicroapp() {
             }, onSessionClicked = { steamId, session ->
                 navController.navigate(Routes.SessionInfo.mapArgs(mapOf(
                     CommonArguments.SteamId to steamId,
-                    Arguments.SessionData to session.protoBytes().base64Url()
+                    Arguments.SessionData to session.session.protoBytes().base64Url()
                 )))
             }, onSessionArrived = { steamId, clientId ->
                 navController.navigate(Routes.ConfirmSignIn.mapArgs(mapOf(

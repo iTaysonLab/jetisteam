@@ -87,6 +87,7 @@ ksteamVdf = { module = "bruhcollective.itaysonlab:kotlinx-vdf-jvm", version.ref 
 ksteamProto = { module = "bruhcollective.itaysonlab.ksteam:proto-common-jvm", version.ref = "ksteam" }
 ksteamExtCore = { module = "bruhcollective.itaysonlab.ksteam:extension-core-jvm", version.ref = "ksteam" }
 ksteamExtGuard = { module = "bruhcollective.itaysonlab.ksteam:extension-guard-jvm", version.ref = "ksteam" }
+ksteamExtGuardMigration = { module = "bruhcollective.itaysonlab.ksteam:extension-guard-proto-migration-jvm", version.ref = "ksteam" }
 ksteamExtPics = { module = "bruhcollective.itaysonlab.ksteam:extension-pics-jvm", version.ref = "ksteam" }
 
 [bundles]
@@ -99,4 +100,4 @@ retrofit = ["retrofit", "retrofitMoshi"]
 richText = ["richTextMaterial3", "richTextMarkdown"]
 camerax = ["cameraxCore", "camerax2", "cameraxLifecycle", "cameraxMlkit", "cameraxView"]
 androidTest = ["androidTest", "androidEspresso", "composeTestManifest", "composeUiTest"]
-ksteam = ["ksteamCore", "ksteamProto", "ksteamExtCore", "ksteamExtGuard", "ksteamExtPics", "ksteamVdf"]
+ksteam = ["ksteamCore", "ksteamProto", "ksteamExtCore", "ksteamExtGuard", "ksteamExtGuardMigration", "ksteamExtPics", "ksteamVdf"]

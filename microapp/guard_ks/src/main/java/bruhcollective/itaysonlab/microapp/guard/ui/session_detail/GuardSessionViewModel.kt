@@ -19,13 +19,14 @@ import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.handlers.guardManagement
 import bruhcollective.itaysonlab.ksteam.util.ipString
-import bruhcollective.itaysonlab.microapp.core.ext.getProto
+import bruhcollective.itaysonlab.microapp.core.ext.getBase64
 import bruhcollective.itaysonlab.microapp.core.ext.getSteamId
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.guard.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import steam.webui.authentication.CAuthentication_RefreshToken_Enumerate_Response_RefreshTokenDescription
 import steam.webui.authentication.EAuthSessionGuardType
 import javax.inject.Inject
 
@@ -36,7 +37,7 @@ internal class GuardSessionViewModel @Inject constructor(
     private val steamClient: HostSteamClient
 ) : ViewModel() {
     val steamId = savedStateHandle.getSteamId()
-    val sessionData = ActiveSession(savedStateHandle.getProto(GuardMicroapp.Arguments.SessionData.name))
+    val sessionData = ActiveSession(CAuthentication_RefreshToken_Enumerate_Response_RefreshTokenDescription.Companion.ADAPTER.decode(savedStateHandle.getBase64(GuardMicroapp.Arguments.SessionData.name)))
 
     val infoBlocks = buildListBlocks(context)
     var revokingSession by mutableStateOf(false)

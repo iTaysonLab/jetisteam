@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
 import bruhcollective.itaysonlab.jetisteam.uikit.partialShapes
-import bruhcollective.itaysonlab.ksteam.models.apps.AppSummary
-import bruhcollective.itaysonlab.ksteam.models.apps.libraryEntry
+import bruhcollective.itaysonlab.jetisteam.util.CdnUrlUtil
+import bruhcollective.itaysonlab.ksteam.models.library.OwnedGame
 import coil.compose.AsyncImage
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 internal fun CollectionPage(
     onClick: (Int) -> Unit,
-    summariesDelegate: () -> Flow<ImmutableList<AppSummary>>,
+    summariesDelegate: () -> Flow<ImmutableList<OwnedGame>>,
 ) {
     val summaries by summariesDelegate().collectAsStateWithLifecycle(
         initialValue = persistentListOf(),
@@ -54,7 +54,11 @@ internal fun CollectionPage(
                 0
             }) { index, app ->
                 LibraryItem(remember(app.id) {
-                    app.libraryEntry.url
+                    CdnUrlUtil.buildAppUrl(app.id.id, if (app.capsuleFilename.isNotEmpty()) {
+                        app.capsuleFilename
+                    } else {
+                        "library_600x900.jpg"
+                    })
                 }, modifier = Modifier
                     .aspectRatio(2f / 3f)
                     .clip(

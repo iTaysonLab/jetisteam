@@ -39,7 +39,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import bruhcollective.itaysonlab.jetisteam.uikit.components.IndicatorBehindScrollableTabRow
 import bruhcollective.itaysonlab.jetisteam.uikit.components.tabIndicatorOffset
-import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.CodeModel
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.core.navigation.extensions.results.InstallResultHandler
@@ -64,7 +63,7 @@ internal fun GuardScreen(
     onQrClicked: (Long) -> Unit,
     onRecoveryClicked: (Long) -> Unit,
     onConfirmationClicked: (Long, String) -> Unit,
-    onSessionClicked: (Long, ActiveSession) -> Unit,
+    onSessionClicked: (Long, GuardViewModel.ActiveSessionWrapper) -> Unit,
     onSessionArrived: (Long, Long) -> Unit,
 ) {
     val isConnectedToSteam = viewModel.connectedToSteam.collectAsStateWithLifecycle(initialValue = false)

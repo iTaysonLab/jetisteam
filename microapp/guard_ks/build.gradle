@@ -58,10 +58,11 @@ dependencies {
     implementation project(':domain')
     implementation project(':uikit')
 
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0-RC"
-    implementation 'com.google.mlkit:barcode-scanning:17.0.3'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0"
+    implementation 'com.google.mlkit:barcode-scanning:17.1.0'
 
     implementation libs.kotlinDatetime
+    implementation libs.kotlinImmutableCollections
 
     implementation libs.bundles.ksteam
     implementation libs.bundles.compose
