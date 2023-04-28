@@ -23,7 +23,7 @@ class QrCodeBottomsheetViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             qrCodeState = account.getSignInQrCode()!!.let {
                 QrCodeState.Ready(
-                    QRCode("https://s.team/q/${it.version}/${it.data}")
+                    QRCode(it.data)
                 )
             }
         }
