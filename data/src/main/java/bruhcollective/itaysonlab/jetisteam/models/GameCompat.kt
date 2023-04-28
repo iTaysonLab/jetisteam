@@ -1,41 +1,41 @@
 package bruhcollective.itaysonlab.jetisteam.models
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 class GameCompatDetails(
     val success: Boolean,
     val data: GameCompatDetailsData?
 )
 
-@JsonClass(generateAdapter = true)
+@Serializable
 class GameCompatDetailsData(
-    @Json(name = "friendsown") val friendsOwners: List<Owner>,
-    @Json(name = "recommendations") val friendsRecommendations: Recommendations,
-    @Json(name = "added_to_wishlist") val inWishlist: Boolean,
-    @Json(name = "is_owned") val inLibrary: Boolean
+    @SerialName("friendsown") val friendsOwners: List<Owner>,
+    @SerialName("recommendations") val friendsRecommendations: Recommendations,
+    @SerialName("added_to_wishlist") val inWishlist: Boolean,
+    @SerialName("is_owned") val inLibrary: Boolean
 ) {
-    @JsonClass(generateAdapter = true)
+    @Serializable
     class Owner(
         val steamid: Long,
-        @Json(name = "playtime_twoweeks") val twoWeeksPlaytime: Int,
-        @Json(name = "playtime_total") val totalPlaytime: Int,
+        @SerialName("playtime_twoweeks") val twoWeeksPlaytime: Int,
+        @SerialName("playtime_total") val totalPlaytime: Int,
     ) {
         val steamId get() = SteamID(steamid)
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     class Recommendations(
-        @Json(name = "totalfriends") val friendsWithReviews: Int,
+        @SerialName("totalfriends") val friendsWithReviews: Int,
         val friends: List<FriendReview>?
     ) {
-        @JsonClass(generateAdapter = true)
+        @Serializable
         class FriendReview(
             val steamid: Long,
             val timestamp: Long,
             val recommendation: String,
-            @Json(name = "commentcount") val comments: Int
+            @SerialName("commentcount") val comments: Int
         ) {
             val steamId get() = SteamID(steamid)
         }

@@ -1,15 +1,15 @@
 package bruhcollective.itaysonlab.jetisteam.models
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 class QueryTimeResponse(
     val response: QueryTimeData
 )
 
-@JsonClass(generateAdapter = true)
+@Serializable
 class QueryTimeData(
-    @Json(name = "server_time") val serverTime: Long,
-    @Json(name = "allow_correction") val allowCorrection: Boolean?,
+    @SerialName("server_time") val serverTime: Long,
+    @SerialName("allow_correction") val allowCorrection: Boolean?,
 )

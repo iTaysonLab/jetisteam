@@ -1,18 +1,18 @@
 package bruhcollective.itaysonlab.jetisteam.models
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 class Miniprofile (
     val level: Int,
-    @Json(name = "avatar_url") val avatarUrl: String,
-    @Json(name = "persona_name") val personaName: String,
-    @Json(name = "favorite_badge") val favoriteBadge: MiniprofileBadge?,
-    @Json(name = "in_game") val inGame: MiniprofileIngame?,
+    @SerialName("avatar_url") val avatarUrl: String,
+    @SerialName("persona_name") val personaName: String,
+    @SerialName("favorite_badge") val favoriteBadge: MiniprofileBadge?,
+    @SerialName("in_game") val inGame: MiniprofileIngame?,
 )
 
-@JsonClass(generateAdapter = true)
+@Serializable
 class MiniprofileBadge(
     val name: String,
     val xp: String,
@@ -21,9 +21,9 @@ class MiniprofileBadge(
     val icon: String
 )
 
-@JsonClass(generateAdapter = true)
+@Serializable
 class MiniprofileIngame(
     val name: String,
     val logo: String,
-    @Json(name = "rich_presence") val richPresence: String
+    @SerialName("rich_presence") val richPresence: String
 )

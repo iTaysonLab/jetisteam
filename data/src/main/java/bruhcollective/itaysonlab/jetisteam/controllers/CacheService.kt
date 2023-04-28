@@ -1,8 +1,9 @@
 package bruhcollective.itaysonlab.jetisteam.controllers
 
-import com.squareup.moshi.JsonAdapter
 import com.squareup.wire.Message
 import com.squareup.wire.ProtoAdapter
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.Json
 import okhttp3.internal.EMPTY_BYTE_ARRAY
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -47,7 +48,7 @@ class CacheService @Inject constructor(
 
     suspend fun <T> jsonEntry(
         key: String,
-        adapter: JsonAdapter<T>,
+        adapter: KSerializer<T>,
         maxCacheTime: Duration = 24.hours,
         force: Boolean = false,
         networkFunc: suspend () -> T,
@@ -61,11 +62,11 @@ class CacheService @Inject constructor(
                 meta = cachedMeta,
                 networkFunc = networkFunc,
                 defaultFunc = defaultFunc,
-                localFunc = adapter::fromJson,
-                cacheWrap = adapter::toJson
+                localFunc = { Json.decodeFromString(adapter, it) },
+                cacheWrap = { Json.encodeToString(adapter, it) }
             ) ?: defaultFunc()
         } else if (cachedMeta.data != null) {
-            adapter.fromJson(cachedMeta.data) ?: defaultFunc()
+            Json.decodeFromString(adapter, cachedMeta.data)
         } else {
             defaultFunc()
         }

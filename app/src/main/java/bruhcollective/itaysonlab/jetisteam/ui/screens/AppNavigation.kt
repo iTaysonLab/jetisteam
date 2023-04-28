@@ -1,14 +1,32 @@
 package bruhcollective.itaysonlab.jetisteam.ui.screens
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,10 +51,15 @@ import bruhcollective.itaysonlab.jetisteam.ui.SteamConnectionRowVisibility
 import bruhcollective.itaysonlab.ksteam.handlers.account
 import bruhcollective.itaysonlab.ksteam.network.CMClientState
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
-import bruhcollective.itaysonlab.microapp.core.*
+import bruhcollective.itaysonlab.microapp.core.BottomNavigationCapable
+import bruhcollective.itaysonlab.microapp.core.ComposableMicroappEntry
+import bruhcollective.itaysonlab.microapp.core.Destinations
+import bruhcollective.itaysonlab.microapp.core.HasFullscreenRoutes
+import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
 import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
+import bruhcollective.itaysonlab.microapp.core.find
 import bruhcollective.itaysonlab.microapp.guard.GuardMicroapp
 import bruhcollective.itaysonlab.microapp.library.LibraryMicroapp
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
@@ -254,8 +277,7 @@ class AppNavigationViewModel @Inject constructor(
         }
     }
 
-    @OptIn(ExperimentalAnimationApi::class)
-    fun <T> buildAnimation(scope: AnimatedContentScope<NavBackStackEntry>, builder: (forwardDirection: Boolean) -> T): T {
+    fun <T> buildAnimation(scope: AnimatedContentTransitionScope<NavBackStackEntry>, builder: (forwardDirection: Boolean) -> T): T {
         val isRoute = getStartingRoute(scope.initialState.destination)
         val tsRoute = getStartingRoute(scope.targetState.destination)
 

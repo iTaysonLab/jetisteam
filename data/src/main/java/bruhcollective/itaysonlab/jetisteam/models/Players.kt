@@ -1,13 +1,13 @@
 package bruhcollective.itaysonlab.jetisteam.models
 
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 class Players(
     val players: List<Player>
 )
 
-@JsonClass(generateAdapter = true)
+@Serializable
 class Player(
     val steamid: String,
     // val communityvisibilitystate: Int,

@@ -1,29 +1,29 @@
 package bruhcollective.itaysonlab.jetisteam.models
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 class SteamDeckSupportReportWrap(
     val success: Int,
     val results: SteamDeckSupportReport
 )
 
-@JsonClass(generateAdapter = true)
+@Serializable
 class SteamDeckSupportReport(
-    @Json(name = "appid") val appId: Int,
-    @Json(name = "resolved_category") val resolvedCategory: Int,
-    @Json(name = "resolved_items") val resolvedItems: List<SupportItem>
+    @SerialName("appid") val appId: Int,
+    @SerialName("resolved_category") val resolvedCategory: Int,
+    @SerialName("resolved_items") val resolvedItems: List<SupportItem>
 ) {
     @delegate:Transient
     val category by lazy {
         SteamDeckSupport.values().firstOrNull { it.enumInt == resolvedCategory } ?: SteamDeckSupport.Unknown
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     class SupportItem(
-        @Json(name = "display_type") val type: Int,
-        @Json(name = "loc_token") val stringRef: String,
+        @SerialName("display_type") val type: Int,
+        @SerialName("loc_token") val stringRef: String,
     ) {
         @delegate:Transient
         val displayType by lazy {

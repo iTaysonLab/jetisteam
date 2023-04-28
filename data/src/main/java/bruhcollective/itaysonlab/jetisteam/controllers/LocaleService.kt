@@ -2,10 +2,10 @@ package bruhcollective.itaysonlab.jetisteam.controllers
 
 import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.ksteam.handlers.Persona
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.adapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -17,7 +17,6 @@ import kotlin.time.Duration.Companion.days
 class LocaleService @Inject constructor(
     private val hostSteamClient: HostSteamClient,
     private val cacheService: CacheService,
-    private val moshi: Moshi,
     private val okHttpClient: OkHttpClient
 ) {
     private companion object {
@@ -33,10 +32,9 @@ class LocaleService @Inject constructor(
         return hostSteamClient.client.getHandler<Persona>().currentPersona.value.country
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     suspend fun localeMap(): Map<String, String> {
         if (languageDynamic.isEmpty()) {
-            val adapter = moshi.adapter<Map<String, String>>()
+            val adapter = serializer<Map<String, String>>()
 
             return cacheService.jsonEntry(
                 key = keyLanguage(),
@@ -46,7 +44,7 @@ class LocaleService @Inject constructor(
                         okHttpClient.newCall(Request(
                             url = "https://steamcommunity.com/public/javascript/applications/community/localization/shared_${language}-json.js".toHttpUrl()
                         )).execute().use { r ->
-                            adapter.fromJson(LANG_REGEX.find(r.body.string().lines().last().replace("\\\\", "\\"))!!.groupValues[1]) ?: emptyMap()
+                            Json.decodeFromString(adapter, LANG_REGEX.find(r.body.string().lines().last().replace("\\\\", "\\"))!!.groupValues[1]) ?: emptyMap()
                         }
                     }
                 },
