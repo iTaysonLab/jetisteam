@@ -51,6 +51,8 @@ kotlin {
 }
 
 dependencies {
+    implementation project(":uikit")
+
     implementation libs.bundles.ksteam
 
     implementation libs.bundles.compose

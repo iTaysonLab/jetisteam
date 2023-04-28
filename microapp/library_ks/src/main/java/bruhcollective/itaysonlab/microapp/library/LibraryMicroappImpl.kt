@@ -44,7 +44,7 @@ class LibraryMicroappImpl @Inject constructor(): LibraryMicroapp() {
         }*/
 
         composable(Routes.GameDetail.url, arguments = listOf(Arguments.ApplicationId)) {
-            LibraryGamepageScreen()
+            LibraryGamepageScreen(onBack = navController::popBackStack)
         }
 
         /*bottomSheet(Routes.PickRemoteMachine.url, arguments = listOf(CommonArguments.SteamId, Arguments.MachineList)) {

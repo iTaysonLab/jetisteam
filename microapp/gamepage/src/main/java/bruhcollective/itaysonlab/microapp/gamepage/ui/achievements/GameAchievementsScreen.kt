@@ -60,7 +60,7 @@ internal fun GameAchievementsScreen(
         ) {
             PageLayout(state = viewModel.state, onReload = viewModel::reload) { data ->
                 LazyColumn(
-                    contentPadding = PaddingValues(16.dp),
+                    contentPadding = floatingWindowInsetsAsPaddings(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(data.global) { achievement ->

@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import bruhcollective.itaysonlab.jetisteam.uikit.FloatingWindowInsetsAsPaddings
 import bruhcollective.itaysonlab.jetisteam.uikit.components.IndicatorBehindScrollableTabRow
 import bruhcollective.itaysonlab.jetisteam.uikit.components.tabIndicatorOffset
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
@@ -135,7 +136,7 @@ internal fun LibraryMainContainer(
             beyondBoundsPageCount = 1
         ) { page ->
             if (page == 0) {
-                LazyColumn(Modifier.fillMaxSize()) {
+                LazyColumn(Modifier.fillMaxSize(), contentPadding = FloatingWindowInsetsAsPaddings) {
                     items(viewModel.homeScreenShelves, key = { it.id }) { shelf ->
                         when (shelf.linkedCollection) {
                             "all-collections" -> {

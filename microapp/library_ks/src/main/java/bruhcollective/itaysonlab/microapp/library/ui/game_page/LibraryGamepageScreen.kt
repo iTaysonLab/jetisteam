@@ -60,7 +60,8 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun LibraryGamepageScreen(
-    viewModel: LibraryGamepageViewModel = hiltViewModel()
+    viewModel: LibraryGamepageViewModel = hiltViewModel(),
+    onBack: () -> Unit
 ) {
     val surfaceColor = MaterialTheme.colorScheme.surface
 
@@ -112,7 +113,7 @@ internal fun LibraryGamepageScreen(
                     .pin(), colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent
                 ), navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = onBack) {
                         Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
                     }
                 }

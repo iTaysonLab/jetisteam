@@ -2,7 +2,6 @@ package bruhcollective.itaysonlab.microapp.library.ui.library_pages
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -21,6 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
+import bruhcollective.itaysonlab.jetisteam.uikit.floatingWindowInsetsAsPaddings
 import bruhcollective.itaysonlab.jetisteam.uikit.partialShapes
 import bruhcollective.itaysonlab.jetisteam.util.CdnUrlUtil
 import bruhcollective.itaysonlab.ksteam.models.library.OwnedGame
@@ -43,7 +43,7 @@ internal fun CollectionPage(
     RoundedPage(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = floatingWindowInsetsAsPaddings(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxSize()

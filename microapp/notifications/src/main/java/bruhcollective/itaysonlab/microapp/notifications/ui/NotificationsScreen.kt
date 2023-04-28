@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.microapp.notifications.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,7 +9,12 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
+import bruhcollective.itaysonlab.jetisteam.uikit.floatingWindowInsetsAsPaddings
 import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenLoading
 import bruhcollective.itaysonlab.ksteam.models.notifications.Notification
 import bruhcollective.itaysonlab.ksteam.models.notifications.NotificationFeed
@@ -59,7 +64,7 @@ internal fun NotificationsScreen(
                 is NotificationFeed.Loaded -> {
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(16.dp)
+                        contentPadding = floatingWindowInsetsAsPaddings(16.dp)
                     ) {
                         items(feed.notifications) { notification ->
                             NotificationRenderer(notification) { onClick(notification) }

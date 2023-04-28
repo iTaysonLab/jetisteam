@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.microapp.library.ui.game_page.community
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -18,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import bruhcollective.itaysonlab.jetisteam.uikit.floatingWindowInsetsAsPaddings
 import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
 import bruhcollective.itaysonlab.ksteam.models.news.community.CommunityHubPost
 import bruhcollective.itaysonlab.microapp.library.ui.game_page.community.cards.CommunitySmallGridCard
@@ -30,7 +30,7 @@ internal fun GamepageCommunityScreen(
     PageLayout(viewModel.state) { list ->
         LazyVerticalGrid(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = floatingWindowInsetsAsPaddings(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             columns = GridCells.Fixed(2) // TODO: tablets

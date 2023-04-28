@@ -48,7 +48,7 @@ class HostSteamClient @Inject constructor(
         loggingTransport = KsteamAndroidLoggingTransport
 
         loggingVerbosity = if (BuildConfig.DEBUG) {
-            KSteamLoggingVerbosity.Debug
+            KSteamLoggingVerbosity.Verbose
         } else {
             KSteamLoggingVerbosity.Warning
         }

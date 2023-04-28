@@ -2,7 +2,6 @@ package bruhcollective.itaysonlab.microapp.library.ui.game_page.activity
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import bruhcollective.itaysonlab.jetisteam.uikit.floatingWindowInsetsAsPaddings
 import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
 import coil.compose.AsyncImage
@@ -33,7 +33,7 @@ internal fun GamepageActivityScreen(
     PageLayout(viewModel.state) { list ->
         LazyColumn(
             Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = floatingWindowInsetsAsPaddings(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(list) { entry ->

@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.microapp.guard.ui.variants.pages
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Divider
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
 import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenLoading
 import bruhcollective.itaysonlab.jetisteam.uikit.partialShapes
+import bruhcollective.itaysonlab.jetisteam.uikit.floatingWindowInsetsAsPaddings
 import bruhcollective.itaysonlab.microapp.guard.R
 import bruhcollective.itaysonlab.microapp.guard.ui.GuardViewModel
 import bruhcollective.itaysonlab.microapp.guard.utils.SessionFormatter
@@ -35,7 +35,7 @@ internal fun GuardSessionsPage(
 ) {
     RoundedPage(modifier) {
         if (sessions != null) {
-            LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier) {
+            LazyColumn(contentPadding = floatingWindowInsetsAsPaddings(16.dp), modifier = Modifier) {
                 itemsIndexed(sessions, key = { _, session ->
                     session.session.id
                 }, contentType = { _, _ ->

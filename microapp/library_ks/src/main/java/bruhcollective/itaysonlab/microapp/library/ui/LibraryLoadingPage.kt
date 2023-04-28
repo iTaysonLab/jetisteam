@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.jetisteam.uikit.FloatingWindowInsetsAsPaddings
 import bruhcollective.itaysonlab.ksteam.handlers.Pics
 import bruhcollective.itaysonlab.microapp.library.R
 
@@ -41,7 +42,8 @@ fun LibraryLoadingPage(
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .statusBarsPadding()) {
+        .statusBarsPadding()
+        .padding(FloatingWindowInsetsAsPaddings)) {
         Column(
             modifier = Modifier.align(Alignment.Center),
             verticalArrangement = Arrangement.spacedBy(8.dp),

@@ -8,33 +8,26 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -48,6 +41,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import bruhcollective.itaysonlab.jetisteam.HostSteamClient
 import bruhcollective.itaysonlab.jetisteam.ui.SteamConnectionRow
 import bruhcollective.itaysonlab.jetisteam.ui.SteamConnectionRowVisibility
+import bruhcollective.itaysonlab.jetisteam.uikit.LocalFloatingBarInset
+import bruhcollective.itaysonlab.jetisteam.uikit.components.bottom_bar.BottomBarItem
+import bruhcollective.itaysonlab.jetisteam.uikit.components.bottom_bar.FloatingBottomBar
 import bruhcollective.itaysonlab.ksteam.handlers.account
 import bruhcollective.itaysonlab.ksteam.network.CMClientState
 import bruhcollective.itaysonlab.microapp.auth.AuthMicroapp
@@ -55,6 +51,7 @@ import bruhcollective.itaysonlab.microapp.core.BottomNavigationCapable
 import bruhcollective.itaysonlab.microapp.core.ComposableMicroappEntry
 import bruhcollective.itaysonlab.microapp.core.Destinations
 import bruhcollective.itaysonlab.microapp.core.HasFullscreenRoutes
+import bruhcollective.itaysonlab.microapp.core.NavigationEntry
 import bruhcollective.itaysonlab.microapp.core.NestedMicroappEntry
 import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.core.ext.ROOT_NAV_GRAPH_ID
@@ -106,7 +103,7 @@ fun AppNavigation(
     val navOffsetReverse by animateDpAsState(if (!shouldHideNavigationBar) 80.dp + navBarHeightDp else 0.dp)
     val slideDistance = rememberSlideDistance()
 
-    val connectionState = viewModel.connectingState.collectAsStateWithLifecycle()
+    val connectionState by viewModel.connectingState.collectAsStateWithLifecycle()
 
     var connectionRowVisible by remember { mutableStateOf(true) }
 
@@ -123,7 +120,7 @@ fun AppNavigation(
     ) {
         Scaffold(
             topBar = {
-                SteamConnectionRow(connectionState.value, onVisibilityChanged = {
+                SteamConnectionRow(connectionState, onVisibilityChanged = {
                     connectionRowVisible = it
                 }, overrideVisibility = if (navCurrentRootNode?.route == "@auth") {
                     SteamConnectionRowVisibility.AlwaysHide
@@ -132,112 +129,110 @@ fun AppNavigation(
                 })
             },
             bottomBar = {
-                NavigationBar(
-                    modifier = Modifier
-                        .offset {
-                            IntOffset(
-                                0,
-                                navOffset
-                                    .toPx()
-                                    .toInt()
-                            )
+                fun navigateTo(dest: NavigationEntry) {
+                    navController.navigate(dest.route) {
+                        popUpTo(ROOT_NAV_GRAPH_ID) {
+                            saveState = true
                         }
-                        .background(MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp))
-                        .navigationBarsPadding(),
-                ) {
-                    viewModel.bottomNavDestinations.forEach { dest ->
-                        val selected = navCurrentRootNode?.route == dest.route
 
-                        val onClick = remember(selected, navController, dest) {
-                            {
-                                if (!selected) {
-                                    navController.navigate(dest.route) {
-                                        popUpTo(ROOT_NAV_GRAPH_ID) {
-                                            saveState = true
-                                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
 
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                }
+                val bottomBarItems = remember(connectionState, viewModel.bottomNavDestinations) {
+                    viewModel.bottomNavDestinations.filter { dest ->
+                        dest.route == "@guard" || connectionState == CMClientState.Connected
+                    }.map { entry ->
+                        BottomBarItem.Icon(
+                            icon = entry.icon,
+                            description = entry.name,
+                            id = entry.route,
+                            onClick = {
+                                navigateTo(entry)
                             }
-                        }
-
-                        NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    if (selected) {
-                                        dest.iconSelected()
-                                    } else {
-                                        dest.icon()
-                                    },
-                                    contentDescription = stringResource(dest.name)
-                                )
-                            },
-                            label = { Text(stringResource(dest.name)) },
-                            selected = selected,
-                            enabled = dest.route == "@guard" || connectionState.value == CMClientState.Connected,
-                            onClick = onClick
                         )
                     }
                 }
+
+                val selectedItemIndex = remember(bottomBarItems, navCurrentRootNode, connectionState) {
+                    bottomBarItems.indexOfFirst { dest ->
+                        navCurrentRootNode?.route == dest.id
+                    }.coerceAtLeast(0)
+                }
+
+                FloatingBottomBar(
+                    expanded = false,
+                    selectedItem = selectedItemIndex,
+                    items = bottomBarItems,
+                    modifier = Modifier.offset {
+                        IntOffset(
+                            0,
+                            navOffset
+                                .toPx()
+                                .toInt()
+                        )
+                    }, expandedContent = {}
+                )
             }, contentWindowInsets = EmptyWindowInsets
         ) { padding ->
-            AnimatedNavHost(
-                navController = navController,
-                startDestination = "coreLoading",
-                route = ROOT_NAV_GRAPH_ID,
-                modifier = Modifier
-                    .padding(top = (padding.calculateTopPadding() - connectionRowPaddingCompensation).let {
-                        if (it.value < 0f) {
-                            0.dp
+            CompositionLocalProvider(LocalFloatingBarInset provides navOffsetReverse) {
+                AnimatedNavHost(
+                    navController = navController,
+                    startDestination = "coreLoading",
+                    route = ROOT_NAV_GRAPH_ID,
+                    modifier = Modifier
+                        .padding(top = (padding.calculateTopPadding() - connectionRowPaddingCompensation).let {
+                            if (it.value < 0f) {
+                                0.dp
+                            } else {
+                                it
+                            }
+                        }),
+                    enterTransition = {
+                        if (initialState.destination.route == "coreLoading") {
+                            EnterTransition.None
                         } else {
-                            it
+                            viewModel.buildAnimation(this) { forwardDirection ->
+                                materialSharedAxisXIn(forward = forwardDirection, slideDistance = slideDistance)
+                            }
                         }
-                    }, bottom = navOffsetReverse),
-                enterTransition = {
-                    if (initialState.destination.route == "coreLoading") {
-                        EnterTransition.None
-                    } else {
-                        viewModel.buildAnimation(this) { forwardDirection ->
-                            materialSharedAxisXIn(forward = forwardDirection, slideDistance = slideDistance)
+                    },
+                    exitTransition = {
+                        if (initialState.destination.route == "coreLoading") {
+                            ExitTransition.None
+                        } else {
+                            viewModel.buildAnimation(this) { forwardDirection ->
+                                materialSharedAxisXOut(forward = forwardDirection, slideDistance = slideDistance)
+                            }
                         }
+                    },
+                    popEnterTransition = {
+                        materialSharedAxisXIn(forward = false, slideDistance = slideDistance)
+                    },
+                    popExitTransition = {
+                        materialSharedAxisXOut(forward = false, slideDistance = slideDistance)
                     }
-                },
-                exitTransition = {
-                    if (initialState.destination.route == "coreLoading") {
-                        ExitTransition.None
-                    } else {
-                        viewModel.buildAnimation(this) { forwardDirection ->
-                            materialSharedAxisXOut(forward = forwardDirection, slideDistance = slideDistance)
-                        }
+                ) {
+                    composable("coreLoading") {
+                        Box(modifier = Modifier.fillMaxSize())
                     }
-                },
-                popEnterTransition = {
-                    materialSharedAxisXIn(forward = false, slideDistance = slideDistance)
-                },
-                popExitTransition = {
-                    materialSharedAxisXOut(forward = false, slideDistance = slideDistance)
-                }
-            ) {
-                composable("coreLoading") {
-                    Box(modifier = Modifier.fillMaxSize())
-                }
 
-                viewModel.destinations.forEach { (_, value) ->
-                    when (value) {
-                        is ComposableMicroappEntry -> with(value) {
-                            composable(
-                                navController,
-                                viewModel.destinations
-                            )
-                        }
+                    viewModel.destinations.forEach { (_, value) ->
+                        when (value) {
+                            is ComposableMicroappEntry -> with(value) {
+                                composable(
+                                    navController,
+                                    viewModel.destinations
+                                )
+                            }
 
-                        is NestedMicroappEntry -> with(value) {
-                            navigation(
-                                navController,
-                                viewModel.destinations
-                            )
+                            is NestedMicroappEntry -> with(value) {
+                                navigation(
+                                    navController,
+                                    viewModel.destinations
+                                )
+                            }
                         }
                     }
                 }

@@ -32,14 +32,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import bruhcollective.itaysonlab.jetisteam.uikit.FloatingWindowInsets
+import bruhcollective.itaysonlab.jetisteam.uikit.FloatingWindowInsetsAsPaddings
 import bruhcollective.itaysonlab.jetisteam.uikit.components.RoundedPage
+import bruhcollective.itaysonlab.jetisteam.uikit.floatingWindowInsetsAsPaddings
 import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenError
 import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenLoading
 import bruhcollective.itaysonlab.jetisteam.util.DateUtil
 import bruhcollective.itaysonlab.ksteam.guard.models.CodeModel
 import bruhcollective.itaysonlab.ksteam.guard.models.ConfirmationListState
 import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
-import bruhcollective.itaysonlab.microapp.core.ext.EmptyWindowInsets
 import bruhcollective.itaysonlab.microapp.guard.R
 import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -93,7 +95,7 @@ internal fun GuardCodeAndConfirmationsPage(
 
     Scaffold(modifier, floatingActionButton = {
         val fabDiff by animateDpAsState(
-            targetValue = if (connectedToSteam) 0.dp else 96.dp,
+            targetValue = if (connectedToSteam) 0.dp else 96.dp * 2,
             animationSpec = spring(stiffness = 1000f)
         )
 
@@ -106,7 +108,7 @@ internal fun GuardCodeAndConfirmationsPage(
         }, modifier = Modifier.offset(y = fabDiff)) {
             Icon(imageVector = Icons.Rounded.QrCodeScanner, contentDescription = null)
         }
-    }, contentWindowInsets = EmptyWindowInsets) {
+    }, contentWindowInsets = FloatingWindowInsets) {
         Column(modifier) {
             CodeBox(
                 modifier = Modifier
@@ -136,7 +138,7 @@ internal fun GuardCodeAndConfirmationsPage(
 
                     is ConfirmationListState.Success -> {
                         if (confirmationState.conf.isNotEmpty()) {
-                            LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            LazyColumn(contentPadding = floatingWindowInsetsAsPaddings(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 items(confirmationState.conf) {
                                     ConfirmationCard(confirmation = it, onClick = {
                                         onConfirmationClicked(it)
@@ -159,10 +161,10 @@ internal fun GuardCodeAndConfirmationsPage(
 @Composable
 private fun FullscreenPlaceholder(
     title: String,
-    text: String
+    text: String,
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(FloatingWindowInsetsAsPaddings),
         contentAlignment = Alignment.Center
     ) {
         Column(

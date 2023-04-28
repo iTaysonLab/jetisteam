@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.LocalSteamTheme
 import bruhcollective.itaysonlab.jetisteam.uikit.SteamColors
+import bruhcollective.itaysonlab.jetisteam.uikit.floatingWindowInsetsAsPaddings
 import bruhcollective.itaysonlab.jetisteam.uikit.page.PageLayout
 import bruhcollective.itaysonlab.ksteam.models.enums.EFriendRelationship
 import bruhcollective.itaysonlab.ksteam.models.enums.isFriend
@@ -167,7 +168,7 @@ private fun ProfileScreenImpl(
                 modifier = Modifier
                     .background(theme.gradientBackground.copy(alpha = 1f))
                     .fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 16.dp)
+                contentPadding = floatingWindowInsetsAsPaddings(16.dp)
             ) {
                 item {
                     ProfileHeader(
