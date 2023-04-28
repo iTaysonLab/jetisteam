@@ -48,6 +48,7 @@
 }
 
 -dontwarn kotlin.**
+-dontwarn org.slf4j.**
 
 -keep class org.h2.Driver { *; }
 -keep class org.h2.engine.Engine { *; }
