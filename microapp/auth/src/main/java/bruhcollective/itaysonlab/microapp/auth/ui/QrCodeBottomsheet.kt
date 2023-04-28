@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.microapp.auth.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,13 +27,27 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.jetisteam.uikit.components.BottomSheetLayout
+import bruhcollective.itaysonlab.ksteam.models.account.AuthorizationState
 import coil.compose.AsyncImage
 
 @Composable
 fun QrCodeBottomsheet(
-    viewModel: QrCodeBottomsheetViewModel = hiltViewModel()
+    viewModel: QrCodeBottomsheetViewModel = hiltViewModel(),
+    onSuccess: () -> Unit,
+    onCancel: () -> Unit
 ) {
+    val authPollSignIn by viewModel.authFlow.collectAsStateWithLifecycle(initialValue = false)
+
+    Log.d("QrCode", "AuthPoll -> $authPollSignIn")
+
+    if (authPollSignIn == AuthorizationState.Success) {
+        LaunchedEffect(Unit) {
+            onSuccess()
+        }
+    }
+
     BottomSheetLayout(
         title = {
             "Sign in with QR"
@@ -81,9 +98,7 @@ fun QrCodeBottomsheet(
         )
 
         FilledTonalButton(
-            onClick = {
-
-            },
+            onClick = onCancel,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),

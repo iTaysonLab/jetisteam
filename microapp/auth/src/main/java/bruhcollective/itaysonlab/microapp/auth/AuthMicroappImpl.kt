@@ -8,6 +8,7 @@ import bruhcollective.itaysonlab.microapp.auth.ui.OnboardingScreen
 import bruhcollective.itaysonlab.microapp.auth.ui.QrCodeBottomsheet
 import bruhcollective.itaysonlab.microapp.auth.ui.TfaScreen
 import bruhcollective.itaysonlab.microapp.core.Destinations
+import bruhcollective.itaysonlab.microapp.core.ext.navigateRoot
 import bruhcollective.itaysonlab.microapp.core.find
 import bruhcollective.itaysonlab.microapp.notifications.NotificationsMicroapp
 import com.google.accompanist.navigation.animation.composable
@@ -37,12 +38,14 @@ class AuthMicroappImpl @Inject constructor(): AuthMicroapp() {
 
         composable(Routes.TfaScreen.url) {
             TfaScreen(onSuccess = {
-                navController.navigate(destinations.find<NotificationsMicroapp>().microappRoute)
+                navController.navigateRoot(destinations.find<NotificationsMicroapp>().microappRoute)
             }, onCancel = navController::popBackStack)
         }
 
         bottomSheet(Routes.QrCodeScreen.url) {
-            QrCodeBottomsheet()
+            QrCodeBottomsheet(onSuccess = {
+                navController.navigateRoot(destinations.find<NotificationsMicroapp>().microappRoute)
+            }, onCancel = navController::popBackStack)
         }
     }
 }

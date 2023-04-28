@@ -16,6 +16,8 @@ import javax.inject.Inject
 class QrCodeBottomsheetViewModel @Inject constructor(
     private val account: Account
 ): ViewModel() {
+    val authFlow get() = account.clientAuthState
+
     var qrCodeState by mutableStateOf<QrCodeState>(QrCodeState.Loading)
         private set
 
@@ -36,5 +38,10 @@ class QrCodeBottomsheetViewModel @Inject constructor(
         class Ready(
             val graphicsToRender: QRCode
         ): QrCodeState()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        account.cancelPolling()
     }
 }

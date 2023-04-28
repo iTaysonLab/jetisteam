@@ -139,6 +139,9 @@
         <ImportPathEntry>
           <option name="location" value="file://$PROJECT_DIR$/data/src/main/proto" />
         </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$USER_HOME$/Library/Caches/Google/AndroidStudioPreview2022.3/protoeditor" />
+        </ImportPathEntry>
       </list>
     </option>
     <option name="descriptorPath" value="google/protobuf/descriptor.proto" />
