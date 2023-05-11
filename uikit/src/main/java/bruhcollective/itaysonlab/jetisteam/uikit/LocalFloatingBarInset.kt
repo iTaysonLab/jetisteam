@@ -14,3 +14,6 @@ val FloatingWindowInsetsAsPaddings @Composable get() = PaddingValues(bottom = Lo
 
 @Composable
 fun floatingWindowInsetsAsPaddings(additionalPadding: Dp) = PaddingValues(top = additionalPadding, start = additionalPadding, end = additionalPadding, bottom = additionalPadding + LocalFloatingBarInset.current)
+
+@Composable
+fun floatingWindowInsetsAsPaddings(horizontal: Dp, vertical: Dp) = PaddingValues(top = vertical, start = horizontal, end = horizontal, bottom = vertical + LocalFloatingBarInset.current)

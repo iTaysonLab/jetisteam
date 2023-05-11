@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import bruhcollective.itaysonlab.jetisteam.uikit.FloatingWindowInsetsAsPaddings
 import bruhcollective.itaysonlab.jetisteam.uikit.components.StateTextButton
 import bruhcollective.itaysonlab.jetisteam.uikit.page.FullscreenLoading
 import bruhcollective.itaysonlab.ksteam.guard.models.SgCreationFlowState
@@ -52,7 +53,7 @@ internal fun GuardSetupScreen(
                 SizeTransform(clip = false)
             )
         }
-    }) { currentState ->
+    }, modifier = Modifier.padding(FloatingWindowInsetsAsPaddings), label = "[GuardSetupScreen] Inner content animated container") { currentState ->
         when (currentState) {
             SgCreationFlowState.TryingToAdd, SgCreationFlowState.Processing -> {
                 FullscreenLoading()

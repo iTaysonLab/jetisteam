@@ -55,7 +55,7 @@ kotlin {
 dependencies {
     api libs.wireRuntime
 
-    implementation "io.ktor:ktor-client-okhttp:2.2.4"
+    implementation "io.ktor:ktor-client-okhttp:2.3.0"
     implementation libs.kotlinDatetime
 
     implementation libs.mmkv
