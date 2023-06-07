@@ -1,0 +1,177 @@
+[versions]
+# kotlin
+kotlinVersion = "1.8.21"
+kspVersion = "1.8.21-1.0.11"
+
+# kotlinx
+kotlinxSerializationVersion = "1.5.0"
+kotlinxDateTimeVersion = "0.4.0"
+coroutinesVersion = "1.6.4"
+kotlinxAtomicVersion = "0.20.2"
+
+# ktor
+ktorClientVersion = "2.3.0"
+
+# multiplatform
+multiplatformSettingsVersion = "1.0.0"
+napierVersion = "2.6.1"
+koinVersion = "3.4.0"
+koinKspVersion = "1.2.0"
+okioVersion = "3.3.0"
+kmmViewModelVersion = "1.0.0-ALPHA-5"
+kmmNativeCoroutinesVersion = "1.0.0-ALPHA-7"
+
+# decompose
+decomposeVersion = "2.0.0-beta-01"
+essentyVersion = "1.1.0"
+darwinParcelizeVersion = "0.1.4"
+
+# android
+androidPluginVersion = "8.0.2"
+composeCompilerVersion = "1.4.7"
+lifecycleVersion = "2.6.1"
+hiltVersion = "2.44.2"
+androidCoreKtxVersion = "1.10.1"
+androidActivityKtxVersion = "1.7.2"
+
+# compose
+composeVersion = "1.5.0-beta01"
+composeMaterial3Version = "1.2.0-alpha02"
+compose_motion = "0.12.1"
+accompanist = "0.31.1-alpha"
+
+# android tests
+espressoCoreVersion = "3.5.1"
+testRunnerVersion = "1.5.2"
+testExtJunitVersion = "1.1.5"
+testCoreVersion = "1.5.0"
+robolectricVersion = "4.6.1"
+junit = "4.13.2"
+appcompat = "1.6.1"
+material = "1.9.0"
+
+# ksteam
+ksteam = "r29"
+
+[plugins]
+androidPluginApplication = { id = "com.android.application", version.ref = "androidPluginVersion" }
+androidPluginLibrary = { id = "com.android.library", version.ref = "androidPluginVersion" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlinVersion" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
+googleKsp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
+kmmNativeCoroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref = "kmmNativeCoroutinesVersion" }
+darwinParcelize = { id = "com.arkivanov.parcelize.darwin", version.ref = "darwinParcelizeVersion" }
+kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinVersion" }
+kotlinAtomicFu = { id = "org.jetbrains.kotlinx.plugin.atomicfu", version.ref = "kotlinxAtomicVersion" }
+
+[libraries]
+# kotlin
+kotlinTestJUnit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlinVersion" }
+
+# kotlinx
+kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationVersion" }
+kotlinxDateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTimeVersion" }
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
+
+# ktor
+ktorClient = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientVersion" }
+ktorClientLogging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientVersion" }
+ktorClientMock = { module = "io.ktor:ktor-client-mock", version.ref = "ktorClientVersion" }
+ktorClientContentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientVersion" }
+ktorClientJsonSerialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientVersion" }
+ktorClientAuth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorClientVersion" }
+ktorClientEngineOkHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientVersion" }
+ktorClientEngineDarwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorClientVersion" }
+
+# multiplatform
+multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettingsVersion" }
+multiplatformSettingsSerialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "multiplatformSettingsVersion" }
+multiplatformSettingsTest = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatformSettingsVersion" }
+
+napier = { module = "io.github.aakira:napier", version.ref = "napierVersion" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okioVersion" }
+kmmViewModel = { module = "com.rickclephas.kmm:kmm-viewmodel-core", version.ref = "kmmViewModelVersion" }
+
+koin = { module = "io.insert-koin:koin-core", version.ref = "koinVersion" }
+koinCoroutines = { module = "io.insert-koin:koin-core-coroutines", version.ref = "koinVersion" }
+koinAndroid = { module = "io.insert-koin:koin-android", version.ref = "koinVersion" }
+koinAnnotations = { module = "io.insert-koin:koin-annotations", version.ref = "koinKspVersion" }
+koinCompiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinKspVersion" }
+hilt = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
+
+# android
+androidKtxCore = { module = "androidx.core:core-ktx", version.ref = "androidCoreKtxVersion" }
+androidKtxActivity = { module = "androidx.activity:activity-ktx", version.ref = "androidActivityKtxVersion" }
+androidKtxActivityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidActivityKtxVersion" }
+lifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleVersion" }
+lifecycleLivedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleVersion" }
+lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }
+lifecycleViewModelSavedState = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycleVersion" }
+lifecycleCommonJava8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifecycleVersion" }
+lifecycleServices = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycleVersion" }
+lifecycleProcess = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycleVersion" }
+lifecycleReactiveStreams = { module = "androidx.lifecycle:lifecycle-reactivestreams-ktx", version.ref = "lifecycleVersion" }
+
+# compose
+composeUi = { module = "androidx.compose.ui:ui", version.ref = "composeVersion" }
+composeFoundation = { module = "androidx.compose.foundation:foundation", version.ref = "composeVersion" }
+composeMaterial = { module = "androidx.compose.material:material", version.ref = "composeVersion" }
+composeMaterialIcons = { module = "androidx.compose.material:material-icons-extended", version.ref = "composeVersion" }
+composeMaterial3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3Version" }
+composeUiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "composeVersion" }
+composeUiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeVersion" }
+coilCompose = "io.coil-kt:coil-compose:2.2.2"
+composeMotionCore = { module = "io.github.fornewid:material-motion-compose-core", version.ref = "compose_motion" }
+
+# accompanist
+accompanistNavigation = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist" }
+accompanistNavigationAnimation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
+accompanistSystemUi = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+accompanistPermissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
+accompanistPagerIndicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
+accompanistWeb = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
+
+# android tests
+espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
+testCore = { module = "androidx.test:core", version.ref = "testCoreVersion" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectricVersion" }
+testRunner = { module = "androidx.test:runner", version.ref = "testRunnerVersion" }
+testRules = { module = "androidx.test:rules", version.ref = "testRunnerVersion" }
+testExtJunit = { module = "androidx.test.ext:junit", version.ref = "testExtJunitVersion" }
+
+# tooling
+hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltVersion" }
+
+# gradle plugins artifacts
+kotlinSerializationGradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlinVersion" }
+hiltGradle = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltVersion" }
+
+# decompose
+decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decomposeVersion" }
+decomposeExtensionCompose = { module = "com.arkivanov.decompose:extensions-compose-jetpack", version.ref = "decomposeVersion" }
+decomposeExtensionComposeMpp = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decomposeVersion" }
+essentyLifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "essentyVersion" }
+essentyStateKeeper = { module = "com.arkivanov.essenty:state-keeper", version.ref = "essentyVersion" }
+darwinParcelize = { module = "com.arkivanov.parcelize.darwin:runtime", version.ref = "darwinParcelizeVersion" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# other libs
+mmkv = "com.tencent:mmkv:1.2.15"
+
+# ksteam
+ksteamCore = { module = "bruhcollective.itaysonlab.ksteam:core-android", version.ref = "ksteam" }
+ksteamVdf = { module = "bruhcollective.itaysonlab:kotlinx-vdf-android", version.ref = "ksteam" }
+ksteamProto = { module = "bruhcollective.itaysonlab.ksteam:proto-common-android", version.ref = "ksteam" }
+ksteamExtCore = { module = "bruhcollective.itaysonlab.ksteam:extension-core-android", version.ref = "ksteam" }
+ksteamExtGuard = { module = "bruhcollective.itaysonlab.ksteam:extension-guard-android", version.ref = "ksteam" }
+ksteamExtGuardMigration = { module = "bruhcollective.itaysonlab.ksteam:extension-guard-proto-migration-android", version.ref = "ksteam" }
+ksteamExtPics = { module = "bruhcollective.itaysonlab.ksteam:extension-pics-android", version.ref = "ksteam" }
+
+[bundles]
+compose = ["composeUi", "composeFoundation", "composeMaterial", "composeMaterial3", "composeUiToolingPreview"]
+androidLifecycle = ["lifecycleRuntime", "lifecycleViewModel", "lifecycleServices"]
+ktorClient = ["ktorClient", "ktorClientContentNegotiation", "ktorClientJsonSerialization", "ktorClientLogging"]
+ksteam = ["ksteamCore", "ksteamProto", "ksteamExtCore", "ksteamExtGuard", "ksteamExtGuardMigration", "ksteamExtPics", "ksteamVdf"]
