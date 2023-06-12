@@ -1,3 +1,9 @@
+import org.gradle.api.JavaVersion
+import org.gradle.kotlin.dsl.android
+import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.implementation
+import org.gradle.kotlin.dsl.libs
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidPluginLibrary)
@@ -6,7 +12,7 @@ plugins {
 }
 
 android {
-    namespace = "bruhcollective.itaysonlab.cobalt.signin"
+    namespace = "bruhcollective.itaysonlab.cobalt.core.feature_flags"
     compileSdk = 33
 
     defaultConfig {
@@ -24,24 +30,10 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
-    }
 }
 
 dependencies {
-    implementation(project(":core:decomposekit"))
-    implementation(project(":core:ksteam"))
-
-    implementation(libs.composeRuntime)
     implementation(libs.coroutines)
     implementation(libs.decompose)
     implementation(libs.koin)
-
-    implementation(libs.bundles.ksteam)
 }

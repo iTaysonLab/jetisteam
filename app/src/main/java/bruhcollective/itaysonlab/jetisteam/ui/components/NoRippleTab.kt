@@ -41,7 +41,8 @@ fun NoRippleTab(
                     role = Role.Tab,
                     interactionSource = interactionSource,
                     indication = null
-                ),
+                )
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             content = content

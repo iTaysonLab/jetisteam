@@ -4,9 +4,14 @@ import bruhcollective.itaysonlab.cobalt.core.decompose.componentCoroutineScope
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.ksteam.handlers.News
 import bruhcollective.itaysonlab.ksteam.handlers.news
+import bruhcollective.itaysonlab.ksteam.models.enums.EUserNewsType
+import bruhcollective.itaysonlab.ksteam.models.enums.plus
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -23,8 +28,8 @@ class FusionDiscoverComponent (
     private val loadMutex = Mutex()
 
     override val state = MutableValue(DiscoverComponent.DiscoverState.Idle)
-    override val items = MutableValue(emptyList<ActivityFeedEntry>())
     override val canLoadMore = MutableValue(false)
+    override val items: MutableValue<ImmutableList<ActivityFeedEntry>> = MutableValue(persistentListOf())
 
     override fun dispatchInitialLoad() {
         if (loadMutex.isLocked) return
@@ -34,7 +39,9 @@ class FusionDiscoverComponent (
                 state.value = DiscoverComponent.DiscoverState.Loading
 
                 items.value = withContext(Dispatchers.IO) {
-                    steamClient.ksteam.news.getUserNews(showEvents = News.UserNewsFilterScenario.FriendActivity).sortedByDescending(ActivityFeedEntry::date)
+                    steamClient.ksteam.news.getUserNews(
+                        showEvents = News.UserNewsFilterScenario.FriendActivity
+                    ).sortedByDescending(ActivityFeedEntry::date).toImmutableList()
                 }
 
                 state.value = DiscoverComponent.DiscoverState.Loaded

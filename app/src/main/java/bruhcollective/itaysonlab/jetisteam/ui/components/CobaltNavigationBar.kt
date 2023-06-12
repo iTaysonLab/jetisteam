@@ -1,25 +1,20 @@
 package bruhcollective.itaysonlab.jetisteam.ui.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Home
 import androidx.compose.material.icons.sharp.Message
 import androidx.compose.material.icons.sharp.VideoLibrary
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -30,51 +25,25 @@ fun CobaltNavigationBar() {
 
     val items = remember {
         listOf(
-            Icons.Sharp.Home, Icons.Sharp.VideoLibrary, Icons.Sharp.Message
+            BottomBarItem.Icon({ Icons.Sharp.Home }, 0, "", { selectedItem = 0 }),
+            BottomBarItem.Icon({ Icons.Sharp.VideoLibrary }, 0, "", { selectedItem = 1 }),
+            BottomBarItem.Icon({ Icons.Sharp.Message }, 0, "", { selectedItem = 2 }),
         )
     }
 
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-    ) {
-        CobaltDivider(padding = 0.dp)
+    val offsetDp by animateDpAsState(
+        targetValue = if (FloatingNavigationBarHolder.shouldNavigationBarBeVisible) 0.dp else 150.dp,
+        label = "",
+        animationSpec = tween()
+    )
 
-        IndicatorBehindScrollableTabRow(
-            selectedTabIndex = selectedItem,
-            containerColor = MaterialTheme.colorScheme.background,
-            indicator = { tabPositions ->
-                Box(
-                    Modifier
-                        .tabIndicatorOffset(tabPositions[selectedItem])
-                        .fillMaxHeight()
-                        .background(MaterialTheme.colorScheme.onSurface)
-                )
-            },
-            edgePadding = 0.dp,
-            modifier = Modifier.fillMaxWidth(),
-            paddingBetweenTabs = 0.dp
-        ) {
-            items.forEachIndexed { index, item ->
-                NoRippleTab(
-                    selected = selectedItem == index,
-                    onClick = { selectedItem = index },
-                    selectedContentColor = MaterialTheme.colorScheme.inverseOnSurface,
-                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                ) {
-                    Row {
-                        Icon(
-                            imageVector = item, contentDescription = null, modifier = Modifier
-                                .padding(vertical = 20.dp, horizontal = 20.dp)
-                        )
-
-                        CobaltVerticalDivider()
-                    }
-                }
-            }
+    FloatingBottomBar(
+        expanded = false,
+        selectedItem = selectedItem,
+        items = items,
+        expandedContent = {},
+        modifier = Modifier.offset {
+            IntOffset(x = 0, y = offsetDp.toPx().toInt())
         }
-
-        CobaltDivider(padding = 0.dp)
-    }
+    )
 }

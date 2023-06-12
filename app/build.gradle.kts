@@ -33,6 +33,7 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -59,10 +60,12 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.4.3")
 
     implementation(project(":core:decomposekit"))
     implementation(project(":core:ksteam"))
+    implementation(project(":core:featureflags"))
     implementation(project(":feature:signin"))
     implementation(project(":feature:news"))
     implementation(project(":feature:home"))
@@ -82,6 +85,7 @@ dependencies {
 
     implementation(libs.decompose)
     implementation(libs.decomposeExtensionCompose)
+    implementation(libs.kotlinxCollections)
 
     implementation(libs.koin)
     implementation(libs.koinAndroid)

@@ -22,6 +22,7 @@ include(":app")
 
 include(":core:decomposekit")
 include(":core:ksteam")
+include(":core:featureflags")
 include(":feature:home")
 include(":feature:news")
 include(":feature:signin")

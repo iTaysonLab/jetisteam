@@ -19,11 +19,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.news.discover.DiscoverComponent
 import bruhcollective.itaysonlab.jetisteam.news.entries.NewAchievementsEntry
+import bruhcollective.itaysonlab.jetisteam.news.entries.PlayedForFirstTimeEntry
+import bruhcollective.itaysonlab.jetisteam.news.entries.ReceivedNewGameEntry
+import bruhcollective.itaysonlab.jetisteam.news.entries.parts.FusionOnboardingCard
 import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltDivider
 import bruhcollective.itaysonlab.jetisteam.ui.components.EmptyWindowInsets
+import bruhcollective.itaysonlab.jetisteam.ui.components.rememberFloatingNavigationBarScrollConnection
 import bruhcollective.itaysonlab.jetisteam.ui.font.robotoMonoFontFamily
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
 import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
@@ -67,19 +72,35 @@ fun DiscoverScreen(
             }
 
             DiscoverComponent.DiscoverState.Loaded -> {
-                LazyColumn(modifier = Modifier.padding(innerPadding)) {
+                LazyColumn(modifier = Modifier
+                    .padding(innerPadding)
+                    .nestedScroll(rememberFloatingNavigationBarScrollConnection())) {
+                    /*item {
+                        FusionOnboardingCard()
+                    }*/
+
                     items(items) { feedEntry ->
-                        when (feedEntry) {
-                            is ActivityFeedEntry.NewAchievements -> {
-                                NewAchievementsEntry(feedEntry)
+                        Column {
+                            when (feedEntry) {
+                                is ActivityFeedEntry.PlayedForFirstTime -> {
+                                    PlayedForFirstTimeEntry(feedEntry)
+                                }
+
+                                is ActivityFeedEntry.NewAchievements -> {
+                                    NewAchievementsEntry(feedEntry)
+                                }
+
+                                is ActivityFeedEntry.ReceivedNewGame -> {
+                                    ReceivedNewGameEntry(feedEntry)
+                                }
+
+                                else -> {
+                                    Text(text = feedEntry.toString())
+                                }
                             }
 
-                            else -> {
-                                Text(text = feedEntry.toString())
-                            }
+                            CobaltDivider(padding = 0.dp)
                         }
-
-                        CobaltDivider(padding = 0.dp)
                     }
                 }
             }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="news">News</string>
+    <string name="news_feed_game_news">Updates</string>
+    <string name="news_feed_user_activity">Activity</string>
+
+    <plurals name="news_activity_received_games">
+        <item quantity="one">now owns %1$d game</item>
+        <item quantity="many">now owns %1$d more games</item>
+        <item quantity="other">now owns %1$d more games</item>
+    </plurals>
+
+    <plurals name="news_activity_added_to_wishlist">
+        <item quantity="one">added %1$d game to wishlist</item>
+        <item quantity="many">added %1$d games to wishlist</item>
+        <item quantity="other">added %1$d games to wishlist</item>
+    </plurals>
+
+    <string name="news_activity_received_solo">now owns %1$s</string>
+    <string name="news_activity_added_to_wishlist_solo">added %1$s to wishlist</string>
+    <string name="news_activity_new_achievements">achieved in %1$s</string>
+    <string name="news_activity_friend_added">added %1$s to friends</string>
+    <string name="news_activity_played_first">played %1$s for the first time</string>
+    <string name="news_activity_publish_screenshot">published a %1$s screenshot</string>
+</resources>

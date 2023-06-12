@@ -30,7 +30,7 @@ fun CobaltContainerScreen(
             }, label = "Cobalt container status bar neutralizer"
         )
 
-        Children(stack = component.childStack, modifier = Modifier.padding(top = stackTopPadding, bottom = innerPadding.calculateBottomPadding())) {
+        Children(stack = component.childStack, modifier = Modifier.padding(top = stackTopPadding, bottom = 0.dp)) {
             when (val child = it.instance) {
                 is CobaltContainerComponent.Child.Home -> NewsScreen(child.component)
             }

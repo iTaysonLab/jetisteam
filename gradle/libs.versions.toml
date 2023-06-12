@@ -4,13 +4,14 @@ kotlinVersion = "1.8.21"
 kspVersion = "1.8.21-1.0.11"
 
 # kotlinx
-kotlinxSerializationVersion = "1.5.0"
+kotlinxSerializationVersion = "1.5.1"
 kotlinxDateTimeVersion = "0.4.0"
-coroutinesVersion = "1.6.4"
+coroutinesVersion = "1.7.1"
 kotlinxAtomicVersion = "0.20.2"
+kotlinxCollectionsVersion = "0.3.5"
 
 # ktor
-ktorClientVersion = "2.3.0"
+ktorClientVersion = "2.3.1"
 
 # multiplatform
 multiplatformSettingsVersion = "1.0.0"
@@ -35,7 +36,7 @@ androidCoreKtxVersion = "1.10.1"
 androidActivityKtxVersion = "1.7.2"
 
 # compose
-composeVersion = "1.5.0-beta01"
+composeVersion = "1.5.0-beta02"
 composeMaterial3Version = "1.2.0-alpha02"
 compose_motion = "0.12.1"
 accompanist = "0.31.1-alpha"
@@ -72,6 +73,7 @@ kotlinTestJUnit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.r
 # kotlinx
 kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationVersion" }
 kotlinxDateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTimeVersion" }
+kotlinxCollections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsVersion" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
 
 # ktor
@@ -115,6 +117,7 @@ lifecycleReactiveStreams = { module = "androidx.lifecycle:lifecycle-reactivestre
 
 # compose
 composeUi = { module = "androidx.compose.ui:ui", version.ref = "composeVersion" }
+composeRuntime = { module = "androidx.compose.runtime:runtime", version.ref = "composeVersion" }
 composeFoundation = { module = "androidx.compose.foundation:foundation", version.ref = "composeVersion" }
 composeMaterial = { module = "androidx.compose.material:material", version.ref = "composeVersion" }
 composeMaterialIcons = { module = "androidx.compose.material:material-icons-extended", version.ref = "composeVersion" }

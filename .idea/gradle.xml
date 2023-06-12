@@ -24,6 +24,7 @@
             <option value="$PROJECT_DIR$/build-extensions" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/decomposekit" />
+            <option value="$PROJECT_DIR$/core/featureflags" />
             <option value="$PROJECT_DIR$/core/ksteam" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/home" />

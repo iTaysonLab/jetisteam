@@ -24,15 +24,25 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.7"
+    }
 }
 
 dependencies {
     implementation(project(":core:decomposekit"))
     implementation(project(":core:ksteam"))
 
+    implementation(libs.composeRuntime)
     implementation(libs.coroutines)
     implementation(libs.decompose)
     implementation(libs.koin)
+    implementation(libs.kotlinxCollections)
 
     implementation(libs.bundles.ksteam)
 }
