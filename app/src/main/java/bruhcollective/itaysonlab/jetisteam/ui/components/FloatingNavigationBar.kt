@@ -176,7 +176,12 @@ sealed class BottomBarItem(
 }
 
 internal object IslandAnimations {
-    private const val STIFFNESS = 450F
+    enum class Direction {
+        LEFT,
+        RIGHT
+    }
+
+    private const val STIFFNESS = 300F
     private const val RATIO = 0.75f
 
     fun <T> islandSpec(): FiniteAnimationSpec<T> = spring(stiffness = STIFFNESS, dampingRatio = RATIO)

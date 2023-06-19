@@ -4,7 +4,9 @@ import android.content.Context
 import bruhcollective.itaysonlab.ksteam.Core
 import bruhcollective.itaysonlab.ksteam.Guard
 import bruhcollective.itaysonlab.ksteam.Pics
+import bruhcollective.itaysonlab.ksteam.debug.AndroidLoggingTransport
 import bruhcollective.itaysonlab.ksteam.debug.KSteamLoggingVerbosity
+import bruhcollective.itaysonlab.ksteam.debug.PacketDumper
 import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.kSteam
 import bruhcollective.itaysonlab.ksteam.models.enums.EGamingDeviceType
@@ -42,7 +44,7 @@ class SteamClient (
 
         rootFolder = File(applicationContext.filesDir, "ksteam").toOkioPath()
 
-        loggingTransport = KsteamAndroidLoggingTransport
+        loggingTransport = AndroidLoggingTransport
         loggingVerbosity = KSteamLoggingVerbosity.Verbose
 
         ktor {
@@ -75,6 +77,7 @@ class SteamClient (
     }
 
     private suspend fun launchKsteam() {
+        ksteam.dumperMode = PacketDumper.DumpMode.Full
         ksteam.guard.tryMigratingProtobufs(ksteam)
         ksteam.start()
     }

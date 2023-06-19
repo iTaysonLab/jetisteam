@@ -16,11 +16,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CobaltDivider(
-    padding: Dp = 16.dp
+    padding: Dp = 16.dp,
+    modifier: Modifier = Modifier
 ) {
     Divider(
         color = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = Modifier.padding(horizontal = padding)
+        modifier = modifier.padding(horizontal = padding)
     )
 }
 

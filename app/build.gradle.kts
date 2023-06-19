@@ -62,6 +62,7 @@ android {
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.4.3")
+    implementation("me.onebone:toolbar-compose:2.3.5")
 
     implementation(project(":core:decomposekit"))
     implementation(project(":core:ksteam"))
@@ -70,6 +71,7 @@ dependencies {
     implementation(project(":feature:news"))
     implementation(project(":feature:home"))
     implementation(project(":feature:webview"))
+    implementation(project(":feature:profile"))
 
     implementation(libs.androidKtxCore)
     implementation(libs.androidKtxActivity)
