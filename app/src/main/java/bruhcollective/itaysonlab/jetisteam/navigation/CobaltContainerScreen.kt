@@ -58,7 +58,7 @@ fun CobaltContainerScreen(
             }
 
             slideWithDirection(direction) + fade(IslandAnimations.islandSpec())
-        }) {
+        }, modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
             when (val child = it.instance) {
                 is CobaltContainerComponent.Child.Home -> NewsScreen(stackTopPadding, child.component)
                 is CobaltContainerComponent.Child.MyProfile -> ProfileScreen(stackTopPadding, child.component)

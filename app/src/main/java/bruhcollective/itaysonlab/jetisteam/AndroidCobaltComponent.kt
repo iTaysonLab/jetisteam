@@ -52,14 +52,16 @@ class AndroidCobaltComponent (
         slotNavigation.activate(Config.Cobalt)
     }
 
-    sealed class Slot {
-        class SignIn(val component: SignRootComponent) : Slot()
-        class Cobalt(val component: CobaltContainerComponent) : Slot()
+    sealed interface Slot {
+        class SignIn(val component: SignRootComponent) : Slot
+        class Cobalt(val component: CobaltContainerComponent) : Slot
     }
 
-    @Parcelize
-    private sealed class Config : Parcelable {
-        object SignIn : Config()
-        object Cobalt : Config()
+    private sealed interface Config : Parcelable {
+        @Parcelize
+        object SignIn : Config
+
+        @Parcelize
+        object Cobalt : Config
     }
 }

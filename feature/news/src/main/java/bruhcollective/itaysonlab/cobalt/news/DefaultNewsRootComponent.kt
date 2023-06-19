@@ -32,8 +32,8 @@ class DefaultNewsRootComponent (
         return FusionDiscoverComponent(componentContext)
     }
 
-    @Parcelize
-    private sealed class Config : Parcelable {
-        object Discover : Config()
+    private sealed interface Config : Parcelable {
+        @Parcelize
+        object Discover : Config
     }
 }

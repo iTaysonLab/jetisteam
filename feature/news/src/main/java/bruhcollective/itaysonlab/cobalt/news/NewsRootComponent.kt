@@ -7,7 +7,7 @@ import com.arkivanov.decompose.value.Value
 interface NewsRootComponent {
     val childStack: Value<ChildStack<*, Child>>
 
-    sealed class Child {
-        class Discover(val component: DiscoverComponent) : Child()
+    sealed interface Child {
+        class Discover(val component: DiscoverComponent) : Child
     }
 }

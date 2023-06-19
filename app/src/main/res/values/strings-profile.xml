@@ -2,4 +2,65 @@
 <resources>
     <string name="profile_playing_steam">Playing on Steam</string>
     <string name="profile_playing_non_steam">Playing a non-Steam game</string>
+
+    <string name="profile_widget_favorite_game">Favorite Game</string>
+    <string name="profile_widget_game_collector">Game Collector</string>
+    <string name="profile_widget_unknown">Unknown Showcase</string>
+
+    <plurals name="profile_hours_played">
+        <item quantity="other">%s hours played</item>
+        <item quantity="one">%s hour played</item>
+        <item quantity="few">%s hours played</item>
+    </plurals>
+
+    <string name="friends_group_playing">Playing</string>
+    <string name="friends_group_online">Online</string>
+    <string name="friends_group_offline">Offline</string>
+    <string name="friends_offline_last_seen">Last seen %s ago</string>
+    <string name="friends_status_online">Online</string>
+    <string name="friends_status_busy">Busy</string>
+    <string name="friends_status_away">Away</string>
+    <string name="friends_status_snooze">Snooze</string>
+    <string name="friends_status_looking_to_play">Looking to play</string>
+    <string name="friends_status_looking_to_trade">Looking to trade</string>
+    <string name="friends_status_offline">Offline</string>
+
+    <string name="showcase_achievements_rarest">Rarest Achievement Showcase</string>
+    <string name="showcase_collector_game">Game Collector</string>
+    <string name="showcase_items">Item Showcase</string>
+    <string name="showcase_items_trade">Items Up For Trade</string>
+    <string name="showcase_collector_badge">Badge Collector</string>
+    <string name="showcase_favorite_game">Favorite Game</string>
+    <string name="showcase_screenshots">Screenshot Showcase</string>
+    <string name="showcase_favorite_guide">Favorite Guide</string>
+    <string name="showcase_achievements">Achievement Showcase</string>
+    <string name="showcase_salien">Salien Stats</string>
+    <string name="showcase_awards">Awards Showcase</string>
+    <string name="showcase_favorite_group">Favorite Group</string>
+    <string name="showcase_workshop">Workshop Showcase</string>
+    <string name="showcase_info">Custom Info Box</string>
+    <string name="showcase_unknown">Unknown card</string>
+
+    <string name="edit_title">Edit Profile</string>
+    <string name="edit_type_avatar">Avatar</string>
+    <string name="edit_type_avatar_frame">Avatar Frame</string>
+    <string name="edit_type_profile_bg">Profile Background</string>
+    <string name="edit_type_miniprofile_bg">Mini Profile Background</string>
+    <string name="edit_type_theme">Theme</string>
+    <string name="edit_type_preferences">Community Preferences</string>
+    <string name="edit_type_none">Not set</string>
+    <string name="edit_type_general">General</string>
+
+    <string name="edit_theme_default">Default</string>
+    <string name="edit_theme_summer">Summer</string>
+    <string name="edit_theme_midnight">Midnight</string>
+    <string name="edit_theme_steel">Steel</string>
+    <string name="edit_theme_cosmic">Cosmic</string>
+    <string name="edit_theme_dark">Dark Mode</string>
+
+    <string name="edit_default">Default</string>
+    <string name="edit_debut">The Debut Collection</string>
+
+    <string name="edit_theme_specials">Special Profiles</string>
+    <string name="edit_theme_special_info">Applying a Special Profile will override your current profile items. You can change them later.</string>
 </resources>

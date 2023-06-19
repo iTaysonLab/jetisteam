@@ -44,9 +44,11 @@ class DefaultSignRootComponent (
         return DefaultTwoFactorComponent(componentContext, onBack = navigation::pop, onAuthorizationCompleted = onAuthorizationCompleted)
     }
 
-    @Parcelize
-    private sealed class Config : Parcelable {
-        object SignIn : Config()
-        object TwoFactor : Config()
+    private sealed interface Config : Parcelable {
+        @Parcelize
+        object SignIn : Config
+
+        @Parcelize
+        object TwoFactor : Config
     }
 }

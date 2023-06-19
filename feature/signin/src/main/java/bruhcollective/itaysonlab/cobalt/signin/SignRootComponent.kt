@@ -8,9 +8,9 @@ import com.arkivanov.decompose.value.Value
 interface SignRootComponent {
     val childStack: Value<ChildStack<*, Child>>
 
-    sealed class Child {
-        class SignIn(val component: AuthComponent) : Child()
-        class TwoFactor(val component: TwoFactorComponent) : Child()
-        class WebView(val component: AuthComponent) : Child()
+    sealed interface Child {
+        class SignIn(val component: AuthComponent) : Child
+        class TwoFactor(val component: TwoFactorComponent) : Child
+        class WebView(val component: AuthComponent) : Child
     }
 }

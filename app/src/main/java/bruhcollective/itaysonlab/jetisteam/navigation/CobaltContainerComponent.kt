@@ -60,15 +60,17 @@ class CobaltContainerComponent(
         return navigationItems.value.indexOf(item)
     }
 
-    @Parcelize
-    private sealed class Config : Parcelable {
-        object Home : Config()
-        object MyProfile : Config()
+    private sealed interface Config : Parcelable {
+        @Parcelize
+        object Home : Config
+
+        @Parcelize
+        object MyProfile : Config
     }
 
-    sealed class Child {
-        class Home(val component: NewsRootComponent) : Child()
-        class MyProfile(val component: ProfileComponent) : Child()
+    sealed interface Child {
+        class Home(val component: NewsRootComponent) : Child
+        class MyProfile(val component: ProfileComponent) : Child
     }
 
     enum class NavigationItem {
