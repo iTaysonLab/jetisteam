@@ -1,5 +1,8 @@
 package bruhcollective.itaysonlab.jetisteam.navigation
 
+import bruhcollective.itaysonlab.cobalt.core.decompose.ViewModel
+import bruhcollective.itaysonlab.cobalt.guard.DefaultGuardComponent
+import bruhcollective.itaysonlab.cobalt.guard.GuardComponent
 import bruhcollective.itaysonlab.cobalt.news.DefaultNewsRootComponent
 import bruhcollective.itaysonlab.cobalt.news.NewsRootComponent
 import bruhcollective.itaysonlab.cobalt.profile.MyProfileComponent
@@ -11,6 +14,7 @@ import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.arkivanov.essenty.parcelable.Parcelable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -20,10 +24,11 @@ class CobaltContainerComponent(
     componentContext: ComponentContext
 ): ComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
-    private val _currentNavigationItem = MutableValue(NavigationItem.Home)
+    private val viewModel = instanceKeeper.getOrCreate { ContainerViewModel() }
 
-    val currentNavigationItem: Value<NavigationItem> = _currentNavigationItem
-    val navigationItems: Value<ImmutableList<NavigationItem>> = MutableValue(NavigationItem.values().toList().toImmutableList())
+    val currentNavigationItem: Value<NavigationItem> get() = viewModel.currentNavigationItem
+    val navigationItems: Value<ImmutableList<NavigationItem>> get() = viewModel.navigationItems
+
 
     val childStack: Value<ChildStack<*, Child>> = childStack(
         source = navigation,
@@ -35,6 +40,7 @@ class CobaltContainerComponent(
     private fun createChild(config: Config, componentContext: ComponentContext): Child {
         return when (config) {
             Config.Home -> Child.Home(newsComponent(componentContext))
+            Config.Guard -> Child.Guard(guardComponent(componentContext))
             Config.MyProfile -> Child.MyProfile(myProfileComponent(componentContext))
         }
     }
@@ -43,15 +49,20 @@ class CobaltContainerComponent(
         return DefaultNewsRootComponent(componentContext)
     }
 
+    private fun guardComponent(componentContext: ComponentContext): GuardComponent {
+        return DefaultGuardComponent(componentContext)
+    }
+
     private fun myProfileComponent(componentContext: ComponentContext): ProfileComponent {
         return MyProfileComponent(componentContext)
     }
 
     fun switch(to: NavigationItem) {
-        _currentNavigationItem.value = to
+        viewModel.onNavigationItemChanged(to)
 
         when (to) {
             NavigationItem.Home -> navigation.bringToFront(Config.Home)
+            NavigationItem.Guard -> navigation.bringToFront(Config.Guard)
             NavigationItem.MyProfile -> navigation.bringToFront(Config.MyProfile)
         }
     }
@@ -65,16 +76,30 @@ class CobaltContainerComponent(
         object Home : Config
 
         @Parcelize
+        object Guard : Config
+
+        @Parcelize
         object MyProfile : Config
     }
 
     sealed interface Child {
         class Home(val component: NewsRootComponent) : Child
+        class Guard(val component: GuardComponent) : Child
         class MyProfile(val component: ProfileComponent) : Child
     }
 
     enum class NavigationItem {
         Home,
+        Guard,
         MyProfile
+    }
+
+    private class ContainerViewModel: ViewModel() {
+        val currentNavigationItem = MutableValue(NavigationItem.Home)
+        val navigationItems = MutableValue(NavigationItem.values().toList().toImmutableList())
+
+        fun onNavigationItemChanged(item: NavigationItem) {
+            currentNavigationItem.value = item
+        }
     }
 }

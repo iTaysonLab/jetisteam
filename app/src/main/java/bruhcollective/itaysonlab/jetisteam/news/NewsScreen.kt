@@ -10,8 +10,8 @@ import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
 
 @Composable
 fun NewsScreen(
-    topPadding: Dp,
-    component: NewsRootComponent
+    component: NewsRootComponent,
+    topPadding: Dp
 ) {
     Children(stack = component.childStack, modifier = Modifier.padding(top = topPadding)) {
         when (val child = it.instance) {

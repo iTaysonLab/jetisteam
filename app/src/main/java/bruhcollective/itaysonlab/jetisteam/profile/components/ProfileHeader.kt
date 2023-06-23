@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
@@ -115,7 +116,7 @@ fun BoxScope.ProfileHeaderExpandedContent(
                 drawRect(
                     brush = Brush.linearGradient(
                         colors = listOf(
-                            surfaceColor.copy(alpha = 0.2f),
+                            surfaceColor.copy(alpha = 0.1f),
                             surfaceColor,
                         ),
                         start = Offset(x = size.width / 2f, y = 0f),
@@ -136,7 +137,7 @@ fun BoxScope.ProfileHeaderExpandedContent(
     ) {
         Spacer(
             modifier = Modifier
-                .height(64.dp)
+                .height(96.dp)
                 .padding(top = topPadding)
         )
 

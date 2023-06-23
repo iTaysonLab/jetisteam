@@ -6,6 +6,7 @@
     <string name="profile_widget_favorite_game">Favorite Game</string>
     <string name="profile_widget_game_collector">Game Collector</string>
     <string name="profile_widget_unknown">Unknown Showcase</string>
+    <string name="profile_widget_favorite_game_achievements">%s of %s achievements</string>
 
     <plurals name="profile_hours_played">
         <item quantity="other">%s hours played</item>

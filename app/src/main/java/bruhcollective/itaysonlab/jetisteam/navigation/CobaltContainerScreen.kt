@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.jetisteam.guard.GuardScreen
 import bruhcollective.itaysonlab.jetisteam.news.NewsScreen
 import bruhcollective.itaysonlab.jetisteam.profile.ProfileScreen
 import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltNavigationBar
@@ -60,8 +61,9 @@ fun CobaltContainerScreen(
             slideWithDirection(direction) + fade(IslandAnimations.islandSpec())
         }, modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
             when (val child = it.instance) {
-                is CobaltContainerComponent.Child.Home -> NewsScreen(stackTopPadding, child.component)
-                is CobaltContainerComponent.Child.MyProfile -> ProfileScreen(stackTopPadding, child.component)
+                is CobaltContainerComponent.Child.Home -> NewsScreen(child.component, stackTopPadding)
+                is CobaltContainerComponent.Child.MyProfile -> ProfileScreen(child.component, stackTopPadding)
+                is CobaltContainerComponent.Child.Guard -> GuardScreen(child.component, stackTopPadding)
             }
         }
     }

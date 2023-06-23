@@ -67,11 +67,13 @@ dependencies {
     implementation(project(":core:decomposekit"))
     implementation(project(":core:ksteam"))
     implementation(project(":core:featureflags"))
+
     implementation(project(":feature:signin"))
     implementation(project(":feature:news"))
     implementation(project(":feature:home"))
     implementation(project(":feature:webview"))
     implementation(project(":feature:profile"))
+    implementation(project(":feature:guard"))
 
     implementation(libs.androidKtxCore)
     implementation(libs.androidKtxActivity)

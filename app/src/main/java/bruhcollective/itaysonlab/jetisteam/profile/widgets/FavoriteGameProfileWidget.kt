@@ -80,7 +80,7 @@ fun FavoriteGameProfileWidget(
 
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier) {
                     Text(
-                        "${widget.achievementProgress.currentAchievements} of ${widget.achievementProgress.totalAchievements} achievements",
+                        stringResource(id = R.string.profile_widget_favorite_game_achievements, widget.achievementProgress.currentAchievements, widget.achievementProgress.totalAchievements),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.weight(1f)
                     )

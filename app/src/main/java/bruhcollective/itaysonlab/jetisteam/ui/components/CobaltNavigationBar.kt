@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Home
 import androidx.compose.material.icons.sharp.Message
 import androidx.compose.material.icons.sharp.Person
+import androidx.compose.material.icons.sharp.Security
 import androidx.compose.material.icons.sharp.Store
 import androidx.compose.material.icons.sharp.VideoLibrary
 import androidx.compose.material3.Icon
@@ -87,6 +88,7 @@ fun CobaltNavigationBar(
                         imageVector = when (item) {
                             CobaltContainerComponent.NavigationItem.Home -> Icons.Sharp.Home
                             CobaltContainerComponent.NavigationItem.MyProfile -> Icons.Sharp.Person
+                            CobaltContainerComponent.NavigationItem.Guard -> Icons.Sharp.Security
                         },
                         contentDescription = null,
                         modifier = Modifier.padding(16.dp),

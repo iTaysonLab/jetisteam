@@ -35,7 +35,7 @@ fun ProfilePlayingCard(
     }
 
     Column(
-        modifier = Modifier.background(MaterialTheme.colorScheme.backgroundEmphasis).padding(16.dp).fillMaxWidth(),
+        modifier = Modifier.padding(16.dp).fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(

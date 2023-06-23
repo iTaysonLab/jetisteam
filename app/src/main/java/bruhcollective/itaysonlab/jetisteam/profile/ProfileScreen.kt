@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.jetisteam.profile
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,8 +26,8 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 @Composable
 fun ProfileScreen(
-    topPadding: Dp,
-    component: ProfileComponent
+    component: ProfileComponent,
+    topPadding: Dp
 ) {
     val state by component.state.subscribeAsState()
 
@@ -35,7 +36,7 @@ fun ProfileScreen(
     }
 
     when (state) {
-        ProfileComponent.State.Loading -> {
+        ProfileComponent.State.Idle, ProfileComponent.State.Loading -> {
             FullscreenLoading(modifier = Modifier.padding(top = topPadding))
         }
 
@@ -51,7 +52,7 @@ private fun ProfileScreenContent(
     component: ProfileComponent
 ) {
     val collapsingScaffold = rememberCollapsingToolbarScaffoldState()
-    val widgets by component.widgets.subscribeAsState()
+    val widgets by component.widgetsComponent.widgets.subscribeAsState()
 
     CollapsingToolbarScaffold(
         toolbar = {
@@ -66,18 +67,26 @@ private fun ProfileScreenContent(
         ) {
             item {
                 ProfileActionsStrip()
-                CobaltDivider(padding = 0.dp)
             }
+
+            divider()
 
             item {
                 ProfilePlayingCard(component.statusCardComponent)
-                CobaltDivider(padding = 0.dp)
             }
+
+            divider()
             
             items(widgets) { widget ->
                 ProfileWidgetPortal(widget)
                 CobaltDivider(padding = 0.dp)
             }
         }
+    }
+}
+
+private fun LazyListScope.divider() {
+    item(contentType = 1) {
+        CobaltDivider(padding = 0.dp)
     }
 }

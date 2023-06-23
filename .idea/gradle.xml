@@ -27,6 +27,7 @@
             <option value="$PROJECT_DIR$/core/featureflags" />
             <option value="$PROJECT_DIR$/core/ksteam" />
             <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/guard" />
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/news" />
             <option value="$PROJECT_DIR$/feature/profile" />
