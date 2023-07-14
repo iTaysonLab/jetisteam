@@ -146,7 +146,7 @@ fun NewsEventPortal(entry: NewsEvent) {
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             AsyncImage(
-                model = entry.relatedApp?.icon ?: entry.clanSummary?.avatarMedium,
+                model = entry.relatedApp?.icon,
                 contentDescription = null,
                 modifier = Modifier.size(38.dp),
                 placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
@@ -155,7 +155,7 @@ fun NewsEventPortal(entry: NewsEvent) {
             )
 
             Column {
-                Text(text = entry.relatedApp?.name ?: entry.clanSummary?.name.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(text = entry.relatedApp?.name.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis)
 
                 Text(
                     text = formattedDate,

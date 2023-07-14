@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.guard.setup.GuardSetupComponent
 import bruhcollective.itaysonlab.jetisteam.R
 import bruhcollective.itaysonlab.jetisteam.guard.setup.onboarding.GuardOnboardingScreen
+import bruhcollective.itaysonlab.jetisteam.guard.setup.sms.EnterSmsScreen
 import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltDivider
 import bruhcollective.itaysonlab.jetisteam.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.jetisteam.ui.components.InlineMonoButton
@@ -116,6 +117,8 @@ fun GuardSetupScreen(
     ) {
         when (val child = it.instance) {
             is GuardSetupComponent.Child.Onboarding -> GuardOnboardingScreen(child.component)
+            is GuardSetupComponent.Child.EnterSmsCode -> EnterSmsScreen(child.component)
+            is GuardSetupComponent.Child.SaveRecoveryCode -> TODO()
         }
     }
 }

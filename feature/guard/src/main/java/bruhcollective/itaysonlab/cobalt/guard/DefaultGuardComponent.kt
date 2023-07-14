@@ -6,6 +6,7 @@ import bruhcollective.itaysonlab.ksteam.handlers.guard
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
+import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
@@ -29,8 +30,12 @@ class DefaultGuardComponent (
     private fun createSlot(config: Config, componentContext: ComponentContext): GuardComponent.Child {
         return when (config) {
             is Config.Ready -> GuardComponent.Child.InstanceReady(TODO())
-            Config.Setup -> GuardComponent.Child.Setup(DefaultGuardSetupComponent(componentContext))
+            Config.Setup -> GuardComponent.Child.Setup(DefaultGuardSetupComponent(onSuccess = ::navigateToCurrentGuard, componentContext))
         }
+    }
+
+    private fun navigateToCurrentGuard() {
+        navigation.activate(Config.Ready(steamId = steamClient.currentSteamId.id))
     }
 
     private fun createInitialConfiguration(): Config {

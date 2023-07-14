@@ -37,6 +37,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":core:decomposekit"))
     implementation(libs.coroutines)
     implementation(libs.decompose)
     implementation(libs.koin)

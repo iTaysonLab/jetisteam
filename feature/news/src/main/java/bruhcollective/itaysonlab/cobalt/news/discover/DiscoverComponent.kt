@@ -43,5 +43,7 @@ private fun ActivityFeedEntry.toContentTypeInt(): Int {
         is ActivityFeedEntry.PlayedForFirstTime -> 2
         is ActivityFeedEntry.ReceivedNewGame -> 3
         is ActivityFeedEntry.UnknownEvent -> 4
+        is ActivityFeedEntry.ScreenshotPosted -> 5
+        is ActivityFeedEntry.ScreenshotsPosted -> 6
     }
 }
