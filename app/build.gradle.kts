@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "bruhcollective.itaysonlab.jetisteam"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "bruhcollective.itaysonlab.jetisteam"
@@ -47,7 +47,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
 
     packaging {

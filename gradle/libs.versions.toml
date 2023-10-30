@@ -1,12 +1,12 @@
 [versions]
 # kotlin
-kotlinVersion = "1.8.21"
-kspVersion = "1.8.21-1.0.11"
+kotlinVersion = "1.9.0"
+kspVersion = "1.9.0-1.0.13"
 
 # kotlinx
 kotlinxSerializationVersion = "1.5.1"
 kotlinxDateTimeVersion = "0.4.0"
-coroutinesVersion = "1.7.1"
+coroutinesVersion = "1.7.3"
 kotlinxAtomicVersion = "0.20.2"
 kotlinxCollectionsVersion = "0.3.5"
 
@@ -23,22 +23,22 @@ kmmViewModelVersion = "1.0.0-ALPHA-5"
 kmmNativeCoroutinesVersion = "1.0.0-ALPHA-7"
 
 # decompose
-decomposeVersion = "2.0.0-beta-01"
-essentyVersion = "1.1.0"
+decomposeVersion = "2.1.0-alpha-07"
+essentyVersion = "1.2.0-alpha-06"
 darwinParcelizeVersion = "0.1.4"
 
 # android
-androidPluginVersion = "8.0.2"
+androidPluginVersion = "8.3.0-alpha01"
 composeCompilerVersion = "1.4.7"
 lifecycleVersion = "2.6.1"
-hiltVersion = "2.44.2"
+hiltVersion = "2.47"
 androidCoreKtxVersion = "1.10.1"
 androidActivityKtxVersion = "1.7.2"
 
 # compose
-composeVersion = "1.5.0-beta02"
-composeMaterial3Version = "1.2.0-alpha02"
-compose_motion = "0.12.1"
+composeVersion = "1.6.0-alpha04"
+composeMaterial3Version = "1.2.0-alpha06"
+compose_motion = "1.0.6"
 accompanist = "0.31.1-alpha"
 
 # android tests

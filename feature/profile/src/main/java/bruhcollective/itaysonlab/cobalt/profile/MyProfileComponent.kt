@@ -70,9 +70,7 @@ class MyProfileComponent (
         fun dispatchComponentLoad() {
             viewModelScope.launch {
                 stateMutex.withLock {
-                    println("[MPC] // In mutex")
                     if (state.value != ProfileComponent.State.Idle) return@withLock
-                    println("[MPC] // In mutex ~ Loading")
                     state.value = ProfileComponent.State.Loading
                     launchPersonaObserver()
                     launchPersonaEquipmentObserver()
@@ -83,8 +81,6 @@ class MyProfileComponent (
 
         private fun launchPersonaObserver() {
             steam.ksteam.persona.currentLivePersona().onEach { newPersona ->
-                println("[MPC] // Persona ~ $newPersona")
-
                 if (newPersona.id != SteamId.Empty) {
                     state.value = ProfileComponent.State.Ready
                 }
@@ -95,14 +91,12 @@ class MyProfileComponent (
 
         private fun launchPersonaEquipmentObserver() {
             steam.ksteam.profile.getMyEquipment().onEach { equipment ->
-                println("[MPC] // Persona equipment ~ $equipment")
                 personaEquipment.value = equipment
             }.launchIn(viewModelScope)
         }
 
         private fun launchPersonaCustomizationObserver() {
             steam.ksteam.persona.currentPersona.onEach { persona ->
-                println("[MPC] // Persona customization request ~ $persona")
                 personaCustomization.value = withContext(Dispatchers.Default) {
                     steam.ksteam.profile.getCustomization(steamId = steam.currentSteamId)
                 }

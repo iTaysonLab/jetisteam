@@ -1,7 +1,7 @@
 import org.gradle.api.JavaVersion
 import org.gradle.kotlin.dsl.android
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.implementation
+import org.gradle.kotlin.dsl.implementation§
 import org.gradle.kotlin.dsl.libs
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
@@ -13,7 +13,7 @@ plugins {
 
 android {
     namespace = "bruhcollective.itaysonlab.cobalt.core.decompose"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21

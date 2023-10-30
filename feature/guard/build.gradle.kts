@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "bruhcollective.itaysonlab.cobalt.guard"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
@@ -30,7 +30,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
 }
 
