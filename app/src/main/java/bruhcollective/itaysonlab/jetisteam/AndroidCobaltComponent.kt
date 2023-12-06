@@ -1,7 +1,5 @@
 package bruhcollective.itaysonlab.jetisteam
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.cobalt.signin.DefaultSignRootComponent
 import bruhcollective.itaysonlab.cobalt.signin.SignRootComponent
@@ -12,10 +10,8 @@ import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
-import com.arkivanov.decompose.router.slot.navigate
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.parcelable.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -30,7 +26,8 @@ class AndroidCobaltComponent (
         source = slotNavigation,
         handleBackButton = false,
         childFactory = ::createSlot,
-        initialConfiguration = ::createInitialConfiguration
+        initialConfiguration = ::createInitialConfiguration,
+        serializer = Config.serializer()
     )
 
     private fun createSlot(config: Config, componentContext: ComponentContext): Slot {
@@ -57,11 +54,12 @@ class AndroidCobaltComponent (
         class Cobalt(val component: CobaltContainerComponent) : Slot
     }
 
-    private sealed interface Config : Parcelable {
-        @Parcelize
-        object SignIn : Config
+    @Serializable
+    private sealed interface Config {
+        @Serializable
+        data object SignIn : Config
 
-        @Parcelize
-        object Cobalt : Config
+        @Serializable
+        data object Cobalt : Config
     }
 }

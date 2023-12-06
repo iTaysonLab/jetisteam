@@ -1,43 +1,46 @@
 [versions]
 # kotlin
-kotlinVersion = "1.9.0"
-kspVersion = "1.9.0-1.0.13"
+kotlinVersion = "1.9.10"
+kspVersion = "1.9.10-1.0.13"
 
 # kotlinx
-kotlinxSerializationVersion = "1.5.1"
+kotlinxSerializationVersion = "1.6.0"
 kotlinxDateTimeVersion = "0.4.0"
 coroutinesVersion = "1.7.3"
 kotlinxAtomicVersion = "0.20.2"
 kotlinxCollectionsVersion = "0.3.5"
 
 # ktor
-ktorClientVersion = "2.3.1"
+ktorClientVersion = "2.3.5"
 
 # multiplatform
 multiplatformSettingsVersion = "1.0.0"
 napierVersion = "2.6.1"
 koinVersion = "3.4.0"
 koinKspVersion = "1.2.0"
-okioVersion = "3.3.0"
+okioVersion = "3.6.0"
 kmmViewModelVersion = "1.0.0-ALPHA-5"
 kmmNativeCoroutinesVersion = "1.0.0-ALPHA-7"
 
 # decompose
-decomposeVersion = "2.1.0-alpha-07"
-essentyVersion = "1.2.0-alpha-06"
+decomposeVersion = "2.2.0-alpha04"
+essentyVersion = "1.3.0-alpha03"
 darwinParcelizeVersion = "0.1.4"
 
+# mvikotlin
+mvikotlin = "3.3.0"
+
 # android
-androidPluginVersion = "8.3.0-alpha01"
+androidPluginVersion = "8.3.0-alpha16"
 composeCompilerVersion = "1.4.7"
-lifecycleVersion = "2.6.1"
+lifecycleVersion = "2.6.2"
 hiltVersion = "2.47"
-androidCoreKtxVersion = "1.10.1"
-androidActivityKtxVersion = "1.7.2"
+androidCoreKtxVersion = "1.12.0"
+androidActivityKtxVersion = "1.8.1"
 
 # compose
-composeVersion = "1.6.0-alpha04"
-composeMaterial3Version = "1.2.0-alpha06"
+composeVersion = "1.6.0-beta01"
+composeMaterial3Version = "1.2.0-alpha12"
 compose_motion = "1.0.6"
 accompanist = "0.31.1-alpha"
 
@@ -49,10 +52,10 @@ testCoreVersion = "1.5.0"
 robolectricVersion = "4.6.1"
 junit = "4.13.2"
 appcompat = "1.6.1"
-material = "1.9.0"
+material = "1.10.0"
 
 # ksteam
-ksteam = "r29"
+ksteam = "r31"
 
 [plugins]
 androidPluginApplication = { id = "com.android.application", version.ref = "androidPluginVersion" }
@@ -63,7 +66,6 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 googleKsp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
 kmmNativeCoroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref = "kmmNativeCoroutinesVersion" }
 darwinParcelize = { id = "com.arkivanov.parcelize.darwin", version.ref = "darwinParcelizeVersion" }
-kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinVersion" }
 kotlinAtomicFu = { id = "org.jetbrains.kotlinx.plugin.atomicfu", version.ref = "kotlinxAtomicVersion" }
 
 [libraries]
@@ -157,6 +159,13 @@ decomposeExtensionComposeMpp = { module = "com.arkivanov.decompose:extensions-co
 essentyLifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "essentyVersion" }
 essentyStateKeeper = { module = "com.arkivanov.essenty:state-keeper", version.ref = "essentyVersion" }
 darwinParcelize = { module = "com.arkivanov.parcelize.darwin:runtime", version.ref = "darwinParcelizeVersion" }
+
+# mvikotlin
+mvikotlin = { group = "com.arkivanov.mvikotlin", name = "mvikotlin", version.ref = "mvikotlin" }
+mvikotlin-main = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-main", version.ref = "mvikotlin" }
+mvikotlin-logging = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-logging", version.ref = "mvikotlin" }
+mvikotlin-extensions-coroutines = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-extensions-coroutines", version.ref = "mvikotlin" }
+
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }

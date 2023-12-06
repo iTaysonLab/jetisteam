@@ -23,16 +23,6 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/build-extensions" />
             <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/core/decomposekit" />
-            <option value="$PROJECT_DIR$/core/featureflags" />
-            <option value="$PROJECT_DIR$/core/ksteam" />
-            <option value="$PROJECT_DIR$/feature" />
-            <option value="$PROJECT_DIR$/feature/guard" />
-            <option value="$PROJECT_DIR$/feature/home" />
-            <option value="$PROJECT_DIR$/feature/news" />
-            <option value="$PROJECT_DIR$/feature/profile" />
-            <option value="$PROJECT_DIR$/feature/signin" />
-            <option value="$PROJECT_DIR$/feature/webview" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

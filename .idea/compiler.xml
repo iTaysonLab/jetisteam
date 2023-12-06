@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="17">
+      <module name="Cobalt.core.decomposekit" target="17" />
+      <module name="Cobalt.core.featureflags" target="17" />
+      <module name="Cobalt.feature.guard" target="17" />
+      <module name="Cobalt.feature.home" target="17" />
+      <module name="Cobalt.feature.news" target="17" />
+      <module name="Cobalt.feature.profile" target="17" />
+      <module name="Cobalt.feature.signin" target="17" />
+      <module name="Cobalt.feature.webview" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

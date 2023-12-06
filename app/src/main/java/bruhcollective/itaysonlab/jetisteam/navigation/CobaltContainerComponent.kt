@@ -15,10 +15,9 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.instancekeeper.getOrCreate
-import com.arkivanov.essenty.parcelable.Parcelable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 class CobaltContainerComponent(
     componentContext: ComponentContext
@@ -34,7 +33,8 @@ class CobaltContainerComponent(
         source = navigation,
         initialConfiguration = Config.Home,
         handleBackButton = true,
-        childFactory = ::createChild
+        childFactory = ::createChild,
+        serializer = Config.serializer()
     )
 
     private fun createChild(config: Config, componentContext: ComponentContext): Child {
@@ -71,21 +71,22 @@ class CobaltContainerComponent(
         return navigationItems.value.indexOf(item)
     }
 
-    private sealed interface Config : Parcelable {
-        @Parcelize
-        object Home : Config
+    @Serializable
+    private sealed interface Config {
+        @Serializable
+        data object Home : Config
 
-        @Parcelize
-        object Guard : Config
+        @Serializable
+        data object Guard : Config
 
-        @Parcelize
-        object MyProfile : Config
+        @Serializable
+        data object MyProfile : Config
     }
 
     sealed interface Child {
-        class Home(val component: NewsRootComponent) : Child
-        class Guard(val component: GuardComponent) : Child
-        class MyProfile(val component: ProfileComponent) : Child
+        data class Home(val component: NewsRootComponent) : Child
+        data class Guard(val component: GuardComponent) : Child
+        data class MyProfile(val component: ProfileComponent) : Child
     }
 
     enum class NavigationItem {

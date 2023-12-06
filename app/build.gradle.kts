@@ -2,7 +2,7 @@
 plugins {
     alias(libs.plugins.androidPluginApplication)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.kotlinParcelize)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 android {
@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId = "bruhcollective.itaysonlab.jetisteam"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -47,7 +47,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.2"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 
     packaging {
@@ -60,20 +60,11 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.4.3")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
     implementation("me.onebone:toolbar-compose:2.3.5")
 
-    implementation(project(":core:decomposekit"))
-    implementation(project(":core:ksteam"))
-    implementation(project(":core:featureflags"))
-
-    implementation(project(":feature:signin"))
-    implementation(project(":feature:news"))
-    implementation(project(":feature:home"))
-    implementation(project(":feature:webview"))
-    implementation(project(":feature:profile"))
-    implementation(project(":feature:guard"))
+    implementation(project(":core"))
 
     implementation(libs.androidKtxCore)
     implementation(libs.androidKtxActivity)

@@ -3,6 +3,5 @@ plugins {
     alias(libs.plugins.androidPluginApplication).apply(false)
     alias(libs.plugins.androidPluginLibrary).apply(false)
     alias(libs.plugins.kotlinAndroid).apply(false)
-    alias(libs.plugins.kotlinParcelize).apply(false)
     alias(libs.plugins.kotlinSerialization).apply(false)
 }
