@@ -4,24 +4,10 @@ import android.content.Context
 import android.os.Build
 import android.provider.Settings
 import bruhcollective.itaysonlab.ksteam.models.enums.EOSType
-import com.tencent.mmkv.MMKV
-import java.util.UUID
 
 class DeviceInformationController (
-    private val mmkv: MMKV,
     private val context: Context
 ) {
-    val uuid: String
-        get() {
-            return if (mmkv.containsKey("app.uuid")) {
-                mmkv.getString("app.uuid", null) ?: generateUuid()
-            } else {
-                generateUuid().also { newUuid ->
-                    mmkv.putString("app.uuid", newUuid)
-                }
-            }
-        }
-
     val deviceName by lazy {
         return@lazy if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             val deviceName = Settings.Global.getString(context.contentResolver, Settings.Global.DEVICE_NAME)
@@ -40,6 +26,4 @@ class DeviceInformationController (
             else -> EOSType.k_eAndroidUnknown
         }
     }
-
-    private fun generateUuid() = "android:${UUID.randomUUID()}"
 }

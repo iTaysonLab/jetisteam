@@ -19,7 +19,8 @@ class DefaultNewsRootComponent (
         source = navigation,
         initialConfiguration = Config.Discover,
         handleBackButton = true,
-        childFactory = ::createChild
+        childFactory = ::createChild,
+        serializer = Config.serializer()
     )
 
     private fun createChild(config: Config, componentContext: ComponentContext): NewsRootComponent.Child {
@@ -32,6 +33,7 @@ class DefaultNewsRootComponent (
         return FusionDiscoverComponent(componentContext)
     }
 
+    @Serializable
     private sealed interface Config {
         @Serializable
         data object Discover : Config

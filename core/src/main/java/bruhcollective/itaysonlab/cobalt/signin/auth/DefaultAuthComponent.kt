@@ -36,6 +36,10 @@ class DefaultAuthComponent (
                     signInState.value = AuthComponent.SignInState.InvalidInformation
                 }
 
+                Account.AuthorizationResult.RpcError -> {
+                    signInState.value = AuthComponent.SignInState.InvalidInformation
+                }
+
                 Account.AuthorizationResult.Success -> {
                     onProceedToTfa()
                 }

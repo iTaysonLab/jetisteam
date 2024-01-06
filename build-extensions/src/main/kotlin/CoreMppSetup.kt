@@ -9,7 +9,7 @@ fun KotlinMultiplatformExtension.commonSetup() {
     targetHierarchy.default()
 
     // Enable Android support and use JVM 1.8 target
-    android {
+    androidTarget {
         jvmToolchain(8)
 
         compilations.all {

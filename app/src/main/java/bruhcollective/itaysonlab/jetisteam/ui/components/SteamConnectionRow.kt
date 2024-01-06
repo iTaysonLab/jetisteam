@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetisteam.ui.components
 
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

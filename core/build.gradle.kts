@@ -30,7 +30,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
 }
 
@@ -39,7 +39,10 @@ dependencies {
     implementation(libs.coroutines)
     implementation(libs.decompose)
     implementation(libs.koin)
+    implementation(libs.koinAndroid)
     implementation(libs.kotlinxCollections)
-
+    implementation(libs.ktorClientEngineOkHttp)
+    
     implementation(libs.bundles.ksteam)
+    implementation(libs.bundles.ktorClient)
 }

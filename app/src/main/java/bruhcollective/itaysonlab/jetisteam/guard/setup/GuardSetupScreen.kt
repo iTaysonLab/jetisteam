@@ -8,8 +8,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Cancel
 import androidx.compose.material.icons.sharp.Check
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -24,11 +24,10 @@ import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.guard.setup.GuardSetupComponent
 import bruhcollective.itaysonlab.jetisteam.R
 import bruhcollective.itaysonlab.jetisteam.guard.setup.onboarding.GuardOnboardingScreen
-import bruhcollective.itaysonlab.jetisteam.guard.setup.sms.EnterSmsScreen
-import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltDivider
+import bruhcollective.itaysonlab.jetisteam.guard.setup.recovery.GuardSaveCodeScreen
+import bruhcollective.itaysonlab.jetisteam.guard.setup.sms.GuardEnterSmsScreen
 import bruhcollective.itaysonlab.jetisteam.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.jetisteam.ui.components.InlineMonoButton
-import bruhcollective.itaysonlab.jetisteam.ui.theme.backgroundEmphasis
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.plus
@@ -70,7 +69,7 @@ fun GuardSetupScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
 
                     InlineMonoButton(
                         icon = {
@@ -86,7 +85,7 @@ fun GuardSetupScreen(
                         )
                     )
 
-                    Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
 
                     InlineMonoButton(
                         icon = {
@@ -102,7 +101,7 @@ fun GuardSetupScreen(
                         )
                     )
 
-                    Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
 
                     Spacer(modifier = Modifier.navigationBarsPadding())
                 }
@@ -113,12 +112,11 @@ fun GuardSetupScreen(
     Children(
         stack = component.childStack,
         animation = stackAnimation(fade() + slide()),
-        modifier = Modifier.padding(top = topPadding)
     ) {
         when (val child = it.instance) {
-            is GuardSetupComponent.Child.Onboarding -> GuardOnboardingScreen(child.component)
-            is GuardSetupComponent.Child.EnterSmsCode -> EnterSmsScreen(child.component)
-            is GuardSetupComponent.Child.SaveRecoveryCode -> TODO()
+            is GuardSetupComponent.Child.Onboarding -> GuardOnboardingScreen(child.component, topPadding)
+            is GuardSetupComponent.Child.EnterSmsCode -> GuardEnterSmsScreen(child.component, topPadding)
+            is GuardSetupComponent.Child.SaveRecoveryCode -> GuardSaveCodeScreen(child.component, topPadding)
         }
     }
 }

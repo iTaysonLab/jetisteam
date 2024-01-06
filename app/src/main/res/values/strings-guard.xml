@@ -17,10 +17,10 @@
     <string name="guard_setup_next">Next</string>
     <string name="guard_setup_cancel">Cancel</string>
 
-    <string name="guard_setup_enter_code">Enter the code we sent to your phone</string>
+    <string name="guard_setup_enter_code">Enter the code that was sent to your phone.</string>
     <string name="guard_setup_enter_code_resend">Resend</string>
     <string name="guard_setup_enter_code_action">Verify code</string>
-    <string name="guard_setup_enter_code_with_hint">Enter the code we sent to the number ending with %s</string>
+    <string name="guard_setup_enter_code_with_hint">Enter the code that was sent to the number ending with %s.</string>
 
     <string name="guard_recovery">Recovery Code</string>
     <string name="guard_recovery_hint">Do not share this code with anyone.</string>

@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.guard.setup.onboarding.GuardOnboardingComponent
 import bruhcollective.itaysonlab.jetisteam.ui.components.StateButtonContent
@@ -30,11 +31,12 @@ import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 
 @Composable
 fun GuardOnboardingScreen(
-    component: GuardOnboardingComponent
+    component: GuardOnboardingComponent,
+    topPadding: Dp
 ) {
     val isProcessing by component.isTryingToStartSetup.subscribeAsState()
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.fillMaxSize().padding(top = topPadding), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
             Icon(imageVector = Icons.Sharp.Security, contentDescription = null, modifier = Modifier.size(64.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
 

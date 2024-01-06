@@ -11,8 +11,7 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.parcelable.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 class DefaultSignRootComponent (
     componentContext: ComponentContext,
@@ -24,7 +23,8 @@ class DefaultSignRootComponent (
         source = navigation,
         initialConfiguration = Config.SignIn,
         handleBackButton = true,
-        childFactory = ::createChild
+        childFactory = ::createChild,
+        serializer = Config.serializer()
     )
 
     private fun createChild(config: Config, componentContext: ComponentContext): SignRootComponent.Child {
@@ -44,11 +44,12 @@ class DefaultSignRootComponent (
         return DefaultTwoFactorComponent(componentContext, onBack = navigation::pop, onAuthorizationCompleted = onAuthorizationCompleted)
     }
 
-    private sealed interface Config : Parcelable {
-        @Parcelize
-        object SignIn : Config
+    @Serializable
+    private sealed interface Config {
+        @Serializable
+        data object SignIn : Config
 
-        @Parcelize
-        object TwoFactor : Config
+        @Serializable
+        data object TwoFactor : Config
     }
 }

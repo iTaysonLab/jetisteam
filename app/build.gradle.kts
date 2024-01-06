@@ -47,7 +47,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
 
     packaging {
@@ -55,6 +55,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
             excludes += "/commonMain/**"
             excludes += "/META-INF/kotlin-project-structure-metadata.json"
+            excludes += "/META-INF/versions/9/previous-compilation-data.bin"
         }
     }
 }

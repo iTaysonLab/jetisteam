@@ -21,11 +21,11 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.observe
 import com.arkivanov.essenty.instancekeeper.getOrCreate
-import com.arkivanov.essenty.parcelable.Parcelable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -33,10 +33,10 @@ import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal class DefaultGuardSetupComponent (
+internal class DefaultGuardSetupComponent(
     private val onSuccess: () -> Unit,
     componentContext: ComponentContext
-): GuardSetupComponent, ComponentContext by componentContext {
+) : GuardSetupComponent, ComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
     private val alertNavigation = SlotNavigation<AlertConfig>()
     private val viewModel = instanceKeeper.getOrCreate { SetupViewModel() }
@@ -45,13 +45,15 @@ internal class DefaultGuardSetupComponent (
         source = navigation,
         initialConfiguration = Config.Onboarding,
         handleBackButton = true,
-        childFactory = ::createChild
+        childFactory = ::createChild,
+        serializer = Config.serializer()
     )
 
     override val alert: Value<ChildSlot<*, GuardSetupComponent.AlertChild>> = childSlot(
         source = alertNavigation,
         handleBackButton = true,
-        childFactory = ::createAlertSlot
+        childFactory = ::createAlertSlot,
+        serializer = AlertConfig.serializer()
     )
 
     override fun onAlertDismissed() {
@@ -62,72 +64,115 @@ internal class DefaultGuardSetupComponent (
     init {
         viewModel.guardState.observe(lifecycle) { newState ->
             when (newState) {
+                SgCreationFlowState.Idle -> {
+                    //
+                }
+
                 is SgCreationFlowState.AlreadyHasGuard -> {
                     alertNavigation.activate(AlertConfig.GuardAlreadyExists)
                 }
 
-                else -> {
-                    println("Unknown state: $newState")
+                is SgCreationFlowState.SmsSent -> {
+                    navigation.bringToFront(Config.EnterSmsCode(isMoving = newState.moving, hint = newState.hint))
+                }
+
+                is SgCreationFlowState.Success -> {
+                    navigation.bringToFront(Config.ShowRecoveryCode(code = newState.recoveryCode))
+                }
+
+                is SgCreationFlowState.Error -> {
+                    //
                 }
             }
         }
     }
 
-    private fun createChild(config: Config, componentContext: ComponentContext): GuardSetupComponent.Child {
+    private fun createChild(
+        config: Config,
+        componentContext: ComponentContext
+    ): GuardSetupComponent.Child {
         return when (config) {
-            Config.Onboarding -> GuardSetupComponent.Child.Onboarding(DefaultGuardOnboardingComponent(componentContext))
-            Config.EnterSmsCode -> GuardSetupComponent.Child.EnterSmsCode(enterSmsCodeComponent(componentContext))
-            is Config.ShowRecoveryCode -> GuardSetupComponent.Child.SaveRecoveryCode(saveRecoveryCodeComponent(config, componentContext))
+            Config.Onboarding -> GuardSetupComponent.Child.Onboarding(
+                DefaultGuardOnboardingComponent(componentContext)
+            )
+
+            is Config.EnterSmsCode -> GuardSetupComponent.Child.EnterSmsCode(
+                enterSmsCodeComponent(
+                    componentContext,
+                    config
+                )
+            )
+
+            is Config.ShowRecoveryCode -> GuardSetupComponent.Child.SaveRecoveryCode(
+                saveRecoveryCodeComponent(componentContext, config)
+            )
         }
     }
 
-    private fun enterSmsCodeComponent(componentContext: ComponentContext): GuardEnterSmsComponent {
-        return DefaultGuardEnterSmsComponent(onExitClicked = {
-            viewModel.resetGuard()
-            navigation.bringToFront(Config.Onboarding)
-        }, componentContext)
+    private fun enterSmsCodeComponent(
+        componentContext: ComponentContext,
+        config: Config.EnterSmsCode
+    ): GuardEnterSmsComponent {
+        return DefaultGuardEnterSmsComponent(
+            onExitClicked = {
+                viewModel.resetGuard()
+                navigation.bringToFront(Config.Onboarding)
+            },
+            isMovingGuard = config.isMoving,
+            phoneNumberHint = config.hint,
+            componentContext = componentContext
+        )
     }
 
     private fun saveRecoveryCodeComponent(
-        config: Config.ShowRecoveryCode,
-        componentContext: ComponentContext
+        componentContext: ComponentContext,
+        config: Config.ShowRecoveryCode
     ): GuardRecoveryCodeComponent {
         return SetupGuardRecoveryCodeComponent(
-            userId = config.steamId.toSteamId(),
             code = config.code,
             onExitClicked = onSuccess,
             componentContext = componentContext
         )
     }
 
-    private fun createAlertSlot(config: AlertConfig, componentContext: ComponentContext): GuardSetupComponent.AlertChild {
+    private fun createAlertSlot(
+        config: AlertConfig,
+        componentContext: ComponentContext
+    ): GuardSetupComponent.AlertChild {
         return when (config) {
             AlertConfig.GuardAlreadyExists -> GuardSetupComponent.AlertChild.GuardAlreadyExists(
-                DefaultGuardAlreadyExistsAlertComponent(componentContext, onConfirm = viewModel::confirmMove, onCancel = ::onAlertDismissed)
+                DefaultGuardAlreadyExistsAlertComponent(componentContext, onConfirm = {
+                    alertNavigation.dismiss()
+                    viewModel.confirmMove()
+                }, onCancel = ::onAlertDismissed)
             )
         }
     }
 
+    @Serializable
     private sealed interface Config {
         @Serializable
         data object Onboarding : Config
 
         @Serializable
-        data object EnterSmsCode : Config
+        data class EnterSmsCode(
+            val hint: String,
+            val isMoving: Boolean
+        ) : Config
 
         @Serializable
         data class ShowRecoveryCode(
-            val steamId: ULong,
             val code: String
         ) : Config
     }
 
+    @Serializable
     private sealed interface AlertConfig {
         @Serializable
         data object GuardAlreadyExists : AlertConfig
     }
 
-    private class SetupViewModel: ViewModel(), KoinComponent {
+    private class SetupViewModel : ViewModel(), KoinComponent {
         private val steam by inject<SteamClient>()
 
         val guardState = MutableValue<SgCreationFlowState>(SgCreationFlowState.Idle)

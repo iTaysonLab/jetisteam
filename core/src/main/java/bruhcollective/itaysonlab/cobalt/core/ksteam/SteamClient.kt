@@ -1,19 +1,17 @@
 package bruhcollective.itaysonlab.cobalt.core.ksteam
 
 import android.content.Context
-import bruhcollective.itaysonlab.ksteam.Core
-import bruhcollective.itaysonlab.ksteam.Guard
-import bruhcollective.itaysonlab.ksteam.Pics
+import android.util.Log
+import bruhcollective.itaysonlab.ksteam.KsteamClient
 import bruhcollective.itaysonlab.ksteam.debug.AndroidLoggingTransport
 import bruhcollective.itaysonlab.ksteam.debug.KSteamLoggingVerbosity
 import bruhcollective.itaysonlab.ksteam.debug.PacketDumper
-import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.kSteam
 import bruhcollective.itaysonlab.ksteam.models.enums.EGamingDeviceType
 import bruhcollective.itaysonlab.ksteam.network.CMClientState
+import bruhcollective.itaysonlab.ksteam.persistence.AndroidPersistenceDriver
+import bruhcollective.itaysonlab.ksteam.persistence.KsteamPersistenceDriver
 import bruhcollective.itaysonlab.ksteam.platform.DeviceInformation
-import bruhcollective.itaysonlab.ksteam.tryMigratingProtobufs
-import com.tencent.mmkv.MMKV
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import kotlinx.coroutines.CoroutineName
@@ -25,14 +23,14 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import okio.Path.Companion.toOkioPath
-import steam.webui.authentication.EAuthTokenPlatformType
+import steam.enums.EAuthTokenPlatformType
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 class SteamClient (
     private val applicationContext: Context,
-    private val mmkv: MMKV
 ): CoroutineScope by MainScope() + CoroutineName("Cobalt-SteamHolder") {
-    private val deviceInformationController = DeviceInformationController(mmkv, applicationContext)
+    private val deviceInformationController = DeviceInformationController(applicationContext)
 
     val ksteam = kSteam {
         deviceInfo = DeviceInformation(
@@ -43,22 +41,25 @@ class SteamClient (
         )
 
         rootFolder = File(applicationContext.filesDir, "ksteam").toOkioPath()
+        persistenceDriver = AndroidPersistenceDriver(applicationContext)
 
         loggingTransport = AndroidLoggingTransport
         loggingVerbosity = KSteamLoggingVerbosity.Verbose
 
         ktor {
-            HttpClient(OkHttp)
+            HttpClient(OkHttp) {
+                engine {
+                    config {
+                        readTimeout(30, TimeUnit.SECONDS)
+                        writeTimeout(30, TimeUnit.SECONDS)
+                        connectTimeout(30, TimeUnit.SECONDS)
+                    }
+                }
+            }
         }
 
-        install(Core)
-
-        install(Pics) {
-            database = KsteamMmkvDatabase(mmkv)
-        }
-
-        install(Guard) {
-            uuid = deviceInformationController.uuid
+        install(KsteamClient) {
+            enablePics = true
         }
     }
 
@@ -77,8 +78,7 @@ class SteamClient (
     }
 
     private suspend fun launchKsteam() {
-        ksteam.dumperMode = PacketDumper.DumpMode.Full
-        ksteam.guard.tryMigratingProtobufs(ksteam)
+        ksteam.dumperMode = PacketDumper.DumpMode.Disable
         ksteam.start()
     }
 }

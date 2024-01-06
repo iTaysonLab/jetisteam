@@ -6,6 +6,7 @@ import androidx.compose.ui.unit.Dp
 import bruhcollective.itaysonlab.cobalt.guard.GuardComponent
 import bruhcollective.itaysonlab.cobalt.signin.SignRootComponent
 import bruhcollective.itaysonlab.jetisteam.AndroidCobaltComponent
+import bruhcollective.itaysonlab.jetisteam.guard.instance.GuardInstanceScreen
 import bruhcollective.itaysonlab.jetisteam.guard.setup.GuardSetupScreen
 import bruhcollective.itaysonlab.jetisteam.navigation.CobaltContainerScreen
 import bruhcollective.itaysonlab.jetisteam.signin.SignInScreen
@@ -28,7 +29,7 @@ fun GuardScreen(
     slot.child?.instance?.let {
         when (val child = it) {
             is GuardComponent.Child.Setup -> GuardSetupScreen(child.component, topPadding)
-            is GuardComponent.Child.InstanceReady -> TODO()
+            is GuardComponent.Child.InstanceReady -> GuardInstanceScreen(child.component, topPadding)
         }
     }
 }

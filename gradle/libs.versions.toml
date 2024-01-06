@@ -1,11 +1,11 @@
 [versions]
 # kotlin
-kotlinVersion = "1.9.10"
-kspVersion = "1.9.10-1.0.13"
+kotlinVersion = "1.9.21"
+kspVersion = "1.9.21-1.0.16"
 
 # kotlinx
-kotlinxSerializationVersion = "1.6.0"
-kotlinxDateTimeVersion = "0.4.0"
+kotlinxSerializationVersion = "1.6.1"
+kotlinxDateTimeVersion = "0.4.1"
 coroutinesVersion = "1.7.3"
 kotlinxAtomicVersion = "0.20.2"
 kotlinxCollectionsVersion = "0.3.5"
@@ -36,11 +36,11 @@ composeCompilerVersion = "1.4.7"
 lifecycleVersion = "2.6.2"
 hiltVersion = "2.47"
 androidCoreKtxVersion = "1.12.0"
-androidActivityKtxVersion = "1.8.1"
+androidActivityKtxVersion = "1.8.2"
 
 # compose
-composeVersion = "1.6.0-beta01"
-composeMaterial3Version = "1.2.0-alpha12"
+composeVersion = "1.6.0-beta03"
+composeMaterial3Version = "1.2.0-beta01"
 compose_motion = "1.0.6"
 accompanist = "0.31.1-alpha"
 
@@ -55,7 +55,7 @@ appcompat = "1.6.1"
 material = "1.10.0"
 
 # ksteam
-ksteam = "r31"
+ksteam = "r36"
 
 [plugins]
 androidPluginApplication = { id = "com.android.application", version.ref = "androidPluginVersion" }
@@ -126,7 +126,7 @@ composeMaterialIcons = { module = "androidx.compose.material:material-icons-exte
 composeMaterial3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3Version" }
 composeUiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "composeVersion" }
 composeUiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeVersion" }
-coilCompose = "io.coil-kt:coil-compose:2.2.2"
+coilCompose = "io.coil-kt:coil-compose:2.5.0"
 composeMotionCore = { module = "io.github.fornewid:material-motion-compose-core", version.ref = "compose_motion" }
 
 # accompanist
@@ -175,15 +175,13 @@ mmkv = "com.tencent:mmkv:1.2.15"
 
 # ksteam
 ksteamCore = { module = "bruhcollective.itaysonlab.ksteam:core-android", version.ref = "ksteam" }
+ksteamPersistence = { module = "bruhcollective.itaysonlab.ksteam:core-persistence-android", version.ref = "ksteam" }
 ksteamVdf = { module = "bruhcollective.itaysonlab:kotlinx-vdf-android", version.ref = "ksteam" }
 ksteamProto = { module = "bruhcollective.itaysonlab.ksteam:proto-common-android", version.ref = "ksteam" }
-ksteamExtCore = { module = "bruhcollective.itaysonlab.ksteam:extension-core-android", version.ref = "ksteam" }
-ksteamExtGuard = { module = "bruhcollective.itaysonlab.ksteam:extension-guard-android", version.ref = "ksteam" }
-ksteamExtGuardMigration = { module = "bruhcollective.itaysonlab.ksteam:extension-guard-proto-migration-android", version.ref = "ksteam" }
-ksteamExtPics = { module = "bruhcollective.itaysonlab.ksteam:extension-pics-android", version.ref = "ksteam" }
+ksteamClient = { module = "bruhcollective.itaysonlab.ksteam:extension-client-android", version.ref = "ksteam" }
 
 [bundles]
 compose = ["composeUi", "composeFoundation", "composeMaterial", "composeMaterial3", "composeUiToolingPreview"]
 androidLifecycle = ["lifecycleRuntime", "lifecycleViewModel", "lifecycleServices"]
 ktorClient = ["ktorClient", "ktorClientContentNegotiation", "ktorClientJsonSerialization", "ktorClientLogging"]
-ksteam = ["ksteamCore", "ksteamProto", "ksteamExtCore", "ksteamExtGuard", "ksteamExtGuardMigration", "ksteamExtPics", "ksteamVdf"]
+ksteam = ["ksteamCore", "ksteamPersistence", "ksteamProto", "ksteamClient", "ksteamVdf"]
