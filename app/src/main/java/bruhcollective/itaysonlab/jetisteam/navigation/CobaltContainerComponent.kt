@@ -8,6 +8,10 @@ import bruhcollective.itaysonlab.cobalt.news.NewsRootComponent
 import bruhcollective.itaysonlab.cobalt.profile.MyProfileComponent
 import bruhcollective.itaysonlab.cobalt.profile.ProfileComponent
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.ExperimentalDecomposeApi
+import com.arkivanov.decompose.router.pages.ChildPages
+import com.arkivanov.decompose.router.pages.PagesNavigation
+import com.arkivanov.decompose.router.pages.childPages
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
@@ -15,12 +19,15 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.instancekeeper.getOrCreate
+import com.arkivanov.mvikotlin.core.store.StoreFactory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 
+@OptIn(ExperimentalDecomposeApi::class)
 class CobaltContainerComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    private val storeFactory: StoreFactory
 ): ComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
     private val viewModel = instanceKeeper.getOrCreate { ContainerViewModel() }
@@ -50,7 +57,7 @@ class CobaltContainerComponent(
     }
 
     private fun guardComponent(componentContext: ComponentContext): GuardComponent {
-        return DefaultGuardComponent(componentContext)
+        return DefaultGuardComponent(componentContext, storeFactory)
     }
 
     private fun myProfileComponent(componentContext: ComponentContext): ProfileComponent {
@@ -97,7 +104,7 @@ class CobaltContainerComponent(
 
     private class ContainerViewModel: ViewModel() {
         val currentNavigationItem = MutableValue(NavigationItem.Home)
-        val navigationItems = MutableValue(NavigationItem.values().toList().toImmutableList())
+        val navigationItems = MutableValue(NavigationItem.entries.toImmutableList())
 
         fun onNavigationItemChanged(item: NavigationItem) {
             currentNavigationItem.value = item

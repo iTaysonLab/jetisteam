@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import bruhcollective.itaysonlab.cobalt.signin.SignRootComponent
 import bruhcollective.itaysonlab.jetisteam.signin.pages.AuthScreen
 import bruhcollective.itaysonlab.jetisteam.signin.pages.TwoFactorScreen
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.plus
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.slide
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.stack.animation.plus
+import com.arkivanov.decompose.extensions.compose.stack.animation.slide
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 
 @Composable
 fun SignInScreen(

@@ -57,7 +57,7 @@ import bruhcollective.itaysonlab.cobalt.signin.tfa.TwoFactorComponent
 import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltDivider
 import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltTextField
 import bruhcollective.itaysonlab.jetisteam.ui.components.InlineMonoButton
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @OptIn(ExperimentalTextApi::class)
 @Composable

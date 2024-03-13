@@ -10,7 +10,6 @@ import bruhcollective.itaysonlab.cobalt.guard.setup.sms.DefaultGuardEnterSmsComp
 import bruhcollective.itaysonlab.cobalt.guard.setup.sms.GuardEnterSmsComponent
 import bruhcollective.itaysonlab.ksteam.guard.models.SgCreationFlowState
 import bruhcollective.itaysonlab.ksteam.handlers.guard
-import bruhcollective.itaysonlab.ksteam.models.toSteamId
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
@@ -21,10 +20,10 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
-import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.ObserveLifecycleMode
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.decompose.value.observe
+import com.arkivanov.decompose.value.subscribe
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -62,7 +61,7 @@ internal class DefaultGuardSetupComponent(
     }
 
     init {
-        viewModel.guardState.observe(lifecycle) { newState ->
+        viewModel.guardState.subscribe(lifecycle, mode = ObserveLifecycleMode.RESUME_PAUSE) { newState ->
             when (newState) {
                 SgCreationFlowState.Idle -> {
                     //

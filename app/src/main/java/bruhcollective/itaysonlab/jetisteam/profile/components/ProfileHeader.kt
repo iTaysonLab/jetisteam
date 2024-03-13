@@ -42,7 +42,7 @@ import bruhcollective.itaysonlab.ksteam.models.persona.Persona
 import bruhcollective.itaysonlab.ksteam.models.persona.ProfileEquipment
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import me.onebone.toolbar.CollapsingToolbarScaffoldState
 import me.onebone.toolbar.CollapsingToolbarScope
 import me.onebone.toolbar.ExperimentalToolbarApi

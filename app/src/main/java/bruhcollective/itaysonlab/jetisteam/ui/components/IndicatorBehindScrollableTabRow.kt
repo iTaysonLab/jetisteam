@@ -5,6 +5,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
@@ -60,9 +61,9 @@ fun IndicatorBehindScrollableTabRow(
         }
         SubcomposeLayout(
             Modifier
-                // .fillMaxWidth()
+                .fillMaxWidth()
                 .wrapContentSize(align = tabAlignment)
-                // .horizontalScroll(scrollState)
+                .horizontalScroll(scrollState)
                 .selectableGroup()
                 .clipToBounds()
         ) { constraints ->

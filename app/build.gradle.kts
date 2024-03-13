@@ -47,7 +47,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.7"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
 
     packaging {
@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.androidKtxActivity)
     implementation(libs.androidKtxActivityCompose)
     implementation(libs.bundles.androidLifecycle)
+    implementation(libs.kotlinxDateTime)
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.ksteam)
@@ -78,6 +79,10 @@ dependencies {
     implementation(libs.composeMaterialIcons)
     implementation(libs.composeMotionCore)
     implementation(libs.accompanistSystemUi)
+
+    implementation(libs.mvikotlin)
+    implementation(libs.mvikotlin.main)
+    implementation(libs.mvikotlin.logging)
 
     implementation(libs.decompose)
     implementation(libs.decomposeExtensionCompose)

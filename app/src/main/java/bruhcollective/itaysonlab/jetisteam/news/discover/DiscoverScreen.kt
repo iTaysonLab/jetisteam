@@ -21,7 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,19 +39,16 @@ import bruhcollective.itaysonlab.cobalt.news.discover.DiscoverComponent
 import bruhcollective.itaysonlab.jetisteam.news.entries.NewAchievementsEntry
 import bruhcollective.itaysonlab.jetisteam.news.entries.PlayedForFirstTimeEntry
 import bruhcollective.itaysonlab.jetisteam.news.entries.ReceivedNewGameEntry
-import bruhcollective.itaysonlab.jetisteam.news.entries.parts.FusionOnboardingCard
-import bruhcollective.itaysonlab.jetisteam.news.entries.parts.PostPersonaHeader
 import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltDivider
 import bruhcollective.itaysonlab.jetisteam.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.jetisteam.ui.components.rememberFloatingNavigationBarScrollConnection
 import bruhcollective.itaysonlab.jetisteam.ui.font.robotoMonoFontFamily
 import bruhcollective.itaysonlab.jetisteam.ui.font.rubikFontFamily
-import bruhcollective.itaysonlab.ksteam.models.apps.capsuleSmall
 import bruhcollective.itaysonlab.ksteam.models.apps.icon
 import bruhcollective.itaysonlab.ksteam.models.news.NewsEvent
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
 import coil.compose.AsyncImage
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)

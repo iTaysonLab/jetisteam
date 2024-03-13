@@ -20,7 +20,7 @@ import bruhcollective.itaysonlab.jetisteam.ui.font.robotoMonoFontFamily
 import bruhcollective.itaysonlab.jetisteam.ui.font.rubikFontFamily
 import bruhcollective.itaysonlab.jetisteam.ui.theme.backgroundEmphasis
 import bruhcollective.itaysonlab.ksteam.models.persona.Persona
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
 fun ProfilePlayingCard(

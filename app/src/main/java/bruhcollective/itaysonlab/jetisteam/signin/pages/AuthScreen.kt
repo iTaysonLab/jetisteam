@@ -43,7 +43,7 @@ import bruhcollective.itaysonlab.cobalt.signin.auth.AuthComponent
 import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltDivider
 import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltTextField
 import bruhcollective.itaysonlab.jetisteam.ui.components.StateInlineMonoButton
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

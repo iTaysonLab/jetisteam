@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import bruhcollective.itaysonlab.cobalt.news.NewsRootComponent
 import bruhcollective.itaysonlab.jetisteam.news.discover.DiscoverScreen
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.Children
 
 @Composable
 fun NewsScreen(

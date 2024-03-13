@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="guard">Guard</string>
+    <string name="guard">Requests</string>
     <string name="guard_sessions">Sessions</string>
 
     <string name="guard_title">Protect your account</string>
@@ -62,6 +62,8 @@
     <string name="guard_session_info_loc">Location</string>
     <string name="guard_session_info_action_revoke">Revoke</string>
     <string name="guard_session_info_action_support">Support</string>
+
+    <string name="guard_qr_action">Scan an authorization QR code</string>
 
     <string name="guard_qr_dialog_title">Sign in?</string>
     <string name="guard_qr_dialog_action">Approve</string>

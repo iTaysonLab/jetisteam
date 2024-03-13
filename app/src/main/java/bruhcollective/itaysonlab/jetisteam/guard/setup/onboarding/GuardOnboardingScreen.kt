@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.guard.setup.onboarding.GuardOnboardingComponent
 import bruhcollective.itaysonlab.jetisteam.ui.components.StateButtonContent
 import bruhcollective.itaysonlab.jetisteam.ui.font.robotoMonoFontFamily
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
 fun GuardOnboardingScreen(

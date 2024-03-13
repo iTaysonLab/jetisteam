@@ -11,12 +11,14 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.mvikotlin.core.store.StoreFactory
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class AndroidCobaltComponent (
     componentContext: ComponentContext,
+    private val storeFactory: StoreFactory
 ): ComponentContext by componentContext, KoinComponent {
     private val steamClient: SteamClient by inject()
 
@@ -33,7 +35,7 @@ class AndroidCobaltComponent (
     private fun createSlot(config: Config, componentContext: ComponentContext): Slot {
         return when (config) {
             Config.SignIn -> Slot.SignIn(DefaultSignRootComponent(componentContext, onAuthorizationCompleted = this::onAuthorizationCompleted))
-            Config.Cobalt -> Slot.Cobalt(CobaltContainerComponent(componentContext))
+            Config.Cobalt -> Slot.Cobalt(CobaltContainerComponent(componentContext, storeFactory))
         }
     }
 
@@ -45,7 +47,7 @@ class AndroidCobaltComponent (
         }
     }
 
-    fun onAuthorizationCompleted() {
+    private fun onAuthorizationCompleted() {
         slotNavigation.activate(Config.Cobalt)
     }
 

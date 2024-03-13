@@ -17,7 +17,8 @@ import bruhcollective.itaysonlab.ksteam.models.persona.ProfileEquipment
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.observe
+import com.arkivanov.decompose.value.ObserveLifecycleMode
+import com.arkivanov.decompose.value.subscribe
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -42,16 +43,16 @@ class MyProfileComponent (
     override val widgetsComponent: ProfileWidgetsComponent = DefaultProfileWidgetsComponent(componentContext = childContext(key = "MPC:Widgets"))
 
     init {
-        viewModel.persona.observe(lifecycle) { persona ->
+        viewModel.persona.subscribe(lifecycle, mode = ObserveLifecycleMode.RESUME_PAUSE) { persona ->
             headerComponent.onPersonaUpdated(persona)
             statusCardComponent.onPersonaUpdated(persona)
         }
 
-        viewModel.personaEquipment.observe(lifecycle) { equipment ->
+        viewModel.personaEquipment.subscribe(lifecycle, mode = ObserveLifecycleMode.RESUME_PAUSE) { equipment ->
             headerComponent.onPersonaEquipmentUpdated(equipment)
         }
 
-        viewModel.personaCustomization.observe(lifecycle) { customization ->
+        viewModel.personaCustomization.subscribe(lifecycle, mode = ObserveLifecycleMode.RESUME_PAUSE) { customization ->
             widgetsComponent.onPersonaCustomizationChanged(customization)
         }
     }

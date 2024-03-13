@@ -28,12 +28,12 @@ import bruhcollective.itaysonlab.jetisteam.guard.setup.recovery.GuardSaveCodeScr
 import bruhcollective.itaysonlab.jetisteam.guard.setup.sms.GuardEnterSmsScreen
 import bruhcollective.itaysonlab.jetisteam.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.jetisteam.ui.components.InlineMonoButton
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.plus
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.slide
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.stackAnimation
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.stack.animation.plus
+import com.arkivanov.decompose.extensions.compose.stack.animation.slide
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -2,6 +2,13 @@ package bruhcollective.itaysonlab.jetisteam.navigation
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.sharp.Home
+import androidx.compose.material.icons.sharp.Person
+import androidx.compose.material.icons.sharp.Security
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,14 +22,14 @@ import bruhcollective.itaysonlab.jetisteam.profile.ProfileScreen
 import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltNavigationBar
 import bruhcollective.itaysonlab.jetisteam.ui.components.IslandAnimations
 import bruhcollective.itaysonlab.jetisteam.ui.rememberPrevious
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.StackAnimator
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.plus
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.slide
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.stackAnimation
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.stackAnimator
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.StackAnimator
+import com.arkivanov.decompose.extensions.compose.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.stack.animation.plus
+import com.arkivanov.decompose.extensions.compose.stack.animation.slide
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimator
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
 fun CobaltContainerScreen(
@@ -36,11 +43,26 @@ fun CobaltContainerScreen(
         bottomBar = {
             val navbarItems by component.navigationItems.subscribeAsState()
 
-            CobaltNavigationBar(
-                items = navbarItems,
-                selectedItem = currentNavItem,
-                onSelected = component::switch
-            )
+            NavigationBar {
+                navbarItems.forEach { item ->
+                    NavigationBarItem(
+                        selected = currentNavItem == item,
+                        onClick = {
+                            component.switch(item)
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = when (item) {
+                                    CobaltContainerComponent.NavigationItem.Home -> Icons.Sharp.Home
+                                    CobaltContainerComponent.NavigationItem.MyProfile -> Icons.Sharp.Person
+                                    CobaltContainerComponent.NavigationItem.Guard -> Icons.Sharp.Security
+                                },
+                                contentDescription = null,
+                            )
+                        }
+                    )
+                }
+            }
         }
     ) { innerPadding ->
         val stackTopPadding by animateDpAsState(
@@ -51,7 +73,7 @@ fun CobaltContainerScreen(
             }, label = "Cobalt container status bar neutralizer"
         )
 
-        Children(stack = component.childStack, animation = stackAnimation { _, _, _ ->
+        Children(stack = component.childStack, animation = stackAnimation { _ ->
             val direction = if (previousNavItem != null && component.getNavigationItemIndex(currentNavItem) > component.getNavigationItemIndex(previousNavItem)) {
                 IslandAnimations.Direction.RIGHT
             } else {

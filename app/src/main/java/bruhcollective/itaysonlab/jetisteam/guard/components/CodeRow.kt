@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.guard.setup.sms.CodeRowComponent
 import bruhcollective.itaysonlab.jetisteam.ui.font.robotoMonoFontFamily
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)

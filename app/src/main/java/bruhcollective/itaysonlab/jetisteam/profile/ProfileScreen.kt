@@ -19,7 +19,7 @@ import bruhcollective.itaysonlab.jetisteam.profile.components.ProfilePlayingCard
 import bruhcollective.itaysonlab.jetisteam.profile.widgets.ProfileWidgetPortal
 import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltDivider
 import bruhcollective.itaysonlab.jetisteam.ui.components.FullscreenLoading
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState

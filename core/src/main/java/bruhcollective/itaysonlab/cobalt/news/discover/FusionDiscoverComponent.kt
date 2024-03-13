@@ -56,7 +56,8 @@ class FusionDiscoverComponent (
 
                     items.value = withContext(Dispatchers.IO) {
                         val userNews = ksUserNews.getUserNews(
-                            showEvents = UserNews.UserNewsFilterScenario.FriendActivity
+                            showEvents = UserNews.UserNewsFilterScenario.FriendActivity,
+                            count = 25 // 25 is enough-ish, we can TODO implement paging
                         ).sortedByDescending(ActivityFeedEntry::date)
 
                         val lastUserNewsDate = userNews.lastOrNull()?.date?.toLong() ?: 0L

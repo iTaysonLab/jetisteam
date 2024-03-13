@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Cobalt</string>
+
+    <string name="err_text">An error occurred while loading the page.</string>
+    <string name="err_act_copy">Copy details</string>
+    <string name="err_act_reload">Reload</string>
 </resources>

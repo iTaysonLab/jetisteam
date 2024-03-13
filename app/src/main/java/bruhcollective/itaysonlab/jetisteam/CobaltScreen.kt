@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import bruhcollective.itaysonlab.jetisteam.navigation.CobaltContainerScreen
 import bruhcollective.itaysonlab.jetisteam.signin.SignInScreen
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
 fun CobaltScreen(

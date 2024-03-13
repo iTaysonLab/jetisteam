@@ -30,16 +30,25 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.7"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
 }
 
 dependencies {
     implementation(libs.composeRuntime)
     implementation(libs.coroutines)
+
     implementation(libs.decompose)
+    implementation(libs.essentyLifecycleCoroutines)
+
+    implementation(libs.mvikotlin)
+    implementation(libs.mvikotlin.main)
+    implementation(libs.mvikotlin.logging)
+    implementation(libs.mvikotlin.extensions.coroutines)
+
     implementation(libs.koin)
     implementation(libs.koinAndroid)
+
     implementation(libs.kotlinxCollections)
     implementation(libs.ktorClientEngineOkHttp)
     
