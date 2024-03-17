@@ -44,7 +44,7 @@ fun GuardOnboardingScreen(
 
             Text(
                 text = "Secure your account with first-class Steam Guard support in Cobalt.\n\nConfirm trades, sign-ins and manage active devices with ease.",
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )

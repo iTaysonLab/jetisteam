@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.jetisteam.guard.setup.recovery
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.SettingsSuggest
 import androidx.compose.material.icons.filled.Sms
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,9 +25,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -38,16 +44,16 @@ import bruhcollective.itaysonlab.jetisteam.ui.font.robotoMonoFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GuardSaveCodeScreen (
+fun GuardSaveCodeScreen(
     component: GuardRecoveryCodeComponent,
     topPadding: Dp
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.guard_recovery).uppercase(), fontFamily = robotoMonoFontFamily
+                        text = stringResource(R.string.guard_recovery)
                     )
                 },
                 windowInsets = WindowInsets(top = topPadding),
@@ -62,8 +68,6 @@ fun GuardSaveCodeScreen (
                     }
                 }
             )
-
-            CobaltDivider(padding = 0.dp)
         },
         contentWindowInsets = EmptyWindowInsets
     ) { paddingValues ->
@@ -74,32 +78,42 @@ fun GuardSaveCodeScreen (
             contentAlignment = Alignment.Center
         ) {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    Icons.Default.SettingsSuggest,
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp),
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                            4.dp
+                        )
+                    ), modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Column(
+                        Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = component.code,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier,
+                            fontSize = 40.sp,
+                            letterSpacing = 12.sp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
 
-                Spacer(Modifier.height(8.dp))
-
-                Text(
-                    text = component.code,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    fontSize = 40.sp,
-                    letterSpacing = 12.sp,
-                    color = MaterialTheme.colorScheme.primary
-                )
-
-                Text(
-                    text = stringResource(id = R.string.guard_recovery_hint), textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 16.dp)
-                )
+                        Text(
+                            text = stringResource(id = R.string.guard_recovery_hint),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.alpha(0.7f),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
 
                 Spacer(Modifier.height(16.dp))
 
                 Text(
-                    text = stringResource(id = R.string.guard_recovery_desc), textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 16.dp)
+                    text = stringResource(id = R.string.guard_recovery_desc),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
         }

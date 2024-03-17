@@ -35,7 +35,11 @@ class MainActivity : ComponentActivity() {
 
         val rootComponent = AndroidCobaltComponent(
             componentContext = defaultComponentContext(),
-            storeFactory = LoggingStoreFactory(DefaultStoreFactory())
+            storeFactory = if (BuildConfig.DEBUG) {
+                LoggingStoreFactory(DefaultStoreFactory())
+            } else {
+                DefaultStoreFactory()
+            }
         )
 
         setContent {

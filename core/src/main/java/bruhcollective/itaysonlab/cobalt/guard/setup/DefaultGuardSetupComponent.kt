@@ -129,7 +129,10 @@ internal class DefaultGuardSetupComponent(
     ): GuardRecoveryCodeComponent {
         return SetupGuardRecoveryCodeComponent(
             code = config.code,
-            onExitClicked = onSuccess,
+            onExitClicked = {
+                navigation.bringToFront(Config.Onboarding)
+                onSuccess()
+            },
             componentContext = componentContext
         )
     }

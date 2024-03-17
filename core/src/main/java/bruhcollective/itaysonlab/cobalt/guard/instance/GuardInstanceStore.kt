@@ -4,6 +4,7 @@ import bruhcollective.itaysonlab.ksteam.SteamClient
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.CodeModel
 import bruhcollective.itaysonlab.ksteam.guard.models.ConfirmationListState
+import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.handlers.guardConfirmation
 import bruhcollective.itaysonlab.ksteam.handlers.guardManagement
 import bruhcollective.itaysonlab.ksteam.models.SteamId
@@ -28,13 +29,17 @@ import kotlin.coroutines.CoroutineContext
 internal fun GuardInstanceStore(
     storeFactory: StoreFactory,
     steamClient: SteamClient,
-    steamId: SteamId,
+    initialState: GuardInstanceState,
     codeFlow: Flow<CodeModel>,
     mainContext: CoroutineContext,
 ): Store<GuardInstanceIntent, GuardInstanceState, Nothing> = storeFactory.create<GuardInstanceIntent, GuardInstanceAction, GuardInstanceMsg, GuardInstanceState, Nothing>(
     name = "GuardInstanceStore",
-    initialState = GuardInstanceState(steamId),
+    initialState = initialState,
     bootstrapper = coroutineBootstrapper(mainContext) {
+        steamClient.guard.instanceFor(initialState.steamId)?.revocationCode?.let { revocationCode ->
+            dispatch(GuardInstanceAction.RevocationCodeUpdated(revocationCode))
+        }
+
         // Run code collecting in BG
         codeFlow.map(::modelToAction)
             .onEach(this::dispatch)
@@ -43,6 +48,10 @@ internal fun GuardInstanceStore(
     executorFactory = coroutineExecutorFactory(mainContext) {
         onAction<GuardInstanceAction.CodeUpdated> { action ->
             dispatch(GuardInstanceMsg.CodeUpdated(code = action.code, progress = action.progress))
+        }
+
+        onAction<GuardInstanceAction.RevocationCodeUpdated> { action ->
+            dispatch(GuardInstanceMsg.RevocationCodeUpdated(code = action.code))
         }
 
         onIntent<GuardInstanceIntent.LoadActiveSessions> {
@@ -62,6 +71,7 @@ internal fun GuardInstanceStore(
             is GuardInstanceMsg.CodeUpdated -> copy(code = msg.code, codeProgress = msg.progress)
             is GuardInstanceMsg.ConfirmationsUpdated -> copy(confirmations = msg.listState)
             is GuardInstanceMsg.SessionsUpdated -> copy(sessions = msg.sessions.toPersistentList(), sessionsLoaded = true)
+            is GuardInstanceMsg.RevocationCodeUpdated -> copy(revocationCode = msg.code)
         }
     }
 )
@@ -73,9 +83,11 @@ sealed class GuardInstanceIntent {
 
 data class GuardInstanceState (
     val steamId: SteamId,
+    val username: String,
     //
     val code: String = "",
     val codeProgress: Float = 0f,
+    val revocationCode: String = "",
     // Confirmations
     val confirmations: ConfirmationListState = ConfirmationListState.Loading,
     // Sessions
@@ -84,6 +96,8 @@ data class GuardInstanceState (
 )
 
 private sealed class GuardInstanceAction {
+    data class RevocationCodeUpdated(val code: String): GuardInstanceAction()
+
     data class CodeUpdated(val code: String, val progress: Float): GuardInstanceAction() {
         constructor(model: CodeModel): this(code = model.code, progress = model.progressRemaining)
     }
@@ -93,6 +107,8 @@ private sealed class GuardInstanceMsg {
     data class CodeUpdated(val code: String, val progress: Float): GuardInstanceMsg() {
         constructor(model: CodeModel): this(code = model.code, progress = model.progressRemaining)
     }
+
+    data class RevocationCodeUpdated(val code: String): GuardInstanceMsg()
 
     data class ConfirmationsUpdated(
         val listState: ConfirmationListState
@@ -111,12 +127,12 @@ private fun modelToAction(model: CodeModel) = GuardInstanceAction.CodeUpdated(mo
 internal fun TestGuardInstanceStore(
     storeFactory: StoreFactory,
     steamClient: SteamClient,
-    steamId: SteamId,
+    initialState: GuardInstanceState,
     codeFlow: Flow<CodeModel>,
     mainContext: CoroutineContext,
 ): Store<GuardInstanceIntent, GuardInstanceState, Nothing> = storeFactory.create<GuardInstanceIntent, GuardInstanceAction, GuardInstanceMsg, GuardInstanceState, Nothing>(
     name = "GuardInstanceStore",
-    initialState = GuardInstanceState(steamId),
+    initialState = initialState,
     bootstrapper = coroutineBootstrapper(mainContext) {
         // Run code collecting in BG
         codeFlow.map(::modelToAction)
@@ -165,6 +181,7 @@ internal fun TestGuardInstanceStore(
             is GuardInstanceMsg.CodeUpdated -> copy(code = msg.code, codeProgress = msg.progress)
             is GuardInstanceMsg.ConfirmationsUpdated -> copy(confirmations = msg.listState)
             is GuardInstanceMsg.SessionsUpdated -> copy(sessions = msg.sessions.toPersistentList(), sessionsLoaded = true)
+            is GuardInstanceMsg.RevocationCodeUpdated -> copy(revocationCode = msg.code)
         }
     }
 )

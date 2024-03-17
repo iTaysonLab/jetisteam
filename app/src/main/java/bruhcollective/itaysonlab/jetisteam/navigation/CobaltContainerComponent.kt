@@ -8,10 +8,6 @@ import bruhcollective.itaysonlab.cobalt.news.NewsRootComponent
 import bruhcollective.itaysonlab.cobalt.profile.MyProfileComponent
 import bruhcollective.itaysonlab.cobalt.profile.ProfileComponent
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.ExperimentalDecomposeApi
-import com.arkivanov.decompose.router.pages.ChildPages
-import com.arkivanov.decompose.router.pages.PagesNavigation
-import com.arkivanov.decompose.router.pages.childPages
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
@@ -24,7 +20,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 
-@OptIn(ExperimentalDecomposeApi::class)
 class CobaltContainerComponent(
     componentContext: ComponentContext,
     private val storeFactory: StoreFactory

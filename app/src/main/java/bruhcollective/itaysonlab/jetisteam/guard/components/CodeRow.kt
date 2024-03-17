@@ -33,6 +33,7 @@ import bruhcollective.itaysonlab.jetisteam.ui.font.robotoMonoFontFamily
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.delay
 
+// TODO: "Delete" should focus on previous field
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CodeRow(

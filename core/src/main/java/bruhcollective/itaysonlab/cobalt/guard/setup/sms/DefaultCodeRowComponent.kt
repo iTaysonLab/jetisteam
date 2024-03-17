@@ -3,7 +3,7 @@ package bruhcollective.itaysonlab.cobalt.guard.setup.sms
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
-class DefaultCodeRowComponent(
+internal class DefaultCodeRowComponent(
     override val codeLength: Int,
     private val onEntryFinish: (String) -> Unit
 ): CodeRowComponent {

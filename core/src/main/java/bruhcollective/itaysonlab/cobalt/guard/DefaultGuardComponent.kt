@@ -1,10 +1,8 @@
 package bruhcollective.itaysonlab.cobalt.guard
 
-import android.util.Log
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.cobalt.guard.instance.DefaultGuardInstanceComponent
 import bruhcollective.itaysonlab.cobalt.guard.setup.DefaultGuardSetupComponent
-import bruhcollective.itaysonlab.ksteam.handlers.configuration
 import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.models.toSteamId
 import com.arkivanov.decompose.ComponentContext
@@ -35,9 +33,30 @@ class DefaultGuardComponent (
 
     private fun createSlot(config: Config, componentContext: ComponentContext): GuardComponent.Child {
         return when (config) {
-            is Config.Ready -> GuardComponent.Child.InstanceReady(DefaultGuardInstanceComponent(componentContext, storeFactory, config.steamId.toSteamId()))
-            Config.Setup -> GuardComponent.Child.Setup(DefaultGuardSetupComponent(onSuccess = ::navigateToCurrentGuard, componentContext))
+            is Config.Ready -> {
+                GuardComponent.Child.InstanceReady(
+                    component = DefaultGuardInstanceComponent(
+                        componentContext = componentContext,
+                        storeFactory = storeFactory,
+                        steamId = config.steamId.toSteamId(),
+                        onGuardRemovedSuccessfully = ::navigateToGuardSetup
+                    )
+                )
+            }
+
+            Config.Setup -> {
+                GuardComponent.Child.Setup(
+                    component = DefaultGuardSetupComponent(
+                        componentContext = componentContext,
+                        onSuccess = ::navigateToCurrentGuard
+                    )
+                )
+            }
         }
+    }
+
+    private fun navigateToGuardSetup() {
+        navigation.activate(Config.Setup)
     }
 
     private fun navigateToCurrentGuard() {
@@ -45,17 +64,9 @@ class DefaultGuardComponent (
     }
 
     private fun createInitialConfiguration(): Config {
-        val instance = steamClient.ksteam.guard.instanceForCurrentUser()
-
-        Log.d("KSTest", "${steamClient.currentSteamId.id} -> Got instance! $instance")
-
-        return if (instance != null) {
-            Config.Ready((steamClient.ksteam.currentSessionSteamId.takeIf {
-                it.longId != 0L
-            } ?: steamClient.ksteam.configuration.autologinSteamId).id) // TODO: replace when kSteam is fixed
-        } else {
-            Config.Setup
-        }
+        return steamClient.ksteam.guard.instanceForCurrentUser()?.let { instance ->
+            Config.Ready(instance.steamId.id)
+        } ?: Config.Setup
     }
 
     @Serializable

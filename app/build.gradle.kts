@@ -3,6 +3,14 @@ plugins {
     alias(libs.plugins.androidPluginApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlinSerialization)
+    id("com.vk.vkompose") version "0.4.2"
+}
+
+vkompose {
+    recompose {
+        isHighlighterEnabled = true
+        isLoggerEnabled = true
+    }
 }
 
 android {
@@ -24,11 +32,13 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            ndk {
+                abiFilters += listOf("arm64-v8a")
+            }
         }
     }
 

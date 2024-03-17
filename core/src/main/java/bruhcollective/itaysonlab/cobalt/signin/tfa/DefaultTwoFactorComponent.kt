@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.onEach
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class DefaultTwoFactorComponent (
+internal class DefaultTwoFactorComponent (
     componentContext: ComponentContext,
     private val onBack: () -> Unit,
     private val onAuthorizationCompleted: () -> Unit

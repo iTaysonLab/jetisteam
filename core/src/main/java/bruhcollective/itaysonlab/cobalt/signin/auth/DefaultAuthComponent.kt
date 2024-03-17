@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class DefaultAuthComponent (
+internal class DefaultAuthComponent (
     componentContext: ComponentContext,
     private val onProceedToTfa: () -> Unit
 ): AuthComponent, ComponentContext by componentContext, KoinComponent {

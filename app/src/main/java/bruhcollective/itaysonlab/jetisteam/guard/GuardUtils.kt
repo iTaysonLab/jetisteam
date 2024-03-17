@@ -37,6 +37,15 @@ object GuardUtils {
         ).toString())
     }
 
+    fun formatSessionDescByTime(ctx: Context, platformType: EAuthTokenPlatformType, lastSeen: Int?): SessionVisuals {
+        return SessionVisuals((when (platformType) {
+            EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient -> "Steam Client" to { Icons.Rounded.Computer }
+            EAuthTokenPlatformType.k_EAuthTokenPlatformType_WebBrowser -> "Web Browser" to { Icons.Rounded.Language }
+            EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp -> "Mobile App" to { Icons.Rounded.Smartphone }
+            else -> ("Unknown" to { Icons.Rounded.DeviceUnknown }).also { Log.d("Unknown", platformType.toString()) }
+        }) to lastSeen?.toLong()?.times(1000L)?.let { DateUtils.getRelativeTimeSpanString(ctx, it).toString() })
+    }
+
     fun formatAuthSession(desc: AwaitingSession): SessionVisuals {
         return SessionVisuals((when (desc.platformType) {
             EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient -> "Steam Client" to { Icons.Rounded.Computer }
@@ -47,10 +56,10 @@ object GuardUtils {
     }
 
     @JvmInline
-    value class SessionVisuals(private val packed: Triple<String, () -> ImageVector, String>) {
+    value class SessionVisuals(private val packed: Triple<String, () -> ImageVector, String?>) {
         val fallbackName: String get() = packed.first
         val icon: () -> ImageVector get() = packed.second
-        val relativeLastSeen: String get() = packed.third
+        val relativeLastSeen: String? get() = packed.third
     }
 
     private infix fun <A, B, C> Pair<A, B>.to(third: C): Triple<A, B, C> = Triple(first, second, third)
