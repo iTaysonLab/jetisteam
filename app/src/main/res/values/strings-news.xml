@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="tab_news">News</string>
+
     <string name="news">News</string>
     <string name="news_feed_game_news">Updates</string>
     <string name="news_feed_user_activity">Activity</string>

@@ -8,7 +8,6 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
 fun CobaltScreen(
-    isConnectionRowShown: Boolean,
     component: AndroidCobaltComponent
 ) {
     val slot by component.slot.subscribeAsState()
@@ -16,7 +15,7 @@ fun CobaltScreen(
     slot.child?.instance?.let {
         when (val child = it) {
             is AndroidCobaltComponent.Slot.SignIn -> SignInScreen(child.component)
-            is AndroidCobaltComponent.Slot.Cobalt -> CobaltContainerScreen(isConnectionRowShown, child.component)
+            is AndroidCobaltComponent.Slot.Cobalt -> CobaltContainerScreen(child.component)
         }
     }
 }

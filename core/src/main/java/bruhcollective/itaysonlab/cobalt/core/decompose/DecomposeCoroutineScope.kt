@@ -8,6 +8,10 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 
+@Deprecated(message = "Use Essenty built-in CoroutineScope", replaceWith = ReplaceWith(
+    expression = "coroutineScope(context)",
+    imports = ["com.arkivanov.essenty.lifecycle.coroutines.coroutineScope"]
+))
 fun LifecycleOwner.componentCoroutineScope(
     context: CoroutineContext = SupervisorJob() + Dispatchers.Main.immediate
 ): CoroutineScope {

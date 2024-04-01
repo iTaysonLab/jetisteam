@@ -1,7 +1,10 @@
 package bruhcollective.itaysonlab.cobalt.guard.setup.alert
 
-interface GuardAlreadyExistsAlertComponent {
-    fun onConfirm()
+import com.arkivanov.decompose.value.Value
 
-    fun onCancel()
+interface GuardAlreadyExistsAlertComponent {
+    val isConfirmingReplacement: Value<Boolean>
+
+    fun confirm()
+    fun dismiss()
 }

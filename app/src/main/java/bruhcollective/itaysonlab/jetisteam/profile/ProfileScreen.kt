@@ -1,16 +1,14 @@
 package bruhcollective.itaysonlab.jetisteam.profile
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.profile.ProfileComponent
 import bruhcollective.itaysonlab.jetisteam.profile.components.ProfileActionsStrip
@@ -26,8 +24,7 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 @Composable
 fun ProfileScreen(
-    component: ProfileComponent,
-    topPadding: Dp
+    component: ProfileComponent
 ) {
     val state by component.state.subscribeAsState()
 
@@ -37,18 +34,17 @@ fun ProfileScreen(
 
     when (state) {
         ProfileComponent.State.Idle, ProfileComponent.State.Loading -> {
-            FullscreenLoading(modifier = Modifier.padding(top = topPadding))
+            FullscreenLoading(modifier = Modifier.statusBarsPadding())
         }
 
         is ProfileComponent.State.Ready -> {
-            ProfileScreenContent(topPadding, component)
+            ProfileScreenContent(component)
         }
     }
 }
 
 @Composable
 private fun ProfileScreenContent(
-    topPadding: Dp,
     component: ProfileComponent
 ) {
     val collapsingScaffold = rememberCollapsingToolbarScaffoldState()
@@ -56,7 +52,7 @@ private fun ProfileScreenContent(
 
     CollapsingToolbarScaffold(
         toolbar = {
-            ProfileHeader(collapsingScaffold = collapsingScaffold, component = component.headerComponent, topPadding = topPadding)
+            ProfileHeader(collapsingScaffold = collapsingScaffold, component = component.headerComponent)
         },
         state = collapsingScaffold,
         modifier = Modifier.fillMaxSize(),

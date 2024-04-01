@@ -13,23 +13,26 @@ import kotlinx.coroutines.launch
 
 internal class SetupGuardRecoveryCodeComponent (
     override val code: String,
+    private val steamId: SteamId,
     private val onExitClicked: () -> Unit,
     componentContext: ComponentContext
 ): GuardRecoveryCodeComponent, ComponentContext by componentContext {
     private val viewModel = instanceKeeper.getOrCreate {
-        RecoveryViewModel()
+        RecoveryViewModel(steamId)
     }
 
     override val user get() = viewModel.user
 
     override fun onExitClicked() = onExitClicked.invoke()
 
-    private class RecoveryViewModel: SteamViewModel() {
+    private class RecoveryViewModel(
+        private val id: SteamId
+    ): SteamViewModel() {
         val user = MutableValue(Persona.Unknown)
 
         init {
             viewModelScope.launch {
-                steam.ksteam.persona.currentLivePersona().onEach { persona ->
+                steam.ksteam.persona.persona(id).onEach { persona ->
                     user.value = persona
                 }.collect()
             }

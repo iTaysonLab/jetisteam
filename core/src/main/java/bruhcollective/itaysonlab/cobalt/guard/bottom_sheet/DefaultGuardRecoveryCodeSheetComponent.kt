@@ -1,12 +1,21 @@
 package bruhcollective.itaysonlab.cobalt.guard.bottom_sheet
 
+import bruhcollective.itaysonlab.ksteam.SteamClient
+import bruhcollective.itaysonlab.ksteam.handlers.guard
+import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.decompose.ComponentContext
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 
 internal class DefaultGuardRecoveryCodeSheetComponent (
-    override val recoveryCode: String,
-    override val username: String,
-    private val onDismiss: () -> Unit,
-    componentContext: ComponentContext
-): GuardRecoveryCodeSheetComponent, ComponentContext by componentContext {
+    steamId: SteamId,
+    componentContext: ComponentContext,
+    private val onDismiss: () -> Unit
+): GuardRecoveryCodeSheetComponent, ComponentContext by componentContext, KoinComponent {
+    private val guard = get<SteamClient>().guard.instanceFor(steamId)
+
+    override val username = guard?.username.orEmpty()
+    override val recoveryCode = guard?.revocationCode.orEmpty()
+
     override fun dismiss() = onDismiss()
 }

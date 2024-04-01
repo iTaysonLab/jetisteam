@@ -91,12 +91,13 @@ fun FullscreenError(
 
 @Composable
 fun FullscreenPlaceholder(
-    icon: ImageVector? = null,
     title: String,
-    text: String
+    text: String,
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().then(modifier),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

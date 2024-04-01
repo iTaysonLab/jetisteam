@@ -21,7 +21,7 @@ internal class DefaultGuardSessionDetailComponent (
     override val firstSeen: Int? get() = session.firstSeen?.time
     override val lastSeen: Int get() = session.lastSeen?.time ?: session.timeUpdated
     override val lastSeenLocationString: String? get() = session.lastSeen?.let { ls -> "${ls.city}, ${ls.state}, ${ls.country}" }
-    override val lastSeenIp: String? get() = session.lastSeen?.ipString
+    override val lastSeenIp: String? get() = session.lastSeen?.ip
 
     override fun revokeSession() {
         TODO("Not yet implemented")

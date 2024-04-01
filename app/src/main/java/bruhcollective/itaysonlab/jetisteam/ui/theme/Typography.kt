@@ -26,7 +26,7 @@ val CobaltTypography = Typography(
     bodyMedium = defaultTypography.bodyMedium.copy(fontFamily = rubikFontFamily),
     bodySmall = defaultTypography.bodySmall.copy(fontFamily = rubikFontFamily),
 
-    labelLarge = defaultTypography.labelLarge.copy(fontFamily = robotoMonoFontFamily),
-    labelMedium = defaultTypography.labelMedium.copy(fontFamily = robotoMonoFontFamily),
-    labelSmall = defaultTypography.labelSmall.copy(fontFamily = robotoMonoFontFamily)
+    labelLarge = defaultTypography.labelLarge.copy(fontFamily = rubikFontFamily),
+    labelMedium = defaultTypography.labelMedium.copy(fontFamily = rubikFontFamily),
+    labelSmall = defaultTypography.labelSmall.copy(fontFamily = rubikFontFamily)
 )

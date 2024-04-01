@@ -65,7 +65,7 @@ fun DiscoverScreen(
                 TopAppBar(
                     title = {
                         Text(text = "News".uppercase(), fontFamily = robotoMonoFontFamily)
-                    }, windowInsets = EmptyWindowInsets, colors = TopAppBarDefaults.topAppBarColors(
+                    }, colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.background
                     )
                 )

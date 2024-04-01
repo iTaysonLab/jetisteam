@@ -10,7 +10,7 @@ import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.Smartphone
 import androidx.compose.ui.graphics.vector.ImageVector
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
-import bruhcollective.itaysonlab.ksteam.guard.models.AwaitingSession
+import bruhcollective.itaysonlab.ksteam.guard.models.IncomingSession
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
@@ -46,7 +46,7 @@ object GuardUtils {
         }) to lastSeen?.toLong()?.times(1000L)?.let { DateUtils.getRelativeTimeSpanString(ctx, it).toString() })
     }
 
-    fun formatAuthSession(desc: AwaitingSession): SessionVisuals {
+    fun formatAuthSession(desc: IncomingSession): SessionVisuals {
         return SessionVisuals((when (desc.platformType) {
             EAuthTokenPlatformType.k_EAuthTokenPlatformType_SteamClient -> "Steam Client" to { Icons.Rounded.Computer }
             EAuthTokenPlatformType.k_EAuthTokenPlatformType_WebBrowser -> "Web Browser" to { Icons.Rounded.Language }

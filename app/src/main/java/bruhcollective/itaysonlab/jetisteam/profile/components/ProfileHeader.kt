@@ -51,8 +51,7 @@ import me.onebone.toolbar.ExperimentalToolbarApi
 @Composable
 fun CollapsingToolbarScope.ProfileHeader(
     collapsingScaffold: CollapsingToolbarScaffoldState,
-    component: ProfileHeaderComponent,
-    topPadding: Dp
+    component: ProfileHeaderComponent
 ) {
     val personaTitle by component.title.subscribeAsState()
 
@@ -70,7 +69,7 @@ fun CollapsingToolbarScope.ProfileHeader(
             .parallax(ratio = 1f)
     ) {
         Box(Modifier.alpha(collapsingScaffold.toolbarState.progress)) {
-            ProfileHeaderExpandedContent(component, topPadding)
+            ProfileHeaderExpandedContent(component)
         }
 
         CobaltDivider(padding = 0.dp, modifier = Modifier.align(Alignment.BottomCenter))
@@ -85,7 +84,6 @@ fun CollapsingToolbarScope.ProfileHeader(
             title = {
                 Text(text = remember(personaTitle) { personaTitle.uppercase() }, fontFamily = robotoMonoFontFamily)
             },
-            windowInsets = WindowInsets(top = topPadding),
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.background
             )
@@ -97,8 +95,7 @@ fun CollapsingToolbarScope.ProfileHeader(
 
 @Composable
 fun BoxScope.ProfileHeaderExpandedContent(
-    component: ProfileHeaderComponent,
-    topPadding: Dp
+    component: ProfileHeaderComponent
 ) {
     val personaAvatar by component.staticAvatarUrl.subscribeAsState()
     val personaBackground by component.staticBackgroundUrl.subscribeAsState()
@@ -132,15 +129,11 @@ fun BoxScope.ProfileHeaderExpandedContent(
     Column(
         Modifier
             .align(Alignment.BottomStart)
-            .padding(16.dp),
+            .padding(16.dp)
+            .padding(top = 96.dp)
+            .statusBarsPadding(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Spacer(
-            modifier = Modifier
-                .height(96.dp)
-                .padding(top = topPadding)
-        )
-
         AsyncImage(
             model = personaAvatar,
             contentDescription = null,

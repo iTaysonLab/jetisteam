@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="guard">Requests</string>
+    <string name="tab_guard">Guard</string>
+
+    <string name="guard_confirms">Confirmations</string>
     <string name="guard_sessions">Sessions</string>
+    <string name="guard_code">Code</string>
 
     <string name="guard_title">Protect your account</string>
-    <string name="guard_desc">Sign in by scanning a QR code and easily approve logins.</string>
+    <string name="guard_desc">Secure your account with first-class Steam Guard support in Cobalt.\n\nConfirm item trades, new sign-ins and manage active sessions with ease.</string>
+    <string name="guard_action">Get started</string>
 
     <string name="guard_setup">Add authenticator</string>
     <string name="guard_setup_move_text">Move authenticator</string>

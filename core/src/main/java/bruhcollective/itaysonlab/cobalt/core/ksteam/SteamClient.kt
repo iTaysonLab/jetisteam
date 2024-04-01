@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.cobalt.core.ksteam
 
 import android.content.Context
-import android.util.Log
 import bruhcollective.itaysonlab.ksteam.KsteamClient
 import bruhcollective.itaysonlab.ksteam.debug.AndroidLoggingTransport
 import bruhcollective.itaysonlab.ksteam.debug.KSteamLoggingVerbosity
@@ -10,7 +9,6 @@ import bruhcollective.itaysonlab.ksteam.kSteam
 import bruhcollective.itaysonlab.ksteam.models.enums.EGamingDeviceType
 import bruhcollective.itaysonlab.ksteam.network.CMClientState
 import bruhcollective.itaysonlab.ksteam.persistence.AndroidPersistenceDriver
-import bruhcollective.itaysonlab.ksteam.persistence.KsteamPersistenceDriver
 import bruhcollective.itaysonlab.ksteam.platform.DeviceInformation
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -20,7 +18,6 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import okio.Path.Companion.toOkioPath
 import steam.enums.EAuthTokenPlatformType
@@ -71,14 +68,10 @@ class SteamClient (
 
     val currentSteamId get() = ksteam.currentSessionSteamId
 
-    init {
-        launch {
-            launchKsteam()
+    suspend fun start() {
+        if (ksteam.connectionStatus.value == CMClientState.Offline) {
+            ksteam.dumperMode = PacketDumper.DumpMode.Disable
+            ksteam.start()
         }
-    }
-
-    private suspend fun launchKsteam() {
-        ksteam.dumperMode = PacketDumper.DumpMode.Disable
-        ksteam.start()
     }
 }

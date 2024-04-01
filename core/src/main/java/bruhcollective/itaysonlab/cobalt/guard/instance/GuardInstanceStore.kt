@@ -16,13 +16,11 @@ import com.arkivanov.mvikotlin.extensions.coroutines.coroutineExecutorFactory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import steam.webui.authentication.CAuthentication_RefreshToken_Enumerate_Response_RefreshTokenDescription
 import kotlin.coroutines.CoroutineContext
 
 @OptIn(ExperimentalMviKotlinApi::class)
@@ -56,12 +54,14 @@ internal fun GuardInstanceStore(
 
         onIntent<GuardInstanceIntent.LoadActiveSessions> {
             launch {
+                dispatch(GuardInstanceMsg.StartedSessionsLoad)
                 dispatch(GuardInstanceMsg.SessionsUpdated(steamClient.guardManagement.getActiveSessions()))
             }
         }
 
         onIntent<GuardInstanceIntent.LoadMobileConfirmations> {
             launch {
+                dispatch(GuardInstanceMsg.StartedConfirmationsLoad)
                 dispatch(GuardInstanceMsg.ConfirmationsUpdated(steamClient.guardConfirmation.getConfirmations(steamId = state().steamId)))
             }
         }
@@ -69,9 +69,11 @@ internal fun GuardInstanceStore(
     reducer = { msg ->
         when (msg) {
             is GuardInstanceMsg.CodeUpdated -> copy(code = msg.code, codeProgress = msg.progress)
-            is GuardInstanceMsg.ConfirmationsUpdated -> copy(confirmations = msg.listState)
-            is GuardInstanceMsg.SessionsUpdated -> copy(sessions = msg.sessions.toPersistentList(), sessionsLoaded = true)
+            is GuardInstanceMsg.ConfirmationsUpdated -> copy(confirmations = msg.listState, areConfirmationsLoading = false)
+            is GuardInstanceMsg.SessionsUpdated -> copy(sessions = msg.sessions.toPersistentList(), areSessionsLoading = false)
             is GuardInstanceMsg.RevocationCodeUpdated -> copy(revocationCode = msg.code)
+            GuardInstanceMsg.StartedConfirmationsLoad -> copy(areConfirmationsLoading = true)
+            GuardInstanceMsg.StartedSessionsLoad -> copy(areSessionsLoading = true)
         }
     }
 )
@@ -89,10 +91,11 @@ data class GuardInstanceState (
     val codeProgress: Float = 0f,
     val revocationCode: String = "",
     // Confirmations
+    val areConfirmationsLoading: Boolean = true,
     val confirmations: ConfirmationListState = ConfirmationListState.Loading,
     // Sessions
-    val sessions: ImmutableList<ActiveSession> = persistentListOf(),
-    val sessionsLoaded: Boolean = false,
+    val areSessionsLoading: Boolean = true,
+    val sessions: ImmutableList<ActiveSession> = persistentListOf()
 )
 
 private sealed class GuardInstanceAction {
@@ -110,6 +113,9 @@ private sealed class GuardInstanceMsg {
 
     data class RevocationCodeUpdated(val code: String): GuardInstanceMsg()
 
+    data object StartedConfirmationsLoad: GuardInstanceMsg()
+    data object StartedSessionsLoad: GuardInstanceMsg()
+
     data class ConfirmationsUpdated(
         val listState: ConfirmationListState
     ): GuardInstanceMsg()
@@ -120,70 +126,3 @@ private sealed class GuardInstanceMsg {
 }
 
 private fun modelToAction(model: CodeModel) = GuardInstanceAction.CodeUpdated(model)
-
-// region Test store
-
-@OptIn(ExperimentalMviKotlinApi::class)
-internal fun TestGuardInstanceStore(
-    storeFactory: StoreFactory,
-    steamClient: SteamClient,
-    initialState: GuardInstanceState,
-    codeFlow: Flow<CodeModel>,
-    mainContext: CoroutineContext,
-): Store<GuardInstanceIntent, GuardInstanceState, Nothing> = storeFactory.create<GuardInstanceIntent, GuardInstanceAction, GuardInstanceMsg, GuardInstanceState, Nothing>(
-    name = "GuardInstanceStore",
-    initialState = initialState,
-    bootstrapper = coroutineBootstrapper(mainContext) {
-        // Run code collecting in BG
-        codeFlow.map(::modelToAction)
-            .onEach(this::dispatch)
-            .launchIn(this)
-    },
-    executorFactory = coroutineExecutorFactory(mainContext) {
-        onAction<GuardInstanceAction.CodeUpdated> { action ->
-            dispatch(GuardInstanceMsg.CodeUpdated(code = action.code, progress = action.progress))
-        }
-
-        onIntent<GuardInstanceIntent.LoadActiveSessions> {
-            launch {
-                // Imitate load
-                delay(1000L)
-
-                dispatch(GuardInstanceMsg.SessionsUpdated(
-                    sessions = listOf(
-                        ActiveSession(
-                            CAuthentication_RefreshToken_Enumerate_Response_RefreshTokenDescription(token_id = 1)
-                        ), ActiveSession(
-                            CAuthentication_RefreshToken_Enumerate_Response_RefreshTokenDescription(token_id = 2)
-                        ), ActiveSession(
-                            CAuthentication_RefreshToken_Enumerate_Response_RefreshTokenDescription(token_id = 3)
-                        )
-                    )
-                ))
-            }
-        }
-
-        onIntent<GuardInstanceIntent.LoadMobileConfirmations> {
-            launch {
-                // Imitate load
-                delay(1000L)
-
-                dispatch(GuardInstanceMsg.ConfirmationsUpdated(
-                    listState = ConfirmationListState.Success(
-                        conf = listOf()
-                    )
-                ))
-            }
-        }
-    },
-    reducer = { msg ->
-        when (msg) {
-            is GuardInstanceMsg.CodeUpdated -> copy(code = msg.code, codeProgress = msg.progress)
-            is GuardInstanceMsg.ConfirmationsUpdated -> copy(confirmations = msg.listState)
-            is GuardInstanceMsg.SessionsUpdated -> copy(sessions = msg.sessions.toPersistentList(), sessionsLoaded = true)
-            is GuardInstanceMsg.RevocationCodeUpdated -> copy(revocationCode = msg.code)
-        }
-    }
-)
-
-// endregion

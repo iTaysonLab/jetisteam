@@ -30,14 +30,14 @@ import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun GuardSessionsPage(
-    sessionsLoaded: Boolean,
+    isRefreshing: Boolean,
     sessions: ImmutableList<ActiveSession>,
     onSessionClicked: (ActiveSession) -> Unit,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
 ) {
-    if (sessionsLoaded) {
+    if (isRefreshing.not()) {
         LazyColumn(
             contentPadding = contentPadding,
             state = listState,

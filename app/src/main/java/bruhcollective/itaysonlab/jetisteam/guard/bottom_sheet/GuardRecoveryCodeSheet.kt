@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardRecoveryCodeSheetComponent
 import bruhcollective.itaysonlab.jetisteam.R
 import bruhcollective.itaysonlab.jetisteam.ui.components.BottomSheetLayout
+import bruhcollective.itaysonlab.jetisteam.ui.components.EmptyWindowInsets
+import bruhcollective.itaysonlab.jetisteam.ui.font.robotoMonoFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +41,8 @@ internal fun GuardRecoveryCodeSheet(
 ) {
     ModalBottomSheet(
         onDismissRequest = component::dismiss,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        windowInsets = EmptyWindowInsets
     ) {
         BottomSheetLayout(
             title = {
@@ -72,7 +75,8 @@ internal fun GuardRecoveryCodeSheet(
                         modifier = Modifier,
                         fontSize = 40.sp,
                         letterSpacing = 12.sp,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.primary,
+                        fontFamily = robotoMonoFontFamily,
                     )
 
                     Text(

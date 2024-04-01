@@ -3,7 +3,6 @@ package bruhcollective.itaysonlab.jetisteam.guard.setup.sms
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,13 +19,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.guard.setup.sms.GuardEnterSmsComponent
 import bruhcollective.itaysonlab.jetisteam.R
@@ -37,12 +36,11 @@ import bruhcollective.itaysonlab.jetisteam.ui.components.EmptyWindowInsets
 @Composable
 fun GuardEnterSmsScreen(
     component: GuardEnterSmsComponent,
-    topPadding: Dp
 ) {
     Scaffold(
         topBar = {
             Column {
-                CenterAlignedTopAppBar(
+                TopAppBar(
                     title = {
                         Text(
                             text = stringResource(
@@ -54,7 +52,6 @@ fun GuardEnterSmsScreen(
                             )
                         )
                     },
-                    windowInsets = WindowInsets(top = topPadding),
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.background
                     ), navigationIcon = {

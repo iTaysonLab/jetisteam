@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.jetisteam.navigation
 
 import bruhcollective.itaysonlab.cobalt.core.decompose.ViewModel
+import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.cobalt.guard.DefaultGuardComponent
 import bruhcollective.itaysonlab.cobalt.guard.GuardComponent
 import bruhcollective.itaysonlab.cobalt.news.DefaultNewsRootComponent
@@ -14,22 +15,25 @@ import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.operator.map
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class CobaltContainerComponent(
     componentContext: ComponentContext,
     private val storeFactory: StoreFactory
-): ComponentContext by componentContext {
+): ComponentContext by componentContext, KoinComponent {
+    private val steamClient: SteamClient by inject()
+
     private val navigation = StackNavigation<Config>()
     private val viewModel = instanceKeeper.getOrCreate { ContainerViewModel() }
 
-    val currentNavigationItem: Value<NavigationItem> get() = viewModel.currentNavigationItem
     val navigationItems: Value<ImmutableList<NavigationItem>> get() = viewModel.navigationItems
-
 
     val childStack: Value<ChildStack<*, Child>> = childStack(
         source = navigation,
@@ -38,6 +42,9 @@ class CobaltContainerComponent(
         childFactory = ::createChild,
         serializer = Config.serializer()
     )
+
+    val currentNavigationItem: Value<NavigationItem> = childStack.map { NavigationItem.fromChild(it.active.instance) }
+    val connectionStatus get() = steamClient.connectionStatus
 
     private fun createChild(config: Config, componentContext: ComponentContext): Child {
         return when (config) {
@@ -60,8 +67,6 @@ class CobaltContainerComponent(
     }
 
     fun switch(to: NavigationItem) {
-        viewModel.onNavigationItemChanged(to)
-
         when (to) {
             NavigationItem.Home -> navigation.bringToFront(Config.Home)
             NavigationItem.Guard -> navigation.bringToFront(Config.Guard)
@@ -94,15 +99,18 @@ class CobaltContainerComponent(
     enum class NavigationItem {
         Home,
         Guard,
-        MyProfile
+        MyProfile;
+
+        companion object {
+            fun fromChild(child: Child) = when (child) {
+                is Child.Home -> Home
+                is Child.Guard -> Guard
+                is Child.MyProfile -> MyProfile
+            }
+        }
     }
 
     private class ContainerViewModel: ViewModel() {
-        val currentNavigationItem = MutableValue(NavigationItem.Home)
         val navigationItems = MutableValue(NavigationItem.entries.toImmutableList())
-
-        fun onNavigationItemChanged(item: NavigationItem) {
-            currentNavigationItem.value = item
-        }
     }
 }

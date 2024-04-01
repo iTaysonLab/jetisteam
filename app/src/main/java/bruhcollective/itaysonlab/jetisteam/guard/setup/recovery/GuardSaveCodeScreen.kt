@@ -3,17 +3,15 @@ package bruhcollective.itaysonlab.jetisteam.guard.setup.recovery
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.SettingsSuggest
-import androidx.compose.material.icons.filled.Sms
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -32,31 +30,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.cobalt.guard.setup.recovery.GuardRecoveryCodeComponent
 import bruhcollective.itaysonlab.jetisteam.R
-import bruhcollective.itaysonlab.jetisteam.guard.components.CodeRow
-import bruhcollective.itaysonlab.jetisteam.ui.components.CobaltDivider
 import bruhcollective.itaysonlab.jetisteam.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.jetisteam.ui.font.robotoMonoFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GuardSaveCodeScreen(
-    component: GuardRecoveryCodeComponent,
-    topPadding: Dp
+    component: GuardRecoveryCodeComponent
 ) {
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 title = {
                     Text(
                         text = stringResource(R.string.guard_recovery)
                     )
                 },
-                windowInsets = WindowInsets(top = topPadding),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background
                 ), navigationIcon = {
@@ -96,7 +89,8 @@ fun GuardSaveCodeScreen(
                             modifier = Modifier,
                             fontSize = 40.sp,
                             letterSpacing = 12.sp,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.primary,
+                            fontFamily = robotoMonoFontFamily
                         )
 
                         Text(
@@ -115,6 +109,18 @@ fun GuardSaveCodeScreen(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
+            }
+
+            Button(
+                onClick = component::onExitClicked,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                shape = MaterialTheme.shapes.medium,
+                contentPadding = PaddingValues(16.dp)
+            ) {
+                Text(text = stringResource(id = R.string.guard_recovery_action))
             }
         }
     }
