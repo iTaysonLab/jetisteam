@@ -90,7 +90,7 @@ internal fun GuardCodePage(
                 progress = { intProgress },
                 modifier = Modifier.fillMaxWidth(),
                 // trackColor = MaterialTheme.colorScheme.primary,
-                drawStopIndicator = null
+                drawStopIndicator = { }
             )
 
             IconButton(
@@ -101,7 +101,9 @@ internal fun GuardCodePage(
         }
 
         Row(
-            modifier = Modifier.align(Alignment.BottomStart).padding(16.dp),
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             IconButton(

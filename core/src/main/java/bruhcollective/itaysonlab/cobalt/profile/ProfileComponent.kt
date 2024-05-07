@@ -15,8 +15,8 @@ interface ProfileComponent {
     fun dispatchComponentLoad()
 
     sealed interface State {
-        object Idle: State
-        object Loading: State
-        object Ready: State
+        data object Idle: State
+        data object Loading: State
+        data object Ready: State
     }
 }

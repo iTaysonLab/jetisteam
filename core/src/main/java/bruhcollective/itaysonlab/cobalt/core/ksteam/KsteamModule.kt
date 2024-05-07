@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.core.ksteam
 
 import bruhcollective.itaysonlab.cobalt.core.CobaltDispatchers
-import kotlinx.coroutines.CoroutineDispatcher
+import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -14,11 +14,11 @@ val KsteamModule = module(createdAtStart = true) {
         }
     }
 
-    single {
+    single<SteamClient> {
         SteamClient(applicationContext = androidContext())
     }
 
-    single {
+    single<ExtendedSteamClient> {
         get<SteamClient>().ksteam
     }
 }

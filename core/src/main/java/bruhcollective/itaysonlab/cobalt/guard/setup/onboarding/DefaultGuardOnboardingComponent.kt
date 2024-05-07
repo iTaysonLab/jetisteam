@@ -2,7 +2,6 @@ package bruhcollective.itaysonlab.cobalt.guard.setup.onboarding
 
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.ksteam.guard.models.SgCreationResult
-import bruhcollective.itaysonlab.ksteam.handlers.guard
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope

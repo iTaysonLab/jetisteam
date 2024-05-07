@@ -35,7 +35,7 @@ fun GuardSetupOverrideExistingSheet(
     ModalBottomSheet(
         onDismissRequest = component::dismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        windowInsets = EmptyWindowInsets
+        contentWindowInsets = { EmptyWindowInsets }
     ) {
         BottomSheetLayout(
             title = {

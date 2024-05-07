@@ -1,10 +1,10 @@
 package bruhcollective.itaysonlab.cobalt.guard.instance
 
 import bruhcollective.itaysonlab.cobalt.core.CobaltDispatchers
+import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import bruhcollective.itaysonlab.ksteam.SteamClient
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
-import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.coroutines.withLifecycle
@@ -29,13 +29,13 @@ internal class DefaultGuardInstanceComponent(
     private val onConfirmationClicked: (MobileConfirmationItem) -> Unit,
 ): GuardInstanceComponent, ComponentContext by componentContext, KoinComponent {
     private val store = instanceKeeper.getStore {
-        val instance = get<SteamClient>().guard.instanceFor(steamId) ?: error("GuardInstanceStore cannot be constructed for a non-SG holding user")
+        val instance = get<ExtendedSteamClient>().guard.instanceFor(steamId) ?: error("GuardInstanceStore cannot be constructed for a non-SG holding user")
         val codeFlow = instance.code.withLifecycle(lifecycle)
 
         GuardInstanceStore(
             storeFactory = storeFactory,
             mainContext = get<CobaltDispatchers>().main,
-            steamClient = get<SteamClient>(),
+            steamClient = get<ExtendedSteamClient>(),
             codeFlow = codeFlow,
             initialState = GuardInstanceState(steamId = steamId, username = instance.username)
         )

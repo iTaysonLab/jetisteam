@@ -1,12 +1,9 @@
 package bruhcollective.itaysonlab.cobalt.guard.instance
 
-import bruhcollective.itaysonlab.ksteam.SteamClient
+import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.CodeModel
 import bruhcollective.itaysonlab.ksteam.guard.models.ConfirmationListState
-import bruhcollective.itaysonlab.ksteam.handlers.guard
-import bruhcollective.itaysonlab.ksteam.handlers.guardConfirmation
-import bruhcollective.itaysonlab.ksteam.handlers.guardManagement
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -26,7 +23,7 @@ import kotlin.coroutines.CoroutineContext
 @OptIn(ExperimentalMviKotlinApi::class)
 internal fun GuardInstanceStore(
     storeFactory: StoreFactory,
-    steamClient: SteamClient,
+    steamClient: ExtendedSteamClient,
     initialState: GuardInstanceState,
     codeFlow: Flow<CodeModel>,
     mainContext: CoroutineContext,

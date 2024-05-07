@@ -2,7 +2,6 @@ package bruhcollective.itaysonlab.cobalt.profile.components.status
 
 import bruhcollective.itaysonlab.cobalt.core.decompose.componentCoroutineScope
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
-import bruhcollective.itaysonlab.ksteam.handlers.store
 import bruhcollective.itaysonlab.ksteam.models.apps.AppSummary
 import bruhcollective.itaysonlab.ksteam.models.persona.Persona
 import com.arkivanov.decompose.ComponentContext

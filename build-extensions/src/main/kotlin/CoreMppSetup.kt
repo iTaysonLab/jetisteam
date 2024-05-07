@@ -1,13 +1,8 @@
 import org.gradle.kotlin.dsl.get
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
-@OptIn(ExperimentalKotlinGradlePluginApi::class)
 fun KotlinMultiplatformExtension.commonSetup() {
-    // Enable Kotlin 1.8.20's new default hierarchy
-    targetHierarchy.default()
-
     // Enable Android support and use JVM 1.8 target
     androidTarget {
         jvmToolchain(8)

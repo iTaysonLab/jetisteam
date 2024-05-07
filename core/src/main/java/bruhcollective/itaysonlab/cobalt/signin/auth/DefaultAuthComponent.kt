@@ -3,7 +3,6 @@ package bruhcollective.itaysonlab.cobalt.signin.auth
 import bruhcollective.itaysonlab.cobalt.core.decompose.componentCoroutineScope
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.ksteam.handlers.Account
-import bruhcollective.itaysonlab.ksteam.handlers.account
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import kotlinx.coroutines.launch
@@ -40,7 +39,7 @@ internal class DefaultAuthComponent (
                     signInState.value = AuthComponent.SignInState.InvalidInformation
                 }
 
-                Account.AuthorizationResult.Success -> {
+                Account.AuthorizationResult.ProceedToTfa -> {
                     onProceedToTfa()
                 }
             }

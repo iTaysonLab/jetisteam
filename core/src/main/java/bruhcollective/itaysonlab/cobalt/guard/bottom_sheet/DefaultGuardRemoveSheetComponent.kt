@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.cobalt.guard.bottom_sheet
 
-import bruhcollective.itaysonlab.ksteam.SteamClient
-import bruhcollective.itaysonlab.ksteam.handlers.guard
+import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
@@ -17,7 +16,7 @@ internal class DefaultGuardRemoveSheetComponent (
     private val onGuardRemovedSuccessfully: () -> Unit,
     componentContext: ComponentContext
 ): GuardRemoveSheetComponent, KoinComponent, ComponentContext by componentContext, CoroutineScope by componentContext.coroutineScope() {
-    override val username = get<SteamClient>().guard.instanceFor(steamId)?.username.orEmpty()
+    override val username = get<ExtendedSteamClient>().guard.instanceFor(steamId)?.username.orEmpty()
     override val isRemovalInProgress = MutableValue(false)
     override fun dismiss() = onDismiss()
 
@@ -25,7 +24,7 @@ internal class DefaultGuardRemoveSheetComponent (
         launch {
             isRemovalInProgress.value = true
 
-            get<SteamClient>().guard.delete(steamId = steamId, unsafe = false)
+            get<ExtendedSteamClient>().guard.delete(steamId = steamId, unsafe = false)
             onGuardRemovedSuccessfully()
 
             isRemovalInProgress.value = false

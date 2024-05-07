@@ -6,11 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +33,6 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.delay
 
 // TODO: "Delete" should focus on previous field
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CodeRow(
     component: CodeRowComponent
@@ -90,10 +88,10 @@ fun CodeRow(
                     },
                 enabled = inactive.not(),
                 isError = error,
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                        8.dp
-                    ), unfocusedBorderColor = MaterialTheme.colorScheme.surfaceVariant
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp),
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.surfaceVariant
                 ),
                 singleLine = true,
                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, fontFamily = robotoMonoFontFamily),

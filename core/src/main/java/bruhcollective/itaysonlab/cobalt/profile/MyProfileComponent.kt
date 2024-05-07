@@ -8,8 +8,6 @@ import bruhcollective.itaysonlab.cobalt.profile.components.status.DefaultStatusC
 import bruhcollective.itaysonlab.cobalt.profile.components.status.StatusCardComponent
 import bruhcollective.itaysonlab.cobalt.profile.components.widgets.DefaultProfileWidgetsComponent
 import bruhcollective.itaysonlab.cobalt.profile.components.widgets.ProfileWidgetsComponent
-import bruhcollective.itaysonlab.ksteam.handlers.persona
-import bruhcollective.itaysonlab.ksteam.handlers.profile
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import bruhcollective.itaysonlab.ksteam.models.persona.Persona
 import bruhcollective.itaysonlab.ksteam.models.persona.ProfileCustomization

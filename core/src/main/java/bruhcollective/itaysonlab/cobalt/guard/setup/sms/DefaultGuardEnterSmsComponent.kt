@@ -1,11 +1,9 @@
 package bruhcollective.itaysonlab.cobalt.guard.setup.sms
 
-import bruhcollective.itaysonlab.cobalt.core.decompose.componentCoroutineScope
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.ksteam.guard.models.GuardStructure
-import bruhcollective.itaysonlab.ksteam.handlers.guard
-import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -22,7 +20,7 @@ internal class DefaultGuardEnterSmsComponent (
     componentContext: ComponentContext
 ): GuardEnterSmsComponent, ComponentContext by componentContext, KoinComponent {
     private val steamClient: SteamClient by inject()
-    private val componentScope = componentCoroutineScope()
+    private val componentScope = coroutineScope()
 
     override val codeRow = DefaultCodeRowComponent(codeLength = 5, onEntryFinish = { code ->
         onSubmitCodeClicked(code)

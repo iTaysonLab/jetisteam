@@ -11,7 +11,6 @@ import bruhcollective.itaysonlab.cobalt.guard.setup.recovery.SetupGuardRecoveryC
 import bruhcollective.itaysonlab.cobalt.guard.setup.sms.DefaultGuardEnterSmsComponent
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.GuardStructure
-import bruhcollective.itaysonlab.ksteam.handlers.guard
 import bruhcollective.itaysonlab.ksteam.models.toSteamId
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot

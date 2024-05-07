@@ -4,8 +4,6 @@ import bruhcollective.itaysonlab.cobalt.core.decompose.ViewModel
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.ksteam.handlers.News
 import bruhcollective.itaysonlab.ksteam.handlers.UserNews
-import bruhcollective.itaysonlab.ksteam.handlers.news
-import bruhcollective.itaysonlab.ksteam.handlers.userNews
 import bruhcollective.itaysonlab.ksteam.models.news.NewsEvent
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
 import com.arkivanov.decompose.ComponentContext

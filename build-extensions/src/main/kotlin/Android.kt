@@ -11,5 +11,3 @@ fun Project.androidLibrary(moduleNamespace: String) {
         }
     }
 }
-
-fun Project.vkxAndroidLibrary(module: String) = androidLibrary(moduleNamespace = "bruhcollective.itaysonlab.vkx.$module")

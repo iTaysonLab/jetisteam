@@ -1,10 +1,11 @@
 package bruhcollective.itaysonlab.cobalt.core.ksteam
 
 import android.content.Context
-import bruhcollective.itaysonlab.ksteam.KsteamClient
+import bruhcollective.itaysonlab.cobalt.core.BuildConfig
+import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import bruhcollective.itaysonlab.ksteam.debug.AndroidLoggingTransport
-import bruhcollective.itaysonlab.ksteam.debug.KSteamLoggingVerbosity
-import bruhcollective.itaysonlab.ksteam.debug.PacketDumper
+import bruhcollective.itaysonlab.ksteam.extendToClient
+import bruhcollective.itaysonlab.ksteam.handlers.Logger
 import bruhcollective.itaysonlab.ksteam.kSteam
 import bruhcollective.itaysonlab.ksteam.models.enums.EGamingDeviceType
 import bruhcollective.itaysonlab.ksteam.network.CMClientState
@@ -29,7 +30,7 @@ class SteamClient (
 ): CoroutineScope by MainScope() + CoroutineName("Cobalt-SteamHolder") {
     private val deviceInformationController = DeviceInformationController(applicationContext)
 
-    val ksteam = kSteam {
+    val ksteam: ExtendedSteamClient = kSteam {
         deviceInfo = DeviceInformation(
             osType = deviceInformationController.osType,
             gamingDeviceType = EGamingDeviceType.k_EGamingDeviceType_Phone,
@@ -41,7 +42,12 @@ class SteamClient (
         persistenceDriver = AndroidPersistenceDriver(applicationContext)
 
         loggingTransport = AndroidLoggingTransport
-        loggingVerbosity = KSteamLoggingVerbosity.Verbose
+
+        loggingVerbosity = if (BuildConfig.DEBUG) {
+            Logger.Verbosity.Verbose
+        } else {
+            Logger.Verbosity.Warning
+        }
 
         ktor {
             HttpClient(OkHttp) {
@@ -54,11 +60,7 @@ class SteamClient (
                 }
             }
         }
-
-        install(KsteamClient) {
-            enablePics = true
-        }
-    }
+    }.extendToClient(enablePics = true)
 
     val connectionStatus get() = ksteam.connectionStatus
 
@@ -70,7 +72,6 @@ class SteamClient (
 
     suspend fun start() {
         if (ksteam.connectionStatus.value == CMClientState.Offline) {
-            ksteam.dumperMode = PacketDumper.DumpMode.Disable
             ksteam.start()
         }
     }

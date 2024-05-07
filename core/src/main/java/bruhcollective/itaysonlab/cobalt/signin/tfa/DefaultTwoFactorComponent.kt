@@ -2,7 +2,6 @@ package bruhcollective.itaysonlab.cobalt.signin.tfa
 
 import bruhcollective.itaysonlab.cobalt.core.decompose.componentCoroutineScope
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
-import bruhcollective.itaysonlab.ksteam.handlers.account
 import bruhcollective.itaysonlab.ksteam.models.account.AuthorizationState
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
