@@ -13,11 +13,13 @@ import com.arkivanov.mvikotlin.extensions.coroutines.coroutineExecutorFactory
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
 @OptIn(ExperimentalMviKotlinApi::class)
@@ -52,7 +54,11 @@ internal fun GuardInstanceStore(
         onIntent<GuardInstanceIntent.LoadActiveSessions> {
             launch {
                 dispatch(GuardInstanceMsg.StartedSessionsLoad)
-                dispatch(GuardInstanceMsg.SessionsUpdated(steamClient.guardManagement.getActiveSessions()))
+
+                steamClient.guardManagement.getActiveSessions().let { result ->
+                    dispatch(GuardInstanceMsg.ActiveSessionUpdated(result.currentSession))
+                    dispatch(GuardInstanceMsg.SessionsUpdated(result.sessions))
+                }
             }
         }
 
@@ -62,12 +68,21 @@ internal fun GuardInstanceStore(
                 dispatch(GuardInstanceMsg.ConfirmationsUpdated(steamClient.guardConfirmation.getConfirmations(steamId = state().steamId)))
             }
         }
+
+        onIntent<GuardInstanceIntent.NotifySessionRevoked> { intent ->
+            launch {
+                dispatch(GuardInstanceMsg.SessionsUpdated(sessions = withContext(Dispatchers.Default) {
+                    state().sessions.filterNot { it.id == intent.id }
+                }))
+            }
+        }
     },
     reducer = { msg ->
         when (msg) {
             is GuardInstanceMsg.CodeUpdated -> copy(code = msg.code, codeProgress = msg.progress)
             is GuardInstanceMsg.ConfirmationsUpdated -> copy(confirmations = msg.listState, areConfirmationsLoading = false)
             is GuardInstanceMsg.SessionsUpdated -> copy(sessions = msg.sessions.toPersistentList(), areSessionsLoading = false)
+            is GuardInstanceMsg.ActiveSessionUpdated -> copy(currentSession = msg.session)
             is GuardInstanceMsg.RevocationCodeUpdated -> copy(revocationCode = msg.code)
             GuardInstanceMsg.StartedConfirmationsLoad -> copy(areConfirmationsLoading = true)
             GuardInstanceMsg.StartedSessionsLoad -> copy(areSessionsLoading = true)
@@ -78,6 +93,7 @@ internal fun GuardInstanceStore(
 sealed class GuardInstanceIntent {
     data object LoadMobileConfirmations: GuardInstanceIntent()
     data object LoadActiveSessions: GuardInstanceIntent()
+    data class NotifySessionRevoked ( val id: Long ): GuardInstanceIntent()
 }
 
 data class GuardInstanceState (
@@ -92,6 +108,7 @@ data class GuardInstanceState (
     val confirmations: ConfirmationListState = ConfirmationListState.Loading,
     // Sessions
     val areSessionsLoading: Boolean = true,
+    val currentSession: ActiveSession? = null,
     val sessions: ImmutableList<ActiveSession> = persistentListOf()
 )
 
@@ -115,6 +132,10 @@ private sealed class GuardInstanceMsg {
 
     data class ConfirmationsUpdated(
         val listState: ConfirmationListState
+    ): GuardInstanceMsg()
+
+    data class ActiveSessionUpdated(
+        val session: ActiveSession
     ): GuardInstanceMsg()
 
     data class SessionsUpdated(

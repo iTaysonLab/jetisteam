@@ -15,7 +15,7 @@ val KsteamModule = module(createdAtStart = true) {
     }
 
     single<SteamClient> {
-        SteamClient(applicationContext = androidContext())
+        SteamClient(applicationContext = androidContext(), cookieManager = get())
     }
 
     single<ExtendedSteamClient> {

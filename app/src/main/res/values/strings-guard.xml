@@ -87,4 +87,6 @@
     <string name="guard_confirmations_empty">No active confirmations</string>
     <string name="guard_confirmations_empty_desc">Trades or Market Listing confirmations will be shown here</string>
     <string name="guard_confirmation_detail">Confirmation info</string>
+
+    <string name="guard_current_session">this device</string>
 </resources>

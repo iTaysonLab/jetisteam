@@ -7,6 +7,7 @@ import bruhcollective.itaysonlab.jetisteam.cobaltStackAnimator
 import bruhcollective.itaysonlab.jetisteam.guard.bottom_sheet.GuardRecoveryCodeSheet
 import bruhcollective.itaysonlab.jetisteam.guard.bottom_sheet.GuardRemoveSheet
 import bruhcollective.itaysonlab.jetisteam.guard.bottom_sheet.GuardSetupOverrideExistingSheet
+import bruhcollective.itaysonlab.jetisteam.guard.confirmation.GuardConfirmationPage
 import bruhcollective.itaysonlab.jetisteam.guard.instance.GuardInstanceScreen
 import bruhcollective.itaysonlab.jetisteam.guard.session.GuardSessionScreen
 import bruhcollective.itaysonlab.jetisteam.guard.setup.onboarding.GuardOnboardingScreen
@@ -14,7 +15,6 @@ import bruhcollective.itaysonlab.jetisteam.guard.setup.recovery.GuardSaveCodeScr
 import bruhcollective.itaysonlab.jetisteam.guard.setup.sms.GuardEnterSmsScreen
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.stack.Children
-import com.arkivanov.decompose.extensions.compose.stack.animation.LocalStackAnimationProvider
 import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatable
 import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.predictiveBackAnimation
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
@@ -76,6 +76,10 @@ fun GuardScreen(
 
             is GuardComponent.Child.ActiveSessionDetail -> {
                 GuardSessionScreen(child.component)
+            }
+
+            is GuardComponent.Child.MobileConfirmationDetail -> {
+                GuardConfirmationPage(child.component)
             }
         }
     }

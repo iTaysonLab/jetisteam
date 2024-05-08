@@ -81,4 +81,12 @@ internal class DefaultGuardInstanceComponent(
     override fun reloadSessions() {
         store.accept(GuardInstanceIntent.LoadActiveSessions)
     }
+
+    override fun notifySessionRevoked(id: Long) {
+        store.accept(GuardInstanceIntent.NotifySessionRevoked(id))
+    }
+
+    override fun notifyConfirmationDecided(id: String) {
+        // TODO: LoadMobileConfirmations already does that?
+    }
 }

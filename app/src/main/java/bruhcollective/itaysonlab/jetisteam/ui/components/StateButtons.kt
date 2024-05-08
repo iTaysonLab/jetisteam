@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.jetisteam.ui.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,11 +15,12 @@ fun StateButton(
     inLoadingState: Boolean,
     modifier: Modifier = Modifier,
     shape: Shape = MaterialTheme.shapes.extraLarge,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable () -> Unit,
 ) {
     Button(onClick = {
         if (!inLoadingState) onClick()
-    }, modifier = modifier, shape = shape) {
+    }, modifier = modifier, shape = shape, contentPadding = contentPadding) {
         StateButtonContent(inLoadingState, content)
     }
 }
@@ -29,11 +31,12 @@ fun StateTonalButton(
     inLoadingState: Boolean,
     modifier: Modifier = Modifier,
     shape: Shape = MaterialTheme.shapes.extraLarge,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable () -> Unit,
 ) {
     FilledTonalButton(onClick = {
         if (!inLoadingState) onClick()
-    }, modifier = modifier, shape = shape) {
+    }, modifier = modifier, shape = shape, contentPadding = contentPadding) {
         StateButtonContent(inLoadingState, content)
     }
 }

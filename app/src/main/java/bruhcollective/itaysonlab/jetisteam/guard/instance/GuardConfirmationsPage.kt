@@ -116,6 +116,10 @@ private fun ConfirmationCard(
         GuardUtils.formatDateTimeToLocale(confirmation.creationTime * 1000L)
     }
 
+    val hasSummary = remember(confirmation) {
+        confirmation.summary.isNotEmpty() && confirmation.summary.first().isNotEmpty()
+    }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
@@ -128,19 +132,21 @@ private fun ConfirmationCard(
                 .fillMaxWidth()
                 .clickable(onClick = onClick)
                 .padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            AsyncImage(
-                model = confirmation.icon,
-                contentDescription = null,
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.small)
-                    .size(64.dp),
-                contentScale = ContentScale.Crop,
-                placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp))
-            )
+            if (confirmation.icon.isNullOrEmpty().not()) {
+                AsyncImage(
+                    model = confirmation.icon,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.small)
+                        .size(64.dp),
+                    contentScale = ContentScale.Crop,
+                    placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp))
+                )
+            }
 
-            Column {
+            Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -154,9 +160,11 @@ private fun ConfirmationCard(
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
-                Text(text = remember(confirmation.summary) {
-                    confirmation.summary.joinToString(separator = "\n")
-                }, fontSize = 13.sp, lineHeight = 18.sp)
+                if (hasSummary) {
+                    Text(text = remember(confirmation.summary) {
+                        confirmation.summary.joinToString(separator = "\n")
+                    }, fontSize = 13.sp, lineHeight = 18.sp)
+                }
             }
         }
     }

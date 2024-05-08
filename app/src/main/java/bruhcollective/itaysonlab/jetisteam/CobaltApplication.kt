@@ -2,8 +2,7 @@ package bruhcollective.itaysonlab.jetisteam
 
 import android.app.Application
 import bruhcollective.itaysonlab.cobalt.core.ksteam.KsteamModule
-import com.vk.recompose.highlighter.RecomposeHighlighterConfig
-import com.vk.recompose.logger.RecomposeLoggerConfig
+import bruhcollective.itaysonlab.jetisteam.di.PlatformModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -16,7 +15,7 @@ class CobaltApplication: Application() {
 
         startKoin {
             androidContext(applicationContext)
-            modules(KsteamModule)
+            modules(PlatformModule, KsteamModule)
         }
     }
 }

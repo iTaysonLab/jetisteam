@@ -1,8 +1,10 @@
 package bruhcollective.itaysonlab.cobalt.guard
 
+import android.util.Log
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.DefaultGuardRecoveryCodeSheetComponent
 import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.DefaultGuardRemoveSheetComponent
+import bruhcollective.itaysonlab.cobalt.guard.confirmation.DefaultGuardConfirmationComponent
 import bruhcollective.itaysonlab.cobalt.guard.instance.DefaultGuardInstanceComponent
 import bruhcollective.itaysonlab.cobalt.guard.session.DefaultGuardSessionDetailComponent
 import bruhcollective.itaysonlab.cobalt.guard.setup.alert.DefaultGuardAlreadyExistsAlertComponent
@@ -11,6 +13,7 @@ import bruhcollective.itaysonlab.cobalt.guard.setup.recovery.SetupGuardRecoveryC
 import bruhcollective.itaysonlab.cobalt.guard.setup.sms.DefaultGuardEnterSmsComponent
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.GuardStructure
+import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
 import bruhcollective.itaysonlab.ksteam.models.toSteamId
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
@@ -20,6 +23,7 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
@@ -118,7 +122,7 @@ class DefaultGuardComponent(
                         }, onDeleteClicked = {
                             alertNavigation.activate(AlertConfig.RemoveGuard(steamId = config.steamId))
                         }, onConfirmationClicked = { confirmation ->
-
+                            childNavigation.push(Config.ConfirmationDetail(steamId = config.steamId, confirmation = confirmation))
                         }, onRecoveryCodeClicked = { code ->
                             alertNavigation.activate(AlertConfig.RecoveryCode(steamId = config.steamId, code = code))
                         }, onSessionClicked = { session ->
@@ -128,12 +132,33 @@ class DefaultGuardComponent(
                 )
             }
 
+            is Config.ConfirmationDetail -> {
+                GuardComponent.Child.MobileConfirmationDetail(
+                    component = DefaultGuardConfirmationComponent(
+                        componentContext = componentContext,
+                        item = config.confirmation,
+                        steamId = config.steamId.toSteamId(),
+                        onDismiss = ::onBackPressed,
+                        onActionTaken = {
+                            childNavigation.pop {
+                                (stack.active.instance as? GuardComponent.Child.Instance)?.component?.notifyConfirmationDecided(config.confirmation.id)
+                            }
+                        }
+                    )
+                )
+            }
+
             is Config.SessionDetail -> {
                 GuardComponent.Child.ActiveSessionDetail(
                     component = DefaultGuardSessionDetailComponent(
-                        config.session,
+                        session = config.session,
                         onDismiss = ::onBackPressed,
-                        componentContext
+                        componentContext = componentContext,
+                        onSessionRemoved = {
+                            childNavigation.pop {
+                                (stack.active.instance as? GuardComponent.Child.Instance)?.component?.notifySessionRevoked(config.session.id)
+                            }
+                        },
                     )
                 )
             }
@@ -227,6 +252,12 @@ class DefaultGuardComponent(
         data class SessionDetail(
             val steamId: ULong,
             val session: ActiveSession
+        ) : Config
+
+        @Serializable
+        data class ConfirmationDetail(
+            val steamId: ULong,
+            val confirmation: MobileConfirmationItem
         ) : Config
     }
 

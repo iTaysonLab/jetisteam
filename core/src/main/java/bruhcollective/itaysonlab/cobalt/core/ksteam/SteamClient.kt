@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.cobalt.core.ksteam
 
 import android.content.Context
 import bruhcollective.itaysonlab.cobalt.core.BuildConfig
+import bruhcollective.itaysonlab.cobalt.core.platform.PlatformCookieManager
 import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import bruhcollective.itaysonlab.ksteam.debug.AndroidLoggingTransport
 import bruhcollective.itaysonlab.ksteam.extendToClient
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit
 
 class SteamClient (
     private val applicationContext: Context,
+    private val cookieManager: PlatformCookieManager
 ): CoroutineScope by MainScope() + CoroutineName("Cobalt-SteamHolder") {
     private val deviceInformationController = DeviceInformationController(applicationContext)
 
@@ -71,6 +73,10 @@ class SteamClient (
     val currentSteamId get() = ksteam.currentSessionSteamId
 
     suspend fun start() {
+        ksteam.client.onClientState(CMClientState.Connected) {
+            cookieManager.putCookies(url = "https://steamcommunity.com/", ksteam.account.awaitWebCookies())
+        }
+
         if (ksteam.connectionStatus.value == CMClientState.Offline) {
             ksteam.start()
         }

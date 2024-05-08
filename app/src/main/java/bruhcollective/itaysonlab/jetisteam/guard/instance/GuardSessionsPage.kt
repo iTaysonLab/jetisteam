@@ -2,6 +2,8 @@ package bruhcollective.itaysonlab.jetisteam.guard.instance
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -31,6 +33,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 internal fun GuardSessionsPage(
     isRefreshing: Boolean,
+    currentSession: ActiveSession?,
     sessions: ImmutableList<ActiveSession>,
     onSessionClicked: (ActiveSession) -> Unit,
     modifier: Modifier = Modifier,
@@ -43,6 +46,21 @@ internal fun GuardSessionsPage(
             state = listState,
             modifier = modifier
         ) {
+            if (currentSession != null) {
+                item(key = currentSession.id) {
+                    SessionItem(
+                        currentSession,
+                        top = true,
+                        bottom = true,
+                        onClick = {
+                            onSessionClicked(currentSession)
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
+
             itemsIndexed(sessions, key = { _, session ->
                 session.id
             }) { index, session ->
@@ -52,7 +70,8 @@ internal fun GuardSessionsPage(
                     bottom = index == sessions.lastIndex,
                     onClick = {
                         onSessionClicked(session)
-                    })
+                    }
+                )
 
                 if (index != sessions.lastIndex) {
                     HorizontalDivider(color = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
@@ -81,7 +100,13 @@ private fun SessionItem(
             }, maxLines = 1)
         }, leadingContent = {
             Icon(imageVector = visuals.icon(), contentDescription = null)
-        }, supportingContent = if (visuals.relativeLastSeen != null) {
+        }, supportingContent = if (session.isCurrentSession) {
+            {
+                Text(
+                    text = stringResource(R.string.guard_current_session)
+                )
+            }
+        } else if (visuals.relativeLastSeen != null) {
             {
                 Text(
                     text = stringResource(
@@ -91,7 +116,9 @@ private fun SessionItem(
                 )
             }
         } else null, colors = ListItemDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(16.dp)
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                elevation = if (session.isCurrentSession) 4.dp else 16.dp
+            )
         ), modifier = Modifier
             .clip(
                 when {

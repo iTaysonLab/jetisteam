@@ -62,6 +62,7 @@ import bruhcollective.itaysonlab.jetisteam.guard.GuardUtils
 import bruhcollective.itaysonlab.jetisteam.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.jetisteam.ui.components.RoundedPage
 import bruhcollective.itaysonlab.jetisteam.ui.components.StateTextButton
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import steam.enums.EAuthSessionGuardType
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,13 +72,14 @@ internal fun GuardSessionScreen(
 ) {
     val ctx = LocalContext.current
 
-    var requestSessionRevoke by remember { mutableStateOf(false) }
+    val requestSessionRevoke by component.isRevocationAlertOpened.subscribeAsState()
+    val sessionRevokeInProgress by component.isRevocationInProgress.subscribeAsState()
 
     if (requestSessionRevoke) {
         AlertDialog(onDismissRequest = {
-            // if (!viewModel.revokingSession) {
-            requestSessionRevoke = false
-            // }
+            if (sessionRevokeInProgress.not()) {
+                component.dismissRevokeScreen()
+            }
         }, icon = {
             Icon(
                 imageVector = Icons.Rounded.Delete,
@@ -89,18 +91,15 @@ internal fun GuardSessionScreen(
             Text(text = stringResource(id = R.string.guard_revoke_alert_text))
         }, confirmButton = {
             StateTextButton(onClick = {
-                // viewModel.requestRevokeSession {
-                requestSessionRevoke = false
-                //    onBackClicked()
-                //}
-            }, inLoadingState = false) {
+                component.revokeSession()
+            }, inLoadingState = sessionRevokeInProgress) {
                 Text(text = stringResource(id = R.string.guard_revoke_alert_confirm))
             }
         }, dismissButton = {
             TextButton(onClick = {
-                // if (!viewModel.revokingSession) {
-                requestSessionRevoke = false
-                // }
+                if (sessionRevokeInProgress.not()) {
+                    component.dismissRevokeScreen()
+                }
             }) {
                 Text(text = stringResource(id = R.string.guard_revoke_alert_dismiss))
             }
@@ -146,14 +145,17 @@ internal fun GuardSessionScreen(
                     )
                 }
 
-                item {
-                    SessionActionStrip(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .padding(bottom = 4.dp),
-                        onRevokeRequest = component::revokeSession
-                    )
+                if (component.isCurrentSession.not()) {
+                    item {
+                        SessionActionStrip(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .padding(bottom = 4.dp),
+                            onRevokeRequest = component::openRevokeScreen,
+                            onSupportRequest = component::openSupportPage,
+                        )
+                    }
                 }
 
                 item {
@@ -311,10 +313,9 @@ private fun SessionHeader(
 @Composable
 private fun SessionActionStrip(
     onRevokeRequest: () -> Unit,
+    onSupportRequest: () -> Unit,
     modifier: Modifier
 ) {
-    val uriHandler = LocalUriHandler.current
-
     Card(
         modifier, colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp)
@@ -325,7 +326,9 @@ private fun SessionActionStrip(
             modifier = Modifier.height(IntrinsicSize.Min)
         ) {
             SessionActionStripButton(
-                modifier = Modifier.weight(1f).clickable(onClick = onRevokeRequest),
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable(onClick = onRevokeRequest),
                 icon = Icons.Rounded.Delete,
                 text = stringResource(id = R.string.guard_session_info_action_revoke)
             )
@@ -340,10 +343,7 @@ private fun SessionActionStrip(
             SessionActionStripButton(
                 modifier = Modifier
                     .weight(1f)
-                    .clickable {
-                        // TODO: maybe add some sort of WebView
-                        uriHandler.openUri("https://help.steampowered.com/")
-                    },
+                    .clickable(onClick = onSupportRequest),
                 icon = Icons.Rounded.Help,
                 text = stringResource(id = R.string.guard_session_info_action_support)
             )

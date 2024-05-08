@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.cobalt.guard
 
 import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardRecoveryCodeSheetComponent
 import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardRemoveSheetComponent
+import bruhcollective.itaysonlab.cobalt.guard.confirmation.GuardConfirmationComponent
 import bruhcollective.itaysonlab.cobalt.guard.instance.GuardInstanceComponent
 import bruhcollective.itaysonlab.cobalt.guard.qr.GuardQrScannerComponent
 import bruhcollective.itaysonlab.cobalt.guard.session.GuardSessionDetailComponent
@@ -43,6 +44,10 @@ interface GuardComponent: BackHandlerOwner {
 
         class ActiveSessionDetail (
             val component: GuardSessionDetailComponent
+        ): Child
+
+        class MobileConfirmationDetail (
+            val component: GuardConfirmationComponent
         ): Child
     }
 

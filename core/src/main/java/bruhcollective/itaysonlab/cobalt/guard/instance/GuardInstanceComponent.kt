@@ -16,4 +16,7 @@ interface GuardInstanceComponent {
 
     fun reloadConfirmations()
     fun reloadSessions()
+
+    fun notifySessionRevoked(id: Long)
+    fun notifyConfirmationDecided(id: String)
 }

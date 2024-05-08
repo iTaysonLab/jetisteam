@@ -98,6 +98,7 @@ fun GuardInstanceScreen(
                 2 -> GuardSessionsPage(
                     listState = guardSessionListState,
                     isRefreshing = state.areSessionsLoading,
+                    currentSession = state.currentSession,
                     sessions = state.sessions,
                     onSessionClicked = component::openSessionDetail,
                     modifier = Modifier.fillMaxSize()
