@@ -78,7 +78,7 @@ class SteamClient (
         }
 
         if (ksteam.connectionStatus.value == CMClientState.Offline) {
-            ksteam.start()
+            // ksteam.start()
         }
     }
 }

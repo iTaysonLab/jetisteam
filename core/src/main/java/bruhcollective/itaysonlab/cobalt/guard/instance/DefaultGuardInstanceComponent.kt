@@ -2,19 +2,21 @@ package bruhcollective.itaysonlab.cobalt.guard.instance
 
 import bruhcollective.itaysonlab.cobalt.core.CobaltDispatchers
 import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
-import bruhcollective.itaysonlab.ksteam.SteamClient
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.coroutines.withLifecycle
 import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
@@ -27,15 +29,18 @@ internal class DefaultGuardInstanceComponent(
     private val onDeleteClicked: () -> Unit,
     private val onSessionClicked: (ActiveSession) -> Unit,
     private val onConfirmationClicked: (MobileConfirmationItem) -> Unit,
-): GuardInstanceComponent, ComponentContext by componentContext, KoinComponent {
+    private val onIncomingSessionAppeared: (Long) -> Unit
+): GuardInstanceComponent, ComponentContext by componentContext, KoinComponent, CoroutineScope by componentContext.coroutineScope() {
     private val store = instanceKeeper.getStore {
-        val instance = get<ExtendedSteamClient>().guard.instanceFor(steamId) ?: error("GuardInstanceStore cannot be constructed for a non-SG holding user")
+        val steamClient = get<ExtendedSteamClient>()
+
+        val instance = steamClient.guard.instanceFor(steamId) ?: error("GuardInstanceStore cannot be constructed for a non-SG holding user")
         val codeFlow = instance.code.withLifecycle(lifecycle)
 
         GuardInstanceStore(
             storeFactory = storeFactory,
             mainContext = get<CobaltDispatchers>().main,
-            steamClient = get<ExtendedSteamClient>(),
+            steamClient = steamClient,
             codeFlow = codeFlow,
             initialState = GuardInstanceState(steamId = steamId, username = instance.username)
         )
@@ -48,6 +53,17 @@ internal class DefaultGuardInstanceComponent(
 
         lifecycle.doOnResume {
             store.accept(GuardInstanceIntent.LoadMobileConfirmations)
+        }
+
+        launch {
+            get<ExtendedSteamClient>().guardManagement.createIncomingSessionWatcher()
+                .withLifecycle(lifecycle)
+                .collect {
+                    println("[onIncomingSessionAppeared] $it")
+                    if (it != null) {
+                        onIncomingSessionAppeared(it)
+                    }
+                }
         }
     }
 

@@ -4,11 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import bruhcollective.itaysonlab.cobalt.guard.GuardComponent
 import bruhcollective.itaysonlab.jetisteam.cobaltStackAnimator
+import bruhcollective.itaysonlab.jetisteam.guard.bottom_sheet.GuardConfirmSessionSheet
 import bruhcollective.itaysonlab.jetisteam.guard.bottom_sheet.GuardRecoveryCodeSheet
 import bruhcollective.itaysonlab.jetisteam.guard.bottom_sheet.GuardRemoveSheet
 import bruhcollective.itaysonlab.jetisteam.guard.bottom_sheet.GuardSetupOverrideExistingSheet
 import bruhcollective.itaysonlab.jetisteam.guard.confirmation.GuardConfirmationPage
 import bruhcollective.itaysonlab.jetisteam.guard.instance.GuardInstanceScreen
+import bruhcollective.itaysonlab.jetisteam.guard.qr_code.GuardQrCodeSheet
 import bruhcollective.itaysonlab.jetisteam.guard.session.GuardSessionScreen
 import bruhcollective.itaysonlab.jetisteam.guard.setup.onboarding.GuardOnboardingScreen
 import bruhcollective.itaysonlab.jetisteam.guard.setup.recovery.GuardSaveCodeScreen
@@ -42,8 +44,12 @@ fun GuardScreen(
                 GuardRecoveryCodeSheet(child.component)
             }
 
-            is GuardComponent.AlertChild.QrCodeScanner -> {
+            is GuardComponent.AlertChild.IncomingSession -> {
+                GuardConfirmSessionSheet(child.component)
+            }
 
+            is GuardComponent.AlertChild.QrCodeScanner -> {
+                GuardQrCodeSheet(child.component)
             }
         }
     }

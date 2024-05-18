@@ -1,11 +1,12 @@
 package bruhcollective.itaysonlab.cobalt.guard
 
-import android.util.Log
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
+import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.DefaultGuardIncomingSessionComponent
 import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.DefaultGuardRecoveryCodeSheetComponent
 import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.DefaultGuardRemoveSheetComponent
 import bruhcollective.itaysonlab.cobalt.guard.confirmation.DefaultGuardConfirmationComponent
 import bruhcollective.itaysonlab.cobalt.guard.instance.DefaultGuardInstanceComponent
+import bruhcollective.itaysonlab.cobalt.guard.qr.DefaultGuardQrScannerComponent
 import bruhcollective.itaysonlab.cobalt.guard.session.DefaultGuardSessionDetailComponent
 import bruhcollective.itaysonlab.cobalt.guard.setup.alert.DefaultGuardAlreadyExistsAlertComponent
 import bruhcollective.itaysonlab.cobalt.guard.setup.onboarding.DefaultGuardOnboardingComponent
@@ -127,6 +128,8 @@ class DefaultGuardComponent(
                             alertNavigation.activate(AlertConfig.RecoveryCode(steamId = config.steamId, code = code))
                         }, onSessionClicked = { session ->
                             childNavigation.push(Config.SessionDetail(steamId = config.steamId, session = session))
+                        }, onIncomingSessionAppeared = { id ->
+                            alertNavigation.activate(AlertConfig.IncomingSession(steamId = config.steamId, sessionId = id))
                         }
                     )
                 )
@@ -210,7 +213,26 @@ class DefaultGuardComponent(
                 )
             }
 
-            is AlertConfig.QrScanner -> TODO()
+            is AlertConfig.IncomingSession -> {
+                GuardComponent.AlertChild.IncomingSession(
+                    component = DefaultGuardIncomingSessionComponent(
+                        componentContext = componentContext,
+                        steamId = config.steamId.toSteamId(),
+                        sessionId = config.sessionId,
+                        onDismiss = alertNavigation::dismiss,
+                    )
+                )
+            }
+
+            is AlertConfig.QrScanner -> {
+                GuardComponent.AlertChild.QrCodeScanner(
+                    component = DefaultGuardQrScannerComponent(
+                        componentContext = componentContext,
+                        steamId = config.steamId.toSteamId(),
+                        onDismiss = alertNavigation::dismiss,
+                    )
+                )
+            }
         }
     }
 
@@ -282,6 +304,12 @@ class DefaultGuardComponent(
         @Serializable
         data class QrScanner(
             val steamId: ULong
+        ) : AlertConfig
+
+        @Serializable
+        data class IncomingSession(
+            val steamId: ULong,
+            val sessionId: Long
         ) : AlertConfig
     }
 }

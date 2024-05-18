@@ -4,6 +4,7 @@ import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.CodeModel
 import bruhcollective.itaysonlab.ksteam.guard.models.ConfirmationListState
+import bruhcollective.itaysonlab.ksteam.guard.models.IncomingSession
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory

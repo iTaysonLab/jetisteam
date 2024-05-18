@@ -66,7 +66,7 @@ fun StateButtonContent(
             ResizableCircularIndicator(
                 modifier = Modifier,
                 color = LocalContentColor.current,
-                indicatorSize = 18.dp,
+                indicatorSize = 19.dp,
                 strokeWidth = 2.dp
             )
         } else {
