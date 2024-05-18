@@ -85,10 +85,13 @@ dependencies {
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.ksteam)
+    implementation(libs.bundles.camerax)
+    implementation(libs.mlkit.barcodescanning)
 
     implementation(libs.composeMaterialIcons)
     implementation(libs.composeMotionCore)
     implementation(libs.accompanistSystemUi)
+    implementation(libs.accompanistPermissions)
 
     implementation(libs.mvikotlin)
     implementation(libs.mvikotlin.main)
