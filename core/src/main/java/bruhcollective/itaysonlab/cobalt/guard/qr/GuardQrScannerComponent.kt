@@ -6,11 +6,16 @@ import com.arkivanov.decompose.value.Value
 interface GuardQrScannerComponent {
     val qrState: Value<QrViewfinderState>
     val scannedSession: Value<ScannedSession>
+    val actionInProgress: Value<Action>
 
     fun submitQrContent(rawValue: String)
     fun submitQrEmpty()
 
+    fun approveScannedSession()
+    fun denyScannedSession()
+
     fun dismiss()
+    fun registerBackListener(listener: () -> Unit)
 
     enum class QrViewfinderState {
         // Viewfinder is in default state
@@ -24,10 +29,16 @@ interface GuardQrScannerComponent {
         Detected
     }
 
+    enum class Action {
+        None, Approve, Deny
+    }
+
     sealed interface ScannedSession {
         data class Found (
             val session: IncomingSession
         ): ScannedSession
+
+        data object ActionComplete: ScannedSession
 
         data object Loading: ScannedSession
     }

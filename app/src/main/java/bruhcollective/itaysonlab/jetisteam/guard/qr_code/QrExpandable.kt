@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -32,10 +31,11 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.cobalt.guard.qr.GuardQrScannerComponent
 
 @Composable
 internal fun QrExpandable(
-    state: QrState,
+    state: GuardQrScannerComponent.QrViewfinderState,
     scannedBox: Rect,
     modifier: Modifier,
     expandedContent: @Composable () -> Unit
@@ -78,9 +78,9 @@ internal fun QrExpandable(
             spring(stiffness = QrConstants.SpringStiffness)
         }) { state ->
             when (state) {
-                QrState.NotDetected -> center
-                QrState.Preheat -> scannedBox
-                QrState.Detected -> expanded
+                GuardQrScannerComponent.QrViewfinderState.NotDetected -> center
+                GuardQrScannerComponent.QrViewfinderState.Preheat -> scannedBox
+                GuardQrScannerComponent.QrViewfinderState.Detected -> expanded
             }
         }
 
@@ -88,8 +88,8 @@ internal fun QrExpandable(
             spring(stiffness = QrConstants.SpringStiffness)
         }) { state ->
             when (state) {
-                QrState.NotDetected, QrState.Preheat -> 0f
-                QrState.Detected -> 1f
+                GuardQrScannerComponent.QrViewfinderState.NotDetected, GuardQrScannerComponent.QrViewfinderState.Preheat -> 0f
+                GuardQrScannerComponent.QrViewfinderState.Detected -> 1f
             }
         }
 
@@ -97,8 +97,8 @@ internal fun QrExpandable(
             spring(stiffness = QrConstants.SpringStiffness)
         }) { state ->
             when (state) {
-                QrState.NotDetected, QrState.Detected -> Color.White
-                QrState.Preheat -> MaterialTheme.colorScheme.primary
+                GuardQrScannerComponent.QrViewfinderState.NotDetected, GuardQrScannerComponent.QrViewfinderState.Detected -> Color.White
+                GuardQrScannerComponent.QrViewfinderState.Preheat -> MaterialTheme.colorScheme.primary
             }
         }
 
@@ -127,10 +127,10 @@ internal fun QrExpandable(
                 .scale(stateProgress)
                 .alpha(stateProgress)
                 .align(Alignment.Center)
-                .fillMaxWidth()
+                // .fillMaxWidth()
                 .padding(QrConstants.Padding)
                 .clip(RoundedCornerShape(QrConstants.CornerRadius))
-                .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
+                .background(MaterialTheme.colorScheme.surface)
                 .onGloballyPositioned {
                     if (paths.expandableHeight != it.size.height) {
                         paths.expandableHeight = it.size.height
@@ -140,10 +140,6 @@ internal fun QrExpandable(
             expandedContent()
         }
     }
-}
-
-internal enum class QrState {
-    NotDetected, Preheat, Detected
 }
 
 private object QrConstants {
