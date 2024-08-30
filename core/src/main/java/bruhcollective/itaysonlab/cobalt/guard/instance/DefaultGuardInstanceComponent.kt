@@ -16,6 +16,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -58,11 +59,9 @@ internal class DefaultGuardInstanceComponent(
         launch {
             get<ExtendedSteamClient>().guardManagement.createIncomingSessionWatcher()
                 .withLifecycle(lifecycle)
+                .filterNotNull()
                 .collect {
-                    println("[onIncomingSessionAppeared] $it")
-                    if (it != null) {
-                        onIncomingSessionAppeared(it)
-                    }
+                    onIncomingSessionAppeared(it)
                 }
         }
     }

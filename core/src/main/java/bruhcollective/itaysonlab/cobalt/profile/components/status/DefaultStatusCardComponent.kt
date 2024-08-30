@@ -16,15 +16,15 @@ internal class DefaultStatusCardComponent (
     private val scope = componentCoroutineScope()
     private val steam by inject<SteamClient>()
 
-    override val status = MutableValue<Persona.IngameStatus>(Persona.IngameStatus.None)
+    override val status = MutableValue<Persona.Status>(Persona.Status.Offline)
     override val appInformation = MutableValue(AppSummary(0, "", ""))
 
     override fun onPersonaUpdated(persona: Persona) {
-        status.value = persona.ingame
+        status.value = persona.status
 
-        if (persona.ingame is Persona.IngameStatus.Steam) {
+        if (persona.status is Persona.Status.InGame) {
             scope.launch {
-                appInformation.value = steam.ksteam.store.getNetworkApp((persona.ingame as? Persona.IngameStatus.Steam)?.appId ?: return@launch)
+                appInformation.value = steam.ksteam.store.getNetworkApp((persona.status as? Persona.Status.InGame)?.appId?.value ?: return@launch)
             }
         } else {
             appInformation.value = AppSummary(0, "", "")

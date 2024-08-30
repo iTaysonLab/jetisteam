@@ -1,20 +1,20 @@
 [versions]
 # kotlin
-kotlinVersion = "1.9.23"
-kspVersion = "1.9.23-1.0.16"
+kotlinVersion = "2.0.0"
+kspVersion = "2.0.0-1.0.24"
 
 # kotlinx
-kotlinxSerializationVersion = "1.6.3"
+kotlinxSerializationVersion = "1.7.1"
 kotlinxDateTimeVersion = "0.5.0"
-coroutinesVersion = "1.8.0"
+coroutinesVersion = "1.8.1"
 kotlinxAtomicVersion = "0.20.2"
 kotlinxCollectionsVersion = "0.3.5"
 
 # ktor
-ktorClientVersion = "2.3.10"
+ktorClientVersion = "2.3.12"
 
 # multiplatform
-multiplatformSettingsVersion = "1.0.0"
+multiplatformSettingsVersion = "1.1.1"
 napierVersion = "2.6.1"
 koinVersion = "3.4.0"
 koinKspVersion = "1.2.0"
@@ -30,34 +30,34 @@ essentyVersion = "2.0.0-alpha07"
 mvikotlin = "4.0.0-alpha02"
 
 # android
-androidPluginVersion = "8.5.0-alpha07"
+androidPluginVersion = "8.5.2"
 composeCompilerVersion = "1.4.7"
-lifecycleVersion = "2.8.0"
+lifecycleVersion = "2.8.4"
 hiltVersion = "2.47"
 androidCoreKtxVersion = "1.13.1"
-androidActivityKtxVersion = "1.9.0"
+androidActivityKtxVersion = "1.9.1"
 
 # compose
-composeVersion = "1.7.0-beta01"
-composeMaterial3Version = "1.3.0-beta01"
+composeVersion = "1.7.0-rc01"
+composeMaterial3Version = "1.3.0-rc01"
 compose_motion = "1.0.6"
 accompanist = "0.35.0-alpha"
 
 # android tests
-espressoCoreVersion = "3.5.1"
-testRunnerVersion = "1.5.2"
-testExtJunitVersion = "1.1.5"
-testCoreVersion = "1.5.0"
+espressoCoreVersion = "3.6.1"
+testRunnerVersion = "1.6.2"
+testExtJunitVersion = "1.2.1"
+testCoreVersion = "1.6.1"
 robolectricVersion = "4.6.1"
 junit = "4.13.2"
 appcompat = "1.6.1"
 
 # ksteam
-ksteam = "r37"
+ksteam = "r38"
 
 # camera
-camerax = "1.4.0-beta01"
-mlkit = "17.2.0"
+camerax = "1.4.0-rc01"
+mlkit = "17.3.0"
 
 [plugins]
 androidPluginApplication = { id = "com.android.application", version.ref = "androidPluginVersion" }
@@ -68,6 +68,7 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 googleKsp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
 kmmNativeCoroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref = "kmmNativeCoroutinesVersion" }
 kotlinAtomicFu = { id = "org.jetbrains.kotlinx.plugin.atomicfu", version.ref = "kotlinxAtomicVersion" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVersion" }
 
 [libraries]
 # kotlin

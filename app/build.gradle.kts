@@ -3,22 +3,23 @@ plugins {
     alias(libs.plugins.androidPluginApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlinSerialization)
-    id("com.vk.vkompose") version "0.4.2"
+    alias(libs.plugins.composeCompiler)
+    // id("com.vk.vkompose") version "0.4.2"
 }
 
-vkompose {
+/*vkompose {
     recompose {
         isHighlighterEnabled = true
         isLoggerEnabled = true
     }
-}
+}*/
 
 android {
-    namespace = "bruhcollective.itaysonlab.jetisteam"
+    namespace = "bruhcollective.itaysonlab.cobalt"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "bruhcollective.itaysonlab.jetisteam"
+        applicationId = "bruhcollective.itaysonlab.cobalt"
         minSdk = 21
         targetSdk = 34
         versionCode = 1

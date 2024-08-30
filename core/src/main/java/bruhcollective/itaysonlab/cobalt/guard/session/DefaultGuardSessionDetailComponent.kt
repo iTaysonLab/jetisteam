@@ -48,11 +48,6 @@ internal class DefaultGuardSessionDetailComponent (
         isRevocationInProgress.value = true
 
         scope.launch {
-            get<ExtendedSteamClient>().guard.instanceForCurrentUser()?.let {
-                println("GUARD_RevokeSig => ${it.sgCreateRevokeSignature(session.id).base64()}")
-                println("GUARD_SharedSecret => ${get<ExtendedSteamClient>().client.persistence.secureGet(get<ExtendedSteamClient>().currentSessionSteamId, "guard.shared_secret")}")
-            }
-
             get<ExtendedSteamClient>().guardManagement.revokeSession(session.id)
             onSessionRemoved()
         }

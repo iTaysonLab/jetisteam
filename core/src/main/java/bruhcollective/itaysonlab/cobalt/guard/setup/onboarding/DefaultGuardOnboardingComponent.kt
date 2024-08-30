@@ -23,7 +23,6 @@ internal class DefaultGuardOnboardingComponent (
         launch {
             isTryingToStartSetup.value = true
 
-            // TODO: get rid of sgAddFlow in kSteam
             when (val result = steam.ksteam.guard.initializeSgCreation()) {
                 SgCreationResult.AlreadyHasGuard -> {
                     onDuplicateRequest()
