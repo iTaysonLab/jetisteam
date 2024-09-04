@@ -14,6 +14,6 @@ interface AuthComponent {
     fun onPasswordChanged(value: String)
 
     enum class SignInState {
-        NeedInformation, CanSignIn, Processing, InvalidInformation
+        NeedInformation, CanSignIn, Processing, InvalidInformation, RpcError
     }
 }

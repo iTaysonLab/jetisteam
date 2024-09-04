@@ -20,7 +20,6 @@ fun SignInScreen(
         when (val child = it.instance) {
             is SignRootComponent.Child.SignIn -> AuthScreen(child.component)
             is SignRootComponent.Child.TwoFactor -> TwoFactorScreen(child.component)
-            is SignRootComponent.Child.WebView -> AuthScreen(child.component)
         }
     }
 }

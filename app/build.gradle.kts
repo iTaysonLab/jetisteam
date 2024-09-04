@@ -100,6 +100,7 @@ dependencies {
 
     implementation(libs.decompose)
     implementation(libs.decomposeExtensionCompose)
+    implementation(libs.decomposeExtensionComposeExperimental)
     implementation(libs.kotlinxCollections)
 
     implementation(libs.koin)

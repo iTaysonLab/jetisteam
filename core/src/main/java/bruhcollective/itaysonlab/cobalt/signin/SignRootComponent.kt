@@ -11,6 +11,5 @@ interface SignRootComponent {
     sealed interface Child {
         class SignIn(val component: AuthComponent) : Child
         class TwoFactor(val component: TwoFactorComponent) : Child
-        class WebView(val component: AuthComponent) : Child
     }
 }

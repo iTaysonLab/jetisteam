@@ -12,7 +12,7 @@ import org.koin.core.component.inject
 
 internal class DefaultGuardOnboardingComponent (
     componentContext: ComponentContext,
-    private val onSmsSent: (SgCreationResult.SmsSent) -> Unit,
+    private val onSmsSent: (SgCreationResult.AwaitingConfirmation) -> Unit,
     private val onDuplicateRequest: () -> Unit
 ): GuardOnboardingComponent, ComponentContext by componentContext, CoroutineScope by componentContext.coroutineScope(), KoinComponent {
     private val steam by inject<SteamClient>()
@@ -28,7 +28,7 @@ internal class DefaultGuardOnboardingComponent (
                     onDuplicateRequest()
                 }
 
-                is SgCreationResult.SmsSent -> {
+                is SgCreationResult.AwaitingConfirmation -> {
                     onSmsSent(result)
                 }
 

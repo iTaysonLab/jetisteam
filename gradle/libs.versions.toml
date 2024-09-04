@@ -23,14 +23,14 @@ kmmViewModelVersion = "1.0.0-ALPHA-5"
 kmmNativeCoroutinesVersion = "1.0.0-ALPHA-7"
 
 # decompose
-decomposeVersion = "3.0.0-alpha09"
-essentyVersion = "2.0.0-alpha07"
+decomposeVersion = "3.2.0-alpha05"
+essentyVersion = "2.2.0-alpha04"
 
 # mvikotlin
-mvikotlin = "4.0.0-alpha02"
+mvikotlin = "4.2.0"
 
 # android
-androidPluginVersion = "8.5.2"
+androidPluginVersion = "8.6.0"
 composeCompilerVersion = "1.4.7"
 lifecycleVersion = "2.8.4"
 hiltVersion = "2.47"
@@ -53,7 +53,7 @@ junit = "4.13.2"
 appcompat = "1.6.1"
 
 # ksteam
-ksteam = "r38"
+ksteam = "r40"
 
 # camera
 camerax = "1.4.0-rc01"
@@ -157,6 +157,7 @@ hiltGradle = { module = "com.google.dagger:hilt-android-gradle-plugin", version.
 # decompose
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decomposeVersion" }
 decomposeExtensionCompose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decomposeVersion" }
+decomposeExtensionComposeExperimental = { module = "com.arkivanov.decompose:extensions-compose-experimental", version.ref = "decomposeVersion" }
 essentyLifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "essentyVersion" }
 essentyLifecycleCoroutines = { module = "com.arkivanov.essenty:lifecycle-coroutines", version.ref = "essentyVersion" }
 essentyStateKeeper = { module = "com.arkivanov.essenty:state-keeper", version.ref = "essentyVersion" }

@@ -12,7 +12,7 @@ import org.koin.core.component.inject
 
 internal class DefaultGuardAlreadyExistsAlertComponent (
     componentContext: ComponentContext,
-    private val onConfirm: (SgCreationResult.SmsSent) -> Unit,
+    private val onConfirm: (SgCreationResult.AwaitingConfirmation) -> Unit,
     private val onCancel: () -> Unit
 ): GuardAlreadyExistsAlertComponent, CoroutineScope by componentContext.coroutineScope(), ComponentContext by componentContext, KoinComponent {
     private val steamClient by inject<SteamClient>()
@@ -26,7 +26,7 @@ internal class DefaultGuardAlreadyExistsAlertComponent (
             isConfirmingReplacement.value = false
 
             when (val result = steamClient.ksteam.guard.initializeSgMoving()) {
-                is SgCreationResult.SmsSent -> {
+                is SgCreationResult.AwaitingConfirmation -> {
                     onConfirm(result)
                 }
 

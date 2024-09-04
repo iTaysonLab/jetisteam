@@ -1,140 +1,196 @@
 package bruhcollective.itaysonlab.cobalt.signin.pages
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.sharp.ArrowBack
-import androidx.compose.material.icons.sharp.Check
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.sharp.ArrowBack
 import androidx.compose.material.icons.sharp.SecurityUpdateGood
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.signin.tfa.TwoFactorComponent
-import bruhcollective.itaysonlab.cobalt.ui.components.CobaltDivider
-import bruhcollective.itaysonlab.cobalt.ui.components.CobaltTextField
-import bruhcollective.itaysonlab.cobalt.ui.components.InlineMonoButton
+import bruhcollective.itaysonlab.cobalt.ui.components.ResizableCircularIndicator
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import soup.compose.material.motion.animation.materialSharedAxisY
+import soup.compose.material.motion.animation.rememberSlideDistance
 
-@OptIn(ExperimentalTextApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TwoFactorScreen(
     component: TwoFactorComponent
 ) {
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+
     val code by component.code.subscribeAsState()
+    val codeSource by component.codeSource.subscribeAsState()
+    val codeState by component.state.subscribeAsState()
 
     val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
+    val snackState = remember { SnackbarHostState() }
+    val slideDistance = rememberSlideDistance()
+
+    val isLoading = codeState == TwoFactorComponent.State.SubmittingCode
+    val canSubmitCode = codeState == TwoFactorComponent.State.CanSubmitCode
+    val didErrorOccur = codeState == TwoFactorComponent.State.RpcError || codeState == TwoFactorComponent.State.WrongCode
+
+    LaunchedEffect(didErrorOccur) {
+        if (codeState == TwoFactorComponent.State.WrongCode) {
+            snackState.showSnackbar(message = context.getString(R.string.auth_error_invalid_2fa))
+        } else if (codeState == TwoFactorComponent.State.RpcError) {
+            snackState.showSnackbar(message = context.getString(R.string.auth_error_rpc_error))
+        }
+    }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 
-    Box(
-        Modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .imePadding()
-            .padding(bottom = 16.dp)
-    ) {
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {
+                Text(text = stringResource(R.string.auth_2fa_title,))
+            }, navigationIcon = {
+                IconButton(
+                    onClick = component::onBackClicked,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Sharp.ArrowBack,
+                        contentDescription = null,
+                        modifier = Modifier
+                    )
+                }
+            })
+        }, snackbarHost = {
+            SnackbarHost(hostState = snackState)
+        }
+    ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.padding(innerPadding).padding(horizontal = 16.dp).verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            IconButton(
-                onClick = component::onBackClicked,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Sharp.ArrowBack,
-                    contentDescription = null,
-                    modifier = Modifier
-                )
+            Text(
+                text = when (codeSource) {
+                    is TwoFactorComponent.CodeSource.SteamGuard -> stringResource(R.string.auth_2fa_method_guard)
+                    TwoFactorComponent.CodeSource.EmailCode -> stringResource(R.string.auth_2fa_method_email)
+                    TwoFactorComponent.CodeSource.EmailConfirmation -> stringResource(R.string.auth_2fa_method_email_automatic)
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+            )
+
+            if ((codeSource as? TwoFactorComponent.CodeSource.SteamGuard)?.canAutomaticallyConfirm == true) {
+                Card {
+                    ListItem(headlineContent = {
+                        Text(stringResource(R.string.auth_2fa_method_guard_automatic))
+                    }, leadingContent = {
+                        Icon(imageVector = Icons.Sharp.SecurityUpdateGood, contentDescription = null)
+                    }, colors = ListItemDefaults.colors(containerColor = Color.Transparent))
+                }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            if (codeSource != TwoFactorComponent.CodeSource.EmailConfirmation) {
+                OutlinedTextField(
+                    isError = didErrorOccur,
+                    value = code,
+                    onValueChange = component::onCodeChanged,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrectEnabled = false,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    singleLine = true,
+                    label = {
+                        Text(stringResource(R.string.auth_field_2fa))
+                    }, keyboardActions = KeyboardActions(onDone = {
+                        if (canSubmitCode) {
+                            focusManager.clearFocus()
+                            component.submitCode()
+                        }
+                    }),
+                    shape = MaterialTheme.shapes.medium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester)
+                        .focusTarget()
+                )
 
-            Text(
-                text = "Two-factor authorization",
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
+                Button(
+                    onClick = {
+                        focusManager.clearFocus()
+                        component.submitCode()
+                    },
+                    colors = ButtonDefaults.buttonColors(),
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    enabled = isLoading.not() && canSubmitCode,
+                    contentPadding = PaddingValues(16.dp),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Text(text = stringResource(R.string.auth_action_2fa_submit))
 
-            Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.weight(1f))
 
-            Text(
-                text = "To sign in, enter the Steam Guard code.",
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            CobaltDivider()
-
-            ListItem(headlineContent = {
-                Text(text = "You can also confirm the authorization in any supported Steam authenticator.")
-            }, leadingContent = {
-                Icon(imageVector = Icons.Sharp.SecurityUpdateGood, contentDescription = null)
-            }, colors = ListItemDefaults.colors(containerColor = Color.Transparent), modifier = Modifier.padding(vertical = 8.dp))
-
-            CobaltDivider()
-
-            CobaltTextField(
-                value = code,
-                onValueChange = component::onCodeChanged,
-                label = "Code",
-                placeholder = "1A2BC",
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Text
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .focusRequester(focusRequester)
-            )
-
-            CobaltDivider()
-
-            InlineMonoButton(
-                icon = {
-                    Icon(
-                        imageVector = Icons.Sharp.Check,
-                        contentDescription = null
-                    )
-                },
-                title = "Submit code",
-                onClick = component::onBackClicked
-            )
+                    AnimatedContent(targetState = isLoading, transitionSpec = {
+                        materialSharedAxisY(forward = true, slideDistance = slideDistance)
+                    }, label = "") { showSpinner ->
+                        if (showSpinner) {
+                            ResizableCircularIndicator(
+                                indicatorSize = 24.dp,
+                                strokeWidth = 2.dp,
+                                color = LocalContentColor.current
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                                contentDescription = null,
+                                tint = LocalContentColor.current
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

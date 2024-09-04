@@ -1,10 +1,11 @@
 package bruhcollective.itaysonlab.cobalt.signin.auth
 
-import bruhcollective.itaysonlab.cobalt.core.decompose.componentCoroutineScope
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.ksteam.handlers.Account
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -12,8 +13,7 @@ import org.koin.core.component.inject
 internal class DefaultAuthComponent (
     componentContext: ComponentContext,
     private val onProceedToTfa: () -> Unit
-): AuthComponent, ComponentContext by componentContext, KoinComponent {
-    private val scope = componentCoroutineScope()
+): AuthComponent, ComponentContext by componentContext, KoinComponent, CoroutineScope by componentContext.coroutineScope() {
 
     private val steamClient: SteamClient by inject()
 
@@ -22,13 +22,18 @@ internal class DefaultAuthComponent (
     override val signInState = MutableValue(AuthComponent.SignInState.NeedInformation)
 
     override fun trySignIn() {
-        scope.launch {
+        launch {
             signInState.value = AuthComponent.SignInState.Processing
 
-            val signTry = steamClient.ksteam.account.signIn(
-                username = username.value,
-                password = password.value
-            )
+            val signTry = kotlin.runCatching {
+                steamClient.ksteam.account.signIn(
+                    username = username.value,
+                    password = password.value
+                )
+            }.getOrElse {
+                it.printStackTrace()
+                Account.AuthorizationResult.RpcError
+            }
 
             when (signTry) {
                 Account.AuthorizationResult.InvalidPassword -> {
@@ -36,10 +41,11 @@ internal class DefaultAuthComponent (
                 }
 
                 Account.AuthorizationResult.RpcError -> {
-                    signInState.value = AuthComponent.SignInState.InvalidInformation
+                    signInState.value = AuthComponent.SignInState.RpcError
                 }
 
                 Account.AuthorizationResult.ProceedToTfa -> {
+                    signInState.value = AuthComponent.SignInState.CanSignIn
                     onProceedToTfa()
                 }
             }

@@ -1,9 +1,9 @@
 package bruhcollective.itaysonlab.cobalt
 
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
+import bruhcollective.itaysonlab.cobalt.navigation.CobaltContainerComponent
 import bruhcollective.itaysonlab.cobalt.signin.DefaultSignRootComponent
 import bruhcollective.itaysonlab.cobalt.signin.SignRootComponent
-import bruhcollective.itaysonlab.cobalt.navigation.CobaltContainerComponent
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation

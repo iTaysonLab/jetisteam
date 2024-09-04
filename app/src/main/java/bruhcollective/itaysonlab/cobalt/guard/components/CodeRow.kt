@@ -22,6 +22,7 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.input.KeyboardType
@@ -97,7 +98,8 @@ fun CodeRow(
                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, fontFamily = robotoMonoFontFamily),
                 keyboardOptions = KeyboardOptions(
                     autoCorrect = false,
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Text
+                    // keyboardType = KeyboardType.Number
                 )
             )
         }

@@ -28,6 +28,7 @@ import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
+import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
@@ -177,7 +178,7 @@ class DefaultGuardComponent(
                 GuardComponent.AlertChild.SetupOverrideExisting(
                     DefaultGuardAlreadyExistsAlertComponent(componentContext, onConfirm = { msg ->
                         alertNavigation.dismiss()
-                        childNavigation.push(
+                        childNavigation.pushNew(
                             Config.SetupEnterSmsCode(
                                 steamId = config.steamId,
                                 hint = msg.hint,

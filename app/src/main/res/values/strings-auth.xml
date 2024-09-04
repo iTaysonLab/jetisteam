@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_header_title">Welcome to %s!</string>
+
+    <string name="auth_hide_password">Hide password</string>
+    <string name="auth_show_password">Show password</string>
+
+    <string name="auth_field_username">Username</string>
+    <string name="auth_field_username_hint">example</string>
+    <string name="auth_field_password">Password</string>
+    <string name="auth_field_password_hint">••••••••••</string>
+    <string name="auth_action_sign_in">Sign in with Steam</string>
+
+    <string name="auth_error_invalid_data">Invalid username or password.</string>
+    <string name="auth_error_rpc_error">An error occurred while connecting to the network.</string>
+    <string name="auth_error_invalid_2fa">Invalid 2FA code was provided.</string>
+
+    <string name="auth_disclaimer_p0">By signing in, you agree to</string>
+    <string name="auth_disclaimer_p1">Steam SLA</string>
+    <string name="auth_disclaimer_p2">and</string>
+    <string name="auth_disclaimer_p3">Privacy Policy</string>
+    <string name="auth_disclaimer_p4">, as well as with </string>
+    <string name="auth_disclaimer_p5">Cobalt\'s Privacy Policy</string>
+    <string name="auth_disclaimer_p6">.\n\nCobalt is an unofficial Steam Network client and not affiliated, created, endorsed or connected to Valve.\n\nYour data is only sent to Valve servers and nowhere else.</string>
+
+    <string name="auth_2fa_title">Two-factor authorization</string>
+    <string name="auth_2fa_method_guard">To sign in, enter the Steam Guard code.</string>
+    <string name="auth_2fa_method_guard_automatic">You can also confirm the authorization in any supported Steam authenticator.</string>
+    <string name="auth_2fa_method_email">To sign in, enter the code sent to the linked email.</string>
+    <string name="auth_2fa_method_email_automatic">To sign in, click the confirmation link sent to the linked email.</string>
+    <string name="auth_field_2fa">Code</string>
+    <string name="auth_field_2fa_hint">1A2B3</string>
+    <string name="auth_action_2fa_submit">Continue</string>
+</resources>
