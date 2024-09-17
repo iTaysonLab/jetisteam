@@ -1,5 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.navigation
 
+import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopChild
+import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopComponent
 import bruhcollective.itaysonlab.cobalt.core.decompose.ViewModel
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.cobalt.guard.DefaultGuardComponent
@@ -8,9 +10,12 @@ import bruhcollective.itaysonlab.cobalt.news.DefaultNewsRootComponent
 import bruhcollective.itaysonlab.cobalt.news.NewsRootComponent
 import bruhcollective.itaysonlab.cobalt.profile.MyProfileComponent
 import bruhcollective.itaysonlab.cobalt.profile.ProfileComponent
+import bruhcollective.itaysonlab.cobalt.root_flows.DefaultRootLibraryFlowComponent
+import bruhcollective.itaysonlab.cobalt.root_flows.RootLibraryFlowComponent
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.MutableValue
@@ -37,7 +42,7 @@ class CobaltContainerComponent(
 
     val childStack: Value<ChildStack<*, Child>> = childStack(
         source = navigation,
-        initialConfiguration = Config.Home,
+        initialConfiguration = Config.News,
         handleBackButton = true,
         childFactory = ::createChild,
         serializer = Config.serializer()
@@ -48,9 +53,10 @@ class CobaltContainerComponent(
 
     private fun createChild(config: Config, componentContext: ComponentContext): Child {
         return when (config) {
-            Config.Home -> Child.Home(newsComponent(componentContext))
+            Config.News -> Child.News(newsComponent(componentContext))
             Config.Guard -> Child.Guard(guardComponent(componentContext))
             Config.MyProfile -> Child.MyProfile(myProfileComponent(componentContext))
+            Config.Library -> Child.Library(libraryComponent(componentContext))
         }
     }
 
@@ -66,11 +72,23 @@ class CobaltContainerComponent(
         return MyProfileComponent(componentContext)
     }
 
+    private fun libraryComponent(componentContext: ComponentContext): RootLibraryFlowComponent {
+        return DefaultRootLibraryFlowComponent(componentContext)
+    }
+
     fun switch(to: NavigationItem) {
+        if (to == currentNavigationItem.value) {
+            (childStack.active.instance as? HandlesScrollToTopChild)?.let { child ->
+                child.scrollToTop()
+                return
+            }
+        }
+
         when (to) {
-            NavigationItem.Home -> navigation.bringToFront(Config.Home)
+            NavigationItem.Home -> navigation.bringToFront(Config.News)
             NavigationItem.Guard -> navigation.bringToFront(Config.Guard)
             NavigationItem.MyProfile -> navigation.bringToFront(Config.MyProfile)
+            NavigationItem.Library -> navigation.bringToFront(Config.Library)
         }
     }
 
@@ -81,31 +99,44 @@ class CobaltContainerComponent(
     @Serializable
     private sealed interface Config {
         @Serializable
-        data object Home : Config
+        data object News : Config
 
         @Serializable
         data object Guard : Config
+
+        @Serializable
+        data object Library : Config
 
         @Serializable
         data object MyProfile : Config
     }
 
     sealed interface Child {
-        data class Home(val component: NewsRootComponent) : Child
-        data class Guard(val component: GuardComponent) : Child
+        data class News(val component: NewsRootComponent) : Child
+
+        data class Guard(val component: GuardComponent) : Child, HandlesScrollToTopChild {
+            override fun scrollToTop() = component.scrollToTop()
+        }
+
+        data class Library(val component: RootLibraryFlowComponent) : Child, HandlesScrollToTopChild {
+            override fun scrollToTop() = component.scrollToTop()
+        }
+
         data class MyProfile(val component: ProfileComponent) : Child
     }
 
     enum class NavigationItem {
         Home,
         Guard,
+        Library,
         MyProfile;
 
         companion object {
             fun fromChild(child: Child) = when (child) {
-                is Child.Home -> Home
+                is Child.News -> Home
                 is Child.Guard -> Guard
                 is Child.MyProfile -> MyProfile
+                is Child.Library -> Library
             }
         }
     }

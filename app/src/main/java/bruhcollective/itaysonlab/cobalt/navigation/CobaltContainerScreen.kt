@@ -6,9 +6,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.Feed
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Security
+import androidx.compose.material.icons.automirrored.filled.Feed
+import androidx.compose.material.icons.automirrored.filled.LibraryBooks
+import androidx.compose.material.icons.automirrored.twotone.Feed
+import androidx.compose.material.icons.automirrored.twotone.LibraryBooks
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.twotone.Person
+import androidx.compose.material.icons.twotone.Security
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -24,6 +29,7 @@ import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.guard.GuardScreen
 import bruhcollective.itaysonlab.cobalt.news.NewsScreen
 import bruhcollective.itaysonlab.cobalt.profile.ProfileScreen
+import bruhcollective.itaysonlab.cobalt.root_flows.RootLibraryFlowScreen
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.IslandAnimations
 import bruhcollective.itaysonlab.cobalt.ui.components.SteamConnectionRow
@@ -56,28 +62,39 @@ fun CobaltContainerScreen(
 
                 NavigationBar {
                     navbarItems.forEach { item ->
+                        val deselectedIcon = when (item) {
+                            CobaltContainerComponent.NavigationItem.Home -> Icons.AutoMirrored.TwoTone.Feed
+                            CobaltContainerComponent.NavigationItem.MyProfile -> Icons.TwoTone.Person
+                            CobaltContainerComponent.NavigationItem.Guard -> Icons.TwoTone.Security
+                            CobaltContainerComponent.NavigationItem.Library -> Icons.AutoMirrored.TwoTone.LibraryBooks
+                        }
+
+                        val selectedIcon = when (item) {
+                            CobaltContainerComponent.NavigationItem.Home -> Icons.AutoMirrored.Filled.Feed
+                            CobaltContainerComponent.NavigationItem.MyProfile -> Icons.Filled.Person
+                            CobaltContainerComponent.NavigationItem.Guard -> Icons.Filled.Security
+                            CobaltContainerComponent.NavigationItem.Library -> Icons.AutoMirrored.Filled.LibraryBooks
+                        }
+
+                        val text = stringResource(
+                            id = when (item) {
+                                CobaltContainerComponent.NavigationItem.Home -> R.string.tab_news
+                                CobaltContainerComponent.NavigationItem.MyProfile -> R.string.tab_profile
+                                CobaltContainerComponent.NavigationItem.Guard -> R.string.tab_guard
+                                CobaltContainerComponent.NavigationItem.Library -> R.string.tab_library
+                            }
+                        )
+
                         NavigationBarItem(
                             selected = currentNavItem == item,
-                            onClick = {
-                                component.switch(item)
-                            },
+                            onClick = { component.switch(item) },
                             icon = {
                                 Icon(
-                                    imageVector = when (item) {
-                                        CobaltContainerComponent.NavigationItem.Home -> Icons.AutoMirrored.Rounded.Feed
-                                        CobaltContainerComponent.NavigationItem.MyProfile -> Icons.Rounded.Person
-                                        CobaltContainerComponent.NavigationItem.Guard -> Icons.Rounded.Security
-                                    },
-                                    contentDescription = null,
+                                    imageVector = if (currentNavItem == item) selectedIcon else deselectedIcon,
+                                    contentDescription = text,
                                 )
                             }, label = {
-                                Text(text = stringResource(
-                                    id = when (item) {
-                                        CobaltContainerComponent.NavigationItem.Home -> R.string.tab_news
-                                        CobaltContainerComponent.NavigationItem.MyProfile -> R.string.tab_profile
-                                        CobaltContainerComponent.NavigationItem.Guard -> R.string.tab_guard
-                                    }
-                                ))
+                                Text(text = text)
                             }
                         )
                     }
@@ -86,20 +103,28 @@ fun CobaltContainerScreen(
         }, contentWindowInsets = EmptyWindowInsets
     ) { innerPadding ->
         Children(stack = component.childStack, animation = stackAnimation { _ ->
-            val spec: FiniteAnimationSpec<Float> = tween(durationMillis = MotionConstants.DefaultMotionDuration, easing = FastOutSlowInEasing)
+            val spec: FiniteAnimationSpec<Float> = tween(
+                durationMillis = MotionConstants.DefaultMotionDuration,
+                easing = FastOutSlowInEasing
+            )
 
-            val direction = if (previousNavItem != null && component.getNavigationItemIndex(currentNavItem) > component.getNavigationItemIndex(previousNavItem)) {
-                IslandAnimations.Direction.LEFT
-            } else {
-                IslandAnimations.Direction.RIGHT
-            }
+            val direction =
+                if (previousNavItem != null && component.getNavigationItemIndex(currentNavItem) > component.getNavigationItemIndex(
+                        previousNavItem
+                    )
+                ) {
+                    IslandAnimations.Direction.LEFT
+                } else {
+                    IslandAnimations.Direction.RIGHT
+                }
 
             fade(spec) + slideWithDirection(direction, spec)
         }, modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
             when (val child = it.instance) {
-                is CobaltContainerComponent.Child.Home -> NewsScreen(child.component)
+                is CobaltContainerComponent.Child.News -> NewsScreen(child.component)
                 is CobaltContainerComponent.Child.MyProfile -> ProfileScreen(child.component)
                 is CobaltContainerComponent.Child.Guard -> GuardScreen(child.component)
+                is CobaltContainerComponent.Child.Library -> RootLibraryFlowScreen(child.component)
             }
         }
     }

@@ -1,5 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.guard
 
+import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopChild
+import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopComponent
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.DefaultGuardIncomingSessionComponent
 import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.DefaultGuardRecoveryCodeSheetComponent
@@ -26,10 +28,13 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.items
 import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.popToFirst
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
+import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -46,6 +51,8 @@ class DefaultGuardComponent(
     private val alertNavigation = SlotNavigation<AlertConfig>()
     private val childNavigation = StackNavigation<Config>()
 
+    override val scrollToTopFlag = MutableValue<Boolean>(false)
+
     override val stack: Value<ChildStack<*, GuardComponent.Child>> = childStack(
         source = childNavigation,
         childFactory = ::createChild,
@@ -60,6 +67,18 @@ class DefaultGuardComponent(
         serializer = AlertConfig.serializer()
     )
 
+    override fun scrollToTop() {
+        if (stack.items.size > 1) {
+            childNavigation.popToFirst()
+        } else {
+            (stack.active.instance as? HandlesScrollToTopChild)?.scrollToTop()
+        }
+    }
+
+    override fun resetScrollToTop() {
+
+    }
+
     private fun createChild(
         config: Config,
         componentContext: ComponentContext
@@ -70,7 +89,7 @@ class DefaultGuardComponent(
                     component = DefaultGuardOnboardingComponent(
                         componentContext = componentContext,
                         onSmsSent = { msg ->
-                            childNavigation.push(
+                            childNavigation.pushNew(
                                 Config.SetupEnterSmsCode(
                                     steamId = steamClient.currentSteamId.id,
                                     hint = msg.hint,
@@ -124,11 +143,11 @@ class DefaultGuardComponent(
                         }, onDeleteClicked = {
                             alertNavigation.activate(AlertConfig.RemoveGuard(steamId = config.steamId))
                         }, onConfirmationClicked = { confirmation ->
-                            childNavigation.push(Config.ConfirmationDetail(steamId = config.steamId, confirmation = confirmation))
+                            childNavigation.pushNew(Config.ConfirmationDetail(steamId = config.steamId, confirmation = confirmation))
                         }, onRecoveryCodeClicked = { code ->
                             alertNavigation.activate(AlertConfig.RecoveryCode(steamId = config.steamId, code = code))
                         }, onSessionClicked = { session ->
-                            childNavigation.push(Config.SessionDetail(steamId = config.steamId, session = session))
+                            childNavigation.pushNew(Config.SessionDetail(steamId = config.steamId, session = session))
                         }, onIncomingSessionAppeared = { id ->
                             alertNavigation.activate(AlertConfig.IncomingSession(steamId = config.steamId, sessionId = id))
                         }

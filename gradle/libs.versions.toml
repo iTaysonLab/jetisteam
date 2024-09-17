@@ -38,8 +38,8 @@ androidCoreKtxVersion = "1.13.1"
 androidActivityKtxVersion = "1.9.1"
 
 # compose
-composeVersion = "1.7.0-rc01"
-composeMaterial3Version = "1.3.0-rc01"
+composeVersion = "1.7.0"
+composeMaterial3Version = "1.3.0"
 compose_motion = "1.0.6"
 accompanist = "0.35.0-alpha"
 

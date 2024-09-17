@@ -6,6 +6,7 @@ import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.coroutines.withLifecycle
 import com.arkivanov.essenty.lifecycle.doOnCreate
@@ -32,6 +33,16 @@ internal class DefaultGuardInstanceComponent(
     private val onConfirmationClicked: (MobileConfirmationItem) -> Unit,
     private val onIncomingSessionAppeared: (Long) -> Unit
 ): GuardInstanceComponent, ComponentContext by componentContext, KoinComponent, CoroutineScope by componentContext.coroutineScope() {
+    override val scrollToTopFlag = MutableValue<Boolean>(false)
+
+    override fun scrollToTop() {
+        scrollToTopFlag.value = true
+    }
+
+    override fun resetScrollToTop() {
+        scrollToTopFlag.value = false
+    }
+
     private val store = instanceKeeper.getStore {
         val steamClient = get<ExtendedSteamClient>()
 

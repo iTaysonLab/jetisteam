@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "981591256999",
+    "project_id": "cobalt-b3b90",
+    "storage_bucket": "cobalt-b3b90.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981591256999:android:561aac366b5bb1fcbd9082",
+        "android_client_info": {
+          "package_name": "bruhcollective.itaysonlab.cobalt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcAUEiWTKApmNrwyPrnOdMDbxn7HbsXbs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981591256999:android:112e578fee338204bd9082",
+        "android_client_info": {
+          "package_name": "bruhcollective.itaysonlab.cobalt.release"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcAUEiWTKApmNrwyPrnOdMDbxn7HbsXbs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

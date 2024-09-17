@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_library">Library</string>
+
+    <string name="library_section_devices">Devices</string>
+    <string name="library_section_games">Games</string>
+    <string name="library_section_screenshots">Captures</string>
+
+    <string name="library_games_chip_collections">Collections</string>
+    <string name="library_games_chip_collections_default">All Games</string>
+    <string name="library_games_chip_filter">Filter</string>
+    <string name="library_games_chip_sort">Sort by</string>
+    <string name="library_games_chip_ownership">Family Sharing</string>
+
+    <string name="library_games_collection_dialog">Collections</string>
+    <string name="library_games_collection_favorite">Favorite</string>
+    <string name="library_games_collection_hidden">Hidden</string>
+
+    <string name="library_games_ownership_type_dialog">Family Sharing</string>
+    <string name="library_games_ownership_type_all">Allow</string>
+    <string name="library_games_ownership_type_all_desc">Display owned and shared games</string>
+    <string name="library_games_ownership_type_owned">Hide</string>
+    <string name="library_games_ownership_type_owned_desc">Display only owned games</string>
+
+    <string name="library_screenshots_chip_apps">Games</string>
+    <string name="library_screenshots_chip_sort">Sort by</string>
+</resources>

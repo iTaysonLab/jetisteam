@@ -1,5 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.guard
 
+import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopChild
+import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopComponent
 import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardRecoveryCodeSheetComponent
 import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardRemoveSheetComponent
 import bruhcollective.itaysonlab.cobalt.guard.confirmation.GuardConfirmationComponent
@@ -16,7 +18,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
 
-interface GuardComponent: BackHandlerOwner {
+interface GuardComponent: BackHandlerOwner, HandlesScrollToTopComponent {
     val stack: Value<ChildStack<*, Child>>
     val alertSlot: Value<ChildSlot<*, AlertChild>>
 
@@ -41,7 +43,9 @@ interface GuardComponent: BackHandlerOwner {
 
         class Instance (
             val component: GuardInstanceComponent
-        ): Child
+        ): Child, HandlesScrollToTopChild {
+            override fun scrollToTop() = component.scrollToTop()
+        }
 
         class ActiveSessionDetail (
             val component: GuardSessionDetailComponent

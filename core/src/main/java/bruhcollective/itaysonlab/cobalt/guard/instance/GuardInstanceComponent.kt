@@ -1,10 +1,11 @@
 package bruhcollective.itaysonlab.cobalt.guard.instance
 
+import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopComponent
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
 import kotlinx.coroutines.flow.StateFlow
 
-interface GuardInstanceComponent {
+interface GuardInstanceComponent: HandlesScrollToTopComponent {
     val state: StateFlow<GuardInstanceState>
 
     fun openQrScanner()

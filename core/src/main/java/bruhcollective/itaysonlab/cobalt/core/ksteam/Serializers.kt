@@ -1,0 +1,7 @@
+package bruhcollective.itaysonlab.cobalt.core.ksteam
+
+import bruhcollective.itaysonlab.ksteam.models.SteamId
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializer
+
+object SteamIdSerializer

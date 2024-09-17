@@ -1,5 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.library.devices
 
-interface DevicesComponent {
+import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopComponent
+
+interface DevicesComponent: HandlesScrollToTopComponent {
 
 }

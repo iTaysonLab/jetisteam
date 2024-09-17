@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.composeCompiler)
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
     // id("com.vk.vkompose") version "0.4.2"
 }
 
@@ -22,8 +24,8 @@ android {
         applicationId = "bruhcollective.itaysonlab.cobalt"
         minSdk = 21
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "alpha 2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -33,13 +35,11 @@ android {
 
     buildTypes {
         release {
+            applicationIdSuffix = ".release"
+
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-
-            ndk {
-                abiFilters += listOf("arm64-v8a")
-            }
         }
     }
 
@@ -72,6 +72,9 @@ android {
 }
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+    implementation("com.google.firebase:firebase-crashlytics")
+
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
     implementation("me.onebone:toolbar-compose:2.3.5")

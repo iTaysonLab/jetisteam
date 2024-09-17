@@ -41,6 +41,7 @@ import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.IndicatorBehindScrollableTabRow
 import bruhcollective.itaysonlab.cobalt.ui.components.tabIndicatorOffset
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -48,6 +49,7 @@ import java.util.Locale
 fun GuardInstanceScreen(
     component: GuardInstanceComponent,
 ) {
+    // val scrollToTopFlag by component.scrollToTopFlag.subscribeAsState()
     val state by component.state.collectAsState()
 
     val pagerState = rememberPagerState { 3 }
