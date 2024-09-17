@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+    <title>Cobalt EULA + Privacy Policy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<body class="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white p-8">
+<h1 class="text-3xl">Cobalt's User Agreement and Privacy Policy</h1>
+<i class="text-zinc-500 dark:text-zinc-400"><b>Revision 1</b>, date of publishing: September 16,
+    2024</i>
+<br>
+<br>
+<ul class="text-zinc-500 dark:text-zinc-400 space-y-4">
+    <li>
+        <b class="text-zinc-900 dark:text-white">Cobalt is distributed "as is".</b><br>
+        The application comes with <b>ABSOLUTELY NO WARRANTY</b> - developer is not responsible for
+        any damages on your account or device.
+        <br>
+        Cobalt is not endorsed, sponsored, approved, developed by Valve Corporation or related to
+        it. All trademarks are registered and protected properties of respective owners.
+    </li>
+    <li>
+        <b class="text-zinc-900 dark:text-white">Cobalt does not utilize own servers.</b><br>
+        To access data, Cobalt uses <b>your</b> Steam account credentials. User data is only stored
+        on and transferred between the user's device and Steam servers,
+        operated by Valve and covered by their own <a
+            href="https://store.steampowered.com/privacy_agreement/" target="_blank"
+            class="text-blue-600 dark:text-blue-400">privacy
+        policy</a> and <a href="https://store.steampowered.com/subscriber_agreement/"
+                          target="_blank" class="text-blue-600 dark:text-blue-400">subscriber
+        agreement</a>. <b>You must agree to this terms in order to use Cobalt.</b>
+    </li>
+    <li>
+        <b class="text-zinc-900 dark:text-white">Cobalt ensures that user authorization data is
+            secure.</b><br>
+        <ul class="list-disc">
+            <li>Every network request is encrypted. WebSocket connections are made on WSS protocol,
+                making use of TLS encryption. HTTP connections are not allowed, requiring the usage
+                of HTTPS.
+            </li>
+            <li>Authorization data is encrypted. Access tokens and (optional, if set) Steam Guard
+                options are saved in a storage encrypted by a unique generated key. <b>Your username
+                    and password are never saved on the device and are only transmitted once per
+                    authorization attempt.</b>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <b class="text-zinc-900 dark:text-white">Cobalt may send diagnostic data by using
+            third-party frameworks.</b><br>
+        For tracking application crashes, Firebase Crashlytics (a Google service) is used, that is
+        covered by <a href="https://firebase.google.com/terms/crashlytics" target="_blank"
+                      class="text-blue-600 dark:text-blue-400">Crashlytics
+        and App Distribution Terms</a>.<br>
+        Crash reports do not include sensitive data, such as: user ID, user name or other unique
+        variables that can identify the user.<br>
+        After signing in, user can opt-out of collecting such information by navigating to Profile
+        -&gt; Settings -&gt; Privacy and unchecking "Send crash reports".
+    </li>
+    <li>
+        <b class="text-zinc-900 dark:text-white">Cobalt never uses granted install-time or runtime
+            permission outside specified
+            functions.</b><br>
+        <ul class="list-disc">
+            <li>"Camera" permission is used <b>only</b> for the QR code scanner feature in the Guard
+                section. <b>This permission is not required to use the application.</b>
+            </li>
+            <li>"Internet" permission is used to communicate with Valve or Firebase servers for the
+                uses stated above. <b>This permission is required for application functionality and
+                    is granted by the system automatically.</b>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <b class="text-zinc-900 dark:text-white">Cobalt is an open-source project.</b><br>
+        To verify the privacy claims, you can:
+        <ul class="list-disc">
+            <li>Visit Cobalt's GitHub page: <a href="https://github.com/itaysonlab/jetisteam"
+                                               target="_blank"
+                                               class="text-blue-600 dark:text-blue-400">https://github.com/itaysonlab/jetisteam</a>
+            </li>
+            <li>Visit kSteam's GitHub page: <a href="https://github.com/itaysonlab/ksteam"
+                                               target="_blank"
+                                               class="text-blue-600 dark:text-blue-400">https://github.com/itaysonlab/ksteam</a>
+            </li>
+        </ul>
+        <i>kSteam is a separate project that is used in Cobalt to communicate with Steam
+            servers.</i>
+    </li>
+    <li>
+        <b class="text-zinc-900 dark:text-white">If you have any other concerns, you can reach the
+            developer.</b><br>
+        You can send an email to <code>cobalt [at] vkx [dot] app</code> <i>(email address is
+        obfuscated to prevent scraping)</i>. Your questions will be answered as soon as possible.
+    </li>
+</ul>
+</body>
+</html>
