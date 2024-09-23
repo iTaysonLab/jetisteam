@@ -1,8 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.navigation
 
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -35,13 +34,13 @@ import bruhcollective.itaysonlab.cobalt.ui.components.IslandAnimations
 import bruhcollective.itaysonlab.cobalt.ui.components.SteamConnectionRow
 import bruhcollective.itaysonlab.cobalt.ui.rememberPrevious
 import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.Direction
 import com.arkivanov.decompose.extensions.compose.stack.animation.StackAnimator
 import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.plus
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimator
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import soup.compose.material.motion.MotionConstants
 
 @Composable
 fun CobaltContainerScreen(
@@ -103,16 +102,17 @@ fun CobaltContainerScreen(
         }, contentWindowInsets = EmptyWindowInsets
     ) { innerPadding ->
         Children(stack = component.childStack, animation = stackAnimation { _ ->
-            val spec: FiniteAnimationSpec<Float> = tween(
+            /*val spec: FiniteAnimationSpec<Float> = tween(
                 durationMillis = MotionConstants.DefaultMotionDuration,
                 easing = FastOutSlowInEasing
+            )*/
+
+            val spec = spring<Float>(
+                stiffness = 500f
             )
 
             val direction =
-                if (previousNavItem != null && component.getNavigationItemIndex(currentNavItem) > component.getNavigationItemIndex(
-                        previousNavItem
-                    )
-                ) {
+                if (previousNavItem != null && component.getNavigationItemIndex(currentNavItem) > component.getNavigationItemIndex(previousNavItem)) {
                     IslandAnimations.Direction.LEFT
                 } else {
                     IslandAnimations.Direction.RIGHT
@@ -133,8 +133,15 @@ fun CobaltContainerScreen(
 private fun slideWithDirection(
     direction: IslandAnimations.Direction,
     animationSpec: FiniteAnimationSpec<Float>
-): StackAnimator = stackAnimator(animationSpec) { factor, _, content ->
-    content(Modifier.offsetXFactor(factor * if (direction == IslandAnimations.Direction.RIGHT) 1f else -1f))
+): StackAnimator = stackAnimator(animationSpec) { factor, dcDirection, content ->
+    if ((direction == IslandAnimations.Direction.RIGHT && dcDirection == Direction.ENTER_FRONT) || (direction == IslandAnimations.Direction.LEFT && dcDirection == Direction.EXIT_BACK)) {
+        content(Modifier.offsetXFactor(factor * -1f))
+    } else if ((direction == IslandAnimations.Direction.LEFT && dcDirection == Direction.ENTER_FRONT) || (direction == IslandAnimations.Direction.RIGHT && dcDirection == Direction.EXIT_BACK)) {
+        content(Modifier.offsetXFactor(factor * 1f))
+    } else {
+        // Log.d("CCS", "SWD -> $direction | ${dcDirection}")
+        content(Modifier.offsetXFactor(factor * -1f))
+    }
 }
 
 private fun Modifier.offsetXFactor(factor: Float): Modifier =

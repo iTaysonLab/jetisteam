@@ -18,14 +18,15 @@ plugins {
 
 android {
     namespace = "bruhcollective.itaysonlab.cobalt"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "bruhcollective.itaysonlab.cobalt"
         minSdk = 21
-        targetSdk = 34
-        versionCode = 2
-        versionName = "alpha 2"
+        targetSdk = 35
+
+        versionCode = 4
+        versionName = "alpha 4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -55,10 +56,6 @@ android {
 
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.13"
     }
 
     packaging {

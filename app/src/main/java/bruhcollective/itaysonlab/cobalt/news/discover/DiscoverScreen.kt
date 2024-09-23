@@ -35,9 +35,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import bruhcollective.itaysonlab.cobalt.news.entries.AddedToWishlistEntry
 import bruhcollective.itaysonlab.cobalt.news.entries.NewAchievementsEntry
 import bruhcollective.itaysonlab.cobalt.news.entries.PlayedForFirstTimeEntry
 import bruhcollective.itaysonlab.cobalt.news.entries.ReceivedNewGameEntry
+import bruhcollective.itaysonlab.cobalt.news.entries.ScreenshotPostedEntry
 import bruhcollective.itaysonlab.cobalt.ui.components.CobaltDivider
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.rememberFloatingNavigationBarScrollConnection
@@ -235,6 +237,14 @@ private fun ActivityFeedPortal(
 
         is ActivityFeedEntry.ReceivedNewGame -> {
             ReceivedNewGameEntry(feedEntry)
+        }
+
+        is ActivityFeedEntry.AddedToWishlist -> {
+            AddedToWishlistEntry(feedEntry)
+        }
+
+        is ActivityFeedEntry.ScreenshotPosted -> {
+            ScreenshotPostedEntry(feedEntry)
         }
 
         else -> {

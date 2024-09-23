@@ -1,4 +1,4 @@
-package bruhcollective.itaysonlab.cobalt.di
+package bruhcollective.itaysonlab.cobalt.platform
 
 import android.content.ActivityNotFoundException
 import android.content.Context

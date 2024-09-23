@@ -3,7 +3,9 @@ package bruhcollective.itaysonlab.cobalt.published_files
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
@@ -15,10 +17,12 @@ import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -50,7 +54,8 @@ fun PublishedFullscreenPhotoViewer(
         Box(Modifier.fillMaxSize()) {
             with(nonNullableNavSharedTransitionScope()) {
                 Box(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .sharedElement(
                             state = rememberSharedContentState(key = component.id),
                             animatedVisibilityScope = nonNullableAnimatedVisibilityScope(),
@@ -72,55 +77,33 @@ fun PublishedFullscreenPhotoViewer(
                 }
             }
 
-            LazyRow(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(padding),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp)
+            IconButton(
+                onClick = {
+
+                }, modifier = Modifier.align(Alignment.BottomStart).padding(16.dp)
             ) {
-                item {
-                    AssistChip(
-                        onClick = {},
-                        label = {
-                            Text("About")
-                        }, leadingIcon = {
-                            Icon(Icons.Rounded.Info, contentDescription = null)
-                        }
-                    )
+                Icon(Icons.Rounded.Info, contentDescription = "Information")
+            }
+
+            Row(
+                modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
+                    onClick = {
+
+                    }
+                ) {
+                    Icon(Icons.Rounded.Share, contentDescription = "Share")
                 }
 
-                item {
-                    AssistChip(
-                        onClick = {},
-                        label = {
-                            Text("Download")
-                        }, leadingIcon = {
-                            Icon(Icons.Rounded.Download, contentDescription = null)
-                        }
-                    )
-                }
+                FloatingActionButton(
+                    onClick = {
 
-                item {
-                    AssistChip(
-                        onClick = {},
-                        label = {
-                            Text("Share")
-                        }, leadingIcon = {
-                            Icon(Icons.Rounded.Share, contentDescription = null)
-                        }
-                    )
-                }
-
-                item {
-                    AssistChip(
-                        onClick = {},
-                        label = {
-                            Text("Copy link")
-                        }, leadingIcon = {
-                            Icon(Icons.Rounded.Link, contentDescription = null)
-                        }
-                    )
+                    }
+                ) {
+                    Icon(Icons.Rounded.Download, contentDescription = "Download")
                 }
             }
         }

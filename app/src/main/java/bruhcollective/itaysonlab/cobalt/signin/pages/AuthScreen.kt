@@ -253,7 +253,7 @@ fun AuthScreen(
                     append(" ")
                     withLink(
                         link = LinkAnnotation.Url(
-                            url = "https://itaysonlab.github.io/Jetisteam/privacy_policy.html",
+                            url = "https://itaysonlab.github.io/jetisteam/eula.html",
                             styles = TextLinkStyles(style = SpanStyle(color = MaterialTheme.colorScheme.primary))
                         )
                     ) {

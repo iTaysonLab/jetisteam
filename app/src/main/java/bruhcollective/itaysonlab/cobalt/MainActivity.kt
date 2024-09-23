@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity(), CoroutineScope by MainScope() {
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        startSteamClient()
 
         val rootComponent = createCobaltComponent()
 
@@ -58,11 +59,18 @@ class MainActivity : ComponentActivity(), CoroutineScope by MainScope() {
         }
     }
 
-    private fun createCobaltComponent(): AndroidCobaltComponent {
+    override fun onResume() {
+        super.onResume()
+        // startSteamClient()
+    }
+
+    private fun startSteamClient() {
         launch {
             steamClient.start()
         }
+    }
 
+    private fun createCobaltComponent(): AndroidCobaltComponent {
         return AndroidCobaltComponent(
             componentContext = defaultComponentContext(),
             storeFactory = if (BuildConfig.DEBUG) {

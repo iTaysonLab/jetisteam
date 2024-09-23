@@ -1,10 +1,10 @@
 [versions]
 # kotlin
-kotlinVersion = "2.0.0"
-kspVersion = "2.0.0-1.0.24"
+kotlinVersion = "2.0.20"
+kspVersion = "2.0.20-1.0.24"
 
 # kotlinx
-kotlinxSerializationVersion = "1.7.1"
+kotlinxSerializationVersion = "1.7.2"
 kotlinxDateTimeVersion = "0.5.0"
 coroutinesVersion = "1.8.1"
 kotlinxAtomicVersion = "0.20.2"
@@ -23,22 +23,22 @@ kmmViewModelVersion = "1.0.0-ALPHA-5"
 kmmNativeCoroutinesVersion = "1.0.0-ALPHA-7"
 
 # decompose
-decomposeVersion = "3.2.0-alpha05"
-essentyVersion = "2.2.0-alpha04"
+decomposeVersion = "3.2.0-beta01"
+essentyVersion = "2.2.0-beta01"
 
 # mvikotlin
 mvikotlin = "4.2.0"
 
 # android
-androidPluginVersion = "8.6.0"
+androidPluginVersion = "8.6.1"
 composeCompilerVersion = "1.4.7"
-lifecycleVersion = "2.8.4"
+lifecycleVersion = "2.8.6"
 hiltVersion = "2.47"
 androidCoreKtxVersion = "1.13.1"
-androidActivityKtxVersion = "1.9.1"
+androidActivityKtxVersion = "1.9.2"
 
 # compose
-composeVersion = "1.7.0"
+composeVersion = "1.7.2"
 composeMaterial3Version = "1.3.0"
 compose_motion = "1.0.6"
 accompanist = "0.35.0-alpha"
@@ -56,7 +56,7 @@ appcompat = "1.6.1"
 ksteam = "r40"
 
 # camera
-camerax = "1.4.0-rc01"
+camerax = "1.4.0-rc02"
 mlkit = "17.3.0"
 
 [plugins]
