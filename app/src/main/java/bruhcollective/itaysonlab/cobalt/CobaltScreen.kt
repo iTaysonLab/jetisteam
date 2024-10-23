@@ -2,7 +2,8 @@ package bruhcollective.itaysonlab.cobalt
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import bruhcollective.itaysonlab.cobalt.navigation.CobaltContainerScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import bruhcollective.itaysonlab.cobalt.navigation.RootNavigationScreen
 import bruhcollective.itaysonlab.cobalt.signin.SignInScreen
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
@@ -15,7 +16,11 @@ fun CobaltScreen(
     slot.child?.instance?.let {
         when (val child = it) {
             is AndroidCobaltComponent.Slot.SignIn -> SignInScreen(child.component)
-            is AndroidCobaltComponent.Slot.Cobalt -> CobaltContainerScreen(child.component)
+            is AndroidCobaltComponent.Slot.Cobalt -> {
+                val steamConnectionStatus by component.steamConnectionState.collectAsStateWithLifecycle()
+
+                RootNavigationScreen(component = child.component, steamConnectionStatus = steamConnectionStatus)
+            }
         }
     }
 }

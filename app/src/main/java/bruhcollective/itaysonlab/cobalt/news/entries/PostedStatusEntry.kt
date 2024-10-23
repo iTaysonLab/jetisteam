@@ -2,19 +2,22 @@ package bruhcollective.itaysonlab.cobalt.news.entries
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.news.entries.parts.PostPersonaHeader
+import bruhcollective.itaysonlab.ksteam.models.apps.capsuleSmall
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
+import coil.compose.AsyncImage
 
 @Composable
-fun PlayedForFirstTimeEntry(
-    entry: ActivityFeedEntry.PlayedForFirstTime
+fun PostedStatusEntry(
+    entry: ActivityFeedEntry.PostedStatus
 ) {
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         PostPersonaHeader(
@@ -23,7 +26,14 @@ fun PlayedForFirstTimeEntry(
         )
 
         Text(
-            text = remember { "played ${entry.app.name} for the first time" },
+            text = "wrote about ${entry.app.name}",
+            style = MaterialTheme.typography.labelMedium,
+        )
+
+        AsyncImage(model = entry.app.capsuleSmall, contentDescription = null, modifier = Modifier.width(120.dp).height(50.dp))
+
+        Text(
+            text = entry.text,
             style = MaterialTheme.typography.labelMedium,
         )
     }

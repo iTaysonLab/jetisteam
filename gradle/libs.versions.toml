@@ -36,6 +36,7 @@ lifecycleVersion = "2.8.6"
 hiltVersion = "2.47"
 androidCoreKtxVersion = "1.13.1"
 androidActivityKtxVersion = "1.9.2"
+androidPaging = "3.3.2"
 
 # compose
 composeVersion = "1.7.2"
@@ -118,6 +119,8 @@ lifecycleCommonJava8 = { module = "androidx.lifecycle:lifecycle-common-java8", v
 lifecycleServices = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycleVersion" }
 lifecycleProcess = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycleVersion" }
 lifecycleReactiveStreams = { module = "androidx.lifecycle:lifecycle-reactivestreams-ktx", version.ref = "lifecycleVersion" }
+pagingRuntime = { module = "androidx.paging:paging-runtime", version.ref = "androidPaging" }
+pagingCompose = { module = "androidx.paging:paging-compose", version.ref = "androidPaging" }
 
 # compose
 composeUi = { module = "androidx.compose.ui:ui", version.ref = "composeVersion" }

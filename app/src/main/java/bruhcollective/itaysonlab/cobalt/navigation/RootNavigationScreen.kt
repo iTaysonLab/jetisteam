@@ -23,16 +23,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.cobalt.R
-import bruhcollective.itaysonlab.cobalt.guard.GuardScreen
-import bruhcollective.itaysonlab.cobalt.news.NewsScreen
-import bruhcollective.itaysonlab.cobalt.profile.ProfileScreen
-import bruhcollective.itaysonlab.cobalt.root_flows.RootLibraryFlowScreen
+import bruhcollective.itaysonlab.cobalt.navigation.implementations.RootDestination
+import bruhcollective.itaysonlab.cobalt.navigation.implementations.RootNavigationComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.IslandAnimations
 import bruhcollective.itaysonlab.cobalt.ui.components.SteamConnectionRow
 import bruhcollective.itaysonlab.cobalt.ui.rememberPrevious
+import bruhcollective.itaysonlab.ksteam.network.CMClientState
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.Direction
 import com.arkivanov.decompose.extensions.compose.stack.animation.StackAnimator
@@ -43,53 +41,54 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimator
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
-fun CobaltContainerScreen(
-    component: CobaltContainerComponent
+fun RootNavigationScreen(
+    component: RootNavigationComponent,
+    steamConnectionStatus: CMClientState,
 ) {
-    val currentNavItem by component.currentNavigationItem.subscribeAsState()
+    val children by component.stack.subscribeAsState()
+    val bottomBarItems by component.availableRootDestinations.subscribeAsState()
+
+    val currentNavItem = children.active.configuration
     val previousNavItem = rememberPrevious(current = currentNavItem)
 
     Scaffold(
         bottomBar = {
-            val navbarItems by component.navigationItems.subscribeAsState()
-            val steamConnectionState by component.connectionStatus.collectAsStateWithLifecycle()
-
             Column {
-                SteamConnectionRow(
-                    connectionState = steamConnectionState
-                )
+                SteamConnectionRow(connectionState = steamConnectionStatus)
 
                 NavigationBar {
-                    navbarItems.forEach { item ->
-                        val deselectedIcon = when (item) {
-                            CobaltContainerComponent.NavigationItem.Home -> Icons.AutoMirrored.TwoTone.Feed
-                            CobaltContainerComponent.NavigationItem.MyProfile -> Icons.TwoTone.Person
-                            CobaltContainerComponent.NavigationItem.Guard -> Icons.TwoTone.Security
-                            CobaltContainerComponent.NavigationItem.Library -> Icons.AutoMirrored.TwoTone.LibraryBooks
+                    for (barItem in bottomBarItems) {
+                        val deselectedIcon = when (barItem) {
+                            RootDestination.NEWSFEED -> Icons.AutoMirrored.TwoTone.Feed
+                            RootDestination.PROFILE -> Icons.TwoTone.Person
+                            RootDestination.GUARD -> Icons.TwoTone.Security
+                            RootDestination.LIBRARY -> Icons.AutoMirrored.TwoTone.LibraryBooks
                         }
 
-                        val selectedIcon = when (item) {
-                            CobaltContainerComponent.NavigationItem.Home -> Icons.AutoMirrored.Filled.Feed
-                            CobaltContainerComponent.NavigationItem.MyProfile -> Icons.Filled.Person
-                            CobaltContainerComponent.NavigationItem.Guard -> Icons.Filled.Security
-                            CobaltContainerComponent.NavigationItem.Library -> Icons.AutoMirrored.Filled.LibraryBooks
+                        val selectedIcon = when (barItem) {
+                            RootDestination.NEWSFEED -> Icons.AutoMirrored.Filled.Feed
+                            RootDestination.PROFILE -> Icons.Filled.Person
+                            RootDestination.GUARD -> Icons.Filled.Security
+                            RootDestination.LIBRARY -> Icons.AutoMirrored.Filled.LibraryBooks
                         }
 
                         val text = stringResource(
-                            id = when (item) {
-                                CobaltContainerComponent.NavigationItem.Home -> R.string.tab_news
-                                CobaltContainerComponent.NavigationItem.MyProfile -> R.string.tab_profile
-                                CobaltContainerComponent.NavigationItem.Guard -> R.string.tab_guard
-                                CobaltContainerComponent.NavigationItem.Library -> R.string.tab_library
+                            id = when (barItem) {
+                                RootDestination.NEWSFEED -> R.string.tab_news
+                                RootDestination.PROFILE -> R.string.tab_profile
+                                RootDestination.GUARD -> R.string.tab_guard
+                                RootDestination.LIBRARY -> R.string.tab_library
                             }
                         )
 
                         NavigationBarItem(
-                            selected = currentNavItem == item,
-                            onClick = { component.switch(item) },
+                            selected = currentNavItem == barItem,
+                            onClick = {
+                                component.selectRootDestination(barItem)
+                                      },
                             icon = {
                                 Icon(
-                                    imageVector = if (currentNavItem == item) selectedIcon else deselectedIcon,
+                                    imageVector = if (currentNavItem == barItem) selectedIcon else deselectedIcon,
                                     contentDescription = text,
                                 )
                             }, label = {
@@ -101,18 +100,13 @@ fun CobaltContainerScreen(
             }
         }, contentWindowInsets = EmptyWindowInsets
     ) { innerPadding ->
-        Children(stack = component.childStack, animation = stackAnimation { _ ->
-            /*val spec: FiniteAnimationSpec<Float> = tween(
-                durationMillis = MotionConstants.DefaultMotionDuration,
-                easing = FastOutSlowInEasing
-            )*/
-
+        Children(stack = children, animation = stackAnimation { _ ->
             val spec = spring<Float>(
                 stiffness = 500f
             )
 
             val direction =
-                if (previousNavItem != null && component.getNavigationItemIndex(currentNavItem) > component.getNavigationItemIndex(previousNavItem)) {
+                if (previousNavItem != null && bottomBarItems.indexOf(currentNavItem) > bottomBarItems.indexOf(previousNavItem)) {
                     IslandAnimations.Direction.LEFT
                 } else {
                     IslandAnimations.Direction.RIGHT
@@ -120,12 +114,7 @@ fun CobaltContainerScreen(
 
             fade(spec) + slideWithDirection(direction, spec)
         }, modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
-            when (val child = it.instance) {
-                is CobaltContainerComponent.Child.News -> NewsScreen(child.component)
-                is CobaltContainerComponent.Child.MyProfile -> ProfileScreen(child.component)
-                is CobaltContainerComponent.Child.Guard -> GuardScreen(child.component)
-                is CobaltContainerComponent.Child.Library -> RootLibraryFlowScreen(child.component)
-            }
+            DestinationScreen(component = it.instance)
         }
     }
 }

@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.cobalt.ui.font.robotoMonoFontFamily
 
 @Composable
 fun ProfileActionsStrip(
@@ -38,8 +37,7 @@ fun ProfileActionsStrip(
                 Icon(imageVector = Icons.Sharp.Edit, contentDescription = null)
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = "Edit profile".uppercase(),
-                    fontFamily = robotoMonoFontFamily
+                    text = "Edit profile".uppercase()
                 )
             }
         }

@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.news.entries.parts.PostPersonaHeader
-import bruhcollective.itaysonlab.cobalt.ui.font.rubikFontFamily
 import bruhcollective.itaysonlab.ksteam.models.apps.capsuleSmall
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
 import coil.compose.AsyncImage
@@ -31,8 +30,7 @@ fun ReceivedNewGameEntry(
 
         Text(
             text = remember { if (entry.apps.size > 1) "now owns ${entry.apps.size} more games" else "now owns ${entry.apps.firstOrNull()?.name}" },
-            style = MaterialTheme.typography.labelMedium,
-            fontFamily = rubikFontFamily
+            style = MaterialTheme.typography.labelMedium
         )
 
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

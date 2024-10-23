@@ -13,68 +13,25 @@ import bruhcollective.itaysonlab.cobalt.guard.setup.alert.GuardAlreadyExistsAler
 import bruhcollective.itaysonlab.cobalt.guard.setup.onboarding.GuardOnboardingComponent
 import bruhcollective.itaysonlab.cobalt.guard.setup.recovery.GuardRecoveryCodeComponent
 import bruhcollective.itaysonlab.cobalt.guard.setup.sms.GuardEnterSmsComponent
+import com.arkivanov.decompose.router.pages.ChildPages
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
 
-interface GuardComponent: BackHandlerOwner, HandlesScrollToTopComponent {
-    val stack: Value<ChildStack<*, Child>>
-    val alertSlot: Value<ChildSlot<*, AlertChild>>
+interface GuardComponent {
+    val slot: Value<ChildSlot<*, Child>>
 
-    fun onBackPressed()
+    fun notifySessionsUpdated()
+    fun notifyConfirmationsUpdated()
 
     sealed interface Child {
-        // Setup
-
-        class SetupOnboarding (
+        class Onboarding (
             val component: GuardOnboardingComponent
-        ) : Child
-
-        class SetupEnterSmsCode (
-            val component: GuardEnterSmsComponent
         ): Child
-
-        class SetupRecoveryCode (
-            val component: GuardRecoveryCodeComponent
-        ): Child
-
-        // Instance
 
         class Instance (
             val component: GuardInstanceComponent
-        ): Child, HandlesScrollToTopChild {
-            override fun scrollToTop() = component.scrollToTop()
-        }
-
-        class ActiveSessionDetail (
-            val component: GuardSessionDetailComponent
         ): Child
-
-        class MobileConfirmationDetail (
-            val component: GuardConfirmationComponent
-        ): Child
-    }
-
-    sealed interface AlertChild {
-        class SetupOverrideExisting(
-            val component: GuardAlreadyExistsAlertComponent
-        ): AlertChild
-
-        class InstanceRecoveryCode (
-            val component: GuardRecoveryCodeSheetComponent
-        ): AlertChild
-
-        class InstanceDelete (
-            val component: GuardRemoveSheetComponent
-        ): AlertChild
-
-        class QrCodeScanner (
-            val component: GuardQrScannerComponent
-        ): AlertChild
-
-        class IncomingSession (
-            val component: GuardIncomingSessionComponent
-        ): AlertChild
     }
 }

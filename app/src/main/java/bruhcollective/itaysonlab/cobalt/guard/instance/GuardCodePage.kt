@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -26,25 +27,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.cobalt.R
+import bruhcollective.itaysonlab.cobalt.guard.instance.code.GuardCodeComponent
 import bruhcollective.itaysonlab.cobalt.ui.font.robotoMonoFontFamily
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import soup.compose.material.motion.animation.materialSharedAxisY
 import soup.compose.material.motion.animation.rememberSlideDistance
 
 @Composable
 internal fun GuardCodePage(
-    code: String,
-    codeProgress: Float,
-    onCopyClicked: () -> Unit,
-    onRecoveryClicked: () -> Unit,
-    onDeleteClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    component: GuardCodeComponent
 ) {
+    val code by component.code.subscribeAsState()
+    val codeProgress by component.codeProgress.subscribeAsState()
+
     val slideDistance = rememberSlideDistance()
+    val clipboardManager = LocalClipboardManager.current
 
     val intProgress by animateFloatAsState(
         targetValue = codeProgress, animationSpec = tween(1000, easing = LinearEasing),
@@ -52,7 +56,7 @@ internal fun GuardCodePage(
     )
 
     Box(
-        modifier = modifier
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
             modifier = Modifier
@@ -89,7 +93,9 @@ internal fun GuardCodePage(
             )
 
             IconButton(
-                onClick = onCopyClicked,
+                onClick = {
+                    clipboardManager.setText(AnnotatedString(code))
+                },
             ) {
                 Icon(imageVector = Icons.Rounded.ContentCopy, contentDescription = stringResource(id = R.string.guard_actions_copy))
             }
@@ -102,13 +108,13 @@ internal fun GuardCodePage(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             IconButton(
-                onClick = onDeleteClicked
+                onClick = component::onDeleteGuardButtonClicked
             ) {
                 Icon(imageVector = Icons.Rounded.Delete, contentDescription = stringResource(id = R.string.guard_actions_remove))
             }
 
             IconButton(
-                onClick = onRecoveryClicked
+                onClick = component::onRecoveryCodeButtonClicked
             ) {
                 Icon(imageVector = Icons.Rounded.Password, contentDescription = stringResource(id = R.string.guard_recovery))
             }

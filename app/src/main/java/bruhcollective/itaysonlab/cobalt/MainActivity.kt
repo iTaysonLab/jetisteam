@@ -59,11 +59,6 @@ class MainActivity : ComponentActivity(), CoroutineScope by MainScope() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        // startSteamClient()
-    }
-
     private fun startSteamClient() {
         launch {
             steamClient.start()
@@ -72,12 +67,7 @@ class MainActivity : ComponentActivity(), CoroutineScope by MainScope() {
 
     private fun createCobaltComponent(): AndroidCobaltComponent {
         return AndroidCobaltComponent(
-            componentContext = defaultComponentContext(),
-            storeFactory = if (BuildConfig.DEBUG) {
-                LoggingStoreFactory(DefaultStoreFactory())
-            } else {
-                DefaultStoreFactory()
-            }
+            componentContext = defaultComponentContext()
         )
     }
 

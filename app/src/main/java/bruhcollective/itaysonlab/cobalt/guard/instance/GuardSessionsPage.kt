@@ -8,14 +8,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,56 +29,54 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.guard.GuardUtils
+import bruhcollective.itaysonlab.cobalt.guard.instance.sessions.GuardSessionsComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenLoading
 import bruhcollective.itaysonlab.cobalt.ui.theme.partialShapes
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.collections.immutable.ImmutableList
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GuardSessionsPage(
-    isRefreshing: Boolean,
-    currentSession: ActiveSession?,
-    sessions: ImmutableList<ActiveSession>,
-    onSessionClicked: (ActiveSession) -> Unit,
-    modifier: Modifier = Modifier,
-    listState: LazyListState = rememberLazyListState(),
-    contentPadding: PaddingValues = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
+    component: GuardSessionsComponent,
 ) {
-    if (isRefreshing.not()) {
-        LazyColumn(
-            contentPadding = contentPadding,
-            state = listState,
-            modifier = modifier
-        ) {
-            if (currentSession != null) {
+    val sessions by component.sessions.subscribeAsState()
+    val currentSession by component.currentSession.subscribeAsState()
+    val isRefreshing by component.isRefreshing.subscribeAsState()
+    val isLoading by component.isLoading.subscribeAsState()
+
+    if (isLoading.not()) {
+        PullToRefreshBox(isRefreshing = isRefreshing, onRefresh = component::onRefresh) {
+            LazyColumn(
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            ) {
                 item(key = currentSession.id) {
                     SessionItem(
                         currentSession,
                         top = true,
                         bottom = true,
                         onClick = {
-                            onSessionClicked(currentSession)
+                            component.onSessionClicked(currentSession)
                         }
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-            }
 
-            itemsIndexed(sessions, key = { _, session ->
-                session.id
-            }) { index, session ->
-                SessionItem(
-                    session,
-                    top = index == 0,
-                    bottom = index == sessions.lastIndex,
-                    onClick = {
-                        onSessionClicked(session)
+                itemsIndexed(sessions, key = { _, session -> session.id }) { index, session ->
+                    SessionItem(
+                        session,
+                        top = index == 0,
+                        bottom = index == sessions.lastIndex,
+                        onClick = {
+                            component.onSessionClicked(session)
+                        }
+                    )
+
+                    if (index != sessions.lastIndex) {
+                        HorizontalDivider(color = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
                     }
-                )
-
-                if (index != sessions.lastIndex) {
-                    HorizontalDivider(color = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
                 }
             }
         }

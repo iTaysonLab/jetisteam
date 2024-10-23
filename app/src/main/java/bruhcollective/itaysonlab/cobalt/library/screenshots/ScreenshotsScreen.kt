@@ -74,7 +74,7 @@ fun ScreenshotsScreen(
                         state = gridState
                     ) {
                         items(actualScreenshots) { screenshot ->
-                            with(nonNullableNavSharedTransitionScope()) {
+                            //with(nonNullableNavSharedTransitionScope()) {
                                 AsyncImage(
                                     model = screenshot.info.previewUrl,
                                     contentDescription = null,
@@ -83,14 +83,14 @@ fun ScreenshotsScreen(
                                         .background(Color.Black)
                                         .fillMaxWidth()
                                         .aspectRatio(1f)
-                                        .sharedElement(
-                                            state = rememberSharedContentState(key = screenshot.id),
-                                            animatedVisibilityScope = nonNullableAnimatedVisibilityScope()
-                                        )
+                                        //.sharedElement(
+                                        //    state = rememberSharedContentState(key = screenshot.id),
+                                        //    animatedVisibilityScope = nonNullableAnimatedVisibilityScope()
+                                        //)
                                         .clickable { component.onScreenshotClicked(screenshot) },
                                     contentScale = ContentScale.Fit
                                 )
-                            }
+                            //}
                         }
                     }
                 }

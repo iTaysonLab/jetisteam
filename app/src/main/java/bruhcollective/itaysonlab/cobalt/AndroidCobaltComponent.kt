@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.cobalt
 
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
-import bruhcollective.itaysonlab.cobalt.navigation.CobaltContainerComponent
+import bruhcollective.itaysonlab.cobalt.navigation.implementations.RootNavigationComponent
 import bruhcollective.itaysonlab.cobalt.signin.DefaultSignRootComponent
 import bruhcollective.itaysonlab.cobalt.signin.SignRootComponent
 import com.arkivanov.decompose.ComponentContext
@@ -10,18 +10,17 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.mvikotlin.core.store.StoreFactory
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class AndroidCobaltComponent (
-    componentContext: ComponentContext,
-    private val storeFactory: StoreFactory
+    componentContext: ComponentContext
 ): ComponentContext by componentContext, KoinComponent {
     private val steamClient: SteamClient by inject()
 
     private val slotNavigation = SlotNavigation<Config>()
+    val steamConnectionState get() = steamClient.connectionStatus
 
     val slot: Value<ChildSlot<*, Slot>> = childSlot(
         source = slotNavigation,
@@ -34,7 +33,7 @@ class AndroidCobaltComponent (
     private fun createSlot(config: Config, componentContext: ComponentContext): Slot {
         return when (config) {
             Config.SignIn -> Slot.SignIn(DefaultSignRootComponent(componentContext, onAuthorizationCompleted = this::onAuthorizationCompleted))
-            Config.Cobalt -> Slot.Cobalt(CobaltContainerComponent(componentContext, storeFactory))
+            Config.Cobalt -> Slot.Cobalt(CobaltEntrypoint.rootComponent(componentContext))
         }
     }
 
@@ -52,7 +51,7 @@ class AndroidCobaltComponent (
 
     sealed interface Slot {
         class SignIn(val component: SignRootComponent) : Slot
-        class Cobalt(val component: CobaltContainerComponent) : Slot
+        class Cobalt(val component: RootNavigationComponent) : Slot
     }
 
     @Serializable

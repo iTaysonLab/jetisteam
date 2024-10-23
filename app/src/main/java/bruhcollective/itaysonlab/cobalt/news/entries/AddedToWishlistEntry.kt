@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.news.entries.parts.PostPersonaHeader
-import bruhcollective.itaysonlab.cobalt.ui.font.rubikFontFamily
 import bruhcollective.itaysonlab.ksteam.models.apps.capsuleSmall
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
 import coil.compose.AsyncImage
@@ -32,7 +31,6 @@ fun AddedToWishlistEntry(
         Text(
             text = remember { if (entry.apps.size > 1) "added ${entry.apps.size} games to wishlist" else "added ${entry.apps.firstOrNull()?.name} to wishlist" },
             style = MaterialTheme.typography.labelMedium,
-            fontFamily = rubikFontFamily
         )
 
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

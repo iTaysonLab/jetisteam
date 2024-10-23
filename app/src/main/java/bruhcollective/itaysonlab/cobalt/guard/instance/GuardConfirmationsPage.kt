@@ -20,10 +20,13 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,28 +39,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.guard.GuardUtils
+import bruhcollective.itaysonlab.cobalt.guard.instance.confirmations.GuardConfirmationsComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenError
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenLoading
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenPlaceholder
 import bruhcollective.itaysonlab.ksteam.guard.models.ConfirmationListState
 import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
 import coil.compose.AsyncImage
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GuardConfirmationsPage(
-    confirmationState: ConfirmationListState,
-    isRefreshing: Boolean,
-    onRefresh: () -> Unit,
-    onConfirmationClicked: (MobileConfirmationItem) -> Unit,
-    modifier: Modifier = Modifier
+    component: GuardConfirmationsComponent,
 ) {
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = isRefreshing,
-        onRefresh = onRefresh
-    )
+    val state by component.state.subscribeAsState()
+    val isRefreshing by component.isRefreshing.subscribeAsState()
 
-    when (confirmationState) {
+    when (val confirmationState = state) {
         is ConfirmationListState.Loading -> {
             FullscreenLoading()
         }
@@ -74,7 +73,7 @@ internal fun GuardConfirmationsPage(
         }
 
         is ConfirmationListState.Success -> {
-            Box(modifier.pullRefresh(pullRefreshState)) {
+            PullToRefreshBox(isRefreshing = isRefreshing, onRefresh = component::onRefresh) {
                 if (confirmationState.conf.isNotEmpty()) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
@@ -83,7 +82,7 @@ internal fun GuardConfirmationsPage(
                     ) {
                         items(confirmationState.conf) {
                             ConfirmationCard(confirmation = it, onClick = {
-                                onConfirmationClicked(it)
+                                component.onConfirmationClicked(it)
                             })
                         }
                     }
@@ -94,14 +93,6 @@ internal fun GuardConfirmationsPage(
                         modifier = Modifier.verticalScroll(rememberScrollState())
                     )
                 }
-
-                PullRefreshIndicator(
-                    refreshing = isRefreshing,
-                    state = pullRefreshState,
-                    modifier = Modifier.align(Alignment.TopCenter),
-                    backgroundColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
             }
         }
     }

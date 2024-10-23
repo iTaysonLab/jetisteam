@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.cobalt.ui.font.rubikFontFamily
 import bruhcollective.itaysonlab.ksteam.models.apps.capsuleSmall
 import bruhcollective.itaysonlab.ksteam.models.persona.ProfileWidget
 import coil.compose.AsyncImage
@@ -40,6 +39,5 @@ fun GameCollectorProfileWidget(
         text = "${widget.ownedGamesCount} games and DLCs owned",
         color = MaterialTheme.colorScheme.onSurface,
         style = MaterialTheme.typography.labelLarge,
-        fontFamily = rubikFontFamily
     )
 }

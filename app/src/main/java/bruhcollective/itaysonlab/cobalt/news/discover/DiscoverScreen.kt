@@ -38,13 +38,12 @@ import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.news.entries.AddedToWishlistEntry
 import bruhcollective.itaysonlab.cobalt.news.entries.NewAchievementsEntry
 import bruhcollective.itaysonlab.cobalt.news.entries.PlayedForFirstTimeEntry
+import bruhcollective.itaysonlab.cobalt.news.entries.PostedStatusEntry
 import bruhcollective.itaysonlab.cobalt.news.entries.ReceivedNewGameEntry
 import bruhcollective.itaysonlab.cobalt.news.entries.ScreenshotPostedEntry
 import bruhcollective.itaysonlab.cobalt.ui.components.CobaltDivider
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.rememberFloatingNavigationBarScrollConnection
-import bruhcollective.itaysonlab.cobalt.ui.font.robotoMonoFontFamily
-import bruhcollective.itaysonlab.cobalt.ui.font.rubikFontFamily
 import bruhcollective.itaysonlab.ksteam.models.apps.icon
 import bruhcollective.itaysonlab.ksteam.models.news.NewsEvent
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
@@ -65,7 +64,7 @@ fun DiscoverScreen(
             Column {
                 TopAppBar(
                     title = {
-                        Text(text = "News".uppercase(), fontFamily = robotoMonoFontFamily)
+                        Text(text = "News")
                     }, colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.background
                     )
@@ -181,8 +180,7 @@ fun NewsEventPortal(entry: NewsEvent) {
 
         Text(
             text = entry.title,
-            style = MaterialTheme.typography.headlineSmall,
-            fontFamily = robotoMonoFontFamily
+            style = MaterialTheme.typography.headlineSmall
         )
 
         if (entry.subtitle.isNotEmpty()) {
@@ -191,7 +189,6 @@ fun NewsEventPortal(entry: NewsEvent) {
             Text(
                 text = entry.subtitle,
                 style = MaterialTheme.typography.bodyMedium,
-                fontFamily = rubikFontFamily
             )
         }
     }
@@ -245,6 +242,10 @@ private fun ActivityFeedPortal(
 
         is ActivityFeedEntry.ScreenshotPosted -> {
             ScreenshotPostedEntry(feedEntry)
+        }
+
+        is ActivityFeedEntry.PostedStatus -> {
+            PostedStatusEntry(feedEntry)
         }
 
         else -> {

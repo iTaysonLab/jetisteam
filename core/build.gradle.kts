@@ -36,6 +36,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.pagingRuntime)
+
     implementation(libs.composeRuntime)
     implementation(libs.coroutines)
 
@@ -51,6 +53,7 @@ dependencies {
     implementation(libs.koinAndroid)
 
     implementation(libs.kotlinxCollections)
+    implementation(libs.kotlinxDateTime)
     implementation(libs.ktorClientEngineOkHttp)
     
     implementation(libs.bundles.ksteam)

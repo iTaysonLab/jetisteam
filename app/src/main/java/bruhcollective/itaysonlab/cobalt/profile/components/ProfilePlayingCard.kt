@@ -15,8 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.cobalt.profile.components.status.StatusCardComponent
 import bruhcollective.itaysonlab.cobalt.R
-import bruhcollective.itaysonlab.cobalt.ui.font.robotoMonoFontFamily
-import bruhcollective.itaysonlab.cobalt.ui.font.rubikFontFamily
 import bruhcollective.itaysonlab.ksteam.models.persona.Persona
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
@@ -39,7 +37,6 @@ fun ProfilePlayingCard(
     ) {
         Text(
             text = remember(ingameTitle) { ingameTitle.uppercase() },
-            fontFamily = robotoMonoFontFamily,
             style = MaterialTheme.typography.labelMedium
         )
 
@@ -70,7 +67,6 @@ private fun NonSteamContent(
     Text(
         text = ingame.name,
         style = MaterialTheme.typography.titleLarge,
-        fontFamily = rubikFontFamily,
         fontSize = 20.sp
     )
 }
@@ -85,7 +81,6 @@ private fun SteamContent(
     Text(
         text = steamAppSummary.toString(),
         style = MaterialTheme.typography.titleLarge,
-        fontFamily = rubikFontFamily,
         fontSize = 20.sp
     )
 
@@ -93,7 +88,6 @@ private fun SteamContent(
         Text(
             text = ingame.richPresence.entries.joinToString(),
             style = MaterialTheme.typography.titleLarge,
-            fontFamily = rubikFontFamily,
             fontSize = 20.sp
         )
     }
@@ -106,7 +100,6 @@ private fun StatusContent(
     Text(
         text = "TODO: Online status",
         style = MaterialTheme.typography.titleLarge,
-        fontFamily = rubikFontFamily,
         fontSize = 20.sp
     )
 }

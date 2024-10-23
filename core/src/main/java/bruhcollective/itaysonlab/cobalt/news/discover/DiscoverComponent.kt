@@ -45,5 +45,6 @@ private fun ActivityFeedEntry.toContentTypeInt(): Int {
         is ActivityFeedEntry.UnknownEvent -> 4
         is ActivityFeedEntry.ScreenshotPosted -> 5
         is ActivityFeedEntry.ScreenshotsPosted -> 6
+        is ActivityFeedEntry.PostedStatus -> 7
     }
 }

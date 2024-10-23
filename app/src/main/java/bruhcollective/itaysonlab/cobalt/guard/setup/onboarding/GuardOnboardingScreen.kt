@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
+import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardSetupOverrideExistingSheet
 import bruhcollective.itaysonlab.cobalt.ui.components.StateButtonContent
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
@@ -32,6 +33,15 @@ fun GuardOnboardingScreen(
     component: GuardOnboardingComponent,
 ) {
     val isProcessing by component.isTryingToStartSetup.subscribeAsState()
+    val alert by component.alertSlot.subscribeAsState()
+
+    alert.child?.instance?.let {
+        when (val child = it) {
+            is GuardOnboardingComponent.AlertChild.OverrideExisting -> {
+                GuardSetupOverrideExistingSheet(child.component)
+            }
+        }
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()

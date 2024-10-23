@@ -12,6 +12,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 class DefaultGuardIncomingSessionComponent (
+    private val onConfirmation: () -> Unit,
     private val onDismiss: () -> Unit,
     componentContext: ComponentContext,
     steamId: SteamId,
@@ -52,7 +53,7 @@ class DefaultGuardIncomingSessionComponent (
                 )
             }
 
-            onDismiss()
+            onConfirmation()
         }
     }
 

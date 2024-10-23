@@ -1,118 +1,220 @@
 package bruhcollective.itaysonlab.cobalt.guard.instance
 
-import bruhcollective.itaysonlab.cobalt.core.CobaltDispatchers
+import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.DefaultGuardIncomingSessionComponent
+import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.DefaultGuardRecoveryCodeSheetComponent
+import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.DefaultGuardRemoveSheetComponent
+import bruhcollective.itaysonlab.cobalt.guard.instance.code.DefaultGuardCodeComponent
+import bruhcollective.itaysonlab.cobalt.guard.instance.confirmations.DefaultGuardConfirmationsComponent
+import bruhcollective.itaysonlab.cobalt.guard.instance.sessions.DefaultGuardSessionsComponent
+import bruhcollective.itaysonlab.cobalt.guard.qr.DefaultGuardQrScannerComponent
 import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
 import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.router.pages.ChildPages
+import com.arkivanov.decompose.router.pages.Pages
+import com.arkivanov.decompose.router.pages.PagesNavigation
+import com.arkivanov.decompose.router.pages.childPages
+import com.arkivanov.decompose.router.pages.select
+import com.arkivanov.decompose.router.slot.ChildSlot
+import com.arkivanov.decompose.router.slot.SlotNavigation
+import com.arkivanov.decompose.router.slot.activate
+import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.router.slot.dismiss
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.coroutines.withLifecycle
-import com.arkivanov.essenty.lifecycle.doOnCreate
-import com.arkivanov.essenty.lifecycle.doOnResume
-import com.arkivanov.mvikotlin.core.instancekeeper.getStore
-import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 internal class DefaultGuardInstanceComponent(
     componentContext: ComponentContext,
-    storeFactory: StoreFactory,
     private val steamId: SteamId,
-    private val onQrScannerClicked: () -> Unit,
-    private val onRecoveryCodeClicked: (code: String) -> Unit,
-    private val onDeleteClicked: () -> Unit,
+    private val onGuardDeletionDone: () -> Unit,
     private val onSessionClicked: (ActiveSession) -> Unit,
-    private val onConfirmationClicked: (MobileConfirmationItem) -> Unit,
-    private val onIncomingSessionAppeared: (Long) -> Unit
+    private val onConfirmationClicked: (MobileConfirmationItem) -> Unit
 ): GuardInstanceComponent, ComponentContext by componentContext, KoinComponent, CoroutineScope by componentContext.coroutineScope() {
-    override val scrollToTopFlag = MutableValue<Boolean>(false)
+    private val pagesNavigation = PagesNavigation<PageConfig>()
+    private val alertNavigation = SlotNavigation<AlertConfig>()
 
-    override fun scrollToTop() {
-        scrollToTopFlag.value = true
-    }
+    override val pages: Value<ChildPages<*, GuardInstanceComponent.PageChild>> = childPages(
+        source = pagesNavigation,
+        serializer = PageConfig.serializer(),
+        childFactory = ::createPageChild,
+        initialPages = { Pages(items = listOf(PageConfig.Code, PageConfig.Confirmations, PageConfig.Sessions), selectedIndex = 0) }
+    )
 
-    override fun resetScrollToTop() {
-        scrollToTopFlag.value = false
-    }
+    override val alertSlot: Value<ChildSlot<*, GuardInstanceComponent.AlertChild>> = childSlot(
+        source = alertNavigation,
+        handleBackButton = true,
+        serializer = AlertConfig.serializer(),
+        childFactory = ::createAlertChild
+    )
 
-    private val store = instanceKeeper.getStore {
-        val steamClient = get<ExtendedSteamClient>()
-
-        val instance = steamClient.guard.instanceFor(steamId) ?: error("GuardInstanceStore cannot be constructed for a non-SG holding user")
-        val codeFlow = instance.code.withLifecycle(lifecycle)
-
-        GuardInstanceStore(
-            storeFactory = storeFactory,
-            mainContext = get<CobaltDispatchers>().main,
-            steamClient = steamClient,
-            codeFlow = codeFlow,
-            initialState = GuardInstanceState(steamId = steamId, username = instance.username)
-        )
+    override fun selectPage(index: Int) {
+        pagesNavigation.select(index)
     }
 
     init {
-        lifecycle.doOnCreate {
-            store.accept(GuardInstanceIntent.LoadActiveSessions)
-        }
-
-        lifecycle.doOnResume {
-            store.accept(GuardInstanceIntent.LoadMobileConfirmations)
-        }
-
         launch {
             get<ExtendedSteamClient>().guardManagement.createIncomingSessionWatcher()
-                .withLifecycle(lifecycle)
+                .withLifecycle(lifecycle, minActiveState = Lifecycle.State.RESUMED)
                 .filterNotNull()
-                .collect {
-                    onIncomingSessionAppeared(it)
+                .distinctUntilChanged()
+                .collect { id ->
+                    alertNavigation.activate(AlertConfig.IncomingSession(id))
                 }
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val state: StateFlow<GuardInstanceState> = store.stateFlow
-
     override fun openQrScanner() {
-        onQrScannerClicked()
+        alertNavigation.activate(AlertConfig.QrScanner)
     }
 
-    override fun openSessionDetail(session: ActiveSession) {
-        onSessionClicked(session)
+    private fun createPageChild(
+        config: PageConfig,
+        componentContext: ComponentContext
+    ): GuardInstanceComponent.PageChild {
+        return when (config) {
+            PageConfig.Code -> {
+                GuardInstanceComponent.PageChild.Code(
+                    component = DefaultGuardCodeComponent(
+                        componentContext = componentContext,
+                        steamId = steamId,
+                        onRecoveryButtonClicked = {
+                            alertNavigation.activate(AlertConfig.RecoveryCode)
+                        }, onDeleteButtonClicked = {
+                            alertNavigation.activate(AlertConfig.RemoveGuard)
+                        }
+                    )
+                )
+            }
+
+            PageConfig.Confirmations -> {
+                GuardInstanceComponent.PageChild.Confirmations(
+                    component = DefaultGuardConfirmationsComponent(
+                        componentContext = componentContext,
+                        steamId = steamId,
+                        onConfirmationClicked = onConfirmationClicked
+                    )
+                )
+            }
+
+            PageConfig.Sessions -> {
+                GuardInstanceComponent.PageChild.Sessions(
+                    component = DefaultGuardSessionsComponent(
+                        componentContext = componentContext,
+                        steamId = steamId,
+                        onSessionClicked = onSessionClicked
+                    )
+                )
+            }
+        }
     }
 
-    override fun openConfirmationDetail(confirmation: MobileConfirmationItem) {
-        onConfirmationClicked(confirmation)
+    private fun createAlertChild(
+        config: AlertConfig,
+        componentContext: ComponentContext
+    ): GuardInstanceComponent.AlertChild {
+        return when (config) {
+            is AlertConfig.RecoveryCode -> {
+                GuardInstanceComponent.AlertChild.RecoveryCode(
+                    component = DefaultGuardRecoveryCodeSheetComponent(
+                        componentContext = componentContext,
+                        steamId = steamId,
+                        onDismiss = alertNavigation::dismiss,
+                    )
+                )
+            }
+
+            is AlertConfig.RemoveGuard -> {
+                GuardInstanceComponent.AlertChild.DeleteGuard(
+                    component = DefaultGuardRemoveSheetComponent(
+                        componentContext = componentContext,
+                        steamId = steamId,
+                        onDismiss = alertNavigation::dismiss,
+                        onGuardRemovedSuccessfully = {
+                            alertNavigation.dismiss()
+                            onGuardDeletionDone()
+                        }
+                    )
+                )
+            }
+
+            is AlertConfig.IncomingSession -> {
+                GuardInstanceComponent.AlertChild.IncomingSession(
+                    component = DefaultGuardIncomingSessionComponent(
+                        componentContext = componentContext,
+                        steamId = steamId,
+                        sessionId = config.sessionId,
+                        onDismiss = alertNavigation::dismiss,
+                        onConfirmation = {
+                            alertNavigation.dismiss()
+                            notifySessionsRefresh()
+                        }
+                    )
+                )
+            }
+
+            is AlertConfig.QrScanner -> {
+                GuardInstanceComponent.AlertChild.QrCodeScanner(
+                    component = DefaultGuardQrScannerComponent(
+                        componentContext = componentContext,
+                        steamId = steamId,
+                        onDismiss = alertNavigation::dismiss,
+                    )
+                )
+            }
+        }
     }
 
-    override fun openRecoveryCodeSheet() {
-        onRecoveryCodeClicked(state.value.revocationCode)
+    override fun notifySessionsRefresh() {
+        pages.value.items
+            .map { it.instance }
+            .filterIsInstance<GuardInstanceComponent.PageChild.Sessions>()
+            .forEach { it.component.onRefresh() }
     }
 
-    override fun openDeleteSheet() {
-        onDeleteClicked()
+    override fun notifyConfirmationsRefresh() {
+        pages.value.items
+            .map { it.instance }
+            .filterIsInstance<GuardInstanceComponent.PageChild.Confirmations>()
+            .forEach { it.component.onRefresh() }
     }
 
-    override fun reloadConfirmations() {
-        store.accept(GuardInstanceIntent.LoadMobileConfirmations)
+    @Serializable
+    private sealed interface PageConfig {
+        @Serializable
+        data object Code: PageConfig
+
+        @Serializable
+        data object Confirmations: PageConfig
+
+        @Serializable
+        data object Sessions: PageConfig
     }
 
-    override fun reloadSessions() {
-        store.accept(GuardInstanceIntent.LoadActiveSessions)
-    }
+    @Serializable
+    private sealed interface AlertConfig {
+        @Serializable
+        data object RecoveryCode : AlertConfig
 
-    override fun notifySessionRevoked(id: Long) {
-        store.accept(GuardInstanceIntent.NotifySessionRevoked(id))
-    }
+        @Serializable
+        data object RemoveGuard : AlertConfig
 
-    override fun notifyConfirmationDecided(id: String) {
-        // TODO: LoadMobileConfirmations already does that?
+        @Serializable
+        data class IncomingSession(
+            val sessionId: Long
+        ) : AlertConfig
+
+        @Serializable
+        data object QrScanner : AlertConfig
     }
 }

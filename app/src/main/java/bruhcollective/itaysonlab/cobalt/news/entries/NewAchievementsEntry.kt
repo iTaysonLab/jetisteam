@@ -16,7 +16,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.news.entries.parts.PostPersonaHeader
 import bruhcollective.itaysonlab.cobalt.ui.components.CobaltDivider
-import bruhcollective.itaysonlab.cobalt.ui.font.rubikFontFamily
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
 import coil.compose.AsyncImage
 
@@ -33,7 +32,6 @@ fun NewAchievementsEntry(
         Text(
             text = "achieved in ${entry.app.name}",
             style = MaterialTheme.typography.labelMedium,
-            fontFamily = rubikFontFamily
         )
 
         entry.achievements.forEachIndexed { index, achievement ->

@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.QrCodeScanner
@@ -24,41 +20,59 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.cobalt.R
+import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardConfirmSessionSheet
+import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardRecoveryCodeSheet
+import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardRemoveSheet
+import bruhcollective.itaysonlab.cobalt.guard.qr_code.GuardQrCodeSheet
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.IndicatorBehindScrollableTabRow
 import bruhcollective.itaysonlab.cobalt.ui.components.tabIndicatorOffset
+import com.arkivanov.decompose.extensions.compose.pages.ChildPages
+import com.arkivanov.decompose.extensions.compose.pages.PagesScrollAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import kotlinx.coroutines.launch
 import java.util.Locale
 
 @Composable
 fun GuardInstanceScreen(
     component: GuardInstanceComponent,
 ) {
-    // val scrollToTopFlag by component.scrollToTopFlag.subscribeAsState()
-    val state by component.state.collectAsState()
+    val pages by component.pages.subscribeAsState()
+    val alert by component.alertSlot.subscribeAsState()
 
-    val pagerState = rememberPagerState { 3 }
-    val guardSessionListState = rememberLazyListState()
-    val clipboardManager = LocalClipboardManager.current
+    alert.child?.instance?.let {
+        when (val child = it) {
+            is GuardInstanceComponent.AlertChild.DeleteGuard -> {
+                GuardRemoveSheet(child.component)
+            }
+
+            is GuardInstanceComponent.AlertChild.IncomingSession -> {
+                GuardConfirmSessionSheet(child.component)
+            }
+
+            is GuardInstanceComponent.AlertChild.QrCodeScanner -> {
+                GuardQrCodeSheet(child.component)
+            }
+
+            is GuardInstanceComponent.AlertChild.RecoveryCode -> {
+                GuardRecoveryCodeSheet(child.component)
+            }
+        }
+    }
 
     Scaffold(topBar = {
         GuardInstanceHeader(
-            pagerState = pagerState,
+            selectedIndex = pages.selectedIndex,
+            onPageSelected = component::selectPage,
             modifier = Modifier.statusBarsPadding()
         )
     }, floatingActionButton = {
@@ -69,41 +83,24 @@ fun GuardInstanceScreen(
             )
         }
     }, contentWindowInsets = EmptyWindowInsets) { innerPadding ->
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) { pos ->
-            when (pos) {
-                0 -> GuardCodePage(
-                    code = state.code,
-                    codeProgress = state.codeProgress,
-                    onCopyClicked = {
-                        // TODO: Lower Androids without a toast
-                        clipboardManager.setText(AnnotatedString(state.code))
-                    },
-                    onDeleteClicked = component::openDeleteSheet,
-                    onRecoveryClicked = component::openRecoveryCodeSheet,
-                    modifier = Modifier.fillMaxSize()
-                )
+        ChildPages(
+            pages = pages,
+            onPageSelected = component::selectPage,
+            scrollAnimation = PagesScrollAnimation.Default,
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
+        ) { _, page ->
+            when (page) {
+                is GuardInstanceComponent.PageChild.Code -> {
+                    GuardCodePage(page.component)
+                }
 
-                1 -> GuardConfirmationsPage(
-                    confirmationState = state.confirmations,
-                    modifier = Modifier.fillMaxSize(),
-                    onRefresh = component::reloadConfirmations,
-                    onConfirmationClicked = component::openConfirmationDetail,
-                    isRefreshing = state.areConfirmationsLoading
-                )
+                is GuardInstanceComponent.PageChild.Confirmations -> {
+                    GuardConfirmationsPage(page.component)
+                }
 
-                2 -> GuardSessionsPage(
-                    listState = guardSessionListState,
-                    isRefreshing = state.areSessionsLoading,
-                    currentSession = state.currentSession,
-                    sessions = state.sessions,
-                    onSessionClicked = component::openSessionDetail,
-                    modifier = Modifier.fillMaxSize()
-                )
+                is GuardInstanceComponent.PageChild.Sessions -> {
+                    GuardSessionsPage(page.component)
+                }
             }
         }
     }
@@ -111,20 +108,19 @@ fun GuardInstanceScreen(
 
 @Composable
 private fun GuardInstanceHeader(
-    pagerState: PagerState,
+    selectedIndex: Int,
+    onPageSelected: (Int) -> Unit,
     modifier: Modifier = Modifier,
     confirmationCount: Int = 0
 ) {
-    val scope = rememberCoroutineScope()
-
     IndicatorBehindScrollableTabRow(
-        selectedTabIndex = pagerState.currentPage,
+        selectedTabIndex = selectedIndex,
         containerColor = Color.Transparent,
         indicator = { tabPositions ->
             Box(
                 Modifier
                     .padding(vertical = 12.dp)
-                    .tabIndicatorOffset(tabPositions[pagerState.currentPage])
+                    .tabIndicatorOffset(tabPositions[selectedIndex])
                     .fillMaxHeight()
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.onSurface)
@@ -135,12 +131,8 @@ private fun GuardInstanceHeader(
         tabAlignment = Alignment.Center
     ) {
         Tab(
-            selected = pagerState.currentPage == 0,
-            onClick = {
-                scope.launch {
-                    pagerState.animateScrollToPage(0)
-                }
-            },
+            selected = selectedIndex == 0,
+            onClick = { onPageSelected(0) },
             selectedContentColor = MaterialTheme.colorScheme.inverseOnSurface,
             unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
@@ -153,12 +145,8 @@ private fun GuardInstanceHeader(
         }
 
         Tab(
-            selected = pagerState.currentPage == 1,
-            onClick = {
-                scope.launch {
-                    pagerState.animateScrollToPage(1)
-                }
-            },
+            selected = selectedIndex == 1,
+            onClick = { onPageSelected(1) },
             selectedContentColor = MaterialTheme.colorScheme.inverseOnSurface,
             unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {
@@ -198,12 +186,8 @@ private fun GuardInstanceHeader(
         }
 
         Tab(
-            selected = pagerState.currentPage == 2,
-            onClick = {
-                scope.launch {
-                    pagerState.animateScrollToPage(2)
-                }
-            },
+            selected = selectedIndex == 2,
+            onClick = { onPageSelected(2) },
             selectedContentColor = MaterialTheme.colorScheme.inverseOnSurface,
             unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ) {

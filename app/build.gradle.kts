@@ -25,8 +25,8 @@ android {
         minSdk = 21
         targetSdk = 35
 
-        versionCode = 4
-        versionName = "alpha 4"
+        versionCode = 7
+        versionName = "alpha 7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -81,6 +81,8 @@ dependencies {
     implementation(libs.androidKtxCore)
     implementation(libs.androidKtxActivity)
     implementation(libs.androidKtxActivityCompose)
+    implementation(libs.pagingRuntime)
+    implementation(libs.pagingCompose)
     implementation(libs.bundles.androidLifecycle)
     implementation(libs.kotlinxDateTime)
 

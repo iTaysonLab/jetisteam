@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
-import bruhcollective.itaysonlab.cobalt.ui.font.robotoMonoFontFamily
 import bruhcollective.itaysonlab.ksteam.models.persona.ProfileWidget
 
 @Composable
@@ -55,7 +54,6 @@ fun DefaultPwCard(
     ) {
         Text(
             text = remember(title) { title.uppercase() },
-            fontFamily = robotoMonoFontFamily,
             style = MaterialTheme.typography.labelMedium
         )
 

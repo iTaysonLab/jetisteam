@@ -19,7 +19,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -31,7 +30,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.profile.components.header.ProfileHeaderComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.CobaltDivider
-import bruhcollective.itaysonlab.cobalt.ui.font.robotoMonoFontFamily
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
@@ -74,7 +72,7 @@ fun CollapsingToolbarScope.ProfileHeader(
     ) {
         TopAppBar(
             title = {
-                Text(text = remember(personaTitle) { personaTitle.uppercase() }, fontFamily = robotoMonoFontFamily)
+                Text(text = personaTitle.uppercase())
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.background
