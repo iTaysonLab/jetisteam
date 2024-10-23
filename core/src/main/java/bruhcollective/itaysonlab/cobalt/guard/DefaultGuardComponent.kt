@@ -56,6 +56,10 @@ class DefaultGuardComponent(
         (slot.value.child?.instance as? GuardComponent.Child.Instance)?.component?.notifyConfirmationsRefresh()
     }
 
+    override fun notifySlotUpdate() {
+        slotNavigation.activate(createInitialConfiguration())
+    }
+
     private fun createSlotChild(
         config: SlotConfig,
         componentContext: ComponentContext

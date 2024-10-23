@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.cobalt.guard.instance
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -49,6 +50,7 @@ internal fun GuardSessionsPage(
     if (isLoading.not()) {
         PullToRefreshBox(isRefreshing = isRefreshing, onRefresh = component::onRefresh) {
             LazyColumn(
+                modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
             ) {
                 item(key = currentSession.id) {

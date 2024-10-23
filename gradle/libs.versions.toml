@@ -165,12 +165,6 @@ essentyLifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "
 essentyLifecycleCoroutines = { module = "com.arkivanov.essenty:lifecycle-coroutines", version.ref = "essentyVersion" }
 essentyStateKeeper = { module = "com.arkivanov.essenty:state-keeper", version.ref = "essentyVersion" }
 
-# mvikotlin
-mvikotlin = { group = "com.arkivanov.mvikotlin", name = "mvikotlin", version.ref = "mvikotlin" }
-mvikotlin-main = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-main", version.ref = "mvikotlin" }
-mvikotlin-logging = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-logging", version.ref = "mvikotlin" }
-mvikotlin-extensions-coroutines = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-extensions-coroutines", version.ref = "mvikotlin" }
-
 # ksteam
 ksteamCore = { module = "bruhcollective.itaysonlab.ksteam:core-android", version.ref = "ksteam" }
 ksteamPersistence = { module = "bruhcollective.itaysonlab.ksteam:core-persistence-android", version.ref = "ksteam" }

@@ -8,6 +8,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.items
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import kotlinx.collections.immutable.ImmutableList
@@ -19,12 +20,12 @@ class DefaultRootNavigationComponent (
     private val navigation = StackNavigation<RootDestination>()
 
     override val availableRootDestinations: Value<ImmutableList<RootDestination>> = MutableValue(
-        persistentListOf(RootDestination.NEWSFEED, RootDestination.GUARD, RootDestination.LIBRARY, RootDestination.PROFILE)
+        persistentListOf(RootDestination.Newsfeed, RootDestination.Guard, RootDestination.Library, RootDestination.Profile)
     )
 
     override val stack: Value<ChildStack<RootDestination, DestinationComponent>> = childStack(
         source = navigation,
-        initialStack = { listOf(RootDestination.NEWSFEED) },
+        initialStack = { listOf(RootDestination.Newsfeed) },
         childFactory = ::createChild,
         serializer = RootDestination.serializer(),
         handleBackButton = false
@@ -32,10 +33,10 @@ class DefaultRootNavigationComponent (
 
     private fun createChild(configuration: RootDestination, componentContext: ComponentContext): DestinationComponent {
         val initialRoute = when (configuration) {
-            RootDestination.NEWSFEED -> DestinationRoute.Newsfeed
-            RootDestination.GUARD -> DestinationRoute.Guard
-            RootDestination.LIBRARY -> DestinationRoute.Library
-            RootDestination.PROFILE -> DestinationRoute.MyProfile
+            RootDestination.Newsfeed -> DestinationRoute.Newsfeed
+            RootDestination.Guard -> DestinationRoute.Guard
+            RootDestination.Library -> DestinationRoute.Library
+            RootDestination.Profile -> DestinationRoute.MyProfile
         }
 
         return DefaultDestinationComponent(initialDestinationRoute = initialRoute, componentContext = componentContext)
@@ -51,6 +52,8 @@ class DefaultRootNavigationComponent (
          *         }
          */
 
-        navigation.bringToFront(value)
+        navigation.bringToFront(value) {
+            println("NAV: ${stack.items.joinToString(separator = "\n") { "${it.configuration} -> [${it.instance.stack.items.joinToString { c -> "${c.configuration} = ${c.instance}" }}]" }}")
+        }
     }
 }

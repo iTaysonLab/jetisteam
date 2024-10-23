@@ -25,8 +25,8 @@ android {
         minSdk = 21
         targetSdk = 35
 
-        versionCode = 7
-        versionName = "alpha 7"
+        versionCode = 9
+        versionName = "alpha 9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -95,10 +95,6 @@ dependencies {
     implementation(libs.composeMotionCore)
     implementation(libs.accompanistSystemUi)
     implementation(libs.accompanistPermissions)
-
-    implementation(libs.mvikotlin)
-    implementation(libs.mvikotlin.main)
-    implementation(libs.mvikotlin.logging)
 
     implementation(libs.decompose)
     implementation(libs.decomposeExtensionCompose)

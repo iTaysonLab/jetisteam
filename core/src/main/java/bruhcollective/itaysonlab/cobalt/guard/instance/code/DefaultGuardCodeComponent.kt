@@ -23,7 +23,7 @@ class DefaultGuardCodeComponent (
     private val scope = coroutineScope()
     private val steamClient by inject<SteamClient>()
 
-    override val code = MutableValue("")
+    override val code = MutableValue(" ")
     override val codeProgress = MutableValue(0f)
 
     override fun onRecoveryCodeButtonClicked() {

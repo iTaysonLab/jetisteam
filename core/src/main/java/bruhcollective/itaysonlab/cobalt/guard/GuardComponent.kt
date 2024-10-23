@@ -24,6 +24,7 @@ interface GuardComponent {
 
     fun notifySessionsUpdated()
     fun notifyConfirmationsUpdated()
+    fun notifySlotUpdate()
 
     sealed interface Child {
         class Onboarding (

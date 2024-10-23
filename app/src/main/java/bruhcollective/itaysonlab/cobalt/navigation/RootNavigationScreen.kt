@@ -58,28 +58,12 @@ fun RootNavigationScreen(
 
                 NavigationBar {
                     for (barItem in bottomBarItems) {
-                        val deselectedIcon = when (barItem) {
-                            RootDestination.NEWSFEED -> Icons.AutoMirrored.TwoTone.Feed
-                            RootDestination.PROFILE -> Icons.TwoTone.Person
-                            RootDestination.GUARD -> Icons.TwoTone.Security
-                            RootDestination.LIBRARY -> Icons.AutoMirrored.TwoTone.LibraryBooks
+                        val (deselectedIcon, selectedIcon, textResId) = when (barItem) {
+                            RootDestination.Newsfeed -> Triple(Icons.AutoMirrored.TwoTone.Feed, Icons.AutoMirrored.Filled.Feed, R.string.tab_news)
+                            RootDestination.Profile -> Triple(Icons.TwoTone.Person, Icons.Filled.Person, R.string.tab_profile)
+                            RootDestination.Guard -> Triple(Icons.TwoTone.Security, Icons.Filled.Security, R.string.tab_guard)
+                            RootDestination.Library -> Triple(Icons.AutoMirrored.TwoTone.LibraryBooks, Icons.AutoMirrored.Filled.LibraryBooks, R.string.tab_library)
                         }
-
-                        val selectedIcon = when (barItem) {
-                            RootDestination.NEWSFEED -> Icons.AutoMirrored.Filled.Feed
-                            RootDestination.PROFILE -> Icons.Filled.Person
-                            RootDestination.GUARD -> Icons.Filled.Security
-                            RootDestination.LIBRARY -> Icons.AutoMirrored.Filled.LibraryBooks
-                        }
-
-                        val text = stringResource(
-                            id = when (barItem) {
-                                RootDestination.NEWSFEED -> R.string.tab_news
-                                RootDestination.PROFILE -> R.string.tab_profile
-                                RootDestination.GUARD -> R.string.tab_guard
-                                RootDestination.LIBRARY -> R.string.tab_library
-                            }
-                        )
 
                         NavigationBarItem(
                             selected = currentNavItem == barItem,
@@ -89,10 +73,10 @@ fun RootNavigationScreen(
                             icon = {
                                 Icon(
                                     imageVector = if (currentNavItem == barItem) selectedIcon else deselectedIcon,
-                                    contentDescription = text,
+                                    contentDescription = stringResource(id = textResId),
                                 )
                             }, label = {
-                                Text(text = text)
+                                Text(text = stringResource(id = textResId))
                             }
                         )
                     }

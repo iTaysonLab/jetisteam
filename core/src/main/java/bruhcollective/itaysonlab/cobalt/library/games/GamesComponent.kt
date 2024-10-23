@@ -34,5 +34,6 @@ interface GamesComponent: HandlesScrollToTopComponent {
      */
     val currentSearchQuery: Value<String>
 
+    fun clearCollection()
     fun setCollection(collection: LibraryCollection)
 }

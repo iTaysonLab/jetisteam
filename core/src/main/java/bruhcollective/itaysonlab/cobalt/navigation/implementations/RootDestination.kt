@@ -6,25 +6,25 @@ import kotlinx.serialization.Serializable
  * Defines a root destination (an item in the bottom navigation bar).
  */
 @Serializable
-enum class RootDestination {
+sealed interface RootDestination {
     /**
      * Default 0: Newsfeed
      */
-    NEWSFEED,
+    data object Newsfeed: RootDestination
 
     /**
      * Default 1: Guard
      */
-    GUARD,
+    data object Guard: RootDestination
 
     /**
      * Default 2: Library
      */
-    LIBRARY,
+    data object Library: RootDestination
 
     /**
      * Default 3: Profile
      * TODO: remove it to the top bar
      */
-    PROFILE
+    data object Profile: RootDestination
 }

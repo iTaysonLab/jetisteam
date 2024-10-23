@@ -121,6 +121,8 @@ internal class DefaultDestinationComponent (
                 session = configuration.session,
                 onDismiss = navigation::pop,
                 onSessionRemoved = {
+                    navigation.pop()
+
                     stack.items
                         .map { it.instance }
                         .filterIsInstance<DestinationChild.GuardRoot>()
@@ -165,7 +167,12 @@ internal class DefaultDestinationComponent (
                     navigation.replaceAll(
                         DestinationRoute.Guard,
                         DestinationRoute.GuardSetupRecoveryCode(configuration.steamId, code)
-                    )
+                    ) {
+                        stack.items
+                            .map { it.instance }
+                            .filterIsInstance<DestinationChild.GuardRoot>()
+                            .forEach { it.component.notifySlotUpdate() }
+                    }
                 }
             )
         )

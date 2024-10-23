@@ -44,11 +44,6 @@ dependencies {
     implementation(libs.decompose)
     implementation(libs.essentyLifecycleCoroutines)
 
-    implementation(libs.mvikotlin)
-    implementation(libs.mvikotlin.main)
-    implementation(libs.mvikotlin.logging)
-    implementation(libs.mvikotlin.extensions.coroutines)
-
     implementation(libs.koin)
     implementation(libs.koinAndroid)
 

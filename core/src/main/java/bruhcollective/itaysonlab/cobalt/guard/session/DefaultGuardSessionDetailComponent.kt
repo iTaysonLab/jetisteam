@@ -48,7 +48,13 @@ internal class DefaultGuardSessionDetailComponent (
         isRevocationInProgress.value = true
 
         scope.launch {
-            get<ExtendedSteamClient>().guardManagement.revokeSession(session.id)
+            runCatching {
+                get<ExtendedSteamClient>().guardManagement.revokeSession(session.id)
+            }
+
+            isRevocationAlertOpened.value = false
+            isRevocationInProgress.value = false
+
             onSessionRemoved()
         }
     }

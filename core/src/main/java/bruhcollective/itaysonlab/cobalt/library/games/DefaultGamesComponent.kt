@@ -84,6 +84,12 @@ class DefaultGamesComponent (
         }
     }
 
+    override fun clearCollection() {
+        currentCollectionId.value = ""
+        currentCollectionName.value = ""
+        dispatchLibraryQuery()
+    }
+
     override fun setCollection(collection: LibraryCollection) {
         currentCollectionId.value = collection.id
         currentCollectionName.value = collection.name
