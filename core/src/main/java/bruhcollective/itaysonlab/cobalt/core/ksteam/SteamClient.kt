@@ -4,6 +4,7 @@ import android.content.Context
 import bruhcollective.itaysonlab.cobalt.core.BuildConfig
 import bruhcollective.itaysonlab.cobalt.core.platform.PlatformCookieManager
 import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
+import bruhcollective.itaysonlab.ksteam.database.KSteamDatabaseProvider
 import bruhcollective.itaysonlab.ksteam.debug.AndroidLoggingTransport
 import bruhcollective.itaysonlab.ksteam.extendToClient
 import bruhcollective.itaysonlab.ksteam.handlers.Logger
@@ -62,7 +63,7 @@ class SteamClient (
                 }
             }
         }
-    }.extendToClient(enablePics = true)
+    }.extendToClient(enablePics = true, databaseProvider = KSteamDatabaseProvider(applicationContext))
 
     val connectionStatus get() = ksteam.connectionStatus
 

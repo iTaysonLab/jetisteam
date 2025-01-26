@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.guard.setup.sms
 
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
-import bruhcollective.itaysonlab.ksteam.guard.models.GuardStructure
+import bruhcollective.itaysonlab.ksteam.models.guard.GuardStructure
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import kotlinx.coroutines.launch

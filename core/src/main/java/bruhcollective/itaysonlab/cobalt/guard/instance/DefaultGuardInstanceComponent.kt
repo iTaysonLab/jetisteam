@@ -8,8 +8,8 @@ import bruhcollective.itaysonlab.cobalt.guard.instance.confirmations.DefaultGuar
 import bruhcollective.itaysonlab.cobalt.guard.instance.sessions.DefaultGuardSessionsComponent
 import bruhcollective.itaysonlab.cobalt.guard.qr.DefaultGuardQrScannerComponent
 import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
-import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
-import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
+import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
+import bruhcollective.itaysonlab.ksteam.models.guard.MobileConfirmationItem
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.pages.ChildPages
@@ -27,6 +27,7 @@ import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.coroutines.withLifecycle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -68,9 +69,8 @@ internal class DefaultGuardInstanceComponent(
                 .withLifecycle(lifecycle, minActiveState = Lifecycle.State.RESUMED)
                 .filterNotNull()
                 .distinctUntilChanged()
-                .collect { id ->
-                    alertNavigation.activate(AlertConfig.IncomingSession(id))
-                }
+                .catch {}
+                .collect { id -> alertNavigation.activate(AlertConfig.IncomingSession(id)) }
         }
     }
 

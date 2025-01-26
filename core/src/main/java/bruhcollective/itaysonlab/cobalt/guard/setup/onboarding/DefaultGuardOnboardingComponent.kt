@@ -2,7 +2,7 @@ package bruhcollective.itaysonlab.cobalt.guard.setup.onboarding
 
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.cobalt.guard.setup.alert.DefaultGuardAlreadyExistsAlertComponent
-import bruhcollective.itaysonlab.ksteam.guard.models.SgCreationResult
+import bruhcollective.itaysonlab.ksteam.models.guard.SgCreationResult
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot

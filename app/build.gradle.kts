@@ -25,8 +25,8 @@ android {
         minSdk = 21
         targetSdk = 35
 
-        versionCode = 9
-        versionName = "alpha 9"
+        versionCode = 11
+        versionName = "alpha 11"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -69,12 +69,11 @@ android {
 }
 
 dependencies {
-    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.8.0"))
     implementation("com.google.firebase:firebase-crashlytics")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
-    implementation("me.onebone:toolbar-compose:2.3.5")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.7.6")
 
     implementation(project(":core"))
 
@@ -106,4 +105,8 @@ dependencies {
     implementation(libs.coilCompose)
 
     debugImplementation(libs.composeUiTooling)
+}
+
+composeCompiler {
+    stabilityConfigurationFile = layout.projectDirectory.file("stability.conf")
 }

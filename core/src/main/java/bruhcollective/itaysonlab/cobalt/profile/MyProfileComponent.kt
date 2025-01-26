@@ -96,8 +96,10 @@ class MyProfileComponent (
 
         private fun launchPersonaCustomizationObserver() {
             steam.ksteam.persona.currentPersona.onEach { persona ->
-                personaCustomization.value = withContext(Dispatchers.Default) {
-                    steam.ksteam.profile.getCustomization(steamId = steam.currentSteamId)
+                runCatching {
+                    personaCustomization.value = withContext(Dispatchers.Default) {
+                        steam.ksteam.profile.getCustomization(steamId = steam.currentSteamId)
+                    }
                 }
             }.launchIn(viewModelScope)
         }

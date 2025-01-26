@@ -10,10 +10,10 @@ import bruhcollective.itaysonlab.cobalt.guard.setup.alert.DefaultGuardAlreadyExi
 import bruhcollective.itaysonlab.cobalt.guard.setup.onboarding.DefaultGuardOnboardingComponent
 import bruhcollective.itaysonlab.cobalt.guard.setup.recovery.SetupGuardRecoveryCodeComponent
 import bruhcollective.itaysonlab.cobalt.guard.setup.sms.DefaultGuardEnterSmsComponent
-import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
-import bruhcollective.itaysonlab.ksteam.guard.models.GuardStructure
-import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
-import bruhcollective.itaysonlab.ksteam.guard.models.SgCreationResult
+import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
+import bruhcollective.itaysonlab.ksteam.models.guard.GuardStructure
+import bruhcollective.itaysonlab.ksteam.models.guard.MobileConfirmationItem
+import bruhcollective.itaysonlab.ksteam.models.guard.SgCreationResult
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import bruhcollective.itaysonlab.ksteam.models.toSteamId
 import com.arkivanov.decompose.ComponentContext

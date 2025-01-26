@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.guard.instance.sessions
 
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
-import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
+import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue

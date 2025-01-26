@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,9 +21,6 @@ import bruhcollective.itaysonlab.cobalt.profile.widgets.ProfileWidgetPortal
 import bruhcollective.itaysonlab.cobalt.ui.components.CobaltDivider
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenLoading
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import me.onebone.toolbar.CollapsingToolbarScaffold
-import me.onebone.toolbar.ScrollStrategy
-import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 @Composable
 fun ProfileScreen(
@@ -42,22 +43,25 @@ fun ProfileScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ProfileScreenContent(
     component: ProfileComponent
 ) {
-    val collapsingScaffold = rememberCollapsingToolbarScaffoldState()
     val widgets by component.widgetsComponent.widgets.subscribeAsState()
+    val personaTitle by component.headerComponent.title.subscribeAsState()
 
-    CollapsingToolbarScaffold(
-        toolbar = {
-            ProfileHeader(collapsingScaffold = collapsingScaffold, component = component.headerComponent)
-        },
-        state = collapsingScaffold,
-        modifier = Modifier.fillMaxSize(),
-        scrollStrategy = ScrollStrategy.ExitUntilCollapsed
-    ) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(personaTitle)
+                }
+            )
+        }
+    ) { padding ->
         LazyColumn(
+            contentPadding = padding,
             modifier = Modifier.fillMaxSize()
         ) {
             item {
@@ -71,7 +75,7 @@ private fun ProfileScreenContent(
             }
 
             divider()
-            
+
             items(widgets) { widget ->
                 ProfileWidgetPortal(widget)
                 CobaltDivider(padding = 0.dp)

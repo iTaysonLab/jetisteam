@@ -33,7 +33,7 @@ import bruhcollective.itaysonlab.cobalt.guard.GuardUtils
 import bruhcollective.itaysonlab.cobalt.guard.instance.sessions.GuardSessionsComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenLoading
 import bruhcollective.itaysonlab.cobalt.ui.theme.partialShapes
-import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
+import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.collections.immutable.ImmutableList
 

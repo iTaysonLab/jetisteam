@@ -22,19 +22,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Bolt
+import androidx.compose.material.icons.rounded.Dataset
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -73,6 +78,9 @@ fun GamesScreen(component: GamesComponent) {
         }
     }
 
+    val picsState by component.picsAvailable.subscribeAsState()
+    val picsProgress by component.picsInitProgress.subscribeAsState()
+
     val screenResult by component.screenResult.subscribeAsState()
     val currentGames by component.games.subscribeAsState()
     val currentCollections by component.collections.subscribeAsState()
@@ -90,12 +98,18 @@ fun GamesScreen(component: GamesComponent) {
             ) {
                 LazyColumn {
                     item {
-                        ListItem(headlineContent = {
+                        ListItem(
+                            headlineContent = {
                             Text(stringResource(R.string.library_games_chip_collections_default))
-                        }, modifier = Modifier.fillMaxWidth().clickable {
-                            component.clearCollection()
-                            tmpShowCollections = false
-                        }, colors = ListItemDefaults.colors(containerColor = Color.Transparent))
+                        },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    component.clearCollection()
+                                    tmpShowCollections = false
+                                },
+                            colors = ListItemDefaults.colors(containerColor = Color.Transparent)
+                        )
                     }
 
                     item {
@@ -104,18 +118,30 @@ fun GamesScreen(component: GamesComponent) {
 
                     items(currentCollections) { collection ->
                         Column {
-                            ListItem(headlineContent = {
-                                Text(collection.name)
-                            }, modifier = Modifier.fillMaxWidth().clickable {
-                                component.setCollection(collection)
-                                tmpShowCollections = false
-                            }, colors = ListItemDefaults.colors(containerColor = Color.Transparent), trailingContent = {
-                                if (collection is LibraryCollection.Dynamic) {
-                                    Icon(Icons.Rounded.Bolt, contentDescription = "Dynamic filter")
-                                } else {
-                                    Icon(Icons.Rounded.GridView, contentDescription = "Manual filter")
-                                }
-                            })
+                            ListItem(
+                                headlineContent = {
+                                    Text(collection.name)
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        component.setCollection(collection)
+                                        tmpShowCollections = false
+                                    },
+                                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                                trailingContent = {
+                                    if (collection is LibraryCollection.Dynamic) {
+                                        Icon(
+                                            Icons.Rounded.Bolt,
+                                            contentDescription = "Dynamic filter"
+                                        )
+                                    } else {
+                                        Icon(
+                                            Icons.Rounded.GridView,
+                                            contentDescription = "Manual filter"
+                                        )
+                                    }
+                                })
 
                             HorizontalDivider()
                         }
@@ -132,7 +158,7 @@ fun GamesScreen(component: GamesComponent) {
                 .align(Alignment.CenterHorizontally),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            FilterChip(
+            ElevatedFilterChip(
                 selected = false,
                 onClick = {
                     tmpShowCollections = true
@@ -146,7 +172,15 @@ fun GamesScreen(component: GamesComponent) {
                 },
                 trailingIcon = {
                     Icon(Icons.Rounded.ArrowDropDown, contentDescription = null)
-                }
+                },
+                colors = FilterChipDefaults.elevatedFilterChipColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+                ),
+                border = FilterChipDefaults.filterChipBorder(
+                    true,
+                    false,
+                    borderColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
 
             Spacer(Modifier.weight(1f))
@@ -175,58 +209,98 @@ fun GamesScreen(component: GamesComponent) {
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            when (screenResult) {
-                CobaltScreenResult.Loading -> {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+            if (picsState) {
+
+                when (screenResult) {
+                    CobaltScreenResult.Loading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
-                }
 
-                CobaltScreenResult.Loaded -> {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(3),
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        state = gridState
-                    ) {
-                        itemsIndexed(currentGames) { index, app ->
-                            val shape = when (index) {
-                                0 -> MaterialTheme.partialShapes.largeTopLeftShape
-                                2 -> MaterialTheme.partialShapes.largeTopRightShape
-                                else -> RectangleShape
-                            }
+                    CobaltScreenResult.Loaded -> {
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(3),
+                            contentPadding = PaddingValues(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            state = gridState
+                        ) {
+                            itemsIndexed(currentGames) { index, app ->
+                                val shape = when (index) {
+                                    0 -> MaterialTheme.partialShapes.largeTopLeftShape
+                                    2 -> MaterialTheme.partialShapes.largeTopRightShape
+                                    else -> RectangleShape
+                                }
 
-                            Box(
-                                modifier = Modifier
-                                    .clip(shape)
-                                    .fillMaxWidth()
-                                    .aspectRatio(6f / 9f)
-                                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                            ) {
-                                Text(
-                                    text = app.application.name,
-                                    style = MaterialTheme.typography.labelMedium,
-                                    modifier = Modifier.align(Alignment.Center).padding(horizontal = 16.dp),
-                                    textAlign = TextAlign.Center
-                                )
-
-                                AsyncImage(
-                                    model = app.application.assets.libraryCapsule[ELanguage.English],
-                                    contentDescription = null,
+                                Box(
                                     modifier = Modifier
+                                        .clip(shape)
                                         .fillMaxWidth()
                                         .aspectRatio(6f / 9f)
-                                        .clip(shape),
-                                    contentScale = ContentScale.FillBounds
-                                )
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                        .clickable {
+                                            println(app.toString())
+                                        }
+                                ) {
+                                    Text(
+                                        text = app.application.name,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        modifier = Modifier
+                                            .align(Alignment.Center)
+                                            .padding(horizontal = 16.dp),
+                                        textAlign = TextAlign.Center
+                                    )
+
+                                    AsyncImage(
+                                        model = app.application.assets.localizedAssets[ELanguage.English]?.libraryCapsule?.path,
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .aspectRatio(6f / 9f)
+                                            .clip(shape),
+                                        contentScale = ContentScale.FillBounds
+                                    )
+                                }
                             }
                         }
                     }
-                }
 
-                CobaltScreenResult.NetworkError -> TODO()
-                CobaltScreenResult.UnknownError -> TODO()
+                    CobaltScreenResult.NetworkError -> TODO()
+                    CobaltScreenResult.UnknownError -> TODO()
+                }
+            } else {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            stringResource(R.string.library_initialization),
+                            style = MaterialTheme.typography.headlineMedium,
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Text(
+                            stringResource(R.string.library_initialization_text),
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        LinearProgressIndicator(
+                            progress = { picsProgress },
+                            trackColor = MaterialTheme.colorScheme.surface,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
             }
         }
     }

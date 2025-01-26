@@ -9,6 +9,16 @@ import kotlinx.collections.immutable.ImmutableList
 
 interface GamesComponent: HandlesScrollToTopComponent {
     /**
+     * PICS availability state.
+     */
+    val picsAvailable: Value<Boolean>
+
+    /**
+     * PICS initialization state.
+     */
+    val picsInitProgress: Value<Float>
+
+    /**
      * Page state.
      */
     val screenResult: Value<CobaltScreenResult>

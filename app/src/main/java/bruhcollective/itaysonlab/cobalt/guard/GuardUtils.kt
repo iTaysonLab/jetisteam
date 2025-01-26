@@ -9,8 +9,8 @@ import androidx.compose.material.icons.rounded.DeviceUnknown
 import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.Smartphone
 import androidx.compose.ui.graphics.vector.ImageVector
-import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
-import bruhcollective.itaysonlab.ksteam.guard.models.IncomingSession
+import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
+import bruhcollective.itaysonlab.ksteam.models.guard.IncomingSession
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime

@@ -65,24 +65,34 @@ internal fun GuardCodePage(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            AnimatedContent(
-                targetState = code, transitionSpec = {
-                    materialSharedAxisY(
-                        forward = true,
-                        slideDistance = slideDistance
-                    ).using(
-                        SizeTransform(clip = false)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                AnimatedContent(
+                    targetState = code, transitionSpec = {
+                        materialSharedAxisY(
+                            forward = true,
+                            slideDistance = slideDistance
+                        ).using(
+                            SizeTransform(clip = false)
+                        )
+                    }
+                ) { code ->
+                    Text(
+                        fontFamily = robotoMonoFontFamily,
+                        text = code,
+                        textAlign = TextAlign.Center,
+                        fontSize = 56.sp,
+                        letterSpacing = 12.sp,
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
-            ) { code ->
-                Text(
-                    fontFamily = robotoMonoFontFamily,
-                    text = code,
-                    textAlign = TextAlign.Center,
-                    fontSize = 56.sp,
-                    letterSpacing = 12.sp,
-                    color = MaterialTheme.colorScheme.primary
-                )
+
+                IconButton(
+                    onClick = {
+                        clipboardManager.setText(AnnotatedString(code))
+                    },
+                ) {
+                    Icon(imageVector = Icons.Rounded.ContentCopy, contentDescription = stringResource(id = R.string.guard_actions_copy))
+                }
             }
 
             LinearProgressIndicator(
@@ -91,14 +101,6 @@ internal fun GuardCodePage(
                 // trackColor = MaterialTheme.colorScheme.primary,
                 drawStopIndicator = { }
             )
-
-            IconButton(
-                onClick = {
-                    clipboardManager.setText(AnnotatedString(code))
-                },
-            ) {
-                Icon(imageVector = Icons.Rounded.ContentCopy, contentDescription = stringResource(id = R.string.guard_actions_copy))
-            }
         }
 
         Row(

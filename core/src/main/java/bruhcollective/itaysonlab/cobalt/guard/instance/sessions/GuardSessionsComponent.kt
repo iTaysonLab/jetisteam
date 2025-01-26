@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.cobalt.guard.instance.sessions
 
-import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
+import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
 import com.arkivanov.decompose.value.Value
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

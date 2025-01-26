@@ -2,8 +2,8 @@ package bruhcollective.itaysonlab.cobalt.guard.instance.confirmations
 
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
 import bruhcollective.itaysonlab.cobalt.guard.instance.code.GuardCodeComponent
-import bruhcollective.itaysonlab.ksteam.guard.models.ConfirmationListState
-import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
+import bruhcollective.itaysonlab.ksteam.models.guard.ConfirmationListState
+import bruhcollective.itaysonlab.ksteam.models.guard.MobileConfirmationItem
 import bruhcollective.itaysonlab.ksteam.models.SteamId
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue

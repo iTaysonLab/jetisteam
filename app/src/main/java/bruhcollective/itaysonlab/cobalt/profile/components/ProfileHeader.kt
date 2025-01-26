@@ -33,17 +33,13 @@ import bruhcollective.itaysonlab.cobalt.ui.components.CobaltDivider
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import me.onebone.toolbar.CollapsingToolbarScaffoldState
-import me.onebone.toolbar.CollapsingToolbarScope
-import me.onebone.toolbar.ExperimentalToolbarApi
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalToolbarApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CollapsingToolbarScope.ProfileHeader(
-    collapsingScaffold: CollapsingToolbarScaffoldState,
+fun ProfileHeader(
     component: ProfileHeaderComponent
 ) {
-    val personaTitle by component.title.subscribeAsState()
+    /*val personaTitle by component.title.subscribeAsState()
 
     LaunchedEffect(personaTitle) {
         if (collapsingScaffold.toolbarState.progress == 1f) {
@@ -80,7 +76,7 @@ fun CollapsingToolbarScope.ProfileHeader(
         )
 
         CobaltDivider(padding = 0.dp)
-    }
+    }*/
 }
 
 @Composable

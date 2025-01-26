@@ -43,8 +43,8 @@ import bruhcollective.itaysonlab.cobalt.guard.instance.confirmations.GuardConfir
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenError
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenLoading
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenPlaceholder
-import bruhcollective.itaysonlab.ksteam.guard.models.ConfirmationListState
-import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
+import bruhcollective.itaysonlab.ksteam.models.guard.ConfirmationListState
+import bruhcollective.itaysonlab.ksteam.models.guard.MobileConfirmationItem
 import coil.compose.AsyncImage
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 

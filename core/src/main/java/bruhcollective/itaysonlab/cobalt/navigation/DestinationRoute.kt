@@ -1,8 +1,8 @@
 package bruhcollective.itaysonlab.cobalt.navigation
 
-import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
-import bruhcollective.itaysonlab.ksteam.guard.models.GuardStructure
-import bruhcollective.itaysonlab.ksteam.guard.models.MobileConfirmationItem
+import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
+import bruhcollective.itaysonlab.ksteam.models.guard.GuardStructure
+import bruhcollective.itaysonlab.ksteam.models.guard.MobileConfirmationItem
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

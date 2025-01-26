@@ -52,30 +52,32 @@ class FusionDiscoverComponent (
                 loadMutex.withLock {
                     state.value = DiscoverComponent.DiscoverState.Loading
 
-                    items.value = withContext(Dispatchers.IO) {
-                        val userNews = ksUserNews.getUserNews(
-                            showEvents = UserNews.UserNewsFilterScenario.FriendActivity,
-                            count = 25 // 25 is enough-ish, we can TODO implement paging
-                        ).sortedByDescending(ActivityFeedEntry::date)
+                    runCatching {
+                        items.value = withContext(Dispatchers.IO) {
+                            val userNews = ksUserNews.getUserNews(
+                                showEvents = UserNews.UserNewsFilterScenario.FriendActivity,
+                                count = 25 // 25 is enough-ish, we can TODO implement paging
+                            ).sortedByDescending(ActivityFeedEntry::date)
 
-                        val lastUserNewsDate = userNews.lastOrNull()?.date?.toLong() ?: 0L
-                        val currentClock = System.currentTimeMillis() / 1000
+                            val lastUserNewsDate = userNews.lastOrNull()?.date?.toLong() ?: 0L
+                            val currentClock = System.currentTimeMillis() / 1000
 
-                        val upcomingEvents = ksNews.getUpcomingEvents(maxCount = 5).toImmutableList()
-                        val steamNewsUpToUser = ksNews.getEventsInCalendarRange(range = lastUserNewsDate..currentClock)
+                            val upcomingEvents = ksNews.getUpcomingEvents(maxCount = 5).toImmutableList()
+                            val steamNewsUpToUser = ksNews.getEventsInCalendarRange(range = lastUserNewsDate..currentClock)
 
-                        val afData = userNews.map(::createActivityFeed)
-                        val nfData = steamNewsUpToUser.map(::createNewsPost)
+                            val afData = userNews.map(::createActivityFeed)
+                            val nfData = steamNewsUpToUser.map(::createNewsPost)
 
-                        buildList {
-                            if (upcomingEvents.isNotEmpty()) {
-                                add(DiscoverComponent.DiscoverItem.UpcomingEvents(events = upcomingEvents))
-                            }
+                            buildList {
+                                if (upcomingEvents.isNotEmpty()) {
+                                    add(DiscoverComponent.DiscoverItem.UpcomingEvents(events = upcomingEvents))
+                                }
 
-                            addAll(
-                                (afData + nfData).sortedByDescending(DiscoverComponent.DiscoverItem::date)
-                            )
-                        }.toImmutableList()
+                                addAll(
+                                    (afData + nfData).sortedByDescending(DiscoverComponent.DiscoverItem::date)
+                                )
+                            }.toImmutableList()
+                        }
                     }
 
                     state.value = DiscoverComponent.DiscoverState.Loaded

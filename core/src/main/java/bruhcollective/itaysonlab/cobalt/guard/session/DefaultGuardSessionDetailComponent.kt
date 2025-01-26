@@ -2,7 +2,7 @@ package bruhcollective.itaysonlab.cobalt.guard.session
 
 import bruhcollective.itaysonlab.cobalt.core.platform.PlatformBrowser
 import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
-import bruhcollective.itaysonlab.ksteam.guard.models.ActiveSession
+import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
 import bruhcollective.itaysonlab.ksteam.models.enums.EGamingDeviceType
 import bruhcollective.itaysonlab.ksteam.models.enums.EOSType
 import com.arkivanov.decompose.ComponentContext

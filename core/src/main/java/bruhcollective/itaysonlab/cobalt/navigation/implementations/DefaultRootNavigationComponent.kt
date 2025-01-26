@@ -53,7 +53,7 @@ class DefaultRootNavigationComponent (
          */
 
         navigation.bringToFront(value) {
-            println("NAV: ${stack.items.joinToString(separator = "\n") { "${it.configuration} -> [${it.instance.stack.items.joinToString { c -> "${c.configuration} = ${c.instance}" }}]" }}")
+            // println("NAV: ${stack.items.joinToString(separator = "\n") { "${it.configuration} -> [${it.instance.stack.items.joinToString { c -> "${c.configuration} = ${c.instance}" }}]" }}")
         }
     }
 }

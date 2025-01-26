@@ -3,7 +3,7 @@ package bruhcollective.itaysonlab.cobalt.library.games
 import bruhcollective.itaysonlab.cobalt.core.commons.CobaltScreenResult
 import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import bruhcollective.itaysonlab.ksteam.models.app.OwnedSteamApplication
-import bruhcollective.itaysonlab.ksteam.models.enums.EAppType
+import bruhcollective.itaysonlab.ksteam.models.enums.ECollectionAppType
 import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
 import bruhcollective.itaysonlab.ksteam.models.library.query.KsLibraryQueryBuilder
 import bruhcollective.itaysonlab.ksteam.models.library.query.KsLibraryQueryOwnerFilter
@@ -17,15 +17,16 @@ import com.arkivanov.essenty.lifecycle.doOnResume
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-class DefaultGamesComponent (
+class DefaultGamesComponent(
     componentContext: ComponentContext
-): GamesComponent, KoinComponent, ComponentContext by componentContext {
-    private val scope = coroutineScope()
+) : GamesComponent, KoinComponent, ComponentContext by componentContext,
+    CoroutineScope by componentContext.coroutineScope() {
     private var libraryPollingJob: Job? = null
 
     private val steamClient: ExtendedSteamClient = get()
@@ -36,6 +37,9 @@ class DefaultGamesComponent (
     override val currentCollectionId = MutableValue<String>("")
     override val currentCollectionName = MutableValue<String>("")
     override val currentSearchQuery = MutableValue<String>("")
+
+    override val picsAvailable = MutableValue<Boolean>(false)
+    override val picsInitProgress = MutableValue<Float>(0f)
 
     override val scrollToTopFlag = MutableValue<Boolean>(false)
 
@@ -49,11 +53,32 @@ class DefaultGamesComponent (
 
     init {
         doOnCreate {
-            dispatchLibraryQuery()
+            launch {
+                steamClient.pics.isPicsAvailable.withLifecycle(
+                    lifecycle,
+                    minActiveState = Lifecycle.State.RESUMED
+                ).collect {
+                    picsAvailable.value = it
+
+                    if (it) {
+                        dispatchLibraryQuery()
+                    }
+                }
+            }
+
+            launch {
+                steamClient.pics.picsInitializationProgress.withLifecycle(
+                    lifecycle,
+                    minActiveState = Lifecycle.State.RESUMED
+                ).collect {
+                    println("picsInitializationProgress =>>>>> $it")
+                    picsInitProgress.value = it
+                }
+            }
         }
 
         doOnResume {
-            scope.launch {
+            launch {
                 steamClient.library.userCollections.collect {
                     collections.value = it.values.toImmutableList()
                 }
@@ -66,19 +91,27 @@ class DefaultGamesComponent (
      */
     private fun dispatchLibraryQuery() {
         libraryPollingJob?.cancel()
-        libraryPollingJob = scope.launch {
+        libraryPollingJob = launch {
             if (currentCollectionId.value.isNotEmpty()) {
-                steamClient.library.getAppsInCollection(id = currentCollectionId.value, limit = 0)
+                steamClient.library.getAppsInCollection(
+                    id = currentCollectionId.value,
+                    full = true,
+                    limit = 0
+                )
                     .withLifecycle(lifecycle, minActiveState = Lifecycle.State.RESUMED)
                     .collect { apps ->
                         screenResult.value = CobaltScreenResult.Loaded
                         games.value = apps.toImmutableList()
                     }
             } else {
-                games.value = steamClient.library.execute(KsLibraryQueryBuilder()
-                    .withAppType(EAppType.Game)
-                    .withOwnerFilter(KsLibraryQueryOwnerFilter.Default)
-                    .build()).toImmutableList()
+                games.value = steamClient.library.execute(
+                    KsLibraryQueryBuilder()
+                        .withAppType(ECollectionAppType.Game)
+                        .withOwnerFilter(KsLibraryQueryOwnerFilter.Default)
+                        .fetchFullInformation(true)
+                        // .withLimit(50)
+                        .build()
+                ).toImmutableList()
                 screenResult.value = CobaltScreenResult.Loaded
             }
         }

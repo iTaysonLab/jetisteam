@@ -24,4 +24,8 @@
 
     <string name="library_screenshots_chip_apps">Games</string>
     <string name="library_screenshots_chip_sort">Sort by</string>
+
+    <string name="library_initialization">Initializing library…</string>
+    <string name="library_initialization_text">Cobalt is currently indexing and updating your Steam library. Please wait - this can take a while, depending on your library size, network conditions and device performance.</string>
+
 </resources>

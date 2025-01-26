@@ -1,6 +1,6 @@
 package bruhcollective.itaysonlab.cobalt.guard.qr
 
-import bruhcollective.itaysonlab.ksteam.guard.models.IncomingSession
+import bruhcollective.itaysonlab.ksteam.models.guard.IncomingSession
 import com.arkivanov.decompose.value.Value
 
 interface GuardQrScannerComponent {
