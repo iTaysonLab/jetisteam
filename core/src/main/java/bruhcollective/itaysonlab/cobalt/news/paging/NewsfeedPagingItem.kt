@@ -2,7 +2,6 @@ package bruhcollective.itaysonlab.cobalt.news.paging
 
 import bruhcollective.itaysonlab.ksteam.models.news.NewsEvent
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
-import kotlinx.collections.immutable.ImmutableList
 
 /**
  * Defines an item that is shown on the newsfeed.
@@ -22,17 +21,6 @@ sealed interface NewsfeedPagingItem {
      * Item date, to be shown in shared UI and in sorting algorithms.
      */
     val date: Long
-
-    /**
-     * Represents "Upcoming Events" slider on the top of a page.
-     */
-    data class UpcomingEvents (
-        val events: ImmutableList<NewsEvent>
-    ): NewsfeedPagingItem {
-        override val id: String = "synth_ue"
-        override val contentType: Int = -1
-        override val date: Long = Long.MAX_VALUE
-    }
 
     /**
      * Represents an arbitrary news item that points to a Steam News post.
