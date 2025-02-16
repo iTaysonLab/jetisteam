@@ -30,10 +30,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.cobalt.R
-import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardConfirmSessionSheet
-import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardRecoveryCodeSheet
-import bruhcollective.itaysonlab.cobalt.guard.bottom_sheet.GuardRemoveSheet
-import bruhcollective.itaysonlab.cobalt.guard.qr_code.GuardQrCodeSheet
+import bruhcollective.itaysonlab.cobalt.guard.instance.GuardInstanceComponent
+import bruhcollective.itaysonlab.cobalt.screens.guard.bottom_sheet.GuardConfirmSessionSheet
+import bruhcollective.itaysonlab.cobalt.screens.guard.bottom_sheet.GuardRecoveryCodeSheet
+import bruhcollective.itaysonlab.cobalt.screens.guard.bottom_sheet.GuardRemoveSheet
+import bruhcollective.itaysonlab.cobalt.screens.guard.qr_code.GuardQrCodeSheet
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.IndicatorBehindScrollableTabRow
 import bruhcollective.itaysonlab.cobalt.ui.components.tabIndicatorOffset

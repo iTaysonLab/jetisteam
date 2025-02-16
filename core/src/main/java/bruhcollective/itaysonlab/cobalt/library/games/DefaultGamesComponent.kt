@@ -71,7 +71,6 @@ class DefaultGamesComponent(
                     lifecycle,
                     minActiveState = Lifecycle.State.RESUMED
                 ).collect {
-                    println("picsInitializationProgress =>>>>> $it")
                     picsInitProgress.value = it
                 }
             }

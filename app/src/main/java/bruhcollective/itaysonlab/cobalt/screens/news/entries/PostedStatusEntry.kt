@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.screens.news.entries.parts.PostPersonaHeader
-import bruhcollective.itaysonlab.ksteam.models.apps.capsuleSmall
+import bruhcollective.itaysonlab.ksteam.models.enums.ELanguage
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
 import coil.compose.AsyncImage
 
@@ -30,7 +30,7 @@ fun PostedStatusEntry(
             style = MaterialTheme.typography.labelMedium,
         )
 
-        AsyncImage(model = entry.app.capsuleSmall, contentDescription = null, modifier = Modifier.width(120.dp).height(50.dp))
+        AsyncImage(model = entry.app.assets.localizedAssets[ELanguage.English]?.smallCapsule, contentDescription = null, modifier = Modifier.width(120.dp).height(50.dp))
 
         Text(
             text = entry.text,

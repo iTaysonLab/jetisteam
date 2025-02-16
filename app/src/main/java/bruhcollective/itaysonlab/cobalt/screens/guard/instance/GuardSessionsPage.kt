@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -29,13 +26,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
-import bruhcollective.itaysonlab.cobalt.guard.GuardUtils
 import bruhcollective.itaysonlab.cobalt.guard.instance.sessions.GuardSessionsComponent
+import bruhcollective.itaysonlab.cobalt.screens.guard.GuardUtils
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenLoading
 import bruhcollective.itaysonlab.cobalt.ui.theme.partialShapes
 import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

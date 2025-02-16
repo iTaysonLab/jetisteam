@@ -6,7 +6,7 @@ kspVersion = "2.1.0-1.0.29"
 # kotlinx
 kotlinxSerializationVersion = "1.7.3"
 kotlinxDateTimeVersion = "0.6.1"
-coroutinesVersion = "1.9.0"
+coroutinesVersion = "1.10.1"
 kotlinxAtomicVersion = "0.20.2"
 kotlinxCollectionsVersion = "0.3.8"
 
@@ -18,7 +18,7 @@ multiplatformSettingsVersion = "1.2.0"
 napierVersion = "2.6.1"
 koinVersion = "4.0.0"
 koinKspVersion = "1.3.1"
-okioVersion = "3.9.1"
+okioVersion = "3.10.2"
 
 # decompose
 decomposeVersion = "3.2.2"
@@ -34,7 +34,7 @@ androidActivityKtxVersion = "1.10.0"
 androidPaging = "3.3.5"
 
 # compose
-composeVersion = "1.7.6"
+composeVersion = "1.7.7"
 composeMaterial3Version = "1.3.1"
 compose_motion = "1.0.6"
 accompanist = "0.35.0-alpha"
@@ -49,7 +49,7 @@ junit = "4.13.2"
 appcompat = "1.6.1"
 
 # ksteam
-ksteam = "r43"
+ksteam = "r46"
 
 # camera
 camerax = "1.4.1"

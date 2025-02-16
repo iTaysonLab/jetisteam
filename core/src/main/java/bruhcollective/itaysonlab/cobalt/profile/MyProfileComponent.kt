@@ -19,6 +19,7 @@ import com.arkivanov.decompose.value.ObserveLifecycleMode
 import com.arkivanov.decompose.value.subscribe
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -89,9 +90,11 @@ class MyProfileComponent (
         }
 
         private fun launchPersonaEquipmentObserver() {
-            steam.ksteam.profile.getMyEquipment().onEach { equipment ->
-                personaEquipment.value = equipment
-            }.launchIn(viewModelScope)
+            viewModelScope.launch {
+                steam.ksteam.profile.currentProfileEquipment.collectLatest { equipment ->
+                    personaEquipment.value = equipment
+                }
+            }
         }
 
         private fun launchPersonaCustomizationObserver() {

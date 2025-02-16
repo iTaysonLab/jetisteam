@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.compose.accompanist.WebView
 import bruhcollective.itaysonlab.cobalt.compose.accompanist.rememberWebViewState
+import bruhcollective.itaysonlab.cobalt.guard.confirmation.GuardConfirmationComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.RoundedPage
 import bruhcollective.itaysonlab.cobalt.ui.components.StateButton

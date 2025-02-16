@@ -3,8 +3,45 @@
     <string name="tab_news">News</string>
 
     <string name="news">News</string>
-    <string name="news_feed_game_news">Updates</string>
+
+    <string name="news_upcoming_more">See more</string>
+
+    <string name="news_feed_unified">Feed</string>
+    <string name="news_feed_unified_desc">Everything, from everywhere</string>
+    <string name="news_feed_upcoming">Upcoming</string>
+    <string name="news_feed_upcoming_desc">Events that will be soon</string>
+    <string name="news_feed_game_news">News</string>
+    <string name="news_feed_game_news_desc">Latest game patches and news</string>
     <string name="news_feed_user_activity">Activity</string>
+    <string name="news_feed_user_activity_desc">Your friends activity</string>
+    <string name="news_feed_featured">Your friends activity</string>
+    <string name="news_feed_press">Your friends activity</string>
+    <string name="news_feed_steam">Your friends activity</string>
+
+    <string name="news_feed_my">My feeds</string>
+    <string name="news_feed_create">Create a feed</string>
+
+    <string name="news_settings_header_game_news">News</string>
+    <string name="news_settings_game_news_event_sources">Sources</string>
+    <string name="news_settings_game_news_event_types">Categories</string>
+
+    <string name="news_source_heading_games">Return news about games…</string>
+    <string name="news_source_library">from your library</string>
+    <string name="news_source_wishlist">from your wishlist</string>
+    <string name="news_source_following">from your followings</string>
+    <string name="news_source_recommended">from recommendations</string>
+    <string name="news_source_recent">your purchased or played in past 6 months</string>
+
+    <string name="news_source_heading_other">Return news about…</string>
+    <string name="news_source_steam">Steam platform</string>
+    <string name="news_source_curator">curators you follow</string>
+    <string name="news_source_featured">featured games</string>
+
+    <string name="news_type_events">Events</string>
+    <string name="news_type_streams">Live Streams</string>
+    <string name="news_type_updates">Content Updates</string>
+    <string name="news_type_releases">Releases</string>
+    <string name="news_type_sales">Sales</string>
 
     <plurals name="news_activity_received_games">
         <item quantity="one">now owns %1$d game</item>

@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.screens.news.entries.parts.PostPersonaHeader
-import bruhcollective.itaysonlab.ksteam.models.apps.capsuleSmall
+import bruhcollective.itaysonlab.ksteam.models.enums.ELanguage
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
 import coil.compose.AsyncImage
 
@@ -35,7 +35,7 @@ fun ReceivedNewGameEntry(
 
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(entry.apps) { appSummary ->
-                AsyncImage(model = appSummary.capsuleSmall, contentDescription = null, modifier = Modifier.width(120.dp).height(50.dp))
+                AsyncImage(model = appSummary.assets.localizedAssets[ELanguage.English]?.smallCapsule, contentDescription = null, modifier = Modifier.width(120.dp).height(50.dp))
             }
         }
     }

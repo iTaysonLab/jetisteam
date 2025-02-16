@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.cobalt.R
+import bruhcollective.itaysonlab.cobalt.guard.setup.recovery.GuardRecoveryCodeComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.font.robotoMonoFontFamily
 

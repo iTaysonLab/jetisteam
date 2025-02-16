@@ -1,8 +1,6 @@
 package bruhcollective.itaysonlab.cobalt.screens.library
 
-import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -26,17 +24,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.cobalt.R
-import bruhcollective.itaysonlab.cobalt.library.devices.DevicesScreen
-import bruhcollective.itaysonlab.cobalt.library.games.GamesScreen
-import bruhcollective.itaysonlab.cobalt.library.screenshots.ScreenshotsScreen
+import bruhcollective.itaysonlab.cobalt.library.LibraryComponent
+import bruhcollective.itaysonlab.cobalt.screens.library.devices.DevicesScreen
+import bruhcollective.itaysonlab.cobalt.screens.library.games.GamesScreen
+import bruhcollective.itaysonlab.cobalt.screens.library.screenshots.ScreenshotsScreen
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.IndicatorBehindScrollableTabRow
-import bruhcollective.itaysonlab.cobalt.ui.components.RoundedPage
 import bruhcollective.itaysonlab.cobalt.ui.components.tabIndicatorOffset
 import com.arkivanov.decompose.extensions.compose.pages.ChildPages
 import com.arkivanov.decompose.extensions.compose.pages.PagesScrollAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import kotlinx.coroutines.launch
 import java.util.Locale
 
 @OptIn(ExperimentalSharedTransitionApi::class)

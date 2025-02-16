@@ -22,13 +22,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Bolt
-import androidx.compose.material.icons.rounded.Dataset
 import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -57,7 +55,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.core.commons.CobaltScreenResult
+import bruhcollective.itaysonlab.cobalt.library.games.GamesComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.BottomSheetLayout
+import bruhcollective.itaysonlab.cobalt.ui.components.ExceptionPage
 import bruhcollective.itaysonlab.cobalt.ui.components.RoundedPage
 import bruhcollective.itaysonlab.cobalt.ui.theme.partialShapes
 import bruhcollective.itaysonlab.ksteam.models.enums.ELanguage
@@ -210,8 +210,7 @@ fun GamesScreen(component: GamesComponent) {
                 .fillMaxWidth()
         ) {
             if (picsState) {
-
-                when (screenResult) {
+                when (val s = screenResult) {
                     CobaltScreenResult.Loading -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -219,6 +218,13 @@ fun GamesScreen(component: GamesComponent) {
                         ) {
                             CircularProgressIndicator()
                         }
+                    }
+
+                    is CobaltScreenResult.Error -> {
+                        ExceptionPage(
+                            result = s,
+                            modifier = Modifier.fillMaxSize().padding(16.dp)
+                        )
                     }
 
                     CobaltScreenResult.Loaded -> {
@@ -242,9 +248,6 @@ fun GamesScreen(component: GamesComponent) {
                                         .fillMaxWidth()
                                         .aspectRatio(6f / 9f)
                                         .background(MaterialTheme.colorScheme.surfaceVariant)
-                                        .clickable {
-                                            println(app.toString())
-                                        }
                                 ) {
                                     Text(
                                         text = app.application.name,
@@ -268,9 +271,6 @@ fun GamesScreen(component: GamesComponent) {
                             }
                         }
                     }
-
-                    CobaltScreenResult.NetworkError -> TODO()
-                    CobaltScreenResult.UnknownError -> TODO()
                 }
             } else {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

@@ -15,12 +15,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.ksteam.models.persona.SummaryPersona
+import bruhcollective.itaysonlab.ksteam.models.persona.Persona
 import coil.compose.AsyncImage
 
 @Composable
 fun PostPersonaHeader(
-    persona: SummaryPersona,
+    persona: Persona,
     postedDate: Int,
     modifier: Modifier = Modifier
 ) {

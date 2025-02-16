@@ -27,7 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
-import bruhcollective.itaysonlab.cobalt.guard.components.CodeRow
+import bruhcollective.itaysonlab.cobalt.screens.guard.components.CodeRow
+import bruhcollective.itaysonlab.cobalt.guard.setup.sms.GuardEnterSmsComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 
 @OptIn(ExperimentalMaterial3Api::class)

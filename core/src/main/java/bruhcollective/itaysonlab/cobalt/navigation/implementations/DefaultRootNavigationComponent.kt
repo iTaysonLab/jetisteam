@@ -8,13 +8,12 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
-import com.arkivanov.decompose.router.stack.items
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-class DefaultRootNavigationComponent (
+internal class DefaultRootNavigationComponent (
     componentContext: ComponentContext
 ): RootNavigationComponent, ComponentContext by componentContext {
     private val navigation = StackNavigation<RootDestination>()
@@ -33,7 +32,7 @@ class DefaultRootNavigationComponent (
 
     private fun createChild(configuration: RootDestination, componentContext: ComponentContext): DestinationComponent {
         val initialRoute = when (configuration) {
-            RootDestination.Newsfeed -> DestinationRoute.Newsfeed
+            RootDestination.Newsfeed -> DestinationRoute.WrappedNewsfeed
             RootDestination.Guard -> DestinationRoute.Guard
             RootDestination.Library -> DestinationRoute.Library
             RootDestination.Profile -> DestinationRoute.MyProfile

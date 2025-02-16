@@ -2,16 +2,17 @@ package bruhcollective.itaysonlab.cobalt.screens.navigation
 
 import androidx.compose.runtime.Composable
 import bruhcollective.itaysonlab.cobalt.cobaltStackAnimator
-import bruhcollective.itaysonlab.cobalt.guard.GuardRootScreen
-import bruhcollective.itaysonlab.cobalt.guard.confirmation.GuardConfirmationPage
-import bruhcollective.itaysonlab.cobalt.guard.session.GuardSessionScreen
-import bruhcollective.itaysonlab.cobalt.guard.setup.recovery.GuardSaveCodeScreen
-import bruhcollective.itaysonlab.cobalt.guard.setup.sms.GuardEnterSmsScreen
-import bruhcollective.itaysonlab.cobalt.library.LibraryScreen
+import bruhcollective.itaysonlab.cobalt.screens.guard.GuardRootScreen
+import bruhcollective.itaysonlab.cobalt.screens.guard.confirmation.GuardConfirmationPage
+import bruhcollective.itaysonlab.cobalt.screens.guard.session.GuardSessionScreen
+import bruhcollective.itaysonlab.cobalt.screens.guard.setup.recovery.GuardSaveCodeScreen
+import bruhcollective.itaysonlab.cobalt.screens.guard.setup.sms.GuardEnterSmsScreen
+import bruhcollective.itaysonlab.cobalt.screens.library.LibraryScreen
 import bruhcollective.itaysonlab.cobalt.navigation.DestinationChild
 import bruhcollective.itaysonlab.cobalt.navigation.DestinationComponent
-import bruhcollective.itaysonlab.cobalt.news.discover.DiscoverScreen
-import bruhcollective.itaysonlab.cobalt.profile.ProfileScreen
+import bruhcollective.itaysonlab.cobalt.screens.news.NewsfeedScreen
+import bruhcollective.itaysonlab.cobalt.screens.news.WrappedNewsfeedScreen
+import bruhcollective.itaysonlab.cobalt.screens.profile.ProfileScreen
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.predictiveback.androidPredictiveBackAnimatable
@@ -57,8 +58,12 @@ fun DestinationScreen (
                 LibraryScreen(child.component)
             }
 
+            is DestinationChild.WrappedNewsfeed -> {
+                WrappedNewsfeedScreen(child.component)
+            }
+
             is DestinationChild.Newsfeed -> {
-                DiscoverScreen(child.component)
+                NewsfeedScreen(child.component)
             }
 
             is DestinationChild.Profile -> {

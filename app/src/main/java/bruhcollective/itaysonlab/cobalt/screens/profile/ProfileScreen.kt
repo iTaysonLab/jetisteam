@@ -14,10 +14,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.cobalt.profile.components.ProfileActionsStrip
-import bruhcollective.itaysonlab.cobalt.profile.components.ProfileHeader
-import bruhcollective.itaysonlab.cobalt.profile.components.ProfilePlayingCard
-import bruhcollective.itaysonlab.cobalt.profile.widgets.ProfileWidgetPortal
+import bruhcollective.itaysonlab.cobalt.profile.ProfileComponent
+import bruhcollective.itaysonlab.cobalt.screens.profile.components.ProfileActionsStrip
+import bruhcollective.itaysonlab.cobalt.screens.profile.components.ProfilePlayingCard
+import bruhcollective.itaysonlab.cobalt.screens.profile.widgets.ProfileWidgetPortal
 import bruhcollective.itaysonlab.cobalt.ui.components.CobaltDivider
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenLoading
 import com.arkivanov.decompose.extensions.compose.subscribeAsState

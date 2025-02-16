@@ -1,5 +1,6 @@
 package bruhcollective.itaysonlab.cobalt.navigation
 
+import bruhcollective.itaysonlab.cobalt.news.models.NewsfeedType
 import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
 import bruhcollective.itaysonlab.ksteam.models.guard.GuardStructure
 import bruhcollective.itaysonlab.ksteam.models.guard.MobileConfirmationItem
@@ -70,8 +71,14 @@ sealed interface DestinationRoute {
     // region NEWS
 
     @Serializable
+    @SerialName("wrapped_newsfeed")
+    data object WrappedNewsfeed : DestinationRoute
+
+    @Serializable
     @SerialName("newsfeed")
-    data object Newsfeed : DestinationRoute
+    data class Newsfeed (
+        val type: NewsfeedType
+    ) : DestinationRoute
 
     // endregion
 }

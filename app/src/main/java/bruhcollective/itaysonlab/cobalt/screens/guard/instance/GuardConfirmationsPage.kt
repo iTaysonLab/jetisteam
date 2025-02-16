@@ -38,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.cobalt.R
-import bruhcollective.itaysonlab.cobalt.guard.GuardUtils
+import bruhcollective.itaysonlab.cobalt.screens.guard.GuardUtils
 import bruhcollective.itaysonlab.cobalt.guard.instance.confirmations.GuardConfirmationsComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenError
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenLoading

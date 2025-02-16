@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.ext.roundUpTo
-import bruhcollective.itaysonlab.ksteam.models.apps.libraryHeader
+import bruhcollective.itaysonlab.ksteam.models.enums.ELanguage
 import bruhcollective.itaysonlab.ksteam.models.persona.ProfileWidget
 import coil.compose.AsyncImage
 
@@ -40,7 +40,7 @@ fun FavoriteGameProfileWidget(
 
     Box(modifier = Modifier.height(IntrinsicSize.Min)) {
         AsyncImage(
-            model = widget.app.libraryHeader,
+            model = widget.app.assets.localizedAssets[ELanguage.English]?.libraryHeader?.path,
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop

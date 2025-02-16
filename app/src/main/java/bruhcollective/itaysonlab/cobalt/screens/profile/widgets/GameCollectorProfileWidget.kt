@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.ksteam.models.apps.capsuleSmall
+import bruhcollective.itaysonlab.ksteam.models.enums.ELanguage
 import bruhcollective.itaysonlab.ksteam.models.persona.ProfileWidget
 import coil.compose.AsyncImage
 
@@ -27,7 +27,7 @@ fun GameCollectorProfileWidget(
     ) {
         widget.featuredApps.forEach { app ->
             AsyncImage(
-                model = app.capsuleSmall,
+                model = app.assets.localizedAssets[ELanguage.English]?.smallCapsule,
                 contentDescription = null,
                 contentScale = ContentScale.FillHeight,
                 modifier = Modifier.weight(1f)

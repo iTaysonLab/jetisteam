@@ -29,7 +29,7 @@ sealed interface NewsfeedPagingItem {
         val item: NewsEvent
     ): NewsfeedPagingItem {
         override val id: String get() = item.id
-        override val contentType: Int = -2
+        override val contentType: Int = -1
         override val date: Long get() = item.publishedAt.toLong()
     }
 
@@ -51,6 +51,7 @@ sealed interface NewsfeedPagingItem {
             is ActivityFeedEntry.ScreenshotPosted -> 5
             is ActivityFeedEntry.ScreenshotsPosted -> 6
             is ActivityFeedEntry.PostedStatus -> 7
+            is ActivityFeedEntry.FriendAdded -> 8
         }
     }
 }

@@ -1,14 +1,14 @@
 package bruhcollective.itaysonlab.cobalt.screens.root_flows
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import bruhcollective.itaysonlab.cobalt.compose.LocalAnimatedVisibilityScope
 import bruhcollective.itaysonlab.cobalt.compose.LocalNavSharedTransitionScope
-import bruhcollective.itaysonlab.cobalt.library.LibraryScreen
-import bruhcollective.itaysonlab.cobalt.published_files.PublishedFullscreenPhotoViewer
+import bruhcollective.itaysonlab.cobalt.screens.library.LibraryScreen
+import bruhcollective.itaysonlab.cobalt.screens.published_files.PublishedFullscreenPhotoViewer
+import bruhcollective.itaysonlab.cobalt.root_flows.RootLibraryFlowComponent
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.experimental.stack.ChildStack
 import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.PredictiveBackParams

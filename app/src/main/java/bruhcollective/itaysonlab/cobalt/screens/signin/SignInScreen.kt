@@ -1,8 +1,9 @@
 package bruhcollective.itaysonlab.cobalt.screens.signin
 
 import androidx.compose.runtime.Composable
-import bruhcollective.itaysonlab.cobalt.signin.pages.AuthScreen
-import bruhcollective.itaysonlab.cobalt.signin.pages.TwoFactorScreen
+import bruhcollective.itaysonlab.cobalt.screens.signin.pages.AuthScreen
+import bruhcollective.itaysonlab.cobalt.screens.signin.pages.TwoFactorScreen
+import bruhcollective.itaysonlab.cobalt.signin.SignRootComponent
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.plus

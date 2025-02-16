@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bruhcollective.itaysonlab.cobalt.screens.navigation.RootNavigationScreen
-import bruhcollective.itaysonlab.cobalt.signin.SignInScreen
+import bruhcollective.itaysonlab.cobalt.screens.signin.SignInScreen
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable

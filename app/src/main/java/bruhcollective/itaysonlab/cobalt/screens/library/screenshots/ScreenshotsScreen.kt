@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -26,9 +27,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.cobalt.compose.nonNullableAnimatedVisibilityScope
-import bruhcollective.itaysonlab.cobalt.compose.nonNullableNavSharedTransitionScope
 import bruhcollective.itaysonlab.cobalt.core.commons.CobaltScreenResult
+import bruhcollective.itaysonlab.cobalt.library.screenshots.ScreenshotsComponent
+import bruhcollective.itaysonlab.cobalt.ui.components.ExceptionPage
 import bruhcollective.itaysonlab.cobalt.ui.components.RoundedPage
 import coil.compose.AsyncImage
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
@@ -54,11 +55,18 @@ fun ScreenshotsScreen(
     val isRefreshing by component.isRefreshing.subscribeAsState()
 
     RoundedPage(modifier = Modifier.fillMaxSize()) {
-        when (screenResult) {
+        when (val s = screenResult) {
             CobaltScreenResult.Loading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
+            }
+
+            is CobaltScreenResult.Error -> {
+                ExceptionPage(
+                    result = s,
+                    modifier = Modifier.fillMaxSize().padding(16.dp)
+                )
             }
 
             CobaltScreenResult.Loaded -> {
@@ -94,10 +102,6 @@ fun ScreenshotsScreen(
                         }
                     }
                 }
-            }
-
-            else -> {
-
             }
         }
     }

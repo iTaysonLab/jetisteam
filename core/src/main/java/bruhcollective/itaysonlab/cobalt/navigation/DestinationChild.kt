@@ -6,7 +6,8 @@ import bruhcollective.itaysonlab.cobalt.guard.session.GuardSessionDetailComponen
 import bruhcollective.itaysonlab.cobalt.guard.setup.recovery.GuardRecoveryCodeComponent
 import bruhcollective.itaysonlab.cobalt.guard.setup.sms.GuardEnterSmsComponent
 import bruhcollective.itaysonlab.cobalt.library.LibraryComponent
-import bruhcollective.itaysonlab.cobalt.news.discover.DiscoverComponent
+import bruhcollective.itaysonlab.cobalt.news.NewsfeedComponent
+import bruhcollective.itaysonlab.cobalt.news.WrappedNewsfeedComponent
 import bruhcollective.itaysonlab.cobalt.profile.ProfileComponent
 
 /**
@@ -85,10 +86,17 @@ sealed interface DestinationChild {
     // NEWS
 
     /**
+     * The global newsfeed page.
+     */
+    class WrappedNewsfeed (
+        val component: WrappedNewsfeedComponent
+    ): DestinationChild
+
+    /**
      * The newsfeed page.
      */
     class Newsfeed (
-        val component: DiscoverComponent
+        val component: NewsfeedComponent
     ): DestinationChild
 
     // endregion

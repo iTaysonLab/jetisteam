@@ -71,8 +71,8 @@ class DefaultScreenshotsComponent (
                 runCatching {
                     screenshots.value = requestScreenshots().toImmutableList()
                     screenResult.value = CobaltScreenResult.Loaded
-                }.onFailure {
-                    screenResult.value = CobaltScreenResult.UnknownError
+                }.onFailure { e ->
+                    screenResult.value = CobaltScreenResult.Error(e)
                 }
             }
         }

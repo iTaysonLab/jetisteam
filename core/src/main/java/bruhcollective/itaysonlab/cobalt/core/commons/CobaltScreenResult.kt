@@ -1,26 +1,29 @@
 package bruhcollective.itaysonlab.cobalt.core.commons
 
+import bruhcollective.itaysonlab.ksteam.network.exception.CMJobDroppedException
+import okio.IOException
+
 /**
  * Defines initial loading screen load result for Cobalt screens.
  */
-enum class CobaltScreenResult {
+sealed interface CobaltScreenResult {
     /**
      * Content is loading. Show the progress bar.
      */
-    Loading,
+    data object Loading: CobaltScreenResult
 
     /**
      * Content loaded successfully. Show it.
      */
-    Loaded,
+    data object Loaded: CobaltScreenResult
 
     /**
-     * A network error occurred. Show a generic network exception screen.
+     * An error occurred. Show a generic network exception screen.
      */
-    NetworkError,
-
-    /**
-     * An unknown error occurred. Show a generic error screen with an option to retry.
-     */
-    UnknownError
+    data class Error (
+        val exception: Throwable,
+    ): CobaltScreenResult {
+        val isNetworkException: Boolean
+            = exception is IOException || exception is CMJobDroppedException
+    }
 }

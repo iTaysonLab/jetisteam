@@ -7,7 +7,9 @@ import bruhcollective.itaysonlab.cobalt.guard.session.DefaultGuardSessionDetailC
 import bruhcollective.itaysonlab.cobalt.guard.setup.recovery.SetupGuardRecoveryCodeComponent
 import bruhcollective.itaysonlab.cobalt.guard.setup.sms.DefaultGuardEnterSmsComponent
 import bruhcollective.itaysonlab.cobalt.library.DefaultLibraryComponent
-import bruhcollective.itaysonlab.cobalt.news.discover.FusionDiscoverComponent
+import bruhcollective.itaysonlab.cobalt.news.DefaultNewsfeedComponent
+import bruhcollective.itaysonlab.cobalt.news.DefaultWrappedNewsfeedComponent
+import bruhcollective.itaysonlab.cobalt.news.models.NewsfeedType
 import bruhcollective.itaysonlab.cobalt.profile.MyProfileComponent
 import bruhcollective.itaysonlab.ksteam.models.toSteamId
 import com.arkivanov.decompose.ComponentContext
@@ -70,7 +72,8 @@ internal class DefaultDestinationComponent (
             DestinationRoute.MyProfile -> createMyProfileChild(componentContext)
             
             // NEWS
-            DestinationRoute.Newsfeed -> createNewsfeedChild(componentContext)
+            DestinationRoute.WrappedNewsfeed -> createWrappedNewsfeedChild(componentContext)
+            is DestinationRoute.Newsfeed -> createNewsfeedChild(configuration, componentContext)
         }
     }
     
@@ -202,11 +205,26 @@ internal class DefaultDestinationComponent (
         )
     }
 
-    private fun createNewsfeedChild(
+    private fun createWrappedNewsfeedChild(
         componentContext: ComponentContext
+    ): DestinationChild.WrappedNewsfeed {
+        return DestinationChild.WrappedNewsfeed(
+            component = DefaultWrappedNewsfeedComponent(
+                componentContext = componentContext,
+                onUpcomingCardClicked = {
+                    navigation.pushNew(DestinationRoute.Newsfeed(NewsfeedType.Upcoming))
+                }
+            )
+        )
+    }
+
+    private fun createNewsfeedChild(
+        configuration: DestinationRoute.Newsfeed,
+        componentContext: ComponentContext,
     ): DestinationChild.Newsfeed {
         return DestinationChild.Newsfeed(
-            component = FusionDiscoverComponent(
+            component = DefaultNewsfeedComponent(
+                type = configuration.type,
                 componentContext = componentContext
             )
         )
