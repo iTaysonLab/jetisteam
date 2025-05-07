@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.screens.library.screenshots
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -70,12 +71,13 @@ fun ScreenshotsScreen(
             }
 
             CobaltScreenResult.Loaded -> {
+                SharedTransitionLayout {  }
                 PullToRefreshBox(
                     isRefreshing = isRefreshing,
                     onRefresh = component::refresh
                 ) {
                     LazyVerticalGrid(
-                        columns = GridCells.Fixed(3),
+                        columns = GridCells.Fixed(2),
                         contentPadding = PaddingValues(16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -90,7 +92,7 @@ fun ScreenshotsScreen(
                                         .clip(MaterialTheme.shapes.medium)
                                         .background(Color.Black)
                                         .fillMaxWidth()
-                                        .aspectRatio(1f)
+                                        .aspectRatio(16f / 10f)
                                         //.sharedElement(
                                         //    state = rememberSharedContentState(key = screenshot.id),
                                         //    animatedVisibilityScope = nonNullableAnimatedVisibilityScope()
