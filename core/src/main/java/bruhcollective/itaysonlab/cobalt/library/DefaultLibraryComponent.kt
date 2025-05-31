@@ -1,37 +1,22 @@
 package bruhcollective.itaysonlab.cobalt.library
 
-import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopChild
-import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopComponent
 import bruhcollective.itaysonlab.cobalt.library.devices.DefaultDevicesComponent
 import bruhcollective.itaysonlab.cobalt.library.games.DefaultGamesComponent
 import bruhcollective.itaysonlab.cobalt.library.screenshots.DefaultScreenshotsComponent
-import bruhcollective.itaysonlab.ksteam.models.publishedfiles.PublishedFile
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.children.ChildNavState.Status
 import com.arkivanov.decompose.router.pages.ChildPages
 import com.arkivanov.decompose.router.pages.Pages
-import com.arkivanov.decompose.router.pages.childPages
 import com.arkivanov.decompose.router.pages.PagesNavigation
+import com.arkivanov.decompose.router.pages.childPages
 import com.arkivanov.decompose.router.pages.select
-import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
 
-class DefaultLibraryComponent(
+internal class DefaultLibraryComponent(
     componentContext: ComponentContext,
-    private val onScreenshotClicked: (PublishedFile.Screenshot) -> Unit
 ): LibraryComponent, ComponentContext by componentContext {
     private val navigation = PagesNavigation<Config>()
-
-    override val scrollToTopFlag = MutableValue<Boolean>(false)
-
-    override fun scrollToTop() {
-        (pages.value.items[pages.value.selectedIndex].instance as? HandlesScrollToTopChild)?.scrollToTop()
-    }
-
-    override fun resetScrollToTop() {
-
-    }
 
     override val pages: Value<ChildPages<*, LibraryComponent.Child>> = childPages(
         source = navigation,
@@ -65,7 +50,7 @@ class DefaultLibraryComponent(
             )
 
             Config.Screenshots -> LibraryComponent.Child.Screenshots(
-                component = DefaultScreenshotsComponent(componentContext = componentContext, onScreenshotClicked = onScreenshotClicked)
+                component = DefaultScreenshotsComponent(componentContext = componentContext)
             )
         }
     }

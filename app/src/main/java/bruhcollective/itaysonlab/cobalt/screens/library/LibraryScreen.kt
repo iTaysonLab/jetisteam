@@ -28,6 +28,7 @@ import bruhcollective.itaysonlab.cobalt.library.LibraryComponent
 import bruhcollective.itaysonlab.cobalt.screens.library.devices.DevicesScreen
 import bruhcollective.itaysonlab.cobalt.screens.library.games.GamesScreen
 import bruhcollective.itaysonlab.cobalt.screens.library.screenshots.ScreenshotsScreen
+import bruhcollective.itaysonlab.cobalt.ui.LocalScrollToTopConsumer
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.IndicatorBehindScrollableTabRow
 import bruhcollective.itaysonlab.cobalt.ui.components.tabIndicatorOffset
@@ -40,6 +41,7 @@ import java.util.Locale
 @Composable
 fun LibraryScreen(component: LibraryComponent) {
     val pages by component.pages.subscribeAsState()
+    val scrollToTopConsumer = LocalScrollToTopConsumer.current
 
     Scaffold(topBar = {
         val currentPage = pages.selectedIndex
@@ -65,7 +67,7 @@ fun LibraryScreen(component: LibraryComponent) {
                 selected = currentPage == 0,
                 onClick = {
                     if (pages.selectedIndex == 0) {
-                        component.scrollToTop()
+                        scrollToTopConsumer.dispatchScrollToTop()
                     } else {
                         component.selectPage(0)
                     }
@@ -85,7 +87,7 @@ fun LibraryScreen(component: LibraryComponent) {
                 selected = currentPage == 1,
                 onClick = {
                     if (pages.selectedIndex == 1) {
-                        component.scrollToTop()
+                        scrollToTopConsumer.dispatchScrollToTop()
                     } else {
                         component.selectPage(1)
                     }
@@ -105,7 +107,7 @@ fun LibraryScreen(component: LibraryComponent) {
                 selected = currentPage == 2,
                 onClick = {
                     if (pages.selectedIndex == 2) {
-                        component.scrollToTop()
+                        scrollToTopConsumer.dispatchScrollToTop()
                     } else {
                         component.selectPage(2)
                     }
@@ -128,18 +130,20 @@ fun LibraryScreen(component: LibraryComponent) {
             onPageSelected = component::selectPage,
             scrollAnimation = PagesScrollAnimation.Default,
             modifier = Modifier.fillMaxSize().padding(innerPadding)
-        ) { _, child ->
+        ) { index, child ->
+            val isFocused = pages.selectedIndex == index
+
             when (child) {
                 is LibraryComponent.Child.Devices -> {
                     DevicesScreen(child.component)
                 }
 
                 is LibraryComponent.Child.Games -> {
-                    GamesScreen(child.component)
+                    GamesScreen(isFocused = isFocused, child.component)
                 }
 
                 is LibraryComponent.Child.Screenshots -> {
-                    ScreenshotsScreen(component = child.component)
+                    ScreenshotsScreen(isFocused = isFocused, component = child.component)
                 }
             }
         }

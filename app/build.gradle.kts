@@ -18,15 +18,15 @@ plugins {
 
 android {
     namespace = "bruhcollective.itaysonlab.cobalt"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "bruhcollective.itaysonlab.cobalt"
         minSdk = 21
         targetSdk = 35
 
-        versionCode = 13
-        versionName = "alpha 13"
+        versionCode = 14
+        versionName = "alpha 14"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -69,11 +69,11 @@ android {
 }
 
 dependencies {
-    implementation(platform("com.google.firebase:firebase-bom:33.8.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
     implementation("com.google.firebase:firebase-crashlytics")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.7.6")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.8.2")
 
     implementation(project(":core"))
 
@@ -92,7 +92,6 @@ dependencies {
 
     implementation(libs.composeMaterialIcons)
     implementation(libs.composeMotionCore)
-    implementation(libs.accompanistSystemUi)
     implementation(libs.accompanistPermissions)
 
     implementation(libs.decompose)

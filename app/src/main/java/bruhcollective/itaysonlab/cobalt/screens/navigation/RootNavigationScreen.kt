@@ -13,10 +13,13 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.twotone.Person
 import androidx.compose.material.icons.twotone.Security
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ShortNavigationBar
+import androidx.compose.material3.ShortNavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.navigation.implementations.RootDestination
 import bruhcollective.itaysonlab.cobalt.navigation.implementations.RootNavigationComponent
+import bruhcollective.itaysonlab.cobalt.ui.LocalScrollToTopConsumer
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.IslandAnimations
 import bruhcollective.itaysonlab.cobalt.ui.components.SteamConnectionRow
@@ -40,6 +44,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimator
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun RootNavigationScreen(
     component: RootNavigationComponent,
@@ -50,14 +55,17 @@ fun RootNavigationScreen(
 
     val currentNavItem = children.active.configuration
     val previousNavItem = rememberPrevious(current = currentNavItem)
+    val scrollToTopConsumer = LocalScrollToTopConsumer.current
 
     Scaffold(
         bottomBar = {
             Column {
                 SteamConnectionRow(connectionState = steamConnectionStatus)
 
-                NavigationBar {
+                ShortNavigationBar {
                     for (barItem in bottomBarItems) {
+                        val selected = currentNavItem == barItem
+
                         val (deselectedIcon, selectedIcon, textResId) = when (barItem) {
                             RootDestination.Newsfeed -> Triple(Icons.AutoMirrored.TwoTone.Feed, Icons.AutoMirrored.Filled.Feed, R.string.tab_news)
                             RootDestination.Profile -> Triple(Icons.TwoTone.Person, Icons.Filled.Person, R.string.tab_profile)
@@ -65,11 +73,16 @@ fun RootNavigationScreen(
                             RootDestination.Library -> Triple(Icons.AutoMirrored.TwoTone.LibraryBooks, Icons.AutoMirrored.Filled.LibraryBooks, R.string.tab_library)
                         }
 
-                        NavigationBarItem(
-                            selected = currentNavItem == barItem,
+                        ShortNavigationBarItem(
+                            selected = selected,
                             onClick = {
-                                component.selectRootDestination(barItem)
-                                      },
+                                if (selected) {
+                                    if (children.active.instance.onResetStackPressed()) return@ShortNavigationBarItem
+                                    scrollToTopConsumer.dispatchScrollToTop()
+                                } else {
+                                    component.selectRootDestination(barItem)
+                                }
+                            },
                             icon = {
                                 Icon(
                                     imageVector = if (currentNavItem == barItem) selectedIcon else deselectedIcon,

@@ -15,7 +15,10 @@ fun CobaltScreen(
 
     slot.child?.instance?.let {
         when (val child = it) {
-            is AndroidCobaltComponent.Slot.SignIn -> SignInScreen(child.component)
+            is AndroidCobaltComponent.Slot.SignIn -> {
+                SignInScreen(child.component)
+            }
+
             is AndroidCobaltComponent.Slot.Cobalt -> {
                 val steamConnectionStatus by component.steamConnectionState.collectAsStateWithLifecycle()
 

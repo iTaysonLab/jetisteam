@@ -8,6 +8,7 @@
 
     <string name="library_games_chip_collections">Collections</string>
     <string name="library_games_chip_collections_default">All Games</string>
+    <string name="library_games_chip_collections_favorite">Favorite</string>
     <string name="library_games_chip_filter">Filter</string>
     <string name="library_games_chip_sort">Sort by</string>
     <string name="library_games_chip_ownership">Family Sharing</string>
@@ -23,7 +24,24 @@
     <string name="library_games_ownership_type_owned_desc">Display only owned games</string>
 
     <string name="library_screenshots_chip_apps">Games</string>
-    <string name="library_screenshots_chip_sort">Sort by</string>
+    <string name="library_screenshots_filter_sheet">Filter</string>
+
+    <string name="library_screenshots_filter_sort">Sort by</string>
+    <string name="library_screenshots_filter_sort_popular">Most Popular</string>
+    <string name="library_screenshots_filter_sort_newest">Newest First</string>
+    <string name="library_screenshots_filter_sort_oldest">Oldest First</string>
+    <string name="library_screenshots_filter_sort_last">Last Updated</string>
+    <string name="library_screenshots_filter_privacy">Privacy</string>
+    <string name="library_screenshots_filter_privacy_everything">Everything</string>
+    <string name="library_screenshots_filter_privacy_public">Visible to everybody</string>
+    <string name="library_screenshots_filter_privacy_friends">Visible to friends</string>
+    <string name="library_screenshots_filter_privacy_private">Visible to me</string>
+    <string name="library_screenshots_filter_privacy_link">With link access</string>
+    <string name="library_screenshots_filter_browse">Show</string>
+    <string name="library_screenshots_filter_created">My content</string>
+    <string name="library_screenshots_filter_favorites">Added to favorites</string>
+    <string name="library_screenshots_filter_action_apply">Apply</string>
+    <string name="library_screenshots_filter_action_cancel">Cancel</string>
 
     <string name="library_initialization">Initializing library…</string>
     <string name="library_initialization_text">Cobalt is currently indexing and updating your Steam library. Please wait - this can take a while, depending on your library size, network conditions and device performance.</string>

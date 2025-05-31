@@ -22,13 +22,14 @@ import androidx.compose.material.icons.rounded.Router
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -50,8 +51,8 @@ import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import bruhcollective.itaysonlab.cobalt.guard.qr.GuardQrScannerComponent
 import bruhcollective.itaysonlab.cobalt.R
+import bruhcollective.itaysonlab.cobalt.guard.qr.GuardQrScannerComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.StateButton
 import bruhcollective.itaysonlab.cobalt.ui.components.StateTonalButton
@@ -189,6 +190,7 @@ internal fun GuardQrCodeSheet(
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun QrSignDialog(
     onApprove: () -> Unit,
@@ -302,7 +304,7 @@ private fun QrSignDialog(
                         .padding(32.dp)
                         .fillMaxWidth()
                 ) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    LoadingIndicator(modifier = Modifier.align(Alignment.Center))
                 }
             }
         }

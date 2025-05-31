@@ -14,8 +14,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material.icons.rounded.Error
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -31,10 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bruhcollective.itaysonlab.cobalt.R
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun FullscreenLoading(modifier: Modifier = Modifier) {
     Box(modifier.fillMaxSize()) {
-        CircularProgressIndicator(
+        LoadingIndicator(
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(56.dp)

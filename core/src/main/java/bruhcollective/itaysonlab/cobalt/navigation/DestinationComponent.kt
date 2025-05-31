@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.cobalt.navigation
 
-import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopComponent
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
@@ -21,7 +20,7 @@ import com.arkivanov.essenty.backhandler.BackHandlerOwner
  *
  * The downside is probably the HUGE amount of lines in when (..) closure, but it needs to be done four times in total (Config, Child, Child creation, Compose render)
  */
-interface DestinationComponent: BackHandlerOwner, HandlesScrollToTopComponent {
+interface DestinationComponent: BackHandlerOwner {
     /**
      * Defines a stack of possible destination children.
      */
@@ -31,4 +30,11 @@ interface DestinationComponent: BackHandlerOwner, HandlesScrollToTopComponent {
      * Handles back button presses.
      */
     fun onBackPressed()
+
+    /**
+     * Handles back stack reset events (like the tap of a selected navigation bar item).
+     *
+     * Returns true if stack was reset and "scroll to top" must not be called.
+     */
+    fun onResetStackPressed(): Boolean
 }

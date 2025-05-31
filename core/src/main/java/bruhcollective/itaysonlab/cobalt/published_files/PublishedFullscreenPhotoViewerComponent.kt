@@ -4,6 +4,4 @@ interface PublishedFullscreenPhotoViewerComponent {
     val id: Long
     val previewUrl: String
     val url: String
-
-    fun onBackPressed()
 }

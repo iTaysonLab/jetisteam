@@ -25,18 +25,18 @@ internal fun ExceptionPage(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        Column {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(stringResource(R.string.err_text), style = MaterialTheme.typography.bodyLarge)
-        }
 
-        TextButton(onClick = {
-            board.setText(buildAnnotatedString {
-                append(result.exception.message.orEmpty())
-                appendLine()
-                append(result.exception.stackTraceToString())
-            })
-        }) {
-            Text(stringResource(R.string.err_act_copy))
+            TextButton(onClick = {
+                board.setText(buildAnnotatedString {
+                    append(result.exception.message.orEmpty())
+                    appendLine()
+                    append(result.exception.stackTraceToString())
+                })
+            }) {
+                Text(stringResource(R.string.err_act_copy))
+            }
         }
     }
 }

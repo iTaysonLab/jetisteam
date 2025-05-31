@@ -10,5 +10,6 @@ import bruhcollective.itaysonlab.cobalt.ui.components.RoundedPage
 @Composable
 fun DevicesScreen(component: DevicesComponent) {
     RoundedPage(modifier = Modifier.fillMaxSize()) {
+
     }
 }

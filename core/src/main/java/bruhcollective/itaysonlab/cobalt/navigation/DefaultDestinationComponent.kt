@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.cobalt.navigation
 
-import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopChild
 import bruhcollective.itaysonlab.cobalt.guard.DefaultGuardComponent
 import bruhcollective.itaysonlab.cobalt.guard.confirmation.DefaultGuardConfirmationComponent
 import bruhcollective.itaysonlab.cobalt.guard.session.DefaultGuardSessionDetailComponent
@@ -15,14 +14,12 @@ import bruhcollective.itaysonlab.ksteam.models.toSteamId
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
-import com.arkivanov.decompose.router.stack.active
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.items
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.popToFirst
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
-import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
 internal class DefaultDestinationComponent (
@@ -44,17 +41,14 @@ internal class DefaultDestinationComponent (
         navigation.pop()
     }
 
-    override val scrollToTopFlag = MutableValue(false)
-
-    override fun scrollToTop() {
-        if (stack.items.size > 1) {
+    override fun onResetStackPressed(): Boolean {
+        return if (stack.items.size > 1) {
             navigation.popToFirst()
+            true
         } else {
-            (stack.active.instance as? HandlesScrollToTopChild)?.scrollToTop()
+            false
         }
     }
-
-    override fun resetScrollToTop() {}
 
     private fun createDestinationChild(configuration: DestinationRoute, componentContext: ComponentContext): DestinationChild {
         return when (configuration) {
@@ -80,10 +74,7 @@ internal class DefaultDestinationComponent (
     private fun createLibraryChild(componentContext: ComponentContext): DestinationChild.LibraryRoot {
         return DestinationChild.LibraryRoot(
             component = DefaultLibraryComponent(
-                componentContext = componentContext,
-                onScreenshotClicked = {
-                    // TODO
-                }
+                componentContext = componentContext
             )
         )
     }

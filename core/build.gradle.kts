@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "bruhcollective.itaysonlab.cobalt.core"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21

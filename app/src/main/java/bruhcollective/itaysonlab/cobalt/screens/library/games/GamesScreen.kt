@@ -1,7 +1,6 @@
 package bruhcollective.itaysonlab.cobalt.screens.library.games
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,42 +11,34 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.ArrowDropDown
-import androidx.compose.material.icons.rounded.Bolt
-import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.Tune
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.LinearWavyProgressIndicator
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -56,113 +47,59 @@ import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.core.commons.CobaltScreenResult
 import bruhcollective.itaysonlab.cobalt.library.games.GamesComponent
-import bruhcollective.itaysonlab.cobalt.ui.components.BottomSheetLayout
+import bruhcollective.itaysonlab.cobalt.screens.library.games.alert.ModalSelectCollectionSheet
+import bruhcollective.itaysonlab.cobalt.ui.ScrollToTopHandler
 import bruhcollective.itaysonlab.cobalt.ui.components.ExceptionPage
 import bruhcollective.itaysonlab.cobalt.ui.components.RoundedPage
 import bruhcollective.itaysonlab.cobalt.ui.theme.partialShapes
+import bruhcollective.itaysonlab.ksteam.models.app.OwnedSteamApplication
 import bruhcollective.itaysonlab.ksteam.models.enums.ELanguage
-import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
 import coil.compose.AsyncImage
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun GamesScreen(component: GamesComponent) {
+internal fun GamesScreen(isFocused: Boolean, component: GamesComponent) {
+    val scope = rememberCoroutineScope()
     val gridState = rememberLazyGridState()
-    val scrollToTopFlag by component.scrollToTopFlag.subscribeAsState()
 
-    LaunchedEffect(scrollToTopFlag) {
-        if (scrollToTopFlag) {
+    ScrollToTopHandler(isFocused) {
+        scope.launch {
             gridState.animateScrollToItem(0)
-            component.resetScrollToTop()
         }
     }
 
-    val picsState by component.picsAvailable.subscribeAsState()
-    val picsProgress by component.picsInitProgress.subscribeAsState()
-
+    val alertState by component.alertState.subscribeAsState()
     val screenResult by component.screenResult.subscribeAsState()
+
+    val picsState by component.picsState.subscribeAsState()
+    val picsProgress by component.picsProgress.subscribeAsState()
+
     val currentGames by component.games.subscribeAsState()
-    val currentCollections by component.collections.subscribeAsState()
-    val currentCollectionId by component.currentCollectionId.subscribeAsState()
     val currentCollectionName by component.currentCollectionName.subscribeAsState()
+    val wasDefaultQueryModified by component.wasDefaultQueryModified.subscribeAsState()
+    val canLoadMore by component.canLoadMore.subscribeAsState()
 
-    var tmpShowCollections by remember { mutableStateOf(false) }
-
-    if (tmpShowCollections) {
-        ModalBottomSheet(onDismissRequest = { tmpShowCollections = false }) {
-            BottomSheetLayout(
-                title = {
-                    stringResource(R.string.library_games_chip_collections)
-                }
-            ) {
-                LazyColumn {
-                    item {
-                        ListItem(
-                            headlineContent = {
-                            Text(stringResource(R.string.library_games_chip_collections_default))
-                        },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    component.clearCollection()
-                                    tmpShowCollections = false
-                                },
-                            colors = ListItemDefaults.colors(containerColor = Color.Transparent)
-                        )
-                    }
-
-                    item {
-                        HorizontalDivider()
-                    }
-
-                    items(currentCollections) { collection ->
-                        Column {
-                            ListItem(
-                                headlineContent = {
-                                    Text(collection.name)
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        component.setCollection(collection)
-                                        tmpShowCollections = false
-                                    },
-                                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                                trailingContent = {
-                                    if (collection is LibraryCollection.Dynamic) {
-                                        Icon(
-                                            Icons.Rounded.Bolt,
-                                            contentDescription = "Dynamic filter"
-                                        )
-                                    } else {
-                                        Icon(
-                                            Icons.Rounded.GridView,
-                                            contentDescription = "Manual filter"
-                                        )
-                                    }
-                                })
-
-                            HorizontalDivider()
-                        }
-                    }
-                }
+    alertState.child?.instance?.let { child ->
+        when (child) {
+            is GamesComponent.AlertChild.SelectCollection -> {
+                ModalSelectCollectionSheet(onDismiss = component::dismissAlert, component = child.component)
             }
+
+            is GamesComponent.AlertChild.EditCollection -> TODO()
+            is GamesComponent.AlertChild.SelectSort -> TODO()
         }
     }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .align(Alignment.CenterHorizontally),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            ElevatedFilterChip(
-                selected = false,
-                onClick = {
-                    tmpShowCollections = true
-                },
+            FilterChip(
+                selected = wasDefaultQueryModified,
+                onClick = component::onCollectionTileClicked,
                 label = {
                     if (currentCollectionName.isNotEmpty()) {
                         Text(currentCollectionName)
@@ -173,30 +110,27 @@ fun GamesScreen(component: GamesComponent) {
                 trailingIcon = {
                     Icon(Icons.Rounded.ArrowDropDown, contentDescription = null)
                 },
-                colors = FilterChipDefaults.elevatedFilterChipColors(
+                colors = FilterChipDefaults.filterChipColors(
                     containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+                    // selectedContainerColor = chipSelectedBackground
                 ),
                 border = FilterChipDefaults.filterChipBorder(
-                    true,
-                    false,
-                    borderColor = MaterialTheme.colorScheme.surfaceVariant
+                    enabled = true,
+                    selected = wasDefaultQueryModified,
+                    borderColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
             )
 
             Spacer(Modifier.weight(1f))
 
-            IconButton(onClick = {
-
-            }) {
+            IconButton(onClick = component::onFilterTileClicked) {
                 Icon(
                     Icons.Rounded.Tune,
                     contentDescription = stringResource(R.string.library_games_chip_filter)
                 )
             }
 
-            IconButton(onClick = {
-
-            }) {
+            IconButton(onClick = component::onSortTileClicked) {
                 Icon(
                     Icons.AutoMirrored.Rounded.Sort,
                     contentDescription = stringResource(R.string.library_games_chip_sort)
@@ -216,7 +150,7 @@ fun GamesScreen(component: GamesComponent) {
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
                         ) {
-                            CircularProgressIndicator()
+                            LoadingIndicator()
                         }
                     }
 
@@ -235,7 +169,7 @@ fun GamesScreen(component: GamesComponent) {
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             state = gridState
                         ) {
-                            itemsIndexed(currentGames) { index, app ->
+                            itemsIndexed(currentGames, key = { index, item -> item.application.id.value }) { index, app ->
                                 val shape = when (index) {
                                     0 -> MaterialTheme.partialShapes.largeTopLeftShape
                                     2 -> MaterialTheme.partialShapes.largeTopRightShape
@@ -269,6 +203,18 @@ fun GamesScreen(component: GamesComponent) {
                                     )
                                 }
                             }
+
+                            if (canLoadMore) {
+                                item(span = { GridItemSpan(maxLineSpan) }) {
+                                    LaunchedEffect(Unit) {
+                                        component.onPageRequested()
+                                    }
+
+                                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                                        LoadingIndicator()
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -294,7 +240,7 @@ fun GamesScreen(component: GamesComponent) {
                             modifier = Modifier.fillMaxWidth()
                         )
 
-                        LinearProgressIndicator(
+                        LinearWavyProgressIndicator(
                             progress = { picsProgress },
                             trackColor = MaterialTheme.colorScheme.surface,
                             modifier = Modifier.fillMaxWidth()

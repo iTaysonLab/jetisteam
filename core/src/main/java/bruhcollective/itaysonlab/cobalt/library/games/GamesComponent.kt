@@ -1,22 +1,20 @@
 package bruhcollective.itaysonlab.cobalt.library.games
 
 import bruhcollective.itaysonlab.cobalt.core.commons.CobaltScreenResult
-import bruhcollective.itaysonlab.cobalt.core.decompose.HandlesScrollToTopComponent
+import bruhcollective.itaysonlab.cobalt.library.games.alert.EditCollectionComponent
+import bruhcollective.itaysonlab.cobalt.library.games.alert.SelectCollectionComponent
+import bruhcollective.itaysonlab.cobalt.library.games.alert.SelectSortComponent
 import bruhcollective.itaysonlab.ksteam.models.app.OwnedSteamApplication
-import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
+import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import kotlinx.collections.immutable.ImmutableList
 
-interface GamesComponent: HandlesScrollToTopComponent {
+interface GamesComponent {
     /**
-     * PICS availability state.
+     * Alert state.
      */
-    val picsAvailable: Value<Boolean>
-
-    /**
-     * PICS initialization state.
-     */
-    val picsInitProgress: Value<Float>
+    val alertState: Value<ChildSlot<*, AlertChild>>
+    fun dismissAlert()
 
     /**
      * Page state.
@@ -24,9 +22,10 @@ interface GamesComponent: HandlesScrollToTopComponent {
     val screenResult: Value<CobaltScreenResult>
 
     /**
-     * Currently available CUSTOM collections.
+     * PICS state.
      */
-    val collections: Value<ImmutableList<LibraryCollection>>
+    val picsState: Value<Boolean>
+    val picsProgress: Value<Float>
 
     /**
      * Filtered list of games.
@@ -34,16 +33,44 @@ interface GamesComponent: HandlesScrollToTopComponent {
     val games: Value<ImmutableList<OwnedSteamApplication>>
 
     /**
-     * Selected collection ID. Empty string means "all owned games".
+     * Current collection name.
      */
-    val currentCollectionId: Value<String>
     val currentCollectionName: Value<String>
+
+    /**
+     * If the KsLibraryQueue is not standard.
+     *
+     * Actually always true for everything out of "All Games", "Favorite" and "Hidden".
+     * Also needs to be false for static collections.
+     *
+     * If this is true, "Filter" tile will be highlighted.
+     */
+    val wasDefaultQueryModified: Value<Boolean>
 
     /**
      * Search query. Empty string means no search applied.
      */
     val currentSearchQuery: Value<String>
+    fun setCurrentSearchQuery(value: String)
 
-    fun clearCollection()
-    fun setCollection(collection: LibraryCollection)
+    val canLoadMore: Value<Boolean>
+    fun onPageRequested()
+
+    fun onCollectionTileClicked()
+    fun onFilterTileClicked()
+    fun onSortTileClicked()
+
+    sealed interface AlertChild {
+        class EditCollection (
+            val component: EditCollectionComponent
+        ): AlertChild
+
+        class SelectCollection (
+            val component: SelectCollectionComponent
+        ): AlertChild
+
+        class SelectSort (
+            val component: SelectSortComponent
+        ): AlertChild
+    }
 }

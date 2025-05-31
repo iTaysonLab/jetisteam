@@ -1,85 +1,90 @@
 package bruhcollective.itaysonlab.cobalt.library.games
 
 import bruhcollective.itaysonlab.cobalt.core.commons.CobaltScreenResult
+import bruhcollective.itaysonlab.cobalt.library.games.alert.DefaultSelectCollectionComponent
 import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import bruhcollective.itaysonlab.ksteam.models.app.OwnedSteamApplication
 import bruhcollective.itaysonlab.ksteam.models.enums.ECollectionAppType
-import bruhcollective.itaysonlab.ksteam.models.library.LibraryCollection
 import bruhcollective.itaysonlab.ksteam.models.library.query.KsLibraryQueryBuilder
 import bruhcollective.itaysonlab.ksteam.models.library.query.KsLibraryQueryOwnerFilter
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.router.slot.SlotNavigation
+import com.arkivanov.decompose.router.slot.activate
+import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.update
 import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.coroutines.withLifecycle
 import com.arkivanov.essenty.lifecycle.doOnCreate
-import com.arkivanov.essenty.lifecycle.doOnResume
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-class DefaultGamesComponent(
+internal class DefaultGamesComponent(
     componentContext: ComponentContext
 ) : GamesComponent, KoinComponent, ComponentContext by componentContext,
     CoroutineScope by componentContext.coroutineScope() {
-    private var libraryPollingJob: Job? = null
+    private companion object {
+        private const val PAGE_LOAD_COUNT = 25
+    }
 
     private val steamClient: ExtendedSteamClient = get()
 
+    private var currentCollectionId = ""
+    private var libraryPollingJob: Job? = null
+
+    private val alertNavigation = SlotNavigation<AlertConfig>()
+
+    override val alertState = childSlot(
+        source = alertNavigation,
+        serializer = AlertConfig.serializer(),
+        childFactory = ::createChild
+    )
+
     override val screenResult = MutableValue<CobaltScreenResult>(CobaltScreenResult.Loading)
-    override val collections = MutableValue<ImmutableList<LibraryCollection>>(persistentListOf())
-    override val games = MutableValue<ImmutableList<OwnedSteamApplication>>(persistentListOf())
-    override val currentCollectionId = MutableValue<String>("")
-    override val currentCollectionName = MutableValue<String>("")
-    override val currentSearchQuery = MutableValue<String>("")
+    override val picsState = MutableValue(false)
+    override val picsProgress = MutableValue(0f)
+    override val currentCollectionName = MutableValue("")
+    override val wasDefaultQueryModified = MutableValue(false)
+    override val games = MutableValue(persistentListOf<OwnedSteamApplication>())
 
-    override val picsAvailable = MutableValue<Boolean>(false)
-    override val picsInitProgress = MutableValue<Float>(0f)
-
-    override val scrollToTopFlag = MutableValue<Boolean>(false)
-
-    override fun scrollToTop() {
-        scrollToTopFlag.value = true
-    }
-
-    override fun resetScrollToTop() {
-        scrollToTopFlag.value = false
+    override val currentSearchQuery = MutableValue("")
+    override fun setCurrentSearchQuery(value: String) {
+        currentSearchQuery.value = value
     }
 
     init {
         doOnCreate {
             launch {
-                steamClient.pics.isPicsAvailable.withLifecycle(
-                    lifecycle,
-                    minActiveState = Lifecycle.State.RESUMED
-                ).collect {
-                    picsAvailable.value = it
-
-                    if (it) {
-                        dispatchLibraryQuery()
-                    }
-                }
-            }
-
-            launch {
                 steamClient.pics.picsInitializationProgress.withLifecycle(
                     lifecycle,
                     minActiveState = Lifecycle.State.RESUMED
-                ).collect {
-                    picsInitProgress.value = it
+                ).collect { progress ->
+                    picsProgress.update { progress }
                 }
             }
-        }
 
-        doOnResume {
             launch {
-                steamClient.library.userCollections.collect {
-                    collections.value = it.values.toImmutableList()
+                steamClient.pics.isPicsAvailable.withLifecycle(
+                    lifecycle,
+                    minActiveState = Lifecycle.State.RESUMED
+                ).collect { available ->
+                    picsState.update { available }
+
+                    println("dispatchLibraryQuery: $available && ${screenResult.value}")
+
+                    if (available && screenResult.value == CobaltScreenResult.Loading) {
+                        dispatchLibraryQuery()
+                    }
                 }
             }
         }
@@ -91,40 +96,118 @@ class DefaultGamesComponent(
     private fun dispatchLibraryQuery() {
         libraryPollingJob?.cancel()
         libraryPollingJob = launch {
-            if (currentCollectionId.value.isNotEmpty()) {
+            if (currentCollectionId.isNotEmpty()) {
                 steamClient.library.getAppsInCollection(
-                    id = currentCollectionId.value,
+                    id = currentCollectionId,
                     full = true,
                     limit = 0
-                )
-                    .withLifecycle(lifecycle, minActiveState = Lifecycle.State.RESUMED)
-                    .collect { apps ->
-                        screenResult.value = CobaltScreenResult.Loaded
-                        games.value = apps.toImmutableList()
-                    }
+                ).withLifecycle(lifecycle, minActiveState = Lifecycle.State.RESUMED).collect { apps ->
+                    screenResult.value = CobaltScreenResult.Loaded
+                    games.value = apps.toPersistentList()
+                }
             } else {
-                games.value = steamClient.library.execute(
-                    KsLibraryQueryBuilder()
-                        .withAppType(ECollectionAppType.Game)
-                        .withOwnerFilter(KsLibraryQueryOwnerFilter.Default)
-                        .fetchFullInformation(true)
-                        // .withLimit(50)
-                        .build()
-                ).toImmutableList()
+                requestGlobalLibraryPage()
                 screenResult.value = CobaltScreenResult.Loaded
             }
         }
     }
 
-    override fun clearCollection() {
-        currentCollectionId.value = ""
-        currentCollectionName.value = ""
+    private var offset = 0
+
+    private suspend fun requestGlobalLibraryPage() {
+        val newApplications = steamClient.library.execute(
+            KsLibraryQueryBuilder()
+                .withAppType(ECollectionAppType.Game)
+                .withOwnerFilter(KsLibraryQueryOwnerFilter.Default)
+                .fetchFullInformation(true)
+                .withLimit(PAGE_LOAD_COUNT)
+                .withOffset(offset)
+                .build()
+        ).toImmutableList()
+
+        offset += PAGE_LOAD_COUNT
+        games.update { existing -> existing.addAll(newApplications) }
+
+        canLoadMore.value = newApplications.size == PAGE_LOAD_COUNT
+    }
+
+    private fun setCollectionById(id: String, name: String) {
+        wasDefaultQueryModified.value = id.isNotEmpty()
+        offset = 0
+        canLoadMore.value = false
+        games.value = persistentListOf()
+        currentCollectionId = id
+        currentCollectionName.value = name
         dispatchLibraryQuery()
     }
 
-    override fun setCollection(collection: LibraryCollection) {
-        currentCollectionId.value = collection.id
-        currentCollectionName.value = collection.name
-        dispatchLibraryQuery()
+    override val canLoadMore = MutableValue(false)
+
+    override fun onPageRequested() {
+        launch {
+            requestGlobalLibraryPage()
+        }
+    }
+
+    override fun onCollectionTileClicked() {
+        alertNavigation.activate(AlertConfig.SelectCollection(selectedId = currentCollectionId))
+    }
+
+    override fun onFilterTileClicked() {
+        alertNavigation.activate(AlertConfig.SelectSort())
+    }
+
+    override fun onSortTileClicked() {
+        alertNavigation.activate(AlertConfig.EditCollection())
+    }
+
+    private fun createChild(config: AlertConfig, componentContext: ComponentContext): GamesComponent.AlertChild {
+        return when (config) {
+            is AlertConfig.EditCollection -> {
+                TODO()
+            }
+
+            is AlertConfig.SelectCollection -> {
+                GamesComponent.AlertChild.SelectCollection(
+                    component = DefaultSelectCollectionComponent(
+                        currentCollectionId = config.selectedId,
+                        componentContext = componentContext,
+                        onCollectionSelected = { id, name ->
+                            setCollectionById(id, name)
+                            alertNavigation.dismiss()
+                        }
+                    )
+                )
+            }
+
+            is AlertConfig.SelectSort -> {
+                TODO()
+            }
+        }
+    }
+
+    override fun dismissAlert() {
+        alertNavigation.dismiss()
+    }
+
+    @Serializable
+    sealed interface AlertConfig {
+        @Serializable
+        @SerialName("select_collection")
+        data class SelectCollection (
+            val selectedId: String
+        ): AlertConfig
+
+        @Serializable
+        @SerialName("select_sort")
+        class SelectSort (
+
+        ): AlertConfig
+
+        @Serializable
+        @SerialName("edit_collection")
+        class EditCollection (
+
+        ): AlertConfig
     }
 }

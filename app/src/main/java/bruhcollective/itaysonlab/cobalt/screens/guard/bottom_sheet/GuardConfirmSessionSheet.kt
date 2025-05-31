@@ -25,7 +25,7 @@ import bruhcollective.itaysonlab.cobalt.ui.components.StateButton
 import bruhcollective.itaysonlab.cobalt.ui.components.StateTonalButton
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 internal fun GuardConfirmSessionSheet(
     component: GuardIncomingSessionComponent
@@ -54,7 +54,7 @@ internal fun GuardConfirmSessionSheet(
         }) {
             when (val s = state) {
                 GuardIncomingSessionComponent.State.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    LoadingIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
                 }
 
                 is GuardIncomingSessionComponent.State.Ready -> {
