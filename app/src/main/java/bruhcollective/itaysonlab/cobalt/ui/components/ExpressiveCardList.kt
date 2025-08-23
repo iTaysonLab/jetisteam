@@ -3,6 +3,7 @@ package bruhcollective.itaysonlab.cobalt.ui.components
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +22,7 @@ internal fun M3ECardListItem(
     supportingContent: (@Composable () -> Unit)? = null,
     trailingContent: (@Composable () -> Unit)? = null,
     overlineContent: (@Composable () -> Unit)? = null,
-    shape: Shape = MaterialTheme.shapes.small,
+    shape: Shape = MaterialTheme.shapes.extraSmall,
     colors: CardColors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
 ) {
     Card(
@@ -45,17 +46,21 @@ internal fun M3ECardListItem(
 }
 
 internal object M3ECardListItemShapes {
-    @get:Composable @get:ReadOnlyComposable val top get() = MaterialTheme.shapes.large.copy(bottomStart = MaterialTheme.shapes.small.bottomStart, bottomEnd = MaterialTheme.shapes.small.bottomEnd)
-    @get:Composable @get:ReadOnlyComposable val bottom get() = MaterialTheme.shapes.large.copy(topStart = MaterialTheme.shapes.small.topStart, topEnd = MaterialTheme.shapes.small.topEnd)
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    @get:Composable @get:ReadOnlyComposable val top get() = MaterialTheme.shapes.largeIncreased.copy(bottomStart = MaterialTheme.shapes.extraSmall.bottomStart, bottomEnd = MaterialTheme.shapes.extraSmall.bottomEnd)
 
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    @get:Composable @get:ReadOnlyComposable val bottom get() = MaterialTheme.shapes.largeIncreased.copy(topStart = MaterialTheme.shapes.extraSmall.topStart, topEnd = MaterialTheme.shapes.extraSmall.topEnd)
+
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
     @Composable
     @ReadOnlyComposable
     fun shape(top: Boolean, bottom: Boolean): Shape {
         return when {
-            top && bottom -> MaterialTheme.shapes.large
+            top && bottom -> MaterialTheme.shapes.largeIncreased
             top -> M3ECardListItemShapes.top
             bottom -> M3ECardListItemShapes.bottom
-            else -> MaterialTheme.shapes.small
+            else -> MaterialTheme.shapes.extraSmall
         }
     }
 }

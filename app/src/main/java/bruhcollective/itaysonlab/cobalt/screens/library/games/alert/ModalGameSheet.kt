@@ -30,6 +30,7 @@ import androidx.compose.material.icons.rounded.Timelapse
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -243,7 +244,7 @@ private val strings = mutableScatterMapOf(
 private fun ModalGameSheetLaunchDatesView(
     playtime: GameSheetComponent.PlaytimeInformation
 ) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         item {
             Text(
                 text = stringResource(R.string.library_sheet_last),
@@ -304,7 +305,7 @@ private fun ModalGameSheetLaunchDatesView(
 private fun ModalGameSheetPlaytimeView(
     playtime: GameSheetComponent.PlaytimeInformation
 ) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         item {
             Card(
                 shape = MaterialTheme.shapes.large,
@@ -364,6 +365,7 @@ private fun ModalGameSheetPlaytimeView(
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun ModalGameSheetGenericView(
     achievements: GameSheetComponent.AchievementsState,
@@ -372,11 +374,11 @@ private fun ModalGameSheetGenericView(
     onStorePageClicked: () -> Unit,
     onGameNotesClicked: () -> Unit,
 ) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         item {
             Card(
-                shape = MaterialTheme.shapes.large,
-                modifier = Modifier.fillParentMaxWidth().padding(bottom = 4.dp),
+                shape = MaterialTheme.shapes.largeIncreased,
+                modifier = Modifier.fillParentMaxWidth().padding(bottom = 6.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                 )
@@ -401,7 +403,10 @@ private fun ModalGameSheetGenericView(
                                     stringResource(id = R.string.library_achievements_none)
                                 })
                             }, colors = ListItemDefaults.colors(
-                                containerColor = Color.Transparent
+                                containerColor = Color.Transparent,
+                                leadingIconColor = MaterialTheme.colorScheme.onSurface,
+                                headlineColor = MaterialTheme.colorScheme.onSurface,
+                                supportingColor = MaterialTheme.colorScheme.onSurface,
                             ), trailingContent = {
                                 if (state.total > 0) {
                                     Icon(
