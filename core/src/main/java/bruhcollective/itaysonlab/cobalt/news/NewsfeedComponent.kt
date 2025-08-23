@@ -14,4 +14,6 @@ interface NewsfeedComponent {
 
     fun dispatchLoad()
     fun refresh()
+
+    fun onItemClicked(item: NewsfeedPagingItem)
 }

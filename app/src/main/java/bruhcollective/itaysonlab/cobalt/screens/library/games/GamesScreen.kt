@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.screens.library.games
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.core.commons.CobaltScreenResult
 import bruhcollective.itaysonlab.cobalt.library.games.GamesComponent
+import bruhcollective.itaysonlab.cobalt.screens.library.games.alert.ModalGameSheet
 import bruhcollective.itaysonlab.cobalt.screens.library.games.alert.ModalSelectCollectionSheet
 import bruhcollective.itaysonlab.cobalt.ui.ScrollToTopHandler
 import bruhcollective.itaysonlab.cobalt.ui.components.ExceptionPage
@@ -85,6 +87,10 @@ internal fun GamesScreen(isFocused: Boolean, component: GamesComponent) {
         when (child) {
             is GamesComponent.AlertChild.SelectCollection -> {
                 ModalSelectCollectionSheet(onDismiss = component::dismissAlert, component = child.component)
+            }
+
+            is GamesComponent.AlertChild.GameSheet -> {
+                ModalGameSheet(onDismiss = component::dismissAlert, component = child.component)
             }
 
             is GamesComponent.AlertChild.EditCollection -> TODO()
@@ -182,6 +188,9 @@ internal fun GamesScreen(isFocused: Boolean, component: GamesComponent) {
                                         .fillMaxWidth()
                                         .aspectRatio(6f / 9f)
                                         .background(MaterialTheme.colorScheme.surfaceVariant)
+                                        .clickable {
+                                            component.onGameClicked(app)
+                                        }
                                 ) {
                                     Text(
                                         text = app.application.name,

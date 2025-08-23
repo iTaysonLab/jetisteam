@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.guard.instance.sessions.GuardSessionsComponent
-import bruhcollective.itaysonlab.cobalt.screens.guard.GuardUtils
+import bruhcollective.itaysonlab.cobalt.ext.GuardUtils
 import bruhcollective.itaysonlab.cobalt.ui.components.FullscreenLoading
 import bruhcollective.itaysonlab.cobalt.ui.theme.partialShapes
 import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession

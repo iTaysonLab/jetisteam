@@ -3,7 +3,7 @@ package bruhcollective.itaysonlab.cobalt.news
 import bruhcollective.itaysonlab.cobalt.news.models.NewsfeedType
 import com.arkivanov.decompose.ComponentContext
 
-class DefaultPickNewsfeedComponent (
+internal class DefaultPickNewsfeedComponent (
     override val selectedFeed: NewsfeedType,
     private val onPick: (NewsfeedType) -> Unit,
     private val onDismiss: () -> Unit,

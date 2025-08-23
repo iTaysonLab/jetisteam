@@ -30,6 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -58,6 +59,7 @@ import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
 import coil.compose.AsyncImage
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.launch
+import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -195,6 +197,7 @@ private fun EntryPortal(entry: NewsfeedPagingItem, modifier: Modifier = Modifier
     }
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 fun NewsEventPortal(entry: NewsEvent) {
     Column(modifier = Modifier.padding(16.dp)) {
@@ -203,7 +206,7 @@ fun NewsEventPortal(entry: NewsEvent) {
         val formattedDate = remember(entry.publishedAt) {
             DateUtils.getRelativeDateTimeString(
                 ctx,
-                entry.publishedAt * 1000L,
+                entry.publishedAt.toEpochMilliseconds(),
                 DateUtils.MINUTE_IN_MILLIS,
                 DateUtils.WEEK_IN_MILLIS,
                 0

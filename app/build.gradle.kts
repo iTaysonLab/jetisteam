@@ -22,11 +22,11 @@ android {
 
     defaultConfig {
         applicationId = "bruhcollective.itaysonlab.cobalt"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 35
 
-        versionCode = 14
-        versionName = "alpha 14"
+        versionCode = 17
+        versionName = "alpha 17"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -73,11 +73,12 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.8.2")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.9.0")
 
     implementation(project(":core"))
 
     implementation(libs.androidKtxCore)
+    implementation(libs.androidCoreSplashscreen)
     implementation(libs.androidKtxActivity)
     implementation(libs.androidKtxActivityCompose)
     implementation(libs.pagingRuntime)

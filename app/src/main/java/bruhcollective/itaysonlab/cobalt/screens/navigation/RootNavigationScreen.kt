@@ -15,8 +15,6 @@ import androidx.compose.material.icons.twotone.Person
 import androidx.compose.material.icons.twotone.Security
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ShortNavigationBar
 import androidx.compose.material3.ShortNavigationBarItem
@@ -33,18 +31,18 @@ import bruhcollective.itaysonlab.cobalt.ui.LocalScrollToTopConsumer
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.IslandAnimations
 import bruhcollective.itaysonlab.cobalt.ui.components.SteamConnectionRow
-import bruhcollective.itaysonlab.cobalt.ui.rememberPrevious
 import bruhcollective.itaysonlab.ksteam.network.CMClientState
-import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.ExperimentalDecomposeApi
+import com.arkivanov.decompose.extensions.compose.experimental.stack.ChildStack
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.StackAnimator
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.plus
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.experimental.stack.animation.stackAnimator
 import com.arkivanov.decompose.extensions.compose.stack.animation.Direction
-import com.arkivanov.decompose.extensions.compose.stack.animation.StackAnimator
-import com.arkivanov.decompose.extensions.compose.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.stack.animation.plus
-import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
-import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimator
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalDecomposeApi::class)
 @Composable
 fun RootNavigationScreen(
     component: RootNavigationComponent,
@@ -54,7 +52,6 @@ fun RootNavigationScreen(
     val bottomBarItems by component.availableRootDestinations.subscribeAsState()
 
     val currentNavItem = children.active.configuration
-    val previousNavItem = rememberPrevious(current = currentNavItem)
     val scrollToTopConsumer = LocalScrollToTopConsumer.current
 
     Scaffold(
@@ -67,10 +64,29 @@ fun RootNavigationScreen(
                         val selected = currentNavItem == barItem
 
                         val (deselectedIcon, selectedIcon, textResId) = when (barItem) {
-                            RootDestination.Newsfeed -> Triple(Icons.AutoMirrored.TwoTone.Feed, Icons.AutoMirrored.Filled.Feed, R.string.tab_news)
-                            RootDestination.Profile -> Triple(Icons.TwoTone.Person, Icons.Filled.Person, R.string.tab_profile)
-                            RootDestination.Guard -> Triple(Icons.TwoTone.Security, Icons.Filled.Security, R.string.tab_guard)
-                            RootDestination.Library -> Triple(Icons.AutoMirrored.TwoTone.LibraryBooks, Icons.AutoMirrored.Filled.LibraryBooks, R.string.tab_library)
+                            RootDestination.Newsfeed -> Triple(
+                                Icons.AutoMirrored.TwoTone.Feed,
+                                Icons.AutoMirrored.Filled.Feed,
+                                R.string.tab_news
+                            )
+
+                            RootDestination.Profile -> Triple(
+                                Icons.TwoTone.Person,
+                                Icons.Filled.Person,
+                                R.string.tab_profile
+                            )
+
+                            RootDestination.Guard -> Triple(
+                                Icons.TwoTone.Security,
+                                Icons.Filled.Security,
+                                R.string.tab_guard
+                            )
+
+                            RootDestination.Library -> Triple(
+                                Icons.AutoMirrored.TwoTone.LibraryBooks,
+                                Icons.AutoMirrored.Filled.LibraryBooks,
+                                R.string.tab_library
+                            )
                         }
 
                         ShortNavigationBarItem(
@@ -97,36 +113,43 @@ fun RootNavigationScreen(
             }
         }, contentWindowInsets = EmptyWindowInsets
     ) { innerPadding ->
-        Children(stack = children, animation = stackAnimation { _ ->
-            val spec = spring<Float>(
-                stiffness = 500f
-            )
+        ChildStack(
+            stack = children,
+            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+            animation = stackAnimation { child, otherChild, direction, isPredictiveBack ->
+                val spec = spring<Float>(stiffness = 500f)
 
-            val direction =
-                if (previousNavItem != null && bottomBarItems.indexOf(currentNavItem) > bottomBarItems.indexOf(previousNavItem)) {
-                    IslandAnimations.Direction.LEFT
-                } else {
+                val islDirection = if (otherChild.configuration.index > child.configuration.index) {
                     IslandAnimations.Direction.RIGHT
+                } else {
+                    IslandAnimations.Direction.LEFT
                 }
 
-            fade(spec) + slideWithDirection(direction, spec)
-        }, modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
+                fade(spec) + slideWithDirection(islDirection, spec)
+            },
+        ) {
             DestinationScreen(component = it.instance)
         }
     }
 }
 
+@OptIn(ExperimentalDecomposeApi::class)
 private fun slideWithDirection(
     direction: IslandAnimations.Direction,
     animationSpec: FiniteAnimationSpec<Float>
-): StackAnimator = stackAnimator(animationSpec) { factor, dcDirection, content ->
-    if ((direction == IslandAnimations.Direction.RIGHT && dcDirection == Direction.ENTER_FRONT) || (direction == IslandAnimations.Direction.LEFT && dcDirection == Direction.EXIT_BACK)) {
-        content(Modifier.offsetXFactor(factor * -1f))
-    } else if ((direction == IslandAnimations.Direction.LEFT && dcDirection == Direction.ENTER_FRONT) || (direction == IslandAnimations.Direction.RIGHT && dcDirection == Direction.EXIT_BACK)) {
-        content(Modifier.offsetXFactor(factor * 1f))
+): StackAnimator = stackAnimator(animationSpec) { factor, dcDirection ->
+    if (
+        (direction == IslandAnimations.Direction.RIGHT && dcDirection == Direction.ENTER_FRONT) ||
+        (direction == IslandAnimations.Direction.LEFT && dcDirection == Direction.EXIT_BACK)
+    ) {
+        Modifier.offsetXFactor(factor * -1f)
+    } else if (
+        (direction == IslandAnimations.Direction.LEFT && dcDirection == Direction.ENTER_FRONT) ||
+        (direction == IslandAnimations.Direction.RIGHT && dcDirection == Direction.EXIT_BACK)
+    ) {
+        Modifier.offsetXFactor(factor * 1f)
     } else {
-        // Log.d("CCS", "SWD -> $direction | ${dcDirection}")
-        content(Modifier.offsetXFactor(factor * -1f))
+        Modifier.offsetXFactor(factor * -1f)
     }
 }
 

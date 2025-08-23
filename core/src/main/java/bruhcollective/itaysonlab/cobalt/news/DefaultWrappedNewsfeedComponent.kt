@@ -1,6 +1,5 @@
 package bruhcollective.itaysonlab.cobalt.news
 
-import androidx.compose.runtime.key
 import bruhcollective.itaysonlab.cobalt.news.models.NewsfeedType
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.SlotNavigation
@@ -9,7 +8,7 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.decompose.value.MutableValue
 
-class DefaultWrappedNewsfeedComponent (
+internal class DefaultWrappedNewsfeedComponent (
     componentContext: ComponentContext,
     onUpcomingCardClicked: () -> Unit,
 ): WrappedNewsfeedComponent, ComponentContext by componentContext {
@@ -51,7 +50,10 @@ class DefaultWrappedNewsfeedComponent (
     private fun createFeedComponent(configuration: NewsfeedType, componentContext: ComponentContext): NewsfeedComponent {
         return DefaultNewsfeedComponent(
             type = configuration,
-            componentContext = componentContext
+            componentContext = componentContext,
+            onItemClicked = { item ->
+
+            }
         )
     }
 }

@@ -54,7 +54,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
-import bruhcollective.itaysonlab.cobalt.screens.guard.GuardUtils
+import bruhcollective.itaysonlab.cobalt.ext.GuardUtils
 import bruhcollective.itaysonlab.cobalt.guard.session.GuardSessionDetailComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.EmptyWindowInsets
 import bruhcollective.itaysonlab.cobalt.ui.components.RoundedPage

@@ -10,6 +10,7 @@ import bruhcollective.itaysonlab.cobalt.screens.guard.setup.sms.GuardEnterSmsScr
 import bruhcollective.itaysonlab.cobalt.screens.library.LibraryScreen
 import bruhcollective.itaysonlab.cobalt.navigation.DestinationChild
 import bruhcollective.itaysonlab.cobalt.navigation.DestinationComponent
+import bruhcollective.itaysonlab.cobalt.screens.library.games.achievements.AchievementsScreen
 import bruhcollective.itaysonlab.cobalt.screens.news.NewsfeedScreen
 import bruhcollective.itaysonlab.cobalt.screens.news.WrappedNewsfeedScreen
 import bruhcollective.itaysonlab.cobalt.screens.profile.ProfileScreen
@@ -68,6 +69,10 @@ fun DestinationScreen (
 
             is DestinationChild.Profile -> {
                 ProfileScreen(child.component)
+            }
+
+            is DestinationChild.AppAchievements -> {
+                AchievementsScreen(child.component, component::onBackPressed)
             }
         }
     }

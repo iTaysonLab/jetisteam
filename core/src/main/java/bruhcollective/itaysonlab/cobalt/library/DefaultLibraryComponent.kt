@@ -14,6 +14,7 @@ import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
 
 internal class DefaultLibraryComponent(
+    private val onAppAchievementsClicked: (Int) -> Unit,
     componentContext: ComponentContext,
 ): LibraryComponent, ComponentContext by componentContext {
     private val navigation = PagesNavigation<Config>()
@@ -46,7 +47,7 @@ internal class DefaultLibraryComponent(
             )
 
             Config.Games -> LibraryComponent.Child.Games(
-                component = DefaultGamesComponent(componentContext = componentContext)
+                component = DefaultGamesComponent(componentContext = componentContext, onAppAchievementsClicked = onAppAchievementsClicked)
             )
 
             Config.Screenshots -> LibraryComponent.Child.Screenshots(

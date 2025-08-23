@@ -1,6 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.library.games
 
 import bruhcollective.itaysonlab.cobalt.core.commons.CobaltScreenResult
+import bruhcollective.itaysonlab.cobalt.library.games.alert.DefaultGameSheetComponent
 import bruhcollective.itaysonlab.cobalt.library.games.alert.DefaultSelectCollectionComponent
 import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import bruhcollective.itaysonlab.ksteam.models.app.OwnedSteamApplication
@@ -30,6 +31,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 internal class DefaultGamesComponent(
+    private val onAppAchievementsClicked: (Int) -> Unit,
     componentContext: ComponentContext
 ) : GamesComponent, KoinComponent, ComponentContext by componentContext,
     CoroutineScope by componentContext.coroutineScope() {
@@ -161,6 +163,10 @@ internal class DefaultGamesComponent(
         alertNavigation.activate(AlertConfig.EditCollection())
     }
 
+    override fun onGameClicked(value: OwnedSteamApplication) {
+        alertNavigation.activate(AlertConfig.GameSheet(id = value.application.id.value))
+    }
+
     private fun createChild(config: AlertConfig, componentContext: ComponentContext): GamesComponent.AlertChild {
         return when (config) {
             is AlertConfig.EditCollection -> {
@@ -182,6 +188,28 @@ internal class DefaultGamesComponent(
 
             is AlertConfig.SelectSort -> {
                 TODO()
+            }
+
+            is AlertConfig.GameSheet -> {
+                GamesComponent.AlertChild.GameSheet(
+                    component = DefaultGameSheetComponent(
+                        id = config.id,
+                        componentContext = componentContext,
+                        onAchievementsClicked = {
+                            dismissAlert()
+                            onAppAchievementsClicked(config.id)
+                        },
+                        onStorePageClicked = {
+                            dismissAlert()
+                        },
+                        onRemoteInstallClicked = {
+                            dismissAlert()
+                        },
+                        onGameNotesClicked = {
+                            dismissAlert()
+                        }
+                    )
+                )
             }
         }
     }
@@ -208,6 +236,12 @@ internal class DefaultGamesComponent(
         @SerialName("edit_collection")
         class EditCollection (
 
+        ): AlertConfig
+
+        @Serializable
+        @SerialName("game_sheet")
+        class GameSheet (
+            val id: Int
         ): AlertConfig
     }
 }

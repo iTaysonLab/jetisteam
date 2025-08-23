@@ -1,0 +1,3 @@
+<inset android:drawable="@drawable/ic_joystick_72dp"
+    android:inset="20dp"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

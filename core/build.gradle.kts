@@ -11,7 +11,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -53,4 +53,9 @@ dependencies {
     
     implementation(libs.bundles.ksteam)
     implementation(libs.bundles.ktorClient)
+
+    //
+    api("dev.icerock.moko:permissions:0.20.0")
+    implementation("dev.icerock.moko:permissions-gallery:0.20.0")
+    implementation("dev.icerock.moko:permissions-storage:0.20.0")
 }

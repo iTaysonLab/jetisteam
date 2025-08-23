@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.cobalt.library.games
 
 import bruhcollective.itaysonlab.cobalt.core.commons.CobaltScreenResult
 import bruhcollective.itaysonlab.cobalt.library.games.alert.EditCollectionComponent
+import bruhcollective.itaysonlab.cobalt.library.games.alert.GameSheetComponent
 import bruhcollective.itaysonlab.cobalt.library.games.alert.SelectCollectionComponent
 import bruhcollective.itaysonlab.cobalt.library.games.alert.SelectSortComponent
 import bruhcollective.itaysonlab.ksteam.models.app.OwnedSteamApplication
@@ -59,6 +60,7 @@ interface GamesComponent {
     fun onCollectionTileClicked()
     fun onFilterTileClicked()
     fun onSortTileClicked()
+    fun onGameClicked(value: OwnedSteamApplication)
 
     sealed interface AlertChild {
         class EditCollection (
@@ -71,6 +73,10 @@ interface GamesComponent {
 
         class SelectSort (
             val component: SelectSortComponent
+        ): AlertChild
+
+        class GameSheet (
+            val component: GameSheetComponent
         ): AlertChild
     }
 }

@@ -10,6 +10,8 @@ import bruhcollective.itaysonlab.cobalt.news.DefaultNewsfeedComponent
 import bruhcollective.itaysonlab.cobalt.news.DefaultWrappedNewsfeedComponent
 import bruhcollective.itaysonlab.cobalt.news.models.NewsfeedType
 import bruhcollective.itaysonlab.cobalt.profile.MyProfileComponent
+import bruhcollective.itaysonlab.cobalt.store_page.achievements.DefaultGameAchievementsComponent
+import bruhcollective.itaysonlab.ksteam.models.AppId
 import bruhcollective.itaysonlab.ksteam.models.toSteamId
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
@@ -68,12 +70,28 @@ internal class DefaultDestinationComponent (
             // NEWS
             DestinationRoute.WrappedNewsfeed -> createWrappedNewsfeedChild(componentContext)
             is DestinationRoute.Newsfeed -> createNewsfeedChild(configuration, componentContext)
+            is DestinationRoute.NewsfeedArticle -> TODO()
+
+            // APPS
+            is DestinationRoute.AppAchievements -> createAppAchievementsChild(configuration.appId, componentContext)
         }
     }
     
     private fun createLibraryChild(componentContext: ComponentContext): DestinationChild.LibraryRoot {
         return DestinationChild.LibraryRoot(
             component = DefaultLibraryComponent(
+                componentContext = componentContext,
+                onAppAchievementsClicked = { appId ->
+                    navigation.pushNew(DestinationRoute.AppAchievements(appId = appId))
+                }
+            )
+        )
+    }
+
+    private fun createAppAchievementsChild(appId: Int, componentContext: ComponentContext): DestinationChild.AppAchievements {
+        return DestinationChild.AppAchievements(
+            component = DefaultGameAchievementsComponent(
+                appId = AppId(appId),
                 componentContext = componentContext
             )
         )
@@ -216,7 +234,10 @@ internal class DefaultDestinationComponent (
         return DestinationChild.Newsfeed(
             component = DefaultNewsfeedComponent(
                 type = configuration.type,
-                componentContext = componentContext
+                componentContext = componentContext,
+                onItemClicked = {
+
+                }
             )
         )
     }

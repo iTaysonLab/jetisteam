@@ -2,6 +2,7 @@ package bruhcollective.itaysonlab.cobalt.news.paging
 
 import bruhcollective.itaysonlab.ksteam.models.news.NewsEvent
 import bruhcollective.itaysonlab.ksteam.models.news.usernews.ActivityFeedEntry
+import kotlin.time.ExperimentalTime
 
 /**
  * Defines an item that is shown on the newsfeed.
@@ -30,7 +31,9 @@ sealed interface NewsfeedPagingItem {
     ): NewsfeedPagingItem {
         override val id: String get() = item.id
         override val contentType: Int = -1
-        override val date: Long get() = item.publishedAt.toLong()
+
+        @OptIn(ExperimentalTime::class)
+        override val date: Long get() = item.publishedAt.epochSeconds
     }
 
     /**

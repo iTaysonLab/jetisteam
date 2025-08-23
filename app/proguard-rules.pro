@@ -30,3 +30,6 @@
 -dontwarn com.google.errorprone.annotations.Immutable
 -dontwarn com.google.errorprone.annotations.RestrictedApi
 -dontwarn org.slf4j.impl.StaticLoggerBinder
+
+# why
+-keepclasseswithmembernames class androidx.sqlite.driver.bundled.** { native <methods>; }

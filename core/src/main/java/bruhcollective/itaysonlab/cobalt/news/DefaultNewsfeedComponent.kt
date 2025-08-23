@@ -21,14 +21,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.ExperimentalTime
 
-class DefaultNewsfeedComponent(
+@OptIn(ExperimentalTime::class)
+internal class DefaultNewsfeedComponent(
     private val type: NewsfeedType,
+    private val onItemClicked: (NewsfeedPagingItem) -> Unit,
     componentContext: ComponentContext
 ) : NewsfeedComponent, KoinComponent, ComponentContext by componentContext,
     CoroutineScope by componentContext.coroutineScope() {
@@ -75,11 +77,15 @@ class DefaultNewsfeedComponent(
         dispatchLoad()
     }
 
+    override fun onItemClicked(item: NewsfeedPagingItem) {
+        onItemClicked.invoke(item)
+    }
+
     private suspend fun load() {
         viewModel.submitIsLoading(true)
 
         withContext(Dispatchers.IO) {
-            val pagingKey = viewModel.pagingKey ?: Clock.System.now()
+            val pagingKey = viewModel.pagingKey ?: kotlin.time.Clock.System.now()
             val pagingKeyRange = pagingKey - 24.hours
 
             if (type != NewsfeedType.Upcoming) {

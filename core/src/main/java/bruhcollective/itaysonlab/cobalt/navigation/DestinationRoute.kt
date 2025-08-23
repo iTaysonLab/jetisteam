@@ -1,9 +1,11 @@
 package bruhcollective.itaysonlab.cobalt.navigation
 
 import bruhcollective.itaysonlab.cobalt.news.models.NewsfeedType
+import bruhcollective.itaysonlab.cobalt.news.paging.NewsfeedPagingItem
 import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
 import bruhcollective.itaysonlab.ksteam.models.guard.GuardStructure
 import bruhcollective.itaysonlab.ksteam.models.guard.MobileConfirmationItem
+import bruhcollective.itaysonlab.ksteam.models.news.NewsEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -78,6 +80,22 @@ sealed interface DestinationRoute {
     @SerialName("newsfeed")
     data class Newsfeed (
         val type: NewsfeedType
+    ) : DestinationRoute
+
+    @Serializable
+    @SerialName("news_article")
+    data class NewsfeedArticle (
+        val article: NewsEvent
+    ) : DestinationRoute
+
+    // endregion
+
+    // region APPS
+
+    @Serializable
+    @SerialName("achievements")
+    data class AppAchievements (
+        val appId: Int
     ) : DestinationRoute
 
     // endregion

@@ -46,4 +46,41 @@
     <string name="library_initialization">Initializing library…</string>
     <string name="library_initialization_text">Cobalt is currently indexing and updating your Steam library. Please wait - this can take a while, depending on your library size, network conditions and device performance.</string>
 
+    <string name="library_achievements">Achievements</string>
+    <string name="library_achievements_none">Not available</string>
+    <string name="library_achievements_world">%s%% have unlocked this</string>
+    <string name="library_achievements_hidden">Hidden achievement</string>
+    <string name="library_achievements_hidden_text">Keep playing to find more about it!</string>
+    <string name="library_achievements_hidden_spoiler_warning">Spoiler Warning</string>
+    <string name="library_achievements_hidden_spoiler_warning_text">Are you sure you want to view achievement details? Hidden achievements can spoil information about the story or gameplay mechanics.</string>
+
+    <string name="library_notes">Notes</string>
+    <string name="library_notes_empty">No entries found</string>
+    <string name="library_notes_empty_text">For now, you can create notes using the official desktop Steam client</string>
+    <string name="library_hours">%.1f h</string>
+
+    <string name="library_sheet_playtime">Playtime</string>
+    <string name="library_sheet_first">First Played</string>
+    <string name="library_sheet_last">Last Played</string>
+    <string name="library_sheet_platform_win">Windows</string>
+    <string name="library_sheet_platform_linux">Linux</string>
+    <string name="library_sheet_platform_mac">macOS</string>
+    <string name="library_sheet_platform_deck">Steam Deck</string>
+
+    <string name="files_save_permission">Permission Required</string>
+    <string name="files_save_permission_text">In order to save this file to gallery, a \"Files\" permission is required. Please grant it to continue.</string>
+    <string name="files_save_permission_action">Settings</string>
+    <string name="files_action_share">Share</string>
+    <string name="files_action_info">Information</string>
+    <string name="files_action_save">Save to Gallery</string>
+    <string name="files_action_share_post_link">Steam link</string>
+    <string name="files_action_share_file_link">Direct link</string>
+    <string name="files_info_app">Application</string>
+    <string name="files_info_date">Date</string>
+    <string name="files_info_resolution">Resolution</string>
+    <string name="files_info_size">Size</string>
+    <string name="files_info_views">Views</string>
+    <string name="files_info_likes">Likes</string>
+    <string name="files_info_favorites">Favorites</string>
+
 </resources>

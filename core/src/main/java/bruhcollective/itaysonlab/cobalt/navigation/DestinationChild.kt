@@ -9,6 +9,7 @@ import bruhcollective.itaysonlab.cobalt.library.LibraryComponent
 import bruhcollective.itaysonlab.cobalt.news.NewsfeedComponent
 import bruhcollective.itaysonlab.cobalt.news.WrappedNewsfeedComponent
 import bruhcollective.itaysonlab.cobalt.profile.ProfileComponent
+import bruhcollective.itaysonlab.cobalt.store_page.achievements.GameAchievementsComponent
 
 /**
  * A destination child, used in [DestinationComponent].
@@ -83,7 +84,7 @@ sealed interface DestinationChild {
 
     // endregion
 
-    // NEWS
+    // region NEWS
 
     /**
      * The global newsfeed page.
@@ -97,6 +98,14 @@ sealed interface DestinationChild {
      */
     class Newsfeed (
         val component: NewsfeedComponent
+    ): DestinationChild
+
+    // endregion
+
+    // region APPS
+
+    class AppAchievements (
+        val component: GameAchievementsComponent
     ): DestinationChild
 
     // endregion

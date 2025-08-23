@@ -1,4 +1,4 @@
-package bruhcollective.itaysonlab.cobalt.screens.guard
+package bruhcollective.itaysonlab.cobalt.ext
 
 import android.content.Context
 import android.text.format.DateUtils
@@ -11,18 +11,26 @@ import androidx.compose.material.icons.rounded.Smartphone
 import androidx.compose.ui.graphics.vector.ImageVector
 import bruhcollective.itaysonlab.ksteam.models.guard.ActiveSession
 import bruhcollective.itaysonlab.ksteam.models.guard.IncomingSession
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import steam.enums.EAuthTokenPlatformType
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
+@OptIn(ExperimentalTime::class)
 object GuardUtils {
     fun formatDateTimeToLocale(timestamp: Long): String {
         val dtf = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-        val date = Instant.fromEpochMilliseconds(timestamp).toLocalDateTime(TimeZone.UTC)
+        val date = Instant.Companion.fromEpochMilliseconds(timestamp).toLocalDateTime(TimeZone.Companion.UTC)
+        return dtf.format(date.toJavaLocalDateTime())
+    }
+
+    fun formatDateTimeToLocaleFull(timestamp: Long): String {
+        val dtf = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+        val date = Instant.Companion.fromEpochMilliseconds(timestamp).toLocalDateTime(TimeZone.Companion.UTC)
         return dtf.format(date.toJavaLocalDateTime())
     }
 

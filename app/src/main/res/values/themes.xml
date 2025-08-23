@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Cobalt" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Cobalt.Splashscreen" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/Theme.Cobalt</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_joystick_inset_72dp</item>
+    </style>
 </resources>

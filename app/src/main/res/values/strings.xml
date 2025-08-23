@@ -6,4 +6,9 @@
     <string name="err_act_reload">Reload</string>
 
     <string name="close">Close</string>
+
+    <string name="dur_day">d</string>
+    <string name="dur_hour">h</string>
+    <string name="dur_minute">m</string>
+    <string name="dur_second">s</string>
 </resources>
