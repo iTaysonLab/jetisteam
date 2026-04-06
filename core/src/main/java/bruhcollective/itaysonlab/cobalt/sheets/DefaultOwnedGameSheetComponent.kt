@@ -1,7 +1,6 @@
-package bruhcollective.itaysonlab.cobalt.library.games.alert
+package bruhcollective.itaysonlab.cobalt.sheets
 
 import bruhcollective.itaysonlab.cobalt.core.ksteam.SteamClient
-import bruhcollective.itaysonlab.cobalt.library.games.alert.GameSheetComponent.Platform
 import bruhcollective.itaysonlab.ksteam.models.AppId
 import bruhcollective.itaysonlab.ksteam.models.app.SteamApplicationPlaytime
 import bruhcollective.itaysonlab.ksteam.models.enums.ELanguage
@@ -18,22 +17,25 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 @OptIn(ExperimentalTime::class)
-internal class DefaultGameSheetComponent (
+internal class DefaultOwnedGameSheetComponent (
     private val id: Int,
     private val onAchievementsClicked: () -> Unit,
     private val onStorePageClicked: () -> Unit,
     private val onRemoteInstallClicked: () -> Unit,
     private val onGameNotesClicked: () -> Unit,
     componentContext: ComponentContext
-): GameSheetComponent, ComponentContext by componentContext, KoinComponent {
+): OwnedGameSheetComponent, ComponentContext by componentContext, KoinComponent {
     private val scope = coroutineScope()
     private val client by inject<SteamClient>()
 
     override val title = MutableValue("")
     override val sheetBackgroundUrl = MutableValue("")
     override val sheetForegroundUrl = MutableValue("")
-    override val achievements = MutableValue<GameSheetComponent.AchievementsState>(GameSheetComponent.AchievementsState.Loading)
-    override val playtime = MutableValue<GameSheetComponent.PlaytimeInformation>(GameSheetComponent.PlaytimeInformation())
+    override val achievements = MutableValue<OwnedGameSheetComponent.AchievementsState>(
+        OwnedGameSheetComponent.AchievementsState.Loading
+    )
+    override val playtime =
+        MutableValue(OwnedGameSheetComponent.PlaytimeInformation())
 
     init {
         doOnCreate {
@@ -52,13 +54,13 @@ internal class DefaultGameSheetComponent (
                     appIds = appIds
                 ).values.firstOrNull().let { achievementState ->
                     achievements.value = if (achievementState != null) {
-                        GameSheetComponent.AchievementsState.Available(
+                        OwnedGameSheetComponent.AchievementsState.Available(
                             completed = achievementState.unlocked ?: 0,
                             total = achievementState.total ?: 0,
                             percentage = achievementState.percentage ?: 0f
                         )
                     } else {
-                        GameSheetComponent.AchievementsState.Unavailable
+                        OwnedGameSheetComponent.AchievementsState.Unavailable
                     }
                 }
 
@@ -69,37 +71,37 @@ internal class DefaultGameSheetComponent (
         }
     }
 
-    private fun SteamApplicationPlaytime.calculatePlaytimeInformation(): GameSheetComponent.PlaytimeInformation {
+    private fun SteamApplicationPlaytime.calculatePlaytimeInformation(): OwnedGameSheetComponent.PlaytimeInformation {
         val minutesTotal = playTime.total.inWholeMinutes.toFloat()
 
         return arrayOf(
-            GameSheetComponent.PlatformEntry(
-                platform = Platform.Win,
+            OwnedGameSheetComponent.PlatformEntry(
+                platform = OwnedGameSheetComponent.Platform.Win,
                 duration = playTime.windows,
                 percentage = playTime.windows.inWholeMinutes / minutesTotal,
-                firstLaunch = firstLaunch.windows ?: Instant.DISTANT_PAST,
-                lastLaunch = lastLaunch.windows ?: Instant.DISTANT_PAST
-            ), GameSheetComponent.PlatformEntry(
-                platform = Platform.Linux,
+                firstLaunch = firstLaunch.windows ?: Instant.Companion.DISTANT_PAST,
+                lastLaunch = lastLaunch.windows ?: Instant.Companion.DISTANT_PAST
+            ), OwnedGameSheetComponent.PlatformEntry(
+                platform = OwnedGameSheetComponent.Platform.Linux,
                 duration = playTime.linux - playTime.deck,
                 percentage = (playTime.linux - playTime.deck).inWholeMinutes / minutesTotal,
-                firstLaunch = firstLaunch.linux ?: Instant.DISTANT_PAST,
-                lastLaunch = lastLaunch.linux ?: Instant.DISTANT_PAST
-            ), GameSheetComponent.PlatformEntry(
-                platform = Platform.Mac,
+                firstLaunch = firstLaunch.linux ?: Instant.Companion.DISTANT_PAST,
+                lastLaunch = lastLaunch.linux ?: Instant.Companion.DISTANT_PAST
+            ), OwnedGameSheetComponent.PlatformEntry(
+                platform = OwnedGameSheetComponent.Platform.Mac,
                 duration = playTime.mac,
                 percentage = playTime.mac.inWholeMinutes / minutesTotal,
-                firstLaunch = firstLaunch.mac ?: Instant.DISTANT_PAST,
-                lastLaunch = lastLaunch.mac ?: Instant.DISTANT_PAST
-            ), GameSheetComponent.PlatformEntry(
-                platform = Platform.Deck,
+                firstLaunch = firstLaunch.mac ?: Instant.Companion.DISTANT_PAST,
+                lastLaunch = lastLaunch.mac ?: Instant.Companion.DISTANT_PAST
+            ), OwnedGameSheetComponent.PlatformEntry(
+                platform = OwnedGameSheetComponent.Platform.Deck,
                 duration = playTime.deck,
                 percentage = playTime.deck.inWholeMinutes / minutesTotal,
-                firstLaunch = firstLaunch.deck ?: Instant.DISTANT_PAST,
-                lastLaunch = lastLaunch.deck ?: Instant.DISTANT_PAST
+                firstLaunch = firstLaunch.deck ?: Instant.Companion.DISTANT_PAST,
+                lastLaunch = lastLaunch.deck ?: Instant.Companion.DISTANT_PAST
             )
         ).filter { it.duration.isPositive() }.toImmutableList().let { platforms ->
-            GameSheetComponent.PlaytimeInformation(
+            OwnedGameSheetComponent.PlaytimeInformation(
                 totalPlaytime = playTime.total,
                 lastLaunch = lastLaunch.total,
                 platformEntries = platforms

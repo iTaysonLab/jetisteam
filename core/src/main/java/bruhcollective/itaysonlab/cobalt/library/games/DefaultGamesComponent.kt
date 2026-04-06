@@ -1,7 +1,7 @@
 package bruhcollective.itaysonlab.cobalt.library.games
 
 import bruhcollective.itaysonlab.cobalt.core.commons.CobaltScreenResult
-import bruhcollective.itaysonlab.cobalt.library.games.alert.DefaultGameSheetComponent
+import bruhcollective.itaysonlab.cobalt.sheets.DefaultOwnedGameSheetComponent
 import bruhcollective.itaysonlab.cobalt.library.games.alert.DefaultSelectCollectionComponent
 import bruhcollective.itaysonlab.ksteam.ExtendedSteamClient
 import bruhcollective.itaysonlab.ksteam.models.app.OwnedSteamApplication
@@ -192,7 +192,7 @@ internal class DefaultGamesComponent(
 
             is AlertConfig.GameSheet -> {
                 GamesComponent.AlertChild.GameSheet(
-                    component = DefaultGameSheetComponent(
+                    component = DefaultOwnedGameSheetComponent(
                         id = config.id,
                         componentContext = componentContext,
                         onAchievementsClicked = {

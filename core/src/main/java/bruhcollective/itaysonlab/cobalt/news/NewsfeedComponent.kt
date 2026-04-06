@@ -5,6 +5,9 @@ import bruhcollective.itaysonlab.cobalt.news.paging.NewsfeedPagingItem
 import com.arkivanov.decompose.value.Value
 import kotlinx.collections.immutable.ImmutableList
 
+/**
+ * The inner newsfeed component that actually loads and shows information.
+ */
 interface NewsfeedComponent {
     val state: Value<CobaltScreenResult>
     val upcomingItems: Value<ImmutableList<NewsfeedPagingItem>>

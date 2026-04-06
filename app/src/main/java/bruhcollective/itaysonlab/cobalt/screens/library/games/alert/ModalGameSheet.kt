@@ -58,7 +58,7 @@ import androidx.compose.ui.unit.dp
 import bruhcollective.itaysonlab.cobalt.R
 import bruhcollective.itaysonlab.cobalt.ext.DurationUtils
 import bruhcollective.itaysonlab.cobalt.ext.GuardUtils
-import bruhcollective.itaysonlab.cobalt.library.games.alert.GameSheetComponent
+import bruhcollective.itaysonlab.cobalt.sheets.OwnedGameSheetComponent
 import bruhcollective.itaysonlab.cobalt.ui.components.M3ECardListItem
 import bruhcollective.itaysonlab.cobalt.ui.components.M3ECardListItemShapes
 import bruhcollective.itaysonlab.cobalt.ui.components.ResizableCircularIndicator
@@ -85,7 +85,7 @@ private enum class ModalGameSheetMode {
 @Composable
 internal fun ModalGameSheet(
     onDismiss: () -> Unit,
-    component: GameSheetComponent
+    component: OwnedGameSheetComponent
 ) {
     val sheetBackgroundUrl by component.sheetBackgroundUrl.subscribeAsState()
     val sheetForegroundUrl by component.sheetForegroundUrl.subscribeAsState()
@@ -226,23 +226,23 @@ internal fun ModalGameSheet(
 //
 
 private val colors = mutableScatterMapOf(
-    GameSheetComponent.Platform.Win to Color(0, 145, 255), // win
-    GameSheetComponent.Platform.Linux to Color(255, 146, 48), // linux
-    GameSheetComponent.Platform.Mac to Color(255, 55, 95), // mac
-    GameSheetComponent.Platform.Deck to Color(48, 209, 88), // deck
+    OwnedGameSheetComponent.Platform.Win to Color(0, 145, 255), // win
+    OwnedGameSheetComponent.Platform.Linux to Color(255, 146, 48), // linux
+    OwnedGameSheetComponent.Platform.Mac to Color(255, 55, 95), // mac
+    OwnedGameSheetComponent.Platform.Deck to Color(48, 209, 88), // deck
 )
 
 private val strings = mutableScatterMapOf(
-    GameSheetComponent.Platform.Win to R.string.library_sheet_platform_win,
-    GameSheetComponent.Platform.Linux to R.string.library_sheet_platform_linux,
-    GameSheetComponent.Platform.Mac to R.string.library_sheet_platform_mac,
-    GameSheetComponent.Platform.Deck to R.string.library_sheet_platform_deck,
+    OwnedGameSheetComponent.Platform.Win to R.string.library_sheet_platform_win,
+    OwnedGameSheetComponent.Platform.Linux to R.string.library_sheet_platform_linux,
+    OwnedGameSheetComponent.Platform.Mac to R.string.library_sheet_platform_mac,
+    OwnedGameSheetComponent.Platform.Deck to R.string.library_sheet_platform_deck,
 )
 
 @OptIn(ExperimentalTime::class)
 @Composable
 private fun ModalGameSheetLaunchDatesView(
-    playtime: GameSheetComponent.PlaytimeInformation
+    playtime: OwnedGameSheetComponent.PlaytimeInformation
 ) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         item {
@@ -303,7 +303,7 @@ private fun ModalGameSheetLaunchDatesView(
 
 @Composable
 private fun ModalGameSheetPlaytimeView(
-    playtime: GameSheetComponent.PlaytimeInformation
+    playtime: OwnedGameSheetComponent.PlaytimeInformation
 ) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         item {
@@ -368,7 +368,7 @@ private fun ModalGameSheetPlaytimeView(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun ModalGameSheetGenericView(
-    achievements: GameSheetComponent.AchievementsState,
+    achievements: OwnedGameSheetComponent.AchievementsState,
     onAchievementsClicked: () -> Unit,
     onRemoteInstallClicked: () -> Unit,
     onStorePageClicked: () -> Unit,
@@ -384,7 +384,7 @@ private fun ModalGameSheetGenericView(
                 )
             ) {
                 when (val state = achievements) {
-                    is GameSheetComponent.AchievementsState.Available -> {
+                    is OwnedGameSheetComponent.AchievementsState.Available -> {
                         val completedColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f)
                             .compositeOver(MaterialTheme.colorScheme.primary)
 
@@ -426,7 +426,7 @@ private fun ModalGameSheetGenericView(
                         )
                     }
 
-                    GameSheetComponent.AchievementsState.Loading -> {
+                    OwnedGameSheetComponent.AchievementsState.Loading -> {
                         Box(
                             Modifier
                                 .height(72.dp)
@@ -440,7 +440,7 @@ private fun ModalGameSheetGenericView(
                         }
                     }
 
-                    GameSheetComponent.AchievementsState.Unavailable -> {
+                    OwnedGameSheetComponent.AchievementsState.Unavailable -> {
 
                     }
                 }

@@ -2,7 +2,7 @@ package bruhcollective.itaysonlab.cobalt.library.games
 
 import bruhcollective.itaysonlab.cobalt.core.commons.CobaltScreenResult
 import bruhcollective.itaysonlab.cobalt.library.games.alert.EditCollectionComponent
-import bruhcollective.itaysonlab.cobalt.library.games.alert.GameSheetComponent
+import bruhcollective.itaysonlab.cobalt.sheets.OwnedGameSheetComponent
 import bruhcollective.itaysonlab.cobalt.library.games.alert.SelectCollectionComponent
 import bruhcollective.itaysonlab.cobalt.library.games.alert.SelectSortComponent
 import bruhcollective.itaysonlab.ksteam.models.app.OwnedSteamApplication
@@ -76,7 +76,7 @@ interface GamesComponent {
         ): AlertChild
 
         class GameSheet (
-            val component: GameSheetComponent
+            val component: OwnedGameSheetComponent
         ): AlertChild
     }
 }

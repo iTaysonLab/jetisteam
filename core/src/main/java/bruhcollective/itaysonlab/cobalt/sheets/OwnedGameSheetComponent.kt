@@ -1,4 +1,4 @@
-package bruhcollective.itaysonlab.cobalt.library.games.alert
+package bruhcollective.itaysonlab.cobalt.sheets
 
 import com.arkivanov.decompose.value.Value
 import kotlinx.collections.immutable.ImmutableList
@@ -7,7 +7,12 @@ import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-interface GameSheetComponent {
+/**
+ * A game sheet for owned games.
+ *
+ * Has achievements, remote install, playtime information.
+ */
+interface OwnedGameSheetComponent {
     val title: Value<String>
 
     val sheetBackgroundUrl: Value<String>
@@ -22,7 +27,7 @@ interface GameSheetComponent {
 
     @OptIn(ExperimentalTime::class)
     data class PlaytimeInformation (
-        val totalPlaytime: Duration = Duration.ZERO,
+        val totalPlaytime: Duration = Duration.Companion.ZERO,
         val lastLaunch: Instant? = null,
         val platformEntries: ImmutableList<PlatformEntry> = persistentListOf()
     )
@@ -34,8 +39,10 @@ interface GameSheetComponent {
             val percentage: Float
         ): AchievementsState
 
-        data object Unavailable: AchievementsState
-        data object Loading: AchievementsState
+        data object Unavailable:
+            AchievementsState
+        data object Loading:
+            AchievementsState
     }
 
     enum class Platform {

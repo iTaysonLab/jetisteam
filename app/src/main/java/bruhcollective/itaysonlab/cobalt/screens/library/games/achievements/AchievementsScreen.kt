@@ -103,7 +103,7 @@ internal fun AchievementsScreen(
 
                 CobaltScreenResult.Loaded -> {
                     LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(2.dp),
                         contentPadding = PaddingValues(16.dp)
                     ) {
                         itemsIndexed(achievements) { index, item ->

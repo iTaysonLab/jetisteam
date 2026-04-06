@@ -1,119 +1,98 @@
 [versions]
 # kotlin
-kotlinVersion = "2.2.10"
-kspVersion = "2.2.10-2.0.2"
+kotlin = "2.3.20"
+ksp = "2.3.6"
 
 # kotlinx
-kotlinxSerializationVersion = "1.9.0"
-kotlinxDateTimeVersion = "0.7.1"
-coroutinesVersion = "1.10.2"
-kotlinxAtomicVersion = "0.20.2"
-kotlinxCollectionsVersion = "0.4.0"
-
-# ktor
-ktorClientVersion = "3.2.3"
-
-# multiplatform
-multiplatformSettingsVersion = "1.3.0"
-napierVersion = "2.7.1"
-koinVersion = "4.1.0"
-koinKspVersion = "2.1.0"
-okioVersion = "3.16.0"
+serialization = "1.10.0"
+dateTime = "0.7.1"
+coroutines = "1.10.2"
+atomic = "0.20.2"
+collections = "0.4.0"
 
 # decompose
-decomposeVersion = "3.4.0-alpha03"
-essentyVersion = "2.5.0"
+decompose = "3.5.0"
+essenty = "2.5.0"
 
 # android
-androidPluginVersion = "8.12.1"
-composeCompilerVersion = "1.4.7"
-lifecycleVersion = "2.9.2"
-hiltVersion = "2.57.1"
-androidCoreKtxVersion = "1.17.0"
-androidCoreSplashscreenVersion = "1.0.1"
-androidActivityKtxVersion = "1.10.1"
-androidPaging = "3.3.6"
+agp = "8.12.3"
+androidLifecycle = "2.10.0"
+androidCoreKtx = "1.18.0"
+androidCoreSplashscreen = "1.2.0"
+androidActivityKtx = "1.13.0"
+androidPaging = "3.4.2"
+androidDatastore = "1.3.0-alpha07"
+androidRoom3 = "3.0.0-alpha02"
 
 # compose
-composeVersion = "1.10.0-alpha01"
-composeMaterial3Version = "1.5.0-alpha02"
-compose_motion = "2.0.1"
+composeVersion = "1.11.0-beta02"
+composeMaterial3 = "1.5.0-alpha16"
+composeMotion = "2.0.1"
 accompanist = "0.37.3"
 
-# android tests
-espressoCoreVersion = "3.7.0"
-testRunnerVersion = "1.7.0"
-testExtJunitVersion = "1.3.0"
-testCoreVersion = "1.7.0"
-robolectricVersion = "4.15.1"
-junit = "4.13.2"
-appcompat = "1.6.1"
-
 # ksteam
-ksteam = "r48"
+ksteam = "r50"
 
 # camera
-camerax = "1.4.2"
+camerax = "1.6.0"
 mlkit = "17.3.0"
 
+# misc
+ktor = "3.4.2"
+metro = "0.12.1"
+wire = "5.5.1"
+okio = "3.17.0"
+kermit = "2.1.0"
+
 [plugins]
-androidPluginApplication = { id = "com.android.application", version.ref = "androidPluginVersion" }
-androidPluginLibrary = { id = "com.android.library", version.ref = "androidPluginVersion" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlinVersion" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
-googleKsp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
-kotlinAtomicFu = { id = "org.jetbrains.kotlinx.plugin.atomicfu", version.ref = "kotlinxAtomicVersion" }
-composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVersion" }
+androidPluginApplication = { id = "com.android.application", version.ref = "agp" }
+androidPluginLibrary = { id = "com.android.library", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+googleKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlinAtomicFu = { id = "org.jetbrains.kotlinx.plugin.atomicfu", version.ref = "atomic" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
+room3 = { id = "androidx.room3", version.ref = "androidRoom3" }
 
 [libraries]
 # kotlin
-kotlinTestJUnit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlinVersion" }
+kotlinTestJUnit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 
 # kotlinx
-kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationVersion" }
-kotlinxDateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTimeVersion" }
-kotlinxCollections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsVersion" }
-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesVersion" }
+kotlinSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+kotlinxDateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "dateTime" }
+kotlinxCollections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "collections" }
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 
 # ktor
-ktorClient = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientVersion" }
-ktorClientLogging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientVersion" }
-ktorClientMock = { module = "io.ktor:ktor-client-mock", version.ref = "ktorClientVersion" }
-ktorClientContentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientVersion" }
-ktorClientJsonSerialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientVersion" }
-ktorClientAuth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorClientVersion" }
-ktorClientEngineOkHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientVersion" }
-ktorClientEngineDarwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorClientVersion" }
+ktorClient = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktorClientLogging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktorClientMock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
+ktorClientContentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktorClientJsonSerialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktorClientAuth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
+ktorClientEngineOkHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktorClientEngineDarwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 
-# multiplatform
-multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettingsVersion" }
-multiplatformSettingsSerialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "multiplatformSettingsVersion" }
-multiplatformSettingsTest = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatformSettingsVersion" }
-
-napier = { module = "io.github.aakira:napier", version.ref = "napierVersion" }
-okio = { module = "com.squareup.okio:okio", version.ref = "okioVersion" }
-
-koin = { module = "io.insert-koin:koin-core", version.ref = "koinVersion" }
-koinCoroutines = { module = "io.insert-koin:koin-core-coroutines", version.ref = "koinVersion" }
-koinAndroid = { module = "io.insert-koin:koin-android", version.ref = "koinVersion" }
-koinAnnotations = { module = "io.insert-koin:koin-annotations", version.ref = "koinKspVersion" }
-koinCompiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinKspVersion" }
-hilt = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+wire = { module = "com.squareup.wire:wire-runtime", version.ref = "wire" }
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 # android
-androidKtxCore = { module = "androidx.core:core-ktx", version.ref = "androidCoreKtxVersion" }
-androidCoreSplashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidCoreSplashscreenVersion" }
-androidKtxActivity = { module = "androidx.activity:activity-ktx", version.ref = "androidActivityKtxVersion" }
-androidKtxActivityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidActivityKtxVersion" }
-lifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleVersion" }
-lifecycleLivedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleVersion" }
-lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }
-lifecycleViewModelSavedState = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycleVersion" }
-lifecycleCommonJava8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifecycleVersion" }
-lifecycleServices = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycleVersion" }
-lifecycleProcess = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycleVersion" }
-lifecycleReactiveStreams = { module = "androidx.lifecycle:lifecycle-reactivestreams-ktx", version.ref = "lifecycleVersion" }
+androidKtxCore = { module = "androidx.core:core-ktx", version.ref = "androidCoreKtx" }
+androidCoreSplashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidCoreSplashscreen" }
+androidKtxActivity = { module = "androidx.activity:activity-ktx", version.ref = "androidActivityKtx" }
+androidKtxActivityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidActivityKtx" }
+lifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidLifecycle" }
+lifecycleLivedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidLifecycle" }
+lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidLifecycle" }
+lifecycleViewModelSavedState = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "androidLifecycle" }
+lifecycleCommonJava8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "androidLifecycle" }
+lifecycleServices = { module = "androidx.lifecycle:lifecycle-service", version.ref = "androidLifecycle" }
+lifecycleProcess = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidLifecycle" }
+lifecycleReactiveStreams = { module = "androidx.lifecycle:lifecycle-reactivestreams-ktx", version.ref = "androidLifecycle" }
 pagingRuntime = { module = "androidx.paging:paging-runtime", version.ref = "androidPaging" }
 pagingCompose = { module = "androidx.paging:paging-compose", version.ref = "androidPaging" }
 
@@ -123,37 +102,22 @@ composeRuntime = { module = "androidx.compose.runtime:runtime", version.ref = "c
 composeFoundation = { module = "androidx.compose.foundation:foundation", version.ref = "composeVersion" }
 composeMaterial = { module = "androidx.compose.material:material", version.ref = "composeVersion" }
 composeMaterialIcons = { module = "androidx.compose.material:material-icons-extended", version = "1.7.8" }
-composeMaterial3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3Version" }
+composeMaterial3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3" }
 composeUiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "composeVersion" }
 composeUiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeVersion" }
 coilCompose = "io.coil-kt:coil-compose:2.7.0"
-composeMotionCore = { module = "io.github.fornewid:material-motion-compose-core", version.ref = "compose_motion" }
+composeMotionCore = { module = "io.github.fornewid:material-motion-compose-core", version.ref = "composeMotion" }
 
 # accompanist
 accompanistPermissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
-# android tests
-espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
-testCore = { module = "androidx.test:core", version.ref = "testCoreVersion" }
-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectricVersion" }
-testRunner = { module = "androidx.test:runner", version.ref = "testRunnerVersion" }
-testRules = { module = "androidx.test:rules", version.ref = "testRunnerVersion" }
-testExtJunit = { module = "androidx.test.ext:junit", version.ref = "testExtJunitVersion" }
-
-# tooling
-hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltVersion" }
-
-# gradle plugins artifacts
-kotlinSerializationGradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlinVersion" }
-hiltGradle = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltVersion" }
-
 # decompose
-decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decomposeVersion" }
-decomposeExtensionCompose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decomposeVersion" }
-decomposeExtensionComposeExperimental = { module = "com.arkivanov.decompose:extensions-compose-experimental", version.ref = "decomposeVersion" }
-essentyLifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "essentyVersion" }
-essentyLifecycleCoroutines = { module = "com.arkivanov.essenty:lifecycle-coroutines", version.ref = "essentyVersion" }
-essentyStateKeeper = { module = "com.arkivanov.essenty:state-keeper", version.ref = "essentyVersion" }
+decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
+decomposeExtensionCompose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
+decomposeExtensionComposeExperimental = { module = "com.arkivanov.decompose:extensions-compose-experimental", version.ref = "decompose" }
+essentyLifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "essenty" }
+essentyLifecycleCoroutines = { module = "com.arkivanov.essenty:lifecycle-coroutines", version.ref = "essenty" }
+essentyStateKeeper = { module = "com.arkivanov.essenty:state-keeper", version.ref = "essenty" }
 
 # ksteam
 ksteamCore = { module = "bruhcollective.itaysonlab.ksteam:core-android", version.ref = "ksteam" }
@@ -163,16 +127,18 @@ ksteamProto = { module = "bruhcollective.itaysonlab.ksteam:proto-common-android"
 ksteamClient = { module = "bruhcollective.itaysonlab.ksteam:extension-client-android", version.ref = "ksteam" }
 
 # android
+room3 = { module = "androidx.room3:room3-runtime", version.ref = "androidRoom3" }
 camerax-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
 camerax-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
 camerax-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
 camerax-mlkit = { module = "androidx.camera:camera-mlkit-vision", version.ref = "camerax" }
 camerax-view = { module = "androidx.camera:camera-view", version.ref = "camerax" }
 mlkit-barcodescanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "mlkit" }
+datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "androidDatastore" }
 
 [bundles]
 compose = ["composeUi", "composeFoundation", "composeMaterialIcons", "composeMaterial3", "composeUiToolingPreview"]
 androidLifecycle = ["lifecycleRuntime", "lifecycleViewModel", "lifecycleServices"]
 ktorClient = ["ktorClient", "ktorClientContentNegotiation", "ktorClientJsonSerialization", "ktorClientLogging"]
-ksteam = ["ksteamCore", "ksteamPersistence", "ksteamProto", "ksteamClient", "ksteamVdf"]
+ksteam = ["ksteamCore", "ksteamPersistence", "ksteamProto", "ksteamVdf"]
 camerax = ["camerax-core", "camerax-camera2", "camerax-lifecycle", "camerax-mlkit", "camerax-view"]
